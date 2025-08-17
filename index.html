@@ -396,11 +396,12 @@
         /* 动态波点背景 */
         .animated-dots {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
             min-height: 100vh;
+            max-height: 12000px;
             pointer-events: none;
             z-index: 9999;
             overflow: visible;
@@ -556,30 +557,24 @@
             /* Trigger class will be added via JavaScript */
         }
         .arc-animated svg path:first-of-type {
-            animation: yellowBlink 0.8s infinite;
-            stroke-width: 10;
+            stroke-width: 8;
         }
         .arc-animated svg path:nth-of-type(2) {
-            animation: yellowBlink 0.8s infinite;
-            stroke-width: 9;
-        }
-        .arc-animated svg path:nth-of-type(3) {
-            animation: yellowBlink 0.8s infinite;
             stroke-width: 7;
         }
+        .arc-animated svg path:nth-of-type(3) {
+            stroke-width: 5;
+        }
         .arc-animated svg text {
-            animation: yellowTextBlink 0.8s infinite;
+            fill: #ffffff;
         }
         .ring-yellow-arc svg path:first-of-type {
-            transition: stroke-width 0.3s ease;
             stroke-width: 8;
         }
         .ring-yellow-arc svg path:nth-of-type(2) {
-            transition: stroke-width 0.3s ease;
             stroke-width: 7;
         }
         .ring-yellow-arc svg path:nth-of-type(3) {
-            transition: stroke-width 0.3s ease;
             stroke-width: 5;
         }
         @keyframes yellowBlink {
@@ -1353,11 +1348,13 @@
         /* 页面底部额外空间 */
         .bottom-spacer {
             position: absolute;
-            bottom: -12149px;
+            bottom: -9000px;
             left: 0;
             right: 0;
-            height: 3600px;
-            z-index: 1;
+            height: 0px;
+            background-color: #0041ff;
+            opacity: 0;
+            z-index: 100;
         }
         
         .preview-image-7 {
@@ -2752,396 +2749,396 @@ Painting</div>
         //         setTimeout(() => ghost.remove(), 800);
         //     }, 10);
         // }
-        // 眼球跟随鼠标移动
-        document.addEventListener('mousemove', function(e) {
-            // 黄色眼睛
-            const eye = document.querySelector('.yellow-finger-hint');
-            const pupil = eye.querySelector('.pixel-eye .pupil');
+        // 眼球跟随鼠标移动 - 已禁用
+        // document.addEventListener('mousemove', function(e) {
+        //     // 黄色眼睛
+        //     const eye = document.querySelector('.yellow-finger-hint');
+        //     const pupil = eye.querySelector('.pixel-eye .pupil');
+        //     
+        //     if (eye && pupil) {
+        //         const eyeRect = eye.getBoundingClientRect();
+        //         const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+        //         const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+        //         
+        //         const mouseX = e.clientX;
+        //         const mouseY = e.clientY;
+        //         
+        //         const deltaX = mouseX - eyeCenterX;
+        //         const deltaY = mouseY - eyeCenterY;
+        //         
+        //         // 计算距离，让眼球移动更自然
+        //         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        //         const maxDistance = 150; // 增加最大响应距离
+        //         
+        //         if (distance < maxDistance) {
+        //             // 限制眼球移动范围在白色边框内
+        //             const maxMoveX = (eyeRect.width - 50) / 2;
+        //             const maxMoveY = (eyeRect.height - 50) / 2;
+        //             
+        //             // 使用距离比例来平滑移动，增加灵敏度
+        //             const moveRatio = Math.min(distance / maxDistance, 1);
+        //             const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
+        //             const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
+        //             
+        //             pupil.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        //         } else {
+        //             // 鼠标太远时，眼球回到中心
+        //             pupil.style.transform = 'translate(0px, 0px)';
+        //         }
+        //     }
+        //     
+        //     // 绿色眼睛
+        //     const greenEye = document.querySelector('.green-eye-hint');
+        //     const greenPupil = greenEye.querySelector('.pixel-eye-green .pupil-green');
+        //     
+        //     if (greenEye && greenPupil) {
+        //         const greenEyeRect = greenEye.getBoundingClientRect();
+        //         const greenEyeCenterX = greenEyeRect.left + greenEyeRect.width / 2;
+        //         const greenEyeCenterY = greenEyeRect.top + greenEyeRect.height / 2;
+        //         
+        //         const mouseX = e.clientX;
+        //         const mouseY = e.clientY;
+        //         
+        //         const deltaX = mouseX - greenEyeCenterX;
+        //         const deltaY = mouseY - greenEyeCenterY;
+        //         
+        //         // 计算距离，让眼球移动更自然
+        //         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        //         const maxDistance = 150;
+        //         
+        //         if (distance < maxDistance) {
+        //             // 限制眼球移动范围在白色边框内
+        //             const maxMoveX = (greenEyeRect.width - 50) / 2;
+        //             const maxMoveY = (greenEyeRect.height - 50) / 2;
+        //             
+        //             // 使用距离比例来平滑移动
+        //             const moveRatio = Math.min(distance / maxDistance, 1);
+        //             const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
+        //             const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
+        //             
+        //             greenPupil.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        //         } else {
+        //             // 鼠标太远时，眼球回到中心
+        //             greenPupil.style.transform = 'translate(0px, 0px)';
+        //         }
+        //     }
             
-            if (eye && pupil) {
-                const eyeRect = eye.getBoundingClientRect();
-                const eyeCenterX = eyeRect.left + eyeRect.width / 2;
-                const eyeCenterY = eyeRect.top + eyeRect.height / 2;
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const deltaX = mouseX - eyeCenterX;
-                const deltaY = mouseY - eyeCenterY;
-                
-                // 计算距离，让眼球移动更自然
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const maxDistance = 150; // 增加最大响应距离
-                
-                if (distance < maxDistance) {
-                    // 限制眼球移动范围在白色边框内
-                    const maxMoveX = (eyeRect.width - 50) / 2;
-                    const maxMoveY = (eyeRect.height - 50) / 2;
-                    
-                    // 使用距离比例来平滑移动，增加灵敏度
-                    const moveRatio = Math.min(distance / maxDistance, 1);
-                    const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
-                    const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
-                    
-                    pupil.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                } else {
-                    // 鼠标太远时，眼球回到中心
-                    pupil.style.transform = 'translate(0px, 0px)';
-                }
-            }
-            
-            // 绿色眼睛
-            const greenEye = document.querySelector('.green-eye-hint');
-            const greenPupil = greenEye.querySelector('.pixel-eye-green .pupil-green');
-            
-            if (greenEye && greenPupil) {
-                const greenEyeRect = greenEye.getBoundingClientRect();
-                const greenEyeCenterX = greenEyeRect.left + greenEyeRect.width / 2;
-                const greenEyeCenterY = greenEyeRect.top + greenEyeRect.height / 2;
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const deltaX = mouseX - greenEyeCenterX;
-                const deltaY = mouseY - greenEyeCenterY;
-                
-                // 计算距离，让眼球移动更自然
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const maxDistance = 150;
-                
-                if (distance < maxDistance) {
-                    // 限制眼球移动范围在白色边框内
-                    const maxMoveX = (greenEyeRect.width - 50) / 2;
-                    const maxMoveY = (greenEyeRect.height - 50) / 2;
-                    
-                    // 使用距离比例来平滑移动
-                    const moveRatio = Math.min(distance / maxDistance, 1);
-                    const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
-                    const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
-                    
-                    greenPupil.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                } else {
-                    // 鼠标太远时，眼球回到中心
-                    greenPupil.style.transform = 'translate(0px, 0px)';
-                }
-            }
-            
-            // 第二个绿色眼睛
-            const greenEye2 = document.querySelector('.green-eye-hint-2');
-            const greenPupil2 = greenEye2.querySelector('.pixel-eye-green .pupil-green');
-            
-            // 第三个绿色眼睛
-            const greenEye3 = document.querySelector('.green-eye-hint-3');
-            const greenPupil3 = greenEye3.querySelector('.pixel-eye-green .pupil-green');
-            
-            if (greenEye2 && greenPupil2) {
-                const greenEyeRect2 = greenEye2.getBoundingClientRect();
-                const greenEyeCenterX2 = greenEyeRect2.left + greenEyeRect2.width / 2;
-                const greenEyeCenterY2 = greenEyeRect2.top + greenEyeRect2.height / 2;
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const deltaX = mouseX - greenEyeCenterX2;
-                const deltaY = mouseY - greenEyeCenterY2;
-                
-                // 计算距离，让眼球移动更自然
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const maxDistance = 150;
-                
-                if (distance < maxDistance) {
-                    // 限制眼球移动范围在白色边框内
-                    const maxMoveX = (greenEyeRect2.width - 50) / 2;
-                    const maxMoveY = (greenEyeRect2.height - 50) / 2;
-                    
-                    // 使用距离比例来平滑移动
-                    const moveRatio = Math.min(distance / maxDistance, 1);
-                    const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
-                    const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
-                    
-                    greenPupil2.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                } else {
-                    // 鼠标太远时，眼球回到中心
-                    greenPupil2.style.transform = 'translate(0px, 0px)';
-                }
-            }
-            
-            // 第三个绿色眼睛
-            if (greenEye3 && greenPupil3) {
-                const greenEyeRect3 = greenEye3.getBoundingClientRect();
-                const greenEyeCenterX3 = greenEyeRect3.left + greenEyeRect3.width / 2;
-                const greenEyeCenterY3 = greenEyeRect3.top + greenEyeRect3.height / 2;
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const deltaX = mouseX - greenEyeCenterX3;
-                const deltaY = mouseY - greenEyeCenterY3;
-                
-                // 计算距离，让眼球移动更自然
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const maxDistance = 150;
-                
-                if (distance < maxDistance) {
-                    // 限制眼球移动范围在白色边框内
-                    const maxMoveX = (greenEyeRect3.width - 50) / 2;
-                    const maxMoveY = (greenEyeRect3.height - 50) / 2;
-                    
-                    // 使用距离比例来平滑移动
-                    const moveRatio = Math.min(distance / maxDistance, 1);
-                    const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
-                    const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
-                    
-                    greenPupil3.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                } else {
-                    // 鼠标太远时，眼球回到中心
-                    greenPupil3.style.transform = 'translate(0px, 0px)';
-                }
-            }
-            
-            // 第四个绿色眼睛
-            const greenEye4 = document.querySelector('.green-eye-hint-4');
-            if (greenEye4) {
-                const greenPupil4 = greenEye4.querySelector('.pixel-eye-green .pupil-green');
-                
-                if (greenPupil4) {
-                    const greenEyeRect4 = greenEye4.getBoundingClientRect();
-                    const greenEyeCenterX4 = greenEyeRect4.left + greenEyeRect4.width / 2;
-                    const greenEyeCenterY4 = greenEyeRect4.top + greenEyeRect4.height / 2;
-                    
-                    const mouseX = e.clientX;
-                    const mouseY = e.clientY;
-                    
-                    const deltaX = mouseX - greenEyeCenterX4;
-                    const deltaY = mouseY - greenEyeCenterY4;
-                    
-                    // 计算距离，让眼球移动更自然
-                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                    const maxDistance = 150;
-                    
-                    if (distance < maxDistance) {
-                        // 限制眼球移动范围在白色边框内
-                        const maxMoveX = (greenEyeRect4.width - 50) / 2;
-                        const maxMoveY = (greenEyeRect4.height - 50) / 2;
-                        
-                        // 使用距离比例来平滑移动
-                        const moveRatio = Math.min(distance / maxDistance, 1);
-                        const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
-                        const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
-                        
-                        greenPupil4.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                    } else {
-                        // 鼠标太远时，眼球回到中心
-                        greenPupil4.style.transform = 'translate(0px, 0px)';
-                    }
-                }
-            }
-            
-            // 第五个绿色眼睛
-            const greenEye5 = document.querySelector('.green-eye-hint-5');
-            const greenPupil5 = greenEye5.querySelector('.pixel-eye-green .pupil-green');
-            
-            if (greenEye5 && greenPupil5) {
-                const greenEyeRect5 = greenEye5.getBoundingClientRect();
-                const greenEyeCenterX5 = greenEyeRect5.left + greenEyeRect5.width / 2;
-                const greenEyeCenterY5 = greenEyeRect5.top + greenEyeRect5.height / 2;
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const deltaX = mouseX - greenEyeCenterX5;
-                const deltaY = mouseY - greenEyeCenterY5;
-                
-                // 计算距离，让眼球移动更自然
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const maxDistance = 150;
-                
-                if (distance < maxDistance) {
-                    // 限制眼球移动范围在白色边框内
-                    const maxMoveX = (greenEyeRect5.width - 50) / 2;
-                    const maxMoveY = (greenEyeRect5.height - 50) / 2;
-                    
-                    // 使用距离比例来平滑移动
-                    const moveRatio = Math.min(distance / maxDistance, 1);
-                    const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
-                    const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
-                    
-                    greenPupil5.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                } else {
-                    // 鼠标太远时，眼球回到中心
-                    greenPupil5.style.transform = 'translate(0px, 0px)';
-                }
-            }
-            
-            // 第六个绿色眼睛
-            const greenEye6 = document.querySelector('.green-eye-hint-6');
-            const greenPupil6 = greenEye6.querySelector('.pixel-eye-green .pupil-green');
-            
-            if (greenEye6 && greenPupil6) {
-                const greenEyeRect6 = greenEye6.getBoundingClientRect();
-                const greenEyeCenterX6 = greenEyeRect6.left + greenEyeRect6.width / 2;
-                const greenEyeCenterY6 = greenEyeRect6.top + greenEyeRect6.height / 2;
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const deltaX = mouseX - greenEyeCenterX6;
-                const deltaY = mouseY - greenEyeCenterY6;
-                
-                // 计算距离，让眼球移动更自然
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const maxDistance = 150;
-                
-                if (distance < maxDistance) {
-                    // 限制眼球移动范围在白色边框内
-                    const maxMoveX = (greenEyeRect6.width - 50) / 2;
-                    const maxMoveY = (greenEyeRect6.height - 50) / 2;
-                    
-                    // 使用距离比例来平滑移动
-                    const moveRatio = Math.min(distance / maxDistance, 1);
-                    const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
-                    const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
-                    
-                    greenPupil6.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                } else {
-                    // 鼠标太远时，眼球回到中心
-                    greenPupil6.style.transform = 'translate(0px, 0px)';
-                }
-            }
-            
-            // 第七个绿色眼睛
-            const greenEye7 = document.querySelector('.green-eye-hint-7');
-            const greenPupil7 = greenEye7.querySelector('.pixel-eye-green .pupil-green');
-            
-            if (greenEye7 && greenPupil7) {
-                const greenEyeRect7 = greenEye7.getBoundingClientRect();
-                const greenEyeCenterX7 = greenEyeRect7.left + greenEyeRect7.width / 2;
-                const greenEyeCenterY7 = greenEyeRect7.top + greenEyeRect7.height / 2;
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const deltaX = mouseX - greenEyeCenterX7;
-                const deltaY = mouseY - greenEyeCenterY7;
-                
-                // 计算距离，让眼球移动更自然
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const maxDistance = 150;
-                
-                if (distance < maxDistance) {
-                    // 限制眼球移动范围在白色边框内
-                    const maxMoveX = (greenEyeRect7.width - 50) / 2;
-                    const maxMoveY = (greenEyeRect7.height - 50) / 2;
-                    
-                    // 使用距离比例来平滑移动
-                    const moveRatio = Math.min(distance / maxDistance, 1);
-                    const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
-                    const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
-                    
-                    greenPupil7.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                } else {
-                    // 鼠标太远时，眼球回到中心
-                    greenPupil7.style.transform = 'translate(0px, 0px)';
-                }
-            }
-            
-            // 第八个绿色眼睛
-            const greenEye8 = document.querySelector('.green-eye-hint-8');
-            const greenPupil8 = greenEye8.querySelector('.pixel-eye-green .pupil-green');
-            
-            if (greenEye8 && greenPupil8) {
-                const greenEyeRect8 = greenEye8.getBoundingClientRect();
-                const greenEyeCenterX8 = greenEyeRect8.left + greenEyeRect8.width / 2;
-                const greenEyeCenterY8 = greenEyeRect8.top + greenEyeRect8.height / 2;
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const deltaX = mouseX - greenEyeCenterX8;
-                const deltaY = mouseY - greenEyeCenterY8;
-                
-                // 计算距离，让眼球移动更自然
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const maxDistance = 150;
-                
-                if (distance < maxDistance) {
-                    // 限制眼球移动范围在白色边框内
-                    const maxMoveX = (greenEyeRect8.width - 50) / 2;
-                    const maxMoveY = (greenEyeRect8.height - 50) / 2;
-                    
-                    // 使用距离比例来平滑移动
-                    const moveRatio = Math.min(distance / maxDistance, 1);
-                    const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
-                    const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
-                    
-                    greenPupil8.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                } else {
-                    // 鼠标太远时，眼球回到中心
-                    greenPupil8.style.transform = 'translate(0px, 0px)';
-                }
-            }
-            
+        //     // 第二个绿色眼睛
+        //     const greenEye2 = document.querySelector('.green-eye-hint-2');
+        //     const greenPupil2 = greenEye2.querySelector('.pixel-eye-green .pupil-green');
+        //     
+        //     // 第三个绿色眼睛
+        //     const greenEye3 = document.querySelector('.green-eye-hint-3');
+        //     const greenPupil3 = greenEye3.querySelector('.pixel-eye-green .pupil-green');
+        //     
+        //     if (greenEye2 && greenPupil2) {
+        //         const greenEyeRect2 = greenEye2.getBoundingClientRect();
+        //         const greenEyeCenterX2 = greenEyeRect2.left + greenEyeRect2.width / 2;
+        //         const greenEyeCenterY2 = greenEyeRect2.top + greenEyeRect2.width / 2;
+        //         
+        //         const mouseX = e.clientX;
+        //         const mouseY = e.clientY;
+        //         
+        //         const deltaX = mouseX - greenEyeCenterX2;
+        //         const deltaY = mouseY - greenEyeCenterY2;
+        //         
+        //         // 计算距离，让眼球移动更自然
+        //         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        //         const maxDistance = 150;
+        //         
+        //         if (distance < maxDistance) {
+        //             // 限制眼球移动范围在白色边框内
+        //             const maxMoveX = (greenEyeRect2.width - 50) / 2;
+        //             const maxMoveY = (greenEyeRect2.height - 50) / 2;
+        //             
+        //             // 使用距离比例来平滑移动
+        //             const moveRatio = Math.min(distance / maxDistance, 1);
+        //             const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
+        //             const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
+        //             
+        //             greenPupil2.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        //         } else {
+        //             // 鼠标太远时，眼球回到中心
+        //             greenPupil2.style.transform = 'translate(0px, 0px)';
+        //         }
+        //     }
+        //     
+        //     // 第三个绿色眼睛
+        //     if (greenEye3 && greenPupil3) {
+        //         const greenEyeRect3 = greenEye3.getBoundingClientRect();
+        //         const greenEyeCenterX3 = greenEyeRect3.left + greenEyeRect3.width / 2;
+        //         const greenEyeCenterY3 = greenEyeRect3.top + greenEyeRect3.height / 2;
+        //         
+        //         const mouseX = e.clientX;
+        //         const mouseY = e.clientY;
+        //         
+        //         const deltaX = mouseX - greenEyeCenterX3;
+        //         const deltaY = mouseY - greenEyeCenterY3;
+        //         
+        //         // 计算距离，让眼球移动更自然
+        //         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        //         const maxDistance = 150;
+        //         
+        //         if (distance < maxDistance) {
+        //             // 限制眼球移动范围在白色边框内
+        //             const maxMoveX = (greenEyeRect3.width - 50) / 2;
+        //             const maxMoveY = (greenEyeRect3.height - 50) / 2;
+        //             
+        //             // 使用距离比例来平滑移动
+        //             const moveRatio = Math.min(distance / maxDistance, 1);
+        //             const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
+        //             const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
+        //             
+        //             greenPupil3.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        //         } else {
+        //             // 鼠标太远时，眼球回到中心
+        //             greenPupil3.style.transform = 'translate(0px, 0px)';
+        //         }
+        //     }
+        //     
+        //     // 第四个绿色眼睛
+        //     const greenEye4 = document.querySelector('.green-eye-hint-4');
+        //     if (greenEye4) {
+        //         const greenPupil4 = greenEye4.querySelector('.pixel-eye-green .pupil-green');
+        //         
+        //         if (greenPupil4) {
+        //             const greenEyeRect4 = greenEye4.getBoundingClientRect();
+        //             const greenEyeCenterX4 = greenEyeRect4.left + greenEyeRect4.width / 2;
+        //             const greenEyeCenterY4 = greenEyeRect4.top + greenEyeRect4.height / 2;
+        //             
+        //             const mouseX = e.clientX;
+        //             const mouseY = e.clientY;
+        //             
+        //             const deltaX = mouseX - greenEyeCenterX4;
+        //             const deltaY = mouseY - greenEyeCenterY4;
+        //             
+        //             // 计算距离，让眼球移动更自然
+        //             const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        //             const maxDistance = 150;
+        //             
+        //             if (distance < maxDistance) {
+        //                 // 限制眼球移动范围在白色边框内
+        //                 const maxMoveX = (greenEyeRect4.width - 50) / 2;
+        //                 const maxMoveY = (greenEyeRect4.height - 50) / 2;
+        //                 
+        //                 // 使用距离比例来平滑移动
+        //                 const moveRatio = Math.min(distance / maxDistance, 1);
+        //                 const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
+        //                 const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
+        //                 
+        //                 greenPupil4.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        //             } else {
+        //                 // 鼠标太远时，眼球回到中心
+        //                 greenPupil4.style.transform = 'translate(0px, 0px)';
+        //             }
+        //         }
+        //     }
+        //     
+        //     // 第五个绿色眼睛
+        //     const greenEye5 = document.querySelector('.green-eye-hint-5');
+        //     const greenPupil5 = greenEye5.querySelector('.pixel-eye-green .pupil-green');
+        //     
+        //     if (greenEye5 && greenPupil5) {
+        //         const greenEyeRect5 = greenEye5.getBoundingClientRect();
+        //         const greenEyeCenterX5 = greenEyeRect5.left + greenEyeRect5.width / 2;
+        //         const greenEyeCenterY5 = greenEyeRect5.top + greenEyeRect5.height / 2;
+        //         
+        //         const mouseX = e.clientX;
+        //         const mouseY = e.clientY;
+        //         
+        //         const deltaX = mouseX - greenEyeCenterX5;
+        //         const deltaY = mouseY - greenEyeCenterY5;
+        //         
+        //         // 计算距离，让眼球移动更自然
+        //         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        //         const maxDistance = 150;
+        //         
+        //         if (distance < maxDistance) {
+        //             // 限制眼球移动范围在白色边框内
+        //             const maxMoveX = (greenEyeRect5.width - 50) / 2;
+        //             const maxMoveY = (greenEyeRect5.height - 50) / 2;
+        //             
+        //             // 使用距离比例来平滑移动
+        //             const moveRatio = Math.min(distance / maxDistance, 1);
+        //             const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
+        //             const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
+        //             
+        //             greenPupil5.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        //         } else {
+        //             // 鼠标太远时，眼球回到中心
+        //             greenPupil5.style.transform = 'translate(0px, 0px)';
+        //         }
+        //     }
+        //     
+        //     // 第六个绿色眼睛
+        //     const greenEye6 = document.querySelector('.green-eye-hint-6');
+        //     const greenPupil6 = greenEye6.querySelector('.pixel-eye-green .pupil-green');
+        //     
+        //     if (greenEye6 && greenPupil6) {
+        //         const greenEyeRect6 = greenEye6.getBoundingClientRect();
+        //         const greenEyeCenterX6 = greenEyeRect6.left + greenEyeRect6.width / 2;
+        //         const greenEyeCenterY6 = greenEyeRect6.top + greenEyeRect6.height / 2;
+        //         
+        //         const mouseX = e.clientX;
+        //         const mouseY = e.clientY;
+        //         
+        //         const deltaX = mouseX - greenEyeCenterX6;
+        //         const deltaY = mouseY - greenEyeCenterY6;
+        //         
+        //         // 计算距离，让眼球移动更自然
+        //         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        //         const maxDistance = 150;
+        //         
+        //         if (distance < maxDistance) {
+        //             // 限制眼球移动范围在白色边框内
+        //             const maxMoveX = (greenEyeRect6.width - 50) / 2;
+        //             const maxMoveY = (greenEyeRect6.height - 50) / 2;
+        //             
+        //             // 使用距离比例来平滑移动
+        //             const moveRatio = Math.min(distance / maxDistance, 1);
+        //             const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
+        //             const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
+        //             
+        //             greenPupil6.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        //         } else {
+        //             // 鼠标太远时，眼球回到中心
+        //             greenPupil6.style.transform = 'translate(0px, 0px)';
+        //         }
+        //     }
+        //     
+        //     // 第七个绿色眼睛
+        //     const greenEye7 = document.querySelector('.green-eye-hint-7');
+        //     const greenPupil7 = greenEye7.querySelector('.pixel-eye-green .pupil-green');
+        //     
+        //     if (greenEye7 && greenPupil7) {
+        //         const greenEyeRect7 = greenEye7.getBoundingClientRect();
+        //         const greenEyeCenterX7 = greenEyeRect7.left + greenEyeRect7.width / 2;
+        //         const greenEyeCenterY7 = greenEyeRect7.top + greenEyeRect7.height / 2;
+        //         
+        //         const mouseX = e.clientX;
+        //         const mouseY = e.clientY;
+        //         
+        //         const deltaX = mouseX - greenEyeCenterX7;
+        //         const deltaY = mouseY - greenEyeCenterY7;
+        //         
+        //         // 计算距离，让眼球移动更自然
+        //         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        //         const maxDistance = 150;
+        //         
+        //         if (distance < maxDistance) {
+        //             // 限制眼球移动范围在白色边框内
+        //             const maxMoveX = (greenEyeRect7.width - 50) / 2;
+        //             const maxMoveY = (greenEyeRect7.height - 50) / 2;
+        //             
+        //             // 使用距离比例来平滑移动
+        //             const moveRatio = Math.min(distance / maxDistance, 1);
+        //             const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
+        //             const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
+        //             
+        //             greenPupil7.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        //         } else {
+        //             // 鼠标太远时，眼球回到中心
+        //             greenPupil7.style.transform = 'translate(0px, 0px)';
+        //         }
+        //     }
+        //     
+        //     // 第八个绿色眼睛
+        //     const greenEye8 = document.querySelector('.green-eye-hint-8');
+        //     const greenPupil8 = greenEye8.querySelector('.pixel-eye-green .pupil-green');
+        //     
+        //     if (greenEye8 && greenPupil8) {
+        //         const greenEyeRect8 = greenEye8.getBoundingClientRect();
+        //         const greenEyeCenterX8 = greenEyeRect8.left + greenEyeRect8.width / 2;
+        //         const greenEyeCenterX8 = greenEyeRect8.top + greenEyeRect8.height / 2;
+        //         
+        //         const mouseX = e.clientX;
+        //         const mouseY = e.clientY;
+        //         
+        //         const deltaX = mouseX - greenEyeCenterX8;
+        //         const deltaY = mouseY - greenEyeCenterY8;
+        //         
+        //         // 计算距离，让眼球移动更自然
+        //         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        //         const maxDistance = 150;
+        //         
+        //         if (distance < maxDistance) {
+        //             // 限制眼球移动范围在白色边框内
+        //             const maxMoveX = (greenEyeRect8.width - 50) / 2;
+        //             const maxMoveY = (greenEyeRect8.height - 50) / 2;
+        //             
+        //             // 使用距离比例来平滑移动
+        //             const moveRatio = Math.min(distance / maxDistance, 1);
+        //             const moveX = Math.max(-maxMoveX, Math.min(maxMoveX, deltaX * 0.8 * moveRatio));
+        //             const moveY = Math.max(-maxMoveY, Math.min(maxMoveY, deltaY * 0.8 * moveRatio));
+        //             
+        //             greenPupil8.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        //         } else {
+        //             // 鼠标太远时，眼球回到中心
+        //             greenPupil8.style.transform = 'translate(0px, 0px)';
+        //         }
+        //     }
+        //     
 
-        });
+        // });
         
-        // 鼠标离开时眼球回到中心
-        document.addEventListener('mouseleave', function() {
-            const eye = document.querySelector('.yellow-finger-hint');
-            const pupil = eye.querySelector('.pixel-eye .pupil');
-            if (pupil) {
-                pupil.style.transform = 'translate(0px, 0px)';
-            }
-            
-            const greenEye = document.querySelector('.green-eye-hint');
-            const greenPupil = greenEye.querySelector('.pixel-eye-green .pupil-green');
-            if (greenPupil) {
-                greenPupil.style.transform = 'translate(0px, 0px)';
-            }
-            
-            const greenEye2 = document.querySelector('.green-eye-hint-2');
-            const greenPupil2 = greenEye2.querySelector('.pixel-eye-green .pupil-green');
-            if (greenPupil2) {
-                greenPupil2.style.transform = 'translate(0px, 0px)';
-            }
-            
-            const greenEye3 = document.querySelector('.green-eye-hint-3');
-            const greenPupil3 = greenEye3.querySelector('.pixel-eye-green .pupil-green');
-            if (greenPupil3) {
-                greenPupil3.style.transform = 'translate(0px, 0px)';
-            }
-            
-            const greenEye4 = document.querySelector('.green-eye-hint-4');
-            const greenPupil4 = greenEye4.querySelector('.pixel-eye-green .pupil-green');
-            if (greenPupil4) {
-                greenPupil4.style.transform = 'translate(0px, 0px)';
-            }
-            
-            const greenEye5 = document.querySelector('.green-eye-hint-5');
-            const greenPupil5 = greenEye5.querySelector('.pixel-eye-green .pupil-green');
-            if (greenPupil5) {
-                greenPupil5.style.transform = 'translate(0px, 0px)';
-            }
-            
-            const greenEye6 = document.querySelector('.green-eye-hint-6');
-            const greenPupil6 = greenEye6.querySelector('.pixel-eye-green .pupil-green');
-            if (greenPupil6) {
-                greenPupil6.style.transform = 'translate(0px, 0px)';
-            }
-            
-            const greenEye7 = document.querySelector('.green-eye-hint-7');
-            const greenPupil7 = greenEye7.querySelector('.pixel-eye-green .pupil-green');
-            if (greenPupil7) {
-                greenPupil7.style.transform = 'translate(0px, 0px)';
-            }
-            
-            const greenEye8 = document.querySelector('.green-eye-hint-8');
-            const greenPupil8 = greenEye8.querySelector('.pixel-eye-green .pupil-green');
-            if (greenPupil8) {
-                greenPupil8.style.transform = 'translate(0px, 0px)';
-            }
-            
+        // 鼠标离开时眼球回到中心 - 已禁用
+        // document.addEventListener('mouseleave', function() {
+        //     const eye = document.querySelector('.yellow-finger-hint');
+        //     const pupil = eye.querySelector('.pixel-eye .pupil');
+        //     if (pupil) {
+        //         pupil.style.transform = 'translate(0px, 0px)';
+        //     }
+        //     
+        //     const greenEye = document.querySelector('.green-eye-hint');
+        //     const greenPupil = greenEye.querySelector('.pixel-eye-green .pupil-green');
+        //     if (greenPupil) {
+        //         greenPupil.style.transform = 'translate(0px, 0px)';
+        //     }
+        //     
+        //     const greenEye2 = document.querySelector('.green-eye-hint-2');
+        //     const greenPupil2 = greenEye2.querySelector('.pixel-eye-green .pupil-green');
+        //     if (greenPupil2) {
+        //         greenPupil2.style.transform = 'translate(0px, 0px)';
+        //     }
+        //     
+        //     const greenEye3 = document.querySelector('.green-eye-hint-3');
+        //     const greenPupil3 = greenEye3.querySelector('.pixel-eye-green .pupil-green');
+        //     if (greenPupil3) {
+        //         greenPupil3.style.transform = 'translate(0px, 0px)';
+        //     }
+        //     
+        //     const greenEye4 = document.querySelector('.green-eye-hint-4');
+        //     const greenPupil4 = greenEye4.querySelector('.pixel-eye-green .pupil-green');
+        //     if (greenPupil4) {
+        //         greenPupil4.style.transform = 'translate(0px, 0px)';
+        //     }
+        //     
+        //     const greenEye5 = document.querySelector('.green-eye-hint-5');
+        //     const greenPupil5 = greenEye5.querySelector('.pixel-eye-green .pupil-green');
+        //     if (greenPupil5) {
+        //         greenPupil5.style.transform = 'translate(0px, 0px)';
+        //     }
+        //     
+        //     const greenEye6 = document.querySelector('.green-eye-hint-6');
+        //     const greenPupil6 = greenEye6.querySelector('.pixel-eye-green .pupil-green');
+        //     if (greenPupil6) {
+        //         greenPupil6.style.transform = 'translate(0px, 0px)';
+        //     }
+        //     
+        //     const greenEye7 = document.querySelector('.green-eye-hint-7');
+        //     const greenPupil7 = greenEye7.querySelector('.pixel-eye-green .pupil-green');
+        //     if (greenPupil7) {
+        //         greenPupil7.style.transform = 'translate(0px, 0px)';
+        //     }
+        //     
+        //     const greenEye8 = document.querySelector('.green-eye-hint-8');
+        //     const greenPupil8 = greenEye8.querySelector('.pixel-eye-green .pupil-green');
+        //     if (greenPupil8) {
+        //         greenPupil8.style.transform = 'translate(0px, 0px)';
+        //     }
+        //     
 
-        });
+        // });
 
 
         
@@ -3263,11 +3260,11 @@ Painting</div>
                 const isLowEnd = navigator.hardwareConcurrency <= 2;
                 
                 if (isMobile || isLowEnd) {
-                    return 5; // 低性能设备
+                    return 10; // 低性能设备 (原5 + 5)
                 } else if (navigator.hardwareConcurrency <= 4) {
-                    return 10; // 中等性能设备
+                    return 15; // 中等性能设备 (原10 + 5)
                 } else {
-                    return 15; // 高性能设备
+                    return 20; // 高性能设备 (原15 + 5)
                 }
             }
             
@@ -3276,13 +3273,19 @@ Painting</div>
                 
                 // 设置容器高度为右侧面板的实际内容高度
                 const updateContainerHeight = () => {
-                    const panelHeight = this.rightPanel.scrollHeight;
-                    this.container.style.height = panelHeight + 'px';
+                    // 使用固定高度，让波点动画折中一点点
+                    const fixedHeight = 9000;
+                    this.container.style.height = fixedHeight + 'px';
                     this.containerWidth = this.container.clientWidth;
-                    this.containerHeight = panelHeight;
+                    this.containerHeight = fixedHeight;
                 };
                 
                 updateContainerHeight();
+                
+                // 添加滚动事件监听器，实时同步高度
+                this.rightPanel.addEventListener('scroll', () => {
+                    updateContainerHeight();
+                });
                 
                         // 防抖函数
         function debounce(func, wait) {
@@ -4197,6 +4200,8 @@ Painting</div>
                 console.error('❌ 找不到 The Signifer Relic Series 眼睛元素');
             }
         });
+
+        // 滚动控制已移除，允许滚动到bottom-spacer区域
 
     </script>
 </body>
