@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Painting - EziZhang</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+        }
+
+        html, body {
+            background-color: #0041ff;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            color: white;
+            overflow-x: hidden;
+            overflow-y: auto;
+            image-rendering: pixelated;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
+            margin: 0;
+            padding: 0;
+            min-height: 120vh;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            left: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+
+        .content-container {
+            position: relative;
+            z-index: 10;
+            min-height: 120vh;
+        }
+
+        .preview-image-container-3 {
+            position: absolute;
+            top: 0px;
+            left: calc(50% - 400px);
+            transform: translateX(-50%);
+            width: 780px;
+            height: 1170px;
+            z-index: 5;
+        }
+
+        .outer-black-frame-3 {
+            position: absolute;
+            width: 100%;
+            height: calc(100% + 10px);
+            top: -5px;
+            background-color: black;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+
+        .inner-gray-frame-3 {
+            position: absolute;
+            top: 93px;
+            left: 110px;
+            right: 110px;
+            bottom: 93px;
+            background-color: #cfcfcf;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+
+        .preview-image-3 {
+            position: absolute;
+            top: 102px;
+            left: 102px;
+            right: 102px;
+            bottom: 102px;
+            width: calc(100% - 204px);
+            height: calc(100% - 204px);
+            object-fit: contain;
+            border-radius: 0px;
+        }
+
+        .artwork-info {
+            position: absolute;
+            top: 585px;
+            right: 100px;
+            width: 400px;
+            z-index: 10;
+            text-align: right;
+        }
+
+        .artwork-title {
+            font-size: 18px;
+            color: #ffffff;
+             margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .artwork-subtitle {
+            font-size: 18px;
+            color: #ffffff;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .artwork-medium {
+            font-size: 18px;
+            color: #ffffff;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .artwork-medium-chinese {
+            font-size: 18px;
+            color: #ffffff;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .artwork-size {
+            font-size: 18px;
+            color: #ffffff;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .artwork-year {
+            font-size: 18px;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .preview-image-container-4 {
+            position: absolute;
+            top: 1600px;
+            left: calc(50% - 400px);
+            transform: translateX(-50%);
+            width: 780px;
+            height: 1170px;
+            z-index: 5;
+        }
+
+        .outer-black-frame-4 {
+            position: absolute;
+            width: 100%;
+            height: calc(100% + 10px);
+            top: -5px;
+            background-color: black;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+
+        .inner-gray-frame-4 {
+            position: absolute;
+            top: 93px;
+            left: 110px;
+            right: 110px;
+            bottom: 93px;
+            background-color: #cfcfcf;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+
+        .preview-image-4 {
+            position: absolute;
+            top: 102px;
+            left: 102px;
+            right: 102px;
+            bottom: 102px;
+            width: calc(100% - 204px);
+            height: calc(100% - 204px);
+            object-fit: contain;
+            border-radius: 0px;
+        }
+
+        .artwork-info-2 {
+            position: absolute;
+            top: 2185px;
+            right: 100px;
+            width: 400px;
+            z-index: 10;
+            text-align: right;
+        }
+
+        .preview-image-container-5 {
+            position: absolute;
+            top: 3200px;
+            left: calc(50% - 400px);
+            transform: translateX(-50%);
+            width: 780px;
+            height: 1170px;
+            z-index: 5;
+        }
+
+        .outer-black-frame-5 {
+            position: absolute;
+            width: 100%;
+            height: calc(100% + 10px);
+            top: -5px;
+            background-color: black;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+
+        .inner-gray-frame-5 {
+            position: absolute;
+            top: 93px;
+            left: 110px;
+            right: 110px;
+            bottom: 93px;
+            background-color: #cfcfcf;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+
+        .preview-image-5 {
+            position: absolute;
+            top: 102px;
+            left: 102px;
+            right: 102px;
+            bottom: 102px;
+            width: calc(100% - 204px);
+            height: calc(100% - 204px);
+            object-fit: contain;
+            border-radius: 0px;
+        }
+
+        .artwork-info-3 {
+            position: absolute;
+            top: 3785px;
+            right: 100px;
+            width: 400px;
+            z-index: 10;
+            text-align: right;
+        }
+
+        .preview-image-container-6 {
+            position: absolute;
+            top: 4800px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1200px;
+            height: 800px;
+            z-index: 5;
+        }
+
+        .outer-black-frame-6 {
+            position: absolute;
+            width: calc(100% + 200px);
+            height: calc(100% + 10px);
+            top: -5px;
+            left: -100px;
+            background-color: black;
+            border-radius: 0px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .inner-gray-frame-6 {
+            position: absolute;
+            top: 110px;
+            left: 94px;
+            right: 94px;
+            bottom: 110px;
+            background-color: #cfcfcf;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+
+        .preview-image-6 {
+            position: absolute;
+            top: 102px;
+            left: 102px;
+            right: 102px;
+            bottom: 102px;
+            width: calc(100% - 204px);
+            height: calc(100% - 204px);
+            object-fit: contain;
+            border-radius: 0px;
+        }
+
+        .artwork-info-4 {
+            position: absolute;
+            top: 5670px;
+            right: 200px;
+            width: 400px;
+            z-index: 10;
+            text-align: right;
+        }
+
+        .preview-image-container-7 {
+            position: absolute;
+            top: 6300px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1200px;
+            height: 800px;
+            z-index: 5;
+        }
+
+        .outer-black-frame-7 {
+            position: absolute;
+            width: calc(100% + 200px);
+            height: calc(100% + 10px);
+            top: -5px;
+            left: -100px;
+            background-color: black;
+            border-radius: 0px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .inner-gray-frame-7 {
+            position: absolute;
+            top: 110px;
+            left: 94px;
+            right: 94px;
+            bottom: 110px;
+            background-color: #cfcfcf;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+
+        .preview-image-7 {
+            position: absolute;
+            top: 102px;
+            left: 102px;
+            right: 102px;
+            bottom: 102px;
+            width: calc(100% - 204px);
+            height: calc(100% - 204px);
+            object-fit: contain;
+            border-radius: 0px;
+        }
+
+        .artwork-info-5 {
+            position: absolute;
+            top: 7170px;
+            right: 200px;
+            width: 400px;
+            z-index: 10;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <a href="index.html" class="back-btn">Back</a>
+        
+        <!-- 第三个预览图 -->
+        <div class="preview-image-container-3">
+            <div class="outer-black-frame-3"></div>
+            <div class="inner-gray-frame-3"></div>
+            <img src="../TDMovieOut.106 TMD 爱你无限次God Damn love U Infinity Times.jpg" alt="Digital Painting Preview" class="preview-image-3">
+        </div>
+        
+        <!-- 作品信息 -->
+        <div class="artwork-info">
+            <h1 class="artwork-title">God Damn,love U Infinity Times</h1>
+            <h2 class="artwork-subtitle">TMD,爱你无限次</h2>
+            <p class="artwork-medium">Archival-Quality Giclée Print, Mounted on Aluminium Composite Panel</p>
+            <p class="artwork-medium-chinese">收藏级微喷，铝塑板装裱</p>
+            <p class="artwork-size">200*112.5 cm</p>
+            <p class="artwork-year">2025</p>
+        </div>
+        
+        <!-- 第二个作品图片 -->
+        <div class="preview-image-container-4">
+            <div class="outer-black-frame-4"></div>
+            <div class="inner-gray-frame-4"></div>
+            <img src="../TDMovieOut.99The Lost Humanoid Sergeant人形军曹的迷失.jpg" alt="The Lost Humanoid Sergeant" class="preview-image-4">
+        </div>
+        
+        <!-- 第二个作品信息 -->
+        <div class="artwork-info-2">
+            <h1 class="artwork-title">The Lost Humanoid Sergeant</h1>
+            <h2 class="artwork-subtitle">人形军曹的迷失</h2>
+            <p class="artwork-medium">Archival-Quality Giclée Print, Mounted on Aluminium Composite Panel</p>
+            <p class="artwork-medium-chinese">收藏级微喷，铝塑板装裱</p>
+            <p class="artwork-size">200*112.5 cm</p>
+            <p class="artwork-year">2025</p>
+        </div>
+        
+        <!-- 第三个作品图片 -->
+        <div class="preview-image-container-5">
+            <div class="outer-black-frame-5"></div>
+            <div class="inner-gray-frame-5"></div>
+            <img src="../TDMovieOut.139 无限对折魔.jpg" alt="无限对折魔" class="preview-image-5">
+        </div>
+        
+        <!-- 第三个作品信息 -->
+        <div class="artwork-info-3">
+            <h1 class="artwork-title">Infinite Folding Demon</h1>
+            <h2 class="artwork-subtitle">无限对折魔</h2>
+            <p class="artwork-medium">Archival-Quality Giclée Print, Mounted on Aluminium Composite Panel</p>
+            <p class="artwork-medium-chinese">收藏级微喷，铝塑板装裱</p>
+            <p class="artwork-size">200*112.5 cm</p>
+            <p class="artwork-year">2025</p>
+        </div>
+        
+        <!-- 第四个作品图片（横版居中） -->
+        <div class="preview-image-container-6">
+            <div class="outer-black-frame-6"></div>
+            <div class="inner-gray-frame-6"></div>
+            <img src="../TDMovieOut.213猩红极客矿场.jpg" alt="猩红极客矿场" class="preview-image-6">
+        </div>
+        
+        <!-- 第四个作品信息（右下方） -->
+        <div class="artwork-info-4">
+            <h1 class="artwork-title">Crimson Geek Mining Farm</h1>
+            <h2 class="artwork-subtitle">猩红极客矿场</h2>
+            <p class="artwork-medium">Archival-Quality Giclée Print, Mounted on Aluminium Composite Panel</p>
+            <p class="artwork-medium-chinese">收藏级微喷，铝塑板装裱</p>
+            <p class="artwork-size">200*112.5 cm</p>
+            <p class="artwork-year">2025</p>
+        </div>
+        
+        <!-- 第五个作品图片（横版居中） -->
+        <div class="preview-image-container-7">
+            <div class="outer-black-frame-7"></div>
+            <div class="inner-gray-frame-7"></div>
+            <img src="../TDMovieOut.196 雪花频道1台.jpg" alt="雪花频道1台" class="preview-image-7">
+        </div>
+        
+        <!-- 第五个作品信息（右下方） -->
+        <div class="artwork-info-5">
+            <h1 class="artwork-title">Snowflake Channel 1</h1>
+            <h2 class="artwork-subtitle">雪花频道1台</h2>
+            <p class="artwork-medium">Archival-Quality Giclée Print, Mounted on Aluminium Composite Panel</p>
+            <p class="artwork-medium-chinese">收藏级微喷，铝塑板装裱</p>
+            <p class="artwork-size">200*112.5 cm</p>
+            <p class="artwork-year">2025</p>
+        </div>
+        
+        <!-- 页面内容将在这里添加 -->
+        
+        <!-- 添加大量空白空间用于编辑 -->
+        <div style="height: 7700px; margin-top: 100px;"></div>
+    </div>
+</body>
+</html> 

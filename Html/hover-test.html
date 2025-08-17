@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hover测试</title>
+    <style>
+        body { 
+            background: #0041ff; 
+            color: white; 
+            font-family: Arial; 
+            padding: 20px; 
+        }
+        
+        .test-container {
+            position: relative;
+            margin: 20px;
+            display: inline-block;
+        }
+        
+        .black-image {
+            width: 200px;
+            height: 150px;
+            object-fit: contain;
+            filter: brightness(0);
+            transition: filter 0.3s ease;
+            cursor: pointer;
+            border: 2px solid #fac800;
+        }
+        
+        .hidden-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 150px;
+            object-fit: contain;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border: 2px solid #fac800;
+        }
+        
+        .hidden-image.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hover效果测试</h1>
+    
+    <div class="test-container">
+        <img src="../Tangential%20%20EMMA01.png" alt="EMMA01 Black" class="black-image" id="black1">
+        <img src="../Tangential%20%20EMMA01.png" alt="EMMA01 Original" class="hidden-image" id="hidden1">
+    </div>
+    
+    <div class="test-container">
+        <img src="../Tangential%20%20EMMA02.png" alt="EMMA02 Black" class="black-image" id="black2">
+        <img src="../Tangential%20%20EMMA02.png" alt="EMMA02 Original" class="hidden-image" id="hidden2">
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('测试页面加载完成');
+            
+            // 测试图片1
+            const black1 = document.getElementById('black1');
+            const hidden1 = document.getElementById('hidden1');
+            
+            black1.addEventListener('mouseenter', function() {
+                console.log('鼠标进入图片1');
+                hidden1.classList.add('show');
+            });
+            
+            black1.addEventListener('mouseleave', function() {
+                console.log('鼠标离开图片1');
+                hidden1.classList.remove('show');
+            });
+            
+            // 测试图片2
+            const black2 = document.getElementById('black2');
+            const hidden2 = document.getElementById('hidden2');
+            
+            black2.addEventListener('mouseenter', function() {
+                console.log('鼠标进入图片2');
+                hidden2.classList.add('show');
+            });
+            
+            black2.addEventListener('mouseleave', function() {
+                console.log('鼠标离开图片2');
+                hidden2.classList.remove('show');
+            });
+        });
+    </script>
+</body>
+</html> 

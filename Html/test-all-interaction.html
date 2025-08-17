@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>测试所有交互效果</title>
+    <style>
+        body { 
+            background: #0041ff; 
+            color: white; 
+            font-family: Arial; 
+            padding: 20px; 
+        }
+        
+        .container {
+            position: relative;
+            margin: 20px;
+            display: inline-block;
+        }
+        
+        .black-img {
+            width: 100px;
+            height: 120px;
+            object-fit: contain;
+            filter: brightness(0);
+            border: 2px solid #fac800;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .color-img {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px;
+            height: 120px;
+            object-fit: contain;
+            opacity: 0;
+            border: 2px solid #fac800;
+            transition: opacity 0.3s ease;
+        }
+        
+        .color-img.show {
+            opacity: 1;
+        }
+        
+        .light-lines {
+            position: absolute;
+            top: 50px;
+            left: 120px;
+            width: 100px;
+            height: 20px;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .light-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #fac800, transparent);
+            box-shadow: 0 0 10px #fac800;
+        }
+        
+        .light-line:nth-child(1) {
+            top: 0;
+        }
+        
+        .light-line:nth-child(2) {
+            top: 9px;
+        }
+        
+        .light-line:nth-child(3) {
+            top: 18px;
+        }
+        
+        .light-lines.show {
+            opacity: 1;
+        }
+        
+        .status {
+            margin: 20px;
+            padding: 10px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+    <h1>测试所有交互效果</h1>
+    
+    <div class="status">
+        <h3>测试说明：</h3>
+        <p>1. 依次点击每张图片，每张会显现3秒</p>
+        <p>2. 快速点击所有5张图片，当都显现时会出现发光线条2秒</p>
+        <p>3. 观察控制台日志</p>
+    </div>
+    
+    <div class="container">
+        <img src="../Tangential%20%20EMMA01.png" class="black-img" id="img1">
+        <img src="../Tangential%20%20EMMA01.png" class="color-img" id="hidden1">
+    </div>
+    
+    <div class="container">
+        <img src="../Tangential%20%20EMMA02.png" class="black-img" id="img2">
+        <img src="../Tangential%20%20EMMA02.png" class="color-img" id="hidden2">
+    </div>
+    
+    <div class="container">
+        <img src="../Tangential%20%20EMMA03.jpg" class="black-img" id="img3">
+        <img src="../Tangential%20%20EMMA03.jpg" class="color-img" id="hidden3">
+    </div>
+    
+    <div class="container">
+        <img src="../Tangential%20%20EMMA04.png" class="black-img" id="img4">
+        <img src="../Tangential%20%20EMMA04.png" class="color-img" id="hidden4">
+    </div>
+    
+    <div class="container">
+        <img src="../Tangential%20%20EMMA05.png" class="black-img" id="img5">
+        <img src="../Tangential%20%20EMMA05.png" class="color-img" id="hidden5">
+    </div>
+    
+    <!-- 发光线条 -->
+    <div class="light-lines">
+        <div class="light-line"></div>
+        <div class="light-line"></div>
+        <div class="light-line"></div>
+    </div>
+    
+    <div class="status">
+        <h3>当前状态：</h3>
+        <p id="status">等待触发...</p>
+    </div>
+    
+    <script>
+        let revealedImages = new Set();
+        let timeouts = {};
+        let lightLinesTimeout = null;
+        
+        // 为每个图片添加事件监听器
+        for (let i = 1; i <= 5; i++) {
+            const img = document.getElementById(`img${i}`);
+            const hidden = document.getElementById(`hidden${i}`);
+            const index = i - 1;
+            
+            img.addEventListener('click', function() {
+                console.log(`点击图片${i}`);
+                
+                // 显现原图
+                hidden.classList.add('show');
+                revealedImages.add(index);
+                updateStatus();
+                
+                // 清除之前的定时器
+                if (timeouts[index]) {
+                    clearTimeout(timeouts[index]);
+                }
+                
+                // 3秒后自动隐藏
+                timeouts[index] = setTimeout(() => {
+                    hidden.classList.remove('show');
+                    revealedImages.delete(index);
+                    console.log(`图片${i}自动隐藏`);
+                    updateStatus();
+                    checkAllRevealed();
+                }, 3000);
+                
+                checkAllRevealed();
+            });
+        }
+        
+        function updateStatus() {
+            const status = document.getElementById('status');
+            status.textContent = `已显现: ${revealedImages.size}/5 张图片`;
+        }
+        
+        function checkAllRevealed() {
+            const lightLines = document.querySelector('.light-lines');
+            console.log('检查显现状态:', revealedImages.size);
+            
+            if (revealedImages.size === 5) {
+                lightLines.classList.add('show');
+                console.log('发光线条显现！');
+                
+                if (lightLinesTimeout) {
+                    clearTimeout(lightLinesTimeout);
+                }
+                
+                lightLinesTimeout = setTimeout(() => {
+                    lightLines.classList.remove('show');
+                    console.log('发光线条消失');
+                }, 2000);
+            } else {
+                lightLines.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html> 

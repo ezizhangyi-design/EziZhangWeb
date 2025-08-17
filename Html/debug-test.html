@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>调试测试</title>
+    <style>
+        body { 
+            background: #0041ff; 
+            color: white; 
+            font-family: Arial; 
+            padding: 20px; 
+        }
+        
+        .container {
+            position: relative;
+            display: inline-block;
+            margin: 20px;
+            border: 2px solid #fac800;
+        }
+        
+        .black-img {
+            object-fit: contain;
+            filter: brightness(0);
+            border: 2px solid red;
+        }
+        
+        .color-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-fit: contain;
+            opacity: 0;
+            border: 2px solid green;
+            transition: opacity 0.1s ease;
+        }
+        
+        .color-img.show {
+            opacity: 1;
+        }
+        
+        .emma-series-image-1 {
+            width: 280px;
+            height: 210px;
+        }
+        
+        .emma-series-image-2 {
+            width: 180px;
+            height: 135px;
+        }
+        
+        .hidden-image-1 {
+            width: 280px;
+            height: 210px;
+        }
+        
+        .hidden-image-2 {
+            width: 180px;
+            height: 135px;
+        }
+    </style>
+</head>
+<body>
+    <h1>调试测试 - 01和02</h1>
+    
+    <div class="container">
+        <img src="../Tangential%20%20EMMA01.png" class="black-img emma-series-image-1" id="black1">
+        <img src="../Tangential%20%20EMMA01.png" class="color-img hidden-image-1" id="hidden1">
+    </div>
+    
+    <div class="container">
+        <img src="../Tangential%20%20EMMA02.png" class="black-img emma-series-image-2" id="black2">
+        <img src="../Tangential%20%20EMMA02.png" class="color-img hidden-image-2" id="hidden2">
+    </div>
+    
+    <div id="log"></div>
+    
+    <script>
+        function log(message) {
+            console.log(message);
+            document.getElementById('log').innerHTML += message + '<br>';
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            log('页面加载完成');
+            
+            // 检查图片加载状态
+            const images = document.querySelectorAll('img');
+            images.forEach((img, index) => {
+                if (img.complete && img.naturalWidth !== 0) {
+                    log(`图片 ${index + 1} 加载成功: ${img.src}`);
+                } else {
+                    log(`图片 ${index + 1} 加载失败: ${img.src}`);
+                }
+            });
+            
+            // 测试图片1
+            const black1 = document.getElementById('black1');
+            const hidden1 = document.getElementById('hidden1');
+            
+            log('设置图片1事件监听器');
+            
+            black1.addEventListener('mouseenter', function() {
+                log('鼠标进入图片1');
+                hidden1.classList.add('show');
+                log('图片1显示原图');
+            });
+            
+            black1.addEventListener('mouseleave', function() {
+                log('鼠标离开图片1');
+                hidden1.classList.remove('show');
+                log('图片1隐藏原图');
+            });
+            
+            // 测试图片2
+            const black2 = document.getElementById('black2');
+            const hidden2 = document.getElementById('hidden2');
+            
+            log('设置图片2事件监听器');
+            
+            black2.addEventListener('mouseenter', function() {
+                log('鼠标进入图片2');
+                hidden2.classList.add('show');
+                log('图片2显示原图');
+            });
+            
+            black2.addEventListener('mouseleave', function() {
+                log('鼠标离开图片2');
+                hidden2.classList.remove('show');
+                log('图片2隐藏原图');
+            });
+            
+            // 添加点击测试
+            black1.addEventListener('click', function() {
+                log('点击图片1');
+            });
+            
+            black2.addEventListener('click', function() {
+                log('点击图片2');
+            });
+        });
+    </script>
+</body>
+</html> 

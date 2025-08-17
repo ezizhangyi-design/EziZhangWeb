@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片加载测试</title>
+    <style>
+        body {
+            background: #0041ff;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .test-image {
+            margin: 10px;
+            border: 2px solid #fac800;
+            max-width: 300px;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background: rgba(0, 255, 0, 0.3);
+            border: 1px solid #00ff00;
+        }
+        .error {
+            background: rgba(255, 0, 0, 0.3);
+            border: 1px solid #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>图片加载测试</h1>
+    
+    <div id="results"></div>
+    
+    <h2>测试图片：</h2>
+    
+    <div>
+        <h3>题外话图片</h3>
+        <img src="../题外话 .png" alt="题外话" class="test-image" onload="imageLoaded('题外话')" onerror="imageError('题外话')">
+    </div>
+    
+    <div>
+        <h3>白色芯片</h3>
+        <img src="../白色芯片.png" alt="白色芯片" class="test-image" onload="imageLoaded('白色芯片')" onerror="imageError('白色芯片')">
+    </div>
+    
+    <div>
+        <h3>蓝色芯片</h3>
+        <img src="../Tangential  蓝色芯片.png" alt="蓝色芯片" class="test-image" onload="imageLoaded('蓝色芯片')" onerror="imageError('蓝色芯片')">
+    </div>
+    
+    <div>
+        <h3>EMMA主图</h3>
+        <img src="../Tangential  EMMA.jpg" alt="EMMA主图" class="test-image" onload="imageLoaded('EMMA主图')" onerror="imageError('EMMA主图')">
+    </div>
+    
+    <div>
+        <h3>EMMA系列图片</h3>
+        <img src="../Tangential  EMMA01.png" alt="EMMA01" class="test-image" onload="imageLoaded('EMMA01')" onerror="imageError('EMMA01')">
+        <img src="../Tangential  EMMA02.png" alt="EMMA02" class="test-image" onload="imageLoaded('EMMA02')" onerror="imageError('EMMA02')">
+        <img src="../Tangential  EMMA03.jpg" alt="EMMA03" class="test-image" onload="imageLoaded('EMMA03')" onerror="imageError('EMMA03')">
+        <img src="../Tangential  EMMA04.png" alt="EMMA04" class="test-image" onload="imageLoaded('EMMA04')" onerror="imageError('EMMA04')">
+        <img src="../Tangential  EMMA05.png" alt="EMMA05" class="test-image" onload="imageLoaded('EMMA05')" onerror="imageError('EMMA05')">
+    </div>
+    
+    <script>
+        let loadedCount = 0;
+        let errorCount = 0;
+        const totalImages = 10;
+        
+        function imageLoaded(name) {
+            loadedCount++;
+            addStatus(name + ' - 加载成功', 'success');
+            updateSummary();
+        }
+        
+        function imageError(name) {
+            errorCount++;
+            addStatus(name + ' - 加载失败', 'error');
+            updateSummary();
+        }
+        
+        function addStatus(message, type) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = 'status ' + type;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+        
+        function updateSummary() {
+            const total = loadedCount + errorCount;
+            if (total === totalImages) {
+                const summary = document.createElement('div');
+                summary.className = 'status ' + (errorCount === 0 ? 'success' : 'error');
+                summary.textContent = `总结：成功加载 ${loadedCount} 张图片，失败 ${errorCount} 张图片`;
+                document.getElementById('results').appendChild(summary);
+            }
+        }
+        
+        // 页面加载完成后检查
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const images = document.querySelectorAll('img');
+                let notLoaded = 0;
+                images.forEach(img => {
+                    if (!img.complete || img.naturalWidth === 0) {
+                        notLoaded++;
+                    }
+                });
+                
+                if (notLoaded > 0) {
+                    addStatus(`还有 ${notLoaded} 张图片未加载完成`, 'error');
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 

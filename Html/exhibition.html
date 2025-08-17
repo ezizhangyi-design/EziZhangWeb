@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ezi.Zhang - Exhibition Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;7RASTERIZE
+    SHINING00&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #0041ff;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 62.5vw; /* 1200px / 1920px * 100 */
+            margin: 0 auto;
+            padding: 2.0833vh 1.0417vw; /* 40px 20px */
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3.125vh; /* 60px */
+            border-bottom: 0.1042vw solid rgba(255,255,255,0.3); /* 2px */
+            padding-bottom: 1.5625vh; /* 30px */
+        }
+        .title {
+            font-size: 2.5vw; /* 48px / 1920px * 100 */
+            color: #fac800;
+            margin-bottom: 1.0417vh; /* 20px */
+            text-shadow: 0.1042vw 0.1042vw 0.2083vw rgba(0,0,0,0.5); /* 2px 2px 4px */
+        }
+        .subtitle {
+            font-size: 1.4583vw; /* 28px / 1920px * 100 */
+            color: #09ad04;
+            margin-bottom: 0.5208vh; /* 10px */
+        }
+        .back-btn {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            left: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .back-btn:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+        .exhibition-section {
+            margin-bottom: 2.6042vh; /* 50px */
+            padding: 1.5625vh; /* 30px */
+            background: rgba(255,255,255,0.05);
+            border-radius: 0.5208vw; /* 10px */
+            border-left: 0.2083vw solid #fac800; /* 4px */
+        }
+        .exhibition-title {
+            font-size: 1.875vw; /* 36px / 1920px * 100 */
+            color: #fac800;
+            margin-bottom: 0.7813vh; /* 15px */
+            border-bottom: 0.0521vw solid rgba(250,200,0,0.3); /* 1px */
+            padding-bottom: 0.5208vh; /* 10px */
+            text-shadow: 0.1042vw 0.1042vw 0.2083vw rgba(0,0,0,0.5); /* 2px 2px 4px */
+        }
+        .exhibition-date {
+            font-size: 0.9375vw; /* 18px / 1920px * 100 */
+            color: #09ad04;
+            margin-bottom: 0.7813vh; /* 15px */
+        }
+        .exhibition-description {
+            font-size: 0.9375vw; /* 18px / 1920px * 100 */
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 0.7813vh; /* 15px */
+        }
+        .exhibition-location {
+            font-size: 0.5729vw; /* 11px / 1920px * 100 */
+            color: rgba(255,255,255,0.7);
+            font-style: italic;
+        }
+        .placeholder {
+            text-align: center;
+            padding: 5.2083vh 1.0417vw; /* 100px 20px */
+            color: rgba(255,255,255,0.6);
+        }
+        .placeholder h2 {
+            font-size: 2.0833vw; /* 40px / 1920px * 100 */
+            margin-bottom: 1.0417vh; /* 20px */
+            color: #fac800;
+        }
+        .placeholder p {
+            font-size: 0.625vw; /* 12px / 1920px * 100 */
+            line-height: 1.6;
+        }
+        .exhibition-item {
+            margin-bottom: 1.0417vh; /* 20px */
+            padding: 0.7813vh; /* 15px */
+            background: rgba(255,255,255,0.03);
+            border-radius: 0.4167vw; /* 8px */
+            border-left: 0.1563vw solid #09ad04; /* 3px */
+        }
+        .exhibition-item:last-child {
+            margin-bottom: 0;
+        }
+        .exhibition-item .exhibition-date {
+            font-size: 0.9375vw; /* 18px / 1920px * 100 */
+            color: #fac800;
+            margin-bottom: 0.4167vh; /* 8px */
+            font-weight: bold;
+            text-shadow: 0.1042vw 0.1042vw 0.2083vw rgba(0,0,0,0.5); /* 2px 2px 4px */
+        }
+        .exhibition-item .exhibition-description {
+            font-size: 0.9375vw; /* 18px / 1920px * 100 */
+            line-height: 1.6;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 0;
+            font-weight: 200;
+            font-style: italic;
+        }
+        .exhibition-item .exhibition-description::before {
+            content: "●";
+            color: #ff0000;
+            margin-right: 0.4167vw; /* 8px */
+            font-size: 0.625vw; /* 12px / 1920px * 100 */
+            font-weight: bold;
+        }
+        
+        /* Solo Exhibition Slideshow Styles */
+        .solo-slideshow-container {
+            margin-top: 1.5625vh; /* 30px */
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5208vw; /* 10px */
+            padding: 1.0417vh; /* 20px */
+            border: 0.1042vw solid rgba(250,200,0,0.3); /* 2px */
+        }
+        
+        .slideshow-wrapper {
+            position: relative;
+            width: 100%;
+            height: 60vh; /* 进一步增加高度，让播放器更饱满 */
+            overflow: hidden;
+            border-radius: 0.4167vw; /* 8px */
+            background: #000;
+        }
+        
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+            transform: translateX(100%);
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+        
+        .slideshow-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.0417vh; /* 20px */
+            padding: 0 0.5208vw; /* 0 10px */
+        }
+        
+        .prev-btn, .next-btn {
+            background: rgba(250,200,0,0.1);
+            border: 0.1042vw solid #fac800; /* 2px */
+            color: #fac800;
+            padding: 0.625vh 1.0417vw; /* 12px 20px */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.625vw; /* 12px / 1920px * 100 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0.2083vw; /* 4px */
+        }
+        
+        .prev-btn:hover, .next-btn:hover {
+            background: rgba(250,200,0,0.2);
+            transform: scale(1.05);
+        }
+        
+        .slide-counter {
+            font-size: 0.8333vw; /* 16px / 1920px * 100 */
+            color: #fac800;
+            font-weight: bold;
+        }
+        
+        .slideshow-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.4167vw; /* 8px */
+            margin-top: 0.7813vh; /* 15px */
+        }
+        
+        .indicator {
+            width: 0.625vw; /* 12px */
+            height: 0.625vw; /* 12px */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        /* Color cycling: Red, Yellow, Blue, Green */
+        .indicator:nth-child(4n+1) {
+            background: rgba(255, 0, 0, 0.7);
+        }
+        
+        .indicator:nth-child(4n+2) {
+            background: rgba(255, 255, 0, 0.7);
+        }
+        
+        .indicator:nth-child(4n+3) {
+            background: rgba(0, 100, 255, 0.7);
+        }
+        
+        .indicator:nth-child(4n+4) {
+            background: rgba(0, 255, 0, 0.7);
+        }
+        
+        .indicator.active {
+            transform: scale(1.3);
+            box-shadow: 0 0 0.5208vw currentColor; /* 0 0 10px */
+        }
+        
+        .indicator.active:nth-child(4n+1) {
+            background: #ff0000;
+        }
+        
+        .indicator.active:nth-child(4n+2) {
+            background: #ffff00;
+        }
+        
+        .indicator.active:nth-child(4n+3) {
+            background: #0064ff;
+        }
+        
+        .indicator.active:nth-child(4n+4) {
+            background: #00ff00;
+        }
+        
+        .indicator:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        /* 响应式媒体查询 */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95vw;
+                padding: 1.5vh 2vw;
+            }
+            .title {
+                font-size: 4vw;
+            }
+            .subtitle {
+                font-size: 2.5vw;
+            }
+            .exhibition-title {
+                font-size: 3.5vw;
+            }
+            .exhibition-date, .exhibition-description {
+                font-size: 2.5vw;
+            }
+            .back-btn {
+                top: 1vh;
+                left: 2vw;
+                padding: 1vh 2vw;
+                font-size: 2.5vw;
+            }
+                         .slideshow-wrapper {
+                 height: 65vh;
+             }
+            .prev-btn, .next-btn {
+                padding: 1vh 2vw;
+                font-size: 2.5vw;
+            }
+            .slide-counter {
+                font-size: 3vw;
+            }
+            .indicator {
+                width: 2vw;
+                height: 2vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 98vw;
+                padding: 1vh 1vw;
+            }
+            .title {
+                font-size: 5vw;
+            }
+            .subtitle {
+                font-size: 3vw;
+            }
+            .exhibition-title {
+                font-size: 4vw;
+            }
+            .exhibition-date, .exhibition-description {
+                font-size: 3vw;
+            }
+            .back-btn {
+                top: 0.5vh;
+                left: 1vw;
+                padding: 0.8vh 1.5vw;
+                font-size: 3vw;
+            }
+                         .slideshow-wrapper {
+                 height: 60vh;
+             }
+            .prev-btn, .next-btn {
+                padding: 0.8vh 1.5vw;
+                font-size: 3vw;
+            }
+            .slide-counter {
+                font-size: 3.5vw;
+            }
+                         .indicator {
+                 width: 2.5vw;
+                 height: 2.5vw;
+             }
+             
+             /* Performance播放器响应式适配 */
+             .performance-slideshow-container .slideshow-wrapper {
+                 height: 65vh;
+             }
+             .prev-btn-perf, .next-btn-perf {
+                 padding: 1vh 2vw;
+                 font-size: 2.5vw;
+             }
+             .performance-slideshow-container .slide-counter {
+                 font-size: 3vw;
+             }
+             .indicator-perf {
+                 width: 2vw;
+                 height: 2vw;
+             }
+         }
+
+         @media (max-width: 480px) {
+             .container {
+                 max-width: 98vw;
+                 padding: 1vh 1vw;
+             }
+             .title {
+                 font-size: 5vw;
+             }
+             .subtitle {
+                 font-size: 3vw;
+             }
+             .exhibition-title {
+                 font-size: 4vw;
+             }
+             .exhibition-date, .exhibition-description {
+                 font-size: 3vw;
+             }
+             .back-btn {
+                 top: 0.5vh;
+                 left: 1vw;
+                 padding: 0.8vh 1.5vw;
+                 font-size: 3vw;
+             }
+             .slideshow-wrapper {
+                 height: 60vh;
+             }
+             .prev-btn, .next-btn {
+                 padding: 0.8vh 1.5vw;
+                 font-size: 3vw;
+             }
+             .slide-counter {
+                 font-size: 3.5vw;
+             }
+             .indicator {
+                 width: 2.5vw;
+                 height: 2.5vw;
+             }
+             
+             /* Performance播放器响应式适配 */
+             .performance-slideshow-container .slideshow-wrapper {
+                 height: 60vh;
+             }
+             .prev-btn-perf, .next-btn-perf {
+                 padding: 0.8vh 1.5vw;
+                 font-size: 3vw;
+             }
+             .performance-slideshow-container .slide-counter {
+                 font-size: 3.5vw;
+             }
+             .indicator-perf {
+                 width: 2.5vw;
+                 height: 2.5vw;
+             }
+             
+             /* Group播放器响应式适配 */
+             .group-slideshow-container .slideshow-wrapper {
+                 height: 65vh;
+             }
+             .prev-btn-group, .next-btn-group {
+                 padding: 1vh 2vw;
+                 font-size: 2.5vw;
+             }
+             .group-slideshow-container .slide-counter {
+                 font-size: 3vw;
+             }
+             .indicator-group {
+                 width: 2vw;
+                 height: 2vw;
+             }
+         }
+
+         @media (max-width: 480px) {
+             .container {
+                 max-width: 98vw;
+                 padding: 1vh 1vw;
+             }
+             .title {
+                 font-size: 5vw;
+             }
+             .subtitle {
+                 font-size: 3vw;
+             }
+             .exhibition-title {
+                 font-size: 4vw;
+             }
+             .exhibition-date, .exhibition-description {
+                 font-size: 3vw;
+             }
+             .back-btn {
+                 top: 0.5vh;
+                 left: 1vw;
+                 padding: 0.8vh 1.5vw;
+                 font-size: 3vw;
+             }
+             .slideshow-wrapper {
+                 height: 60vh;
+             }
+             .prev-btn, .next-btn {
+                 padding: 0.8vh 1.5vw;
+                 font-size: 3vw;
+             }
+             .slide-counter {
+                 font-size: 3.5vw;
+             }
+             .indicator {
+                 width: 2.5vw;
+                 height: 2.5vw;
+             }
+             
+             /* Performance播放器响应式适配 */
+             .performance-slideshow-container .slideshow-wrapper {
+                 height: 60vh;
+             }
+             .prev-btn-perf, .next-btn-perf {
+                 padding: 0.8vh 1.5vw;
+                 font-size: 3vw;
+             }
+             .performance-slideshow-container .slide-counter {
+                 font-size: 3.5vw;
+             }
+             .indicator-perf {
+                 width: 2.5vw;
+                 height: 2.5vw;
+             }
+             
+             /* Group播放器响应式适配 */
+             .group-slideshow-container .slideshow-wrapper {
+                 height: 60vh;
+             }
+             .prev-btn-group, .next-btn-group {
+                 padding: 0.8vh 1.5vw;
+                 font-size: 3vw;
+             }
+             .group-slideshow-container .slide-counter {
+                 font-size: 3.5vw;
+             }
+             .indicator-group {
+                 width: 2.5vw;
+                 height: 2.5vw;
+             }
+         }
+        
+        /* Performance Exhibition Slideshow Styles */
+        .performance-slideshow-container {
+            margin-top: 1.5625vh; /* 30px */
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5208vw; /* 10px */
+            padding: 1.0417vh; /* 20px */
+            border: 0.1042vw solid rgba(250,200,0,0.3); /* 2px */
+        }
+        
+        .performance-slideshow-container .slideshow-wrapper {
+            position: relative;
+            width: 100%;
+            height: 60vh; /* 与SOLO播放器保持一致的高度 */
+            overflow: hidden;
+            border-radius: 0.4167vw; /* 8px */
+            background: #000;
+        }
+        
+        .performance-slideshow-container .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+            transform: translateX(100%);
+        }
+        
+        .performance-slideshow-container .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .performance-slideshow-container .slide.prev {
+            transform: translateX(-100%);
+        }
+        
+        .performance-slideshow-container .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+        
+        .performance-slideshow-container .slideshow-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.0417vh; /* 20px */
+            padding: 0 0.5208vw; /* 0 10px */
+        }
+        
+        .performance-slideshow-container .slide-counter {
+            font-size: 0.8333vw; /* 16px / 1920px * 100 */
+            color: #fac800;
+            font-weight: bold;
+        }
+        
+        .performance-slideshow-container .slideshow-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.4167vw; /* 8px */
+            margin-top: 0.7813vh; /* 15px */
+        }
+        
+        /* Performance Indicators with different color cycling */
+        .indicator-perf {
+            width: 0.625vw; /* 12px */
+            height: 0.625vw; /* 12px */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        /* Color cycling for performance indicators: Red, Yellow, Blue, Green */
+        .indicator-perf:nth-child(4n+1) {
+            background: rgba(255, 0, 0, 0.7);
+        }
+        
+        .indicator-perf:nth-child(4n+2) {
+            background: rgba(255, 255, 0, 0.7);
+        }
+        
+        .indicator-perf:nth-child(4n+3) {
+            background: rgba(0, 100, 255, 0.7);
+        }
+        
+        .indicator-perf:nth-child(4n+4) {
+            background: rgba(0, 255, 0, 0.7);
+        }
+        
+        .indicator-perf.active {
+            transform: scale(1.3);
+            box-shadow: 0 0 0.5208vw currentColor; /* 0 0 10px */
+        }
+        
+        .indicator-perf.active:nth-child(4n+1) {
+            background: #ff0000;
+        }
+        
+        .indicator-perf.active:nth-child(4n+2) {
+            background: #ffff00;
+        }
+        
+        .indicator-perf.active:nth-child(4n+3) {
+            background: #0064ff;
+        }
+        
+        .indicator-perf.active:nth-child(4n+4) {
+            background: #00ff00;
+        }
+        
+        .indicator-perf:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+        
+        .prev-btn-perf, .next-btn-perf {
+            background: rgba(250,200,0,0.1);
+            border: 0.1042vw solid #fac800; /* 2px */
+            color: #fac800;
+            padding: 0.625vh 1.0417vw; /* 12px 20px */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.625vw; /* 12px / 1920px * 100 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0.2083vw; /* 4px */
+        }
+        
+        .prev-btn-perf:hover, .next-btn-perf:hover {
+            background: rgba(250,200,0,0.2);
+            transform: scale(1.05);
+        }
+        
+        /* Group Exhibition Slideshow Styles */
+        .group-slideshow-container {
+            margin-top: 1.5625vh; /* 30px */
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5208vw; /* 10px */
+            padding: 1.0417vh; /* 20px */
+            border: 0.1042vw solid rgba(250,200,0,0.3); /* 2px */
+        }
+        
+        .group-slideshow-container .slideshow-wrapper {
+            position: relative;
+            width: 100%;
+            height: 60vh; /* 与其他播放器保持一致的高度 */
+            overflow: hidden;
+            border-radius: 0.4167vw; /* 8px */
+            background: #000;
+        }
+        
+        .group-slideshow-container .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+            transform: translateX(100%);
+        }
+        
+        .group-slideshow-container .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .group-slideshow-container .slide.prev {
+            transform: translateX(-100%);
+        }
+        
+        .group-slideshow-container .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+        
+        .group-slideshow-container .slideshow-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.0417vh; /* 20px */
+            padding: 0 0.5208vw; /* 0 10px */
+        }
+        
+        .group-slideshow-container .slide-counter {
+            font-size: 0.8333vw; /* 16px / 1920px * 100 */
+            color: #fac800;
+            font-weight: bold;
+        }
+        
+        .group-slideshow-container .slideshow-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.4167vw; /* 8px */
+            margin-top: 0.7813vh; /* 15px */
+        }
+        
+        /* Group Indicators with red yellow blue green cycling */
+        .indicator-group {
+            width: 0.625vw; /* 12px */
+            height: 0.625vw; /* 12px */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        /* Color cycling for group indicators: Red, Yellow, Blue, Green */
+        .indicator-group:nth-child(4n+1) {
+            background: rgba(255, 0, 0, 0.7);
+        }
+        
+        .indicator-group:nth-child(4n+2) {
+            background: rgba(255, 255, 0, 0.7);
+        }
+        
+        .indicator-group:nth-child(4n+3) {
+            background: rgba(0, 100, 255, 0.7);
+        }
+        
+        .indicator-group:nth-child(4n+4) {
+            background: rgba(0, 255, 0, 0.7);
+        }
+        
+        .indicator-group.active {
+            transform: scale(1.3);
+            box-shadow: 0 0 0.5208vw currentColor; /* 0 0 10px */
+        }
+        
+        .indicator-group.active:nth-child(4n+1) {
+            background: #ff0000;
+        }
+        
+        .indicator-group.active:nth-child(4n+2) {
+            background: #ffff00;
+        }
+        
+        .indicator-group.active:nth-child(4n+3) {
+            background: #0064ff;
+        }
+        
+        .indicator-group.active:nth-child(4n+4) {
+            background: #00ff00;
+        }
+        
+        .indicator-group:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+        
+        .prev-btn-group, .next-btn-group {
+            background: rgba(250,200,0,0.1);
+            border: 0.1042vw solid #fac800; /* 2px */
+            color: #fac800;
+            padding: 0.625vh 1.0417vw; /* 12px 20px */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.625vw; /* 12px / 1920px * 100 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0.2083vw; /* 4px */
+        }
+        
+        .prev-btn-group:hover, .next-btn-group:hover {
+            background: rgba(250,200,0,0.2);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">Back</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">EZI.ZHANG</h1>
+            <p class="subtitle">EXHIBITION EXPERIENCE</p>
+        </div>
+        
+        <!-- Solo Exhibitions -->
+        <div class="exhibition-section">
+            <h2 class="exhibition-title">SOLO EXHIBITIONS</h2>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2025</p>
+                <p class="exhibition-description"><strong>if it happens in a flash Rasterize - L·F·T·R</strong>, E.SCAPE Art Space, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>Journey</strong>, Klein Art Space, M50, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2023</p>
+                <p class="exhibition-description"><strong>Rasterize — The Quadrilogy</strong>, Yellspace, Sichuan</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2022</p>
+                <p class="exhibition-description"><strong>High-Frequency Synesthesia</strong>, Kongsan Art Museum, Hangzhou</p>
+            </div>
+            
+            <!-- 空行分隔 -->
+            <div style="height: 3vh; margin: 0;"></div>
+            
+            <!-- Solo Exhibition Images Slideshow -->
+            <div class="solo-slideshow-container">
+                <div class="slideshow-wrapper">
+                    <div class="slide active">
+                        <img src="../SOLO 2025 ESCAPE01.JPG" alt="Solo Exhibition 2025 - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2025 ESCAPE02.JPG" alt="Solo Exhibition 2025 - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2025 ESCAPE03.JPG" alt="Solo Exhibition 2025 - 3">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2025 ESCAPE04.JPG" alt="Solo Exhibition 2025 - 4">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2025 ESCAPE05.JPG" alt="Solo Exhibition 2025 - 5">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2025 ESCAPE06.JPG" alt="Solo Exhibition 2025 - 6">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2025 ESCAPE07.JPG" alt="Solo Exhibition 2025 - 7">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2025 ESCAPE08.JPG" alt="Solo Exhibition 2025 - 8">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2025 ESCAPE09.JPG" alt="Solo Exhibition 2025 - 9">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2025 ESCAPE11.JPG" alt="Solo Exhibition 2025 - 11">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2024 Klein Art 01 .JPG" alt="Solo Exhibition 2024 - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2024 Klein Art 02.JPG" alt="Solo Exhibition 2024 - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2024 Klein Art 03.JPG" alt="Solo Exhibition 2024 - 3">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2024 Klein Art 004.JPG" alt="Solo Exhibition 2024 - 4">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2023 要空间 防空洞 光栅化.JPG" alt="Solo Exhibition 2023">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2023 要空间 防空洞 光栅化01.JPG" alt="Solo Exhibition 2023 - Detail 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2023 要空间 防空洞 光栅化02.JPG" alt="Solo Exhibition 2023 - Detail 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2023 要空间 防空洞 光栅化03.JPG" alt="Solo Exhibition 2023 - Detail 3">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2022 空山02.JPG" alt="Solo Exhibition 2022 - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../SOLO 2022 空山03.JPG" alt="Solo Exhibition 2022 - 2">
+                    </div>
+                </div>
+                
+                <!-- Slideshow Controls -->
+                <div class="slideshow-controls">
+                    <button class="prev-btn">◀ PREV</button>
+                    <div class="slide-counter">
+                        <span class="current-slide">1</span> / <span class="total-slides">20</span>
+                    </div>
+                    <button class="next-btn">NEXT ▶</button>
+                </div>
+                
+                <!-- Slideshow Indicators -->
+                <div class="slideshow-indicators">
+                    <span class="indicator active" data-slide="0"></span>
+                    <span class="indicator" data-slide="1"></span>
+                    <span class="indicator" data-slide="2"></span>
+                    <span class="indicator" data-slide="3"></span>
+                    <span class="indicator" data-slide="4"></span>
+                    <span class="indicator" data-slide="5"></span>
+                    <span class="indicator" data-slide="6"></span>
+                    <span class="indicator" data-slide="7"></span>
+                    <span class="indicator" data-slide="8"></span>
+                    <span class="indicator" data-slide="9"></span>
+                    <span class="indicator" data-slide="10"></span>
+                    <span class="indicator" data-slide="11"></span>
+                    <span class="indicator" data-slide="12"></span>
+                    <span class="indicator" data-slide="13"></span>
+                    <span class="indicator" data-slide="14"></span>
+                    <span class="indicator" data-slide="15"></span>
+                    <span class="indicator" data-slide="16"></span>
+                    <span class="indicator" data-slide="17"></span>
+                    <span class="indicator" data-slide="18"></span>
+                    <span class="indicator" data-slide="19"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 组间分隔 -->
+        <div style="height: 5vh; margin: 2vh 0; border-top: 0.1042vw solid rgba(135, 206, 235, 0.3);"></div>
+
+        <!-- Performances -->
+        <div class="exhibition-section">
+            <h2 class="exhibition-title">PERFORMANCES</h2>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2025</p>
+                <p class="exhibition-description"><strong>Synth Colors</strong>, Moin, Rockbund Ensemble, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2025</p>
+                <p class="exhibition-description"><strong>if it happens in a flash Rasterize - L·F·T·R</strong>, E.SCAPE Art Space, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>"7th Anniversary"</strong>, Mago Sheng at ALL, All Club, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>Oll.Korrect = All Correct</strong>, SYSTEM, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>Illusion Resonance</strong>, THEBOXX, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2023</p>
+                <p class="exhibition-description"><strong>Circular Gaze</strong>, Yujian Guanchi Space, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2023</p>
+                <p class="exhibition-description"><strong>Loneliness — Audio-Visual Performance</strong>, Shanghai Broadcasting Art Center</p>
+            </div>
+            
+            <!-- 空行分隔 -->
+            <div style="height: 3vh; margin: 0;"></div>
+            
+            <!-- Performance Images Slideshow -->
+            <div class="performance-slideshow-container">
+                <div class="slideshow-wrapper">
+                    <div class="slide active">
+                        <img src="../Performances 2025 Synth Colors MoinRockbund Ensemble01.JPG" alt="Performance 2025 Synth Colors - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2025 Synth Colors MoinRockbund Ensemble02.JPG" alt="Performance 2025 Synth Colors - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2025 Synth Colors MoinRockbund Ensemble03.JPG" alt="Performance 2025 Synth Colors - 3">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2025 Synth Colors MoinRockbund Ensemble04.JPG" alt="Performance 2025 Synth Colors - 4">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2025 Synth Colors MoinRockbund Ensemble05.JPG" alt="Performance 2025 Synth Colors - 5">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2025 Synth Colors MoinRockbund Ensemble06.JPG" alt="Performance 2025 Synth Colors - 6">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2025 Synth Colors MoinRockbund Ensemble07.JPG" alt="Performance 2025 Synth Colors - 7">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2025 ESCAPE01.JPG" alt="Performance 2025 ESCAPE">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024静安雕塑公园 04.JPG" alt="Performance 2024 Sculpture Park - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 The Boxx01.JPG" alt="Performance 2024 The Boxx - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 The Boxx02.JPG" alt="Performance 2024 The Boxx - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 The Boxx03.jpg" alt="Performance 2024 The Boxx - 3">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 OllKorrect All CorrectSYSTEMShanghai01.jpeg" alt="Performance 2024 Oll.Korrect - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 OllKorrect All CorrectSYSTEMShanghai03.jpeg" alt="Performance 2024 Oll.Korrect - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 香港会议展览中心 08.jpeg" alt="Performance 2024 Hong Kong - 8">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 香港会议展览中心 07.jpeg" alt="Performance 2024 Hong Kong - 7">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 香港会议展览中心 06.jpeg" alt="Performance 2024 Hong Kong - 6">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 香港会议展览中心 04.jpeg" alt="Performance 2024 Hong Kong - 4">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 香港会议展览中心 03.JPG" alt="Performance 2024 Hong Kong - 3">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 香港会议展览中心 02.JPG" alt="Performance 2024 Hong Kong - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 香港会议展览中心 01.JPG" alt="Performance 2024 Hong Kong - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 静安雕塑公园 03.JPG" alt="Performance 2024 Sculpture Park - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2024 7th Anniversary Mago Sheng at ALLAll Club Shanghai 01.jpeg" alt="Performance 2024 7th Anniversary">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2023 上海愚见观池 02.JPG" alt="Performance 2023 Shanghai Yujian - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2023 上海愚见观池 01.JPG" alt="Performance 2023 Shanghai Yujian - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2023 上海广播艺术中心 02.JPG" alt="Performance 2023 Shanghai Broadcasting - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Performances 2023 上海广播艺术中心 01.JPG" alt="Performance 2023 Shanghai Broadcasting - 1">
+                    </div>
+                </div>
+                
+                <!-- Slideshow Controls -->
+                <div class="slideshow-controls">
+                    <button class="prev-btn-perf">◀ PREV</button>
+                    <div class="slide-counter">
+                        <span class="current-slide-perf">1</span> / <span class="total-slides-perf">27</span>
+                    </div>
+                    <button class="next-btn-perf">NEXT ▶</button>
+                </div>
+                
+                <!-- Slideshow Indicators -->
+                <div class="slideshow-indicators">
+                    <span class="indicator-perf active" data-slide="0"></span>
+                    <span class="indicator-perf" data-slide="1"></span>
+                    <span class="indicator-perf" data-slide="2"></span>
+                    <span class="indicator-perf" data-slide="3"></span>
+                    <span class="indicator-perf" data-slide="4"></span>
+                    <span class="indicator-perf" data-slide="5"></span>
+                    <span class="indicator-perf" data-slide="6"></span>
+                    <span class="indicator-perf" data-slide="7"></span>
+                    <span class="indicator-perf" data-slide="8"></span>
+                    <span class="indicator-perf" data-slide="9"></span>
+                    <span class="indicator-perf" data-slide="10"></span>
+                    <span class="indicator-perf" data-slide="11"></span>
+                    <span class="indicator-perf" data-slide="12"></span>
+                    <span class="indicator-perf" data-slide="13"></span>
+                    <span class="indicator-perf" data-slide="14"></span>
+                    <span class="indicator-perf" data-slide="15"></span>
+                    <span class="indicator-perf" data-slide="16"></span>
+                    <span class="indicator-perf" data-slide="17"></span>
+                    <span class="indicator-perf" data-slide="18"></span>
+                    <span class="indicator-perf" data-slide="19"></span>
+                    <span class="indicator-perf" data-slide="20"></span>
+                    <span class="indicator-perf" data-slide="21"></span>
+                    <span class="indicator-perf" data-slide="22"></span>
+                    <span class="indicator-perf" data-slide="23"></span>
+                    <span class="indicator-perf" data-slide="24"></span>
+                    <span class="indicator-perf" data-slide="25"></span>
+                    <span class="indicator-perf" data-slide="26"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 组间分隔 -->
+        <div style="height: 5vh; margin: 2vh 0; border-top: 0.1042vw solid rgba(135, 206, 235, 0.3);"></div>
+
+        <!-- Group Exhibitions/Projects -->
+        <div class="exhibition-section">
+            <h2 class="exhibition-title">GROUP EXHIBITIONS / PROJECTS</h2>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2025</p>
+                <p class="exhibition-description"><strong>THERTER NOON WILDNESS STREAM WASHE RUINS THERTER</strong>, Power Station of Art, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>Sense n Vision</strong>, Art Basel Hong Kong, Hong Kong Convention and Exhibition Centre, Hong Kong</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>Shanghai Never Sleeps: ART021 Immersive Party</strong>, K11, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>UFO Terminal: Unknown Terminal</strong>, West Bund Oil Tank Art Park No.1 Tank, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>Phantom Realm</strong>, Sculpture Park Art Center, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>Ultra Substance (HK)</strong>, Mihn Club, Hong Kong</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>Wukang Sun Yard</strong>, E.SCAPE Art Space, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2024</p>
+                <p class="exhibition-description"><strong>Happy Faces — Chinese Experimental & Tech Art</strong>, Nantong Art Museum, Nantong</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2023</p>
+                <p class="exhibition-description"><strong>Virtual · Roaming</strong>, K11 Select Art Mall, Tianjin</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2023</p>
+                <p class="exhibition-description"><strong>Design Shanghai x London</strong>, organized by Shanghai Design Week, London</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2022</p>
+                <p class="exhibition-description"><strong>BXQ Experimental Video Week</strong>, Aotu Space, Beijing</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2022</p>
+                <p class="exhibition-description"><strong>Player Art Festival</strong>, Oil Tank Art Center, Shanghai</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2022</p>
+                <p class="exhibition-description"><strong>Bird & Flower Collection</strong>, Hangzhou</p>
+            </div>
+            <div class="exhibition-item">
+                <p class="exhibition-date">2022</p>
+                <p class="exhibition-description"><strong>Beyond Time, Knowledge of the Past: Oil Tank Art Center Sleepless Night</strong>, curated by Martin Goya, Oil Tank Art Center, Shanghai</p>
+            </div>
+            
+            <!-- 空行分隔 -->
+            <div style="height: 3vh; margin: 0;"></div>
+            
+            <!-- Group Exhibition Images Slideshow -->
+            <div class="group-slideshow-container">
+                <div class="slideshow-wrapper">
+                    <div class="slide active">
+                        <img src="../Group 2025 PSA 01.JPG" alt="Group Exhibition 2025 PSA - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2025 PSA 02.JPG" alt="Group Exhibition 2025 PSA - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2024 UFO 06.jpeg" alt="Group Exhibition 2024 UFO - 6">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2024 UFO 05.jpeg" alt="Group Exhibition 2024 UFO - 5">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2024 UFO 04.jpeg" alt="Group Exhibition 2024 UFO - 4">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2024 UFO 03.jpeg" alt="Group Exhibition 2024 UFO - 3">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2024 UFO 02.JPG" alt="Group Exhibition 2024 UFO - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2024 UFO 01.JPG" alt="Group Exhibition 2024 UFO - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2024 静安雕塑公园02.JPG" alt="Group Exhibition 2024 Sculpture Park - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2024 静安雕塑公园01.JPG" alt="Group Exhibition 2024 Sculpture Park - 1">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2023 天津K11 02.JPG" alt="Group Exhibition 2023 Tianjin K11 - 2">
+                    </div>
+                    <div class="slide">
+                        <img src="../Group 2023 天津K11 01.JPG" alt="Group Exhibition 2023 Tianjin K11 - 1">
+                    </div>
+                </div>
+                
+                <!-- Slideshow Controls -->
+                <div class="slideshow-controls">
+                    <button class="prev-btn-group">◀ PREV</button>
+                    <div class="slide-counter">
+                        <span class="current-slide-group">1</span> / <span class="total-slides-group">12</span>
+                    </div>
+                    <button class="next-btn-group">NEXT ▶</button>
+                </div>
+                
+                <!-- Slideshow Indicators -->
+                <div class="slideshow-indicators">
+                    <span class="indicator-group active" data-slide="0"></span>
+                    <span class="indicator-group" data-slide="1"></span>
+                    <span class="indicator-group" data-slide="2"></span>
+                    <span class="indicator-group" data-slide="3"></span>
+                    <span class="indicator-group" data-slide="4"></span>
+                    <span class="indicator-group" data-slide="5"></span>
+                    <span class="indicator-group" data-slide="6"></span>
+                    <span class="indicator-group" data-slide="7"></span>
+                    <span class="indicator-group" data-slide="8"></span>
+                    <span class="indicator-group" data-slide="9"></span>
+                    <span class="indicator-group" data-slide="10"></span>
+                    <span class="indicator-group" data-slide="11"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Solo Exhibition Slideshow JavaScript
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.solo-slideshow-container .slide');
+        const indicators = document.querySelectorAll('.indicator');
+        const totalSlides = slides.length;
+        const currentSlideSpan = document.querySelector('.current-slide');
+        const totalSlidesSpan = document.querySelector('.total-slides');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        
+        // Initialize slideshow
+        function initSlideshow() {
+            totalSlidesSpan.textContent = totalSlides;
+            updateSlideshow();
+        }
+        
+        // Update slideshow display
+        function updateSlideshow() {
+            // Hide all slides
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+            
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlide);
+            });
+            
+            // Update counter
+            currentSlideSpan.textContent = currentSlide + 1;
+        }
+        
+        // Go to next slide
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlideshow();
+        }
+        
+        // Go to previous slide
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlideshow();
+        }
+        
+        // Go to specific slide
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            updateSlideshow();
+        }
+        
+        // Event listeners
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+        
+        // Indicator click events
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => goToSlide(index));
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+        
+        // Auto-play slideshow (optional - uncomment to enable)
+        // setInterval(nextSlide, 5000); // Change slide every 5 seconds
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initSlideshow);
+        
+        // Performance Exhibition Slideshow JavaScript
+        let currentSlidePerf = 0;
+        const slidesPerf = document.querySelectorAll('.performance-slideshow-container .slide');
+        const indicatorsPerf = document.querySelectorAll('.indicator-perf');
+        const totalSlidesPerf = slidesPerf.length;
+        const currentSlidePerfSpan = document.querySelector('.current-slide-perf');
+        const totalSlidesPerfSpan = document.querySelector('.total-slides-perf');
+        const prevBtnPerf = document.querySelector('.prev-btn-perf');
+        const nextBtnPerf = document.querySelector('.next-btn-perf');
+        
+        // Initialize performance slideshow
+        function initSlideshowPerf() {
+            if (totalSlidesPerfSpan) {
+                totalSlidesPerfSpan.textContent = totalSlidesPerf;
+                updateSlideshowPerf();
+            }
+        }
+        
+        // Update performance slideshow display
+        function updateSlideshowPerf() {
+            // Hide all slides
+            slidesPerf.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlidePerf) {
+                    slide.classList.add('active');
+                } else if (index < currentSlidePerf) {
+                    slide.classList.add('prev');
+                }
+            });
+            
+            // Update indicators
+            indicatorsPerf.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlidePerf);
+            });
+            
+            // Update counter
+            if (currentSlidePerfSpan) {
+                currentSlidePerfSpan.textContent = currentSlidePerf + 1;
+            }
+        }
+        
+        // Go to next slide (performance)
+        function nextSlidePerf() {
+            currentSlidePerf = (currentSlidePerf + 1) % totalSlidesPerf;
+            updateSlideshowPerf();
+        }
+        
+        // Go to previous slide (performance)
+        function prevSlidePerf() {
+            currentSlidePerf = (currentSlidePerf - 1 + totalSlidesPerf) % totalSlidesPerf;
+            updateSlideshowPerf();
+        }
+        
+        // Go to specific slide (performance)
+        function goToSlidePerf(slideIndex) {
+            currentSlidePerf = slideIndex;
+            updateSlideshowPerf();
+        }
+        
+        // Performance event listeners
+        if (nextBtnPerf) nextBtnPerf.addEventListener('click', nextSlidePerf);
+        if (prevBtnPerf) prevBtnPerf.addEventListener('click', prevSlidePerf);
+        
+        // Performance indicator click events
+        indicatorsPerf.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => goToSlidePerf(index));
+        });
+        
+        // Initialize performance slideshow when page loads
+        document.addEventListener('DOMContentLoaded', initSlideshowPerf);
+        
+        // Group Exhibition Slideshow JavaScript
+        let currentSlideGroup = 0;
+        const slidesGroup = document.querySelectorAll('.group-slideshow-container .slide');
+        const indicatorsGroup = document.querySelectorAll('.indicator-group');
+        const totalSlidesGroup = slidesGroup.length;
+        const currentSlideGroupSpan = document.querySelector('.current-slide-group');
+        const totalSlidesGroupSpan = document.querySelector('.total-slides-group');
+        const prevBtnGroup = document.querySelector('.prev-btn-group');
+        const nextBtnGroup = document.querySelector('.next-btn-group');
+        
+        // Initialize group slideshow
+        function initSlideshowGroup() {
+            if (totalSlidesGroupSpan) {
+                totalSlidesGroupSpan.textContent = totalSlidesGroup;
+                updateSlideshowGroup();
+            }
+        }
+        
+        // Update group slideshow display
+        function updateSlideshowGroup() {
+            // Hide all slides
+            slidesGroup.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlideGroup) {
+                    slide.classList.add('active');
+                } else if (index < currentSlideGroup) {
+                    slide.classList.add('prev');
+                }
+            });
+            
+            // Update indicators
+            indicatorsGroup.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlideGroup);
+            });
+            
+            // Update counter
+            if (currentSlideGroupSpan) {
+                currentSlideGroupSpan.textContent = currentSlideGroup + 1;
+            }
+        }
+        
+        // Go to next slide (group)
+        function nextSlideGroup() {
+            currentSlideGroup = (currentSlideGroup + 1) % totalSlidesGroup;
+            updateSlideshowGroup();
+        }
+        
+        // Go to previous slide (group)
+        function prevSlideGroup() {
+            currentSlideGroup = (currentSlideGroup - 1 + totalSlidesGroup) % totalSlidesGroup;
+            updateSlideshowGroup();
+        }
+        
+        // Go to specific slide (group)
+        function goToSlideGroup(slideIndex) {
+            currentSlideGroup = slideIndex;
+            updateSlideshowGroup();
+        }
+        
+        // Group event listeners
+        if (nextBtnGroup) nextBtnGroup.addEventListener('click', nextSlideGroup);
+        if (prevBtnGroup) prevBtnGroup.addEventListener('click', prevSlideGroup);
+        
+        // Group indicator click events
+        indicatorsGroup.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => goToSlideGroup(index));
+        });
+        
+        // Initialize group slideshow when page loads
+        document.addEventListener('DOMContentLoaded', initSlideshowGroup);
+    </script>
+</body>
+</html> 

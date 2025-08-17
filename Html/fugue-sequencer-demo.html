@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赋格音序器样式参考</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            color: #4fc3f7;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+
+        .sequencer-section {
+            margin-bottom: 60px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #4fc3f7;
+        }
+
+        /* 基础音序器样式 */
+        .sequencer {
+            display: flex;
+            gap: 4px;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .step.white {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+        }
+
+        .step.blue {
+            background: #4fc3f7;
+            border: 2px solid #29b6f6;
+        }
+
+        /* 跳动动画 */
+        .step.active {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px currentColor;
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1.2); }
+        }
+
+        /* 样式1: 经典网格 */
+        .classic-grid {
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+            gap: 6px;
+            padding: 25px;
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            border-radius: 12px;
+        }
+
+        .classic-grid .step {
+            width: 35px;
+            height: 35px;
+            border-radius: 6px;
+        }
+
+        /* 样式2: 圆形音序器 */
+        .circular-sequencer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            position: relative;
+        }
+
+        .circular-sequencer .step {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            transform-origin: 100px 100px;
+        }
+
+        /* 样式3: 波浪形 */
+        .wave-sequencer {
+            display: flex;
+            gap: 3px;
+            padding: 30px;
+            background: linear-gradient(90deg, #0d47a1, #1565c0, #1976d2);
+            border-radius: 15px;
+        }
+
+        .wave-sequencer .step {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        .wave-sequencer .step:nth-child(even) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 样式4: 3D立方体 */
+        .cube-sequencer {
+            display: flex;
+            gap: 8px;
+            padding: 25px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-radius: 10px;
+            perspective: 1000px;
+        }
+
+        .cube-sequencer .step {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            transform-style: preserve-3d;
+            transition: transform 0.4s ease;
+        }
+
+        .cube-sequencer .step.active {
+            transform: rotateY(180deg) scale(1.1);
+        }
+
+        /* 样式5: 矩阵式 */
+        .matrix-sequencer {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 5px;
+            padding: 20px;
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+        }
+
+        .matrix-sequencer .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 2px;
+            border: 1px solid #00ff00;
+        }
+
+        .matrix-sequencer .step.active {
+            background: #00ff00 !important;
+            box-shadow: 0 0 15px #00ff00;
+        }
+
+        /* 样式6: 霓虹风格 */
+        .neon-sequencer {
+            display: flex;
+            gap: 6px;
+            padding: 30px;
+            background: #000;
+            border-radius: 12px;
+            border: 2px solid #ff00ff;
+        }
+
+        .neon-sequencer .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        .neon-sequencer .step.active {
+            box-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+            animation: neonPulse 0.8s ease-in-out;
+        }
+
+        @keyframes neonPulse {
+            0% { box-shadow: 0 0 10px rgba(255, 0, 255, 0.3); }
+            50% { box-shadow: 0 0 30px #ff00ff, 0 0 40px #ff00ff; }
+            100% { box-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff; }
+        }
+
+        /* 控制按钮 */
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background: #4fc3f7;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #29b6f6;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .sequencer {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .classic-grid {
+                grid-template-columns: repeat(8, 1fr);
+            }
+            
+            .matrix-sequencer {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>赋格音序器样式参考</h1>
+
+        <!-- 经典网格样式 -->
+        <div class="sequencer-section">
+            <h2 class="section-title">样式1: 经典网格</h2>
+            <div class="classic-grid" id="classic-grid">
+                <!-- 16个步骤 -->
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="startSequencer('classic-grid')">开始</button>
+                <button class="btn" onclick="stopSequencer('classic-grid')">停止</button>
+                <button class="btn" onclick="resetSequencer('classic-grid')">重置</button>
+            </div>
+        </div>
+
+        <!-- 圆形音序器 -->
+        <div class="sequencer-section">
+            <h2 class="section-title">样式2: 圆形音序器</h2>
+            <div class="circular-sequencer" id="circular-sequencer">
+                <!-- 12个步骤 -->
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="startSequencer('circular-sequencer')">开始</button>
+                <button class="btn" onclick="stopSequencer('circular-sequencer')">停止</button>
+                <button class="btn" onclick="resetSequencer('circular-sequencer')">重置</button>
+            </div>
+        </div>
+
+        <!-- 波浪形音序器 -->
+        <div class="sequencer-section">
+            <h2 class="section-title">样式3: 波浪形</h2>
+            <div class="wave-sequencer" id="wave-sequencer">
+                <!-- 16个步骤 -->
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="startSequencer('wave-sequencer')">开始</button>
+                <button class="btn" onclick="stopSequencer('wave-sequencer')">停止</button>
+                <button class="btn" onclick="resetSequencer('wave-sequencer')">重置</button>
+            </div>
+        </div>
+
+        <!-- 3D立方体音序器 -->
+        <div class="sequencer-section">
+            <h2 class="section-title">样式4: 3D立方体</h2>
+            <div class="cube-sequencer" id="cube-sequencer">
+                <!-- 12个步骤 -->
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="startSequencer('cube-sequencer')">开始</button>
+                <button class="btn" onclick="stopSequencer('cube-sequencer')">停止</button>
+                <button class="btn" onclick="resetSequencer('cube-sequencer')">重置</button>
+            </div>
+        </div>
+
+        <!-- 矩阵式音序器 -->
+        <div class="sequencer-section">
+            <h2 class="section-title">样式5: 矩阵式</h2>
+            <div class="matrix-sequencer" id="matrix-sequencer">
+                <!-- 32个步骤 (8x4) -->
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="startSequencer('matrix-sequencer')">开始</button>
+                <button class="btn" onclick="stopSequencer('matrix-sequencer')">停止</button>
+                <button class="btn" onclick="resetSequencer('matrix-sequencer')">重置</button>
+            </div>
+        </div>
+
+        <!-- 霓虹风格音序器 -->
+        <div class="sequencer-section">
+            <h2 class="section-title">样式6: 霓虹风格</h2>
+            <div class="neon-sequencer" id="neon-sequencer">
+                <!-- 16个步骤 -->
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="startSequencer('neon-sequencer')">开始</button>
+                <button class="btn" onclick="stopSequencer('neon-sequencer')">停止</button>
+                <button class="btn" onclick="resetSequencer('neon-sequencer')">重置</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 音序器状态管理
+        const sequencers = {};
+        const intervals = {};
+
+        // 初始化音序器
+        function initializeSequencers() {
+            // 经典网格 - 16步
+            createSequencer('classic-grid', 16);
+            
+            // 圆形音序器 - 12步
+            createCircularSequencer('circular-sequencer', 12);
+            
+            // 波浪形 - 16步
+            createSequencer('wave-sequencer', 16);
+            
+            // 3D立方体 - 12步
+            createSequencer('cube-sequencer', 12);
+            
+            // 矩阵式 - 32步
+            createMatrixSequencer('matrix-sequencer', 32);
+            
+            // 霓虹风格 - 16步
+            createSequencer('neon-sequencer', 16);
+        }
+
+        // 创建标准音序器
+        function createSequencer(containerId, steps) {
+            const container = document.getElementById(containerId);
+            sequencers[containerId] = {
+                currentStep: 0,
+                totalSteps: steps,
+                isPlaying: false
+            };
+
+            for (let i = 0; i < steps; i++) {
+                const step = document.createElement('div');
+                step.className = `step ${i % 2 === 0 ? 'white' : 'blue'}`;
+                step.dataset.index = i;
+                container.appendChild(step);
+            }
+        }
+
+        // 创建圆形音序器
+        function createCircularSequencer(containerId, steps) {
+            const container = document.getElementById(containerId);
+            sequencers[containerId] = {
+                currentStep: 0,
+                totalSteps: steps,
+                isPlaying: false
+            };
+
+            for (let i = 0; i < steps; i++) {
+                const step = document.createElement('div');
+                step.className = `step ${i % 2 === 0 ? 'white' : 'blue'}`;
+                step.dataset.index = i;
+                
+                const angle = (i * 360 / steps) * (Math.PI / 180);
+                const radius = 80;
+                const x = Math.cos(angle) * radius + 100;
+                const y = Math.sin(angle) * radius + 100;
+                
+                step.style.left = x + 'px';
+                step.style.top = y + 'px';
+                
+                container.appendChild(step);
+            }
+        }
+
+        // 创建矩阵音序器
+        function createMatrixSequencer(containerId, steps) {
+            const container = document.getElementById(containerId);
+            sequencers[containerId] = {
+                currentStep: 0,
+                totalSteps: steps,
+                isPlaying: false
+            };
+
+            for (let i = 0; i < steps; i++) {
+                const step = document.createElement('div');
+                step.className = `step ${i % 2 === 0 ? 'white' : 'blue'}`;
+                step.dataset.index = i;
+                container.appendChild(step);
+            }
+        }
+
+        // 开始音序器
+        function startSequencer(containerId) {
+            if (sequencers[containerId].isPlaying) return;
+            
+            sequencers[containerId].isPlaying = true;
+            intervals[containerId] = setInterval(() => {
+                const sequencer = sequencers[containerId];
+                const container = document.getElementById(containerId);
+                const steps = container.querySelectorAll('.step');
+                
+                // 移除之前的激活状态
+                steps.forEach(step => step.classList.remove('active'));
+                
+                // 激活当前步骤
+                steps[sequencer.currentStep].classList.add('active');
+                
+                // 移动到下一步
+                sequencer.currentStep = (sequencer.currentStep + 1) % sequencer.totalSteps;
+            }, 200); // 200ms 间隔，可以根据需要调整
+        }
+
+        // 停止音序器
+        function stopSequencer(containerId) {
+            sequencers[containerId].isPlaying = false;
+            if (intervals[containerId]) {
+                clearInterval(intervals[containerId]);
+                delete intervals[containerId];
+            }
+            
+            // 移除所有激活状态
+            const container = document.getElementById(containerId);
+            const steps = container.querySelectorAll('.step');
+            steps.forEach(step => step.classList.remove('active'));
+        }
+
+        // 重置音序器
+        function resetSequencer(containerId) {
+            stopSequencer(containerId);
+            sequencers[containerId].currentStep = 0;
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', initializeSequencers);
+
+        // 点击步骤切换状态
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('step')) {
+                e.target.classList.toggle('active');
+            }
+        });
+    </script>
+</body>
+</html> 

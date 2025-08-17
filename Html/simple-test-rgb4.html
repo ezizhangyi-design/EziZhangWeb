@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>简单测试</title>
+</head>
+<body>
+    <h1>RGB星史IV图片测试</h1>
+    
+    <h2>测试图片1:</h2>
+    <img src="../RGB星史IV01.jpg" alt="测试图片" style="max-width: 300px; border: 2px solid red;">
+    
+    <h2>测试图片2 (原始文件名):</h2>
+    <img src="../RGB星史Ⅳ01.jpg" alt="测试图片2" style="max-width: 300px; border: 2px solid blue;">
+    
+    <h2>测试图片3 (其他图片):</h2>
+    <img src="../RGB星史 I 黑白01 .png" alt="测试图片3" style="max-width: 300px; border: 2px solid green;">
+    
+    <script>
+        // 检查图片加载状态
+        document.querySelectorAll('img').forEach((img, index) => {
+            img.onload = function() {
+                console.log('图片', index + 1, '加载成功');
+                this.style.border = '2px solid green';
+            };
+            img.onerror = function() {
+                console.log('图片', index + 1, '加载失败');
+                this.style.border = '2px solid red';
+                this.alt = '加载失败';
+            };
+        });
+    </script>
+</body>
+</html> 

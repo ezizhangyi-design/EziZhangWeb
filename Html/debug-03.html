@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>调试03图片交互</title>
+    <style>
+        body { 
+            background: #0041ff; 
+            color: white; 
+            font-family: Arial; 
+            padding: 20px; 
+        }
+        
+        .debug-container {
+            position: relative;
+            margin: 20px;
+            border: 2px solid red;
+        }
+        
+        .emma-03 {
+            position: absolute;
+            top: 2185px;
+            left: 750px;
+            width: 450px;
+            height: 337px;
+            object-fit: contain;
+            filter: brightness(0);
+            border: 2px solid yellow;
+            cursor: pointer;
+        }
+        
+        .hidden-03 {
+            position: absolute;
+            top: 2185px;
+            left: 750px;
+            width: 450px;
+            height: 337px;
+            object-fit: contain;
+            opacity: 0;
+            border: 2px solid green;
+            transition: opacity 0.1s ease;
+        }
+        
+        .hidden-03.show {
+            opacity: 1;
+        }
+        
+        .info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h3>03图片调试</h3>
+        <p>黄色边框：黑色图片</p>
+        <p>绿色边框：隐藏原图</p>
+        <p>位置：top: 2185px, left: 750px</p>
+        <p>尺寸：450x337px</p>
+    </div>
+    
+    <div class="debug-container">
+        <img src="../Tangential%20%20EMMA03.jpg" class="emma-03" id="black03">
+        <img src="../Tangential%20%20EMMA03.jpg" class="hidden-03" id="hidden03">
+    </div>
+    
+    <script>
+        const black03 = document.getElementById('black03');
+        const hidden03 = document.getElementById('hidden03');
+        
+        black03.addEventListener('mouseenter', function(e) {
+            console.log('鼠标进入03图片');
+            hidden03.classList.add('show');
+        });
+        
+        black03.addEventListener('mouseleave', function(e) {
+            console.log('鼠标离开03图片');
+            hidden03.classList.remove('show');
+        });
+        
+        // 添加鼠标移动跟踪
+        document.addEventListener('mousemove', function(e) {
+            const rect = black03.getBoundingClientRect();
+            const isOver = e.clientX >= rect.left && e.clientX <= rect.right && 
+                          e.clientY >= rect.top && e.clientY <= rect.bottom;
+            
+            if (isOver) {
+                console.log('鼠标在03图片区域内');
+            }
+        });
+    </script>
+</body>
+</html> 

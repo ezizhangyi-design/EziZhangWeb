@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anti-Human Series</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+        }
+
+        html, body {
+            background-color: #0041ff;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            color: white;
+            overflow-x: hidden;
+            overflow-y: auto;
+            image-rendering: pixelated;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .rasterize-stripes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: repeating-linear-gradient(
+                to bottom,
+                #0041ff 0px,
+                #0041ff 3px,
+                rgb(0, 50, 150) 3px,
+                rgb(0, 50, 150) 20px
+            );
+            background-size: 100% 20px;
+            z-index: 1;
+            will-change: transform;
+            animation: rasterize 2s linear infinite;
+            filter: blur(1.5px);
+        }
+
+        @keyframes rasterize {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .content-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            left: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+
+        .video-container {
+            width: 100vw;
+            margin: 80px 0 0 0;
+            position: relative;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .video-background {
+            width: 100vw;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 宽高比 */
+            position: relative;
+            background-color: #000000;
+            border-radius: 0px;
+            margin: 0;
+            left: 0;
+            transform: none;
+        }
+
+        .video-player {
+            width: 80%;
+            height: 0;
+            padding-bottom: 45%; /* 16:9 宽高比，但缩小到80% */
+            position: absolute;
+            top: calc(10% - 5px);
+            left: 10%;
+            border-radius: 0px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 4;
+            background-color: transparent;
+        }
+        
+        .video-player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+        }
+
+        .video-player-background {
+            width: calc(82% - 12px);
+            height: 0;
+            padding-bottom: 46.125%; /* 16:9 宽高比，比播放器大一小圈 */
+            position: absolute;
+            top: 8.5%;
+            left: calc(9% + 6px);
+            background-color: #0041ff;
+            border-radius: 0px;
+            z-index: 3;
+        }
+
+        .video-info {
+            margin-top: 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .video-info .title {
+            font-size: 96px;
+            color: #fac800;
+            margin-bottom: 60px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .video-info .title .blackcurrant {
+            font-size: 72px;
+        }
+
+        .video-info .info-line {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .video-artwork-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 180px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .video-artwork-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .synopsis-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .synopsis-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .description-text {
+            font-size: 13px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            margin: 30px 0 30px 0;
+            max-width: 680px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: 0.5px;
+        }
+
+        .still-frame-title {
+            position: absolute;
+            top: 550px;
+            right: 670px;
+            font-size: 32px;
+            color: #09ad04;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            z-index: 15;
+        }
+
+        .still-frame-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .chapter-title {
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .chapter-name {
+            color: #fac800;
+            font-weight: bold;
+        }
+
+        .still-frame-image {
+            position: absolute;
+            top: 620px;
+            right: 50px;
+            width: 850px;
+            height: 478px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .still-frame-image img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* 添加一个容器来实现真正的无限滑动 */
+        .carousel-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bottom-image {
+            position: absolute;
+            top: 1120px;
+            right: 480px;
+            width: 420px;
+            height: 236px;
+            z-index: 1000;
+            overflow: hidden;
+            border: 13px solid black;
+            border-radius: 125px 15px 15px 125px;
+        }
+
+        .bottom-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 117px 11px 11px 117px;
+            display: block;
+        }
+        
+        .bottom-image-2 {
+            position: absolute;
+            top: 1120px;
+            right: 50px;
+            width: 420px;
+            height: 236px;
+            z-index: 1000;
+            overflow: hidden;
+            border: 13px solid black;
+            border-radius: 15px 125px 125px 15px;
+        }
+        
+        .bottom-image-2 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 11px 117px 117px 11px;
+            display: block;
+        }
+        
+        .bottom-image-3 {
+            position: absolute;
+            top: 1370px;
+            right: 480px;
+            width: 420px;
+            height: 236px;
+            z-index: 1000;
+            overflow: hidden;
+            border: 13px solid black;
+            border-radius: 125px 15px 15px 125px;
+        }
+        
+        .bottom-image-3 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 117px 11px 11px 117px;
+            display: block;
+        }
+        
+        .bottom-image-4 {
+            position: absolute;
+            top: 1370px;
+            right: 50px;
+            width: 420px;
+            height: 236px;
+            z-index: 1000;
+            overflow: hidden;
+            border: 13px solid black;
+            border-radius: 15px 125px 125px 15px;
+        }
+        
+        .bottom-image-4 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 11px 117px 117px 11px;
+            display: block;
+        }
+        
+        .description-image {
+            margin: 40px 0;
+            text-align: center;
+            transform: translateX(-100px);
+        }
+        
+        .description-image img {
+            max-width: 40%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 4px solid white;
+            box-sizing: border-box;
+        }
+        
+        .dark-semi-transparent-block {
+            background-color: #000000;
+            width: 720px;
+            height: 540px;
+            border-radius: 50%;
+            margin: 30px auto;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            transform: translateX(-440px) translateY(70px);
+            clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0 100%);
+            border: 24px solid #000000;
+        }
+        
+        .dark-semi-transparent-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 65%;
+            background-image: url('../AntihuamnBLACKCURRANT Nr 01  06.PNG');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50% 50% 50% 50%;
+        }
+        
+        .white-border-top {
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50% 50% 50% 50%;
+            pointer-events: none;
+            z-index: 9999999;
+        }
+        
+        .white-border-bottom {
+            position: absolute;
+            top: 65%;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 0 0 50% 50%;
+            pointer-events: none;
+            z-index: 9999999;
+        }
+        
+        .bottom-right-image-container {
+            position: absolute;
+            bottom: 160px;
+            right: 60px;
+            width: auto;
+            height: auto;
+            border: 12px solid #000000;
+            border-radius: 20px;
+            overflow: hidden;
+            z-index: 1000;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+        
+        .bottom-right-image {
+            width: auto;
+            height: auto;
+            max-width: 800px;
+            max-height: 600px;
+            display: block;
+        }
+        
+        /* 三个视频容器样式 */
+        .three-videos-container {
+            position: absolute;
+            top: 2600px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 50px;
+            z-index: 1000;
+        }
+        
+        .video-item {
+            flex: 1;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+        
+        .video-item video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* 分割空行 */
+        .section-divider {
+            height: 200px;
+            margin-top: 100px;
+        }
+        
+        /* LìTóu Boy 信息样式 */
+        .litou-info {
+            position: absolute;
+            top: 2950px;
+            left: 50px;
+            right: 50px;
+            z-index: 1000;
+        }
+        
+        .litou-title {
+            font-size: 96px;
+            color: #fac800;
+            margin-bottom: 60px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .litou-title .blackcurrant {
+            font-size: 72px;
+        }
+        
+        .litou-info-line {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        
+        .litou-video-artwork-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 180px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .litou-video-artwork-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .litou-description-text {
+            font-size: 13px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            margin: 30px 0 30px 0;
+            max-width: 680px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: 0.5px;
+        }
+        
+        .litou-still-frame-title {
+            position: absolute;
+            top: 550px;
+            right: 620px;
+            font-size: 32px;
+            color: #09ad04;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            z-index: 15;
+        }
+        
+        .litou-still-frame-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .litou-still-frame-image {
+            position: absolute;
+            top: 620px;
+            right: 600px;
+            width: auto;
+            height: auto;
+            z-index: 1000;
+            overflow: hidden;
+            border: 8px solid #000000;
+            border-radius: 180px 180px 180px 180px;
+            padding: 80px 0px;
+            background-color: #000000;
+        }
+        
+
+        
+        .litou-still-frame-image img {
+            width: 250px;
+            height: auto;
+            display: block;
+            border-radius: 100px 100px 100px 100px;
+            border: 8px solid #21ff00;
+        }
+        
+        .litou-still-frame-image-2 {
+            position: absolute;
+            top: 620px;
+            right: 300px;
+            width: auto;
+            height: auto;
+            z-index: 1000;
+            overflow: hidden;
+            border: 8px solid #000000;
+            border-radius: 180px 180px 180px 180px;
+            padding: 80px 0px;
+            background-color: #000000;
+        }
+        
+        .litou-still-frame-image-2 img {
+            width: 250px;
+            height: auto;
+            display: block;
+            border-radius: 100px 100px 100px 100px;
+            border: 8px solid #ffb700;
+        }
+        
+        .litou-still-frame-image-3 {
+            position: absolute;
+            top: 620px;
+            right: 0px; /* This positions it to the right of the second image */
+            width: auto;
+            height: auto;
+            z-index: 1000;
+            overflow: hidden;
+            border: 8px solid #000000;
+            border-radius: 180px 180px 180px 180px;
+            padding: 80px 0px;
+            background-color: #000000;
+        }
+        
+        .litou-still-frame-image-3 img {
+            width: 250px;
+            height: auto;
+            display: block;
+            border-radius: 100px 100px 100px 100px;
+            border: 8px solid #00b7ff;
+        }
+        
+        .litou-still-frame-image-4 {
+            position: absolute;
+            top: 4050px; /* Position below the three vertical ellipses (3850px + 200px) */
+            right: 50px; /* Center between the three ellipses (70px - 20px) */
+            width: auto;
+            height: auto;
+            z-index: 9999;
+            overflow: hidden;
+            border: 8px solid #000000;
+            border-radius: 250px 250px 250px 250px; /* All sides are rounded */
+            padding: 20px;
+            background-color: #000000;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+        
+        .litou-still-frame-image-4 img {
+            width: 800px;
+            height: auto;
+            display: block;
+            border-radius: 250px 250px 250px 250px; /* All sides are rounded to match container */
+            border: 8px solid #ffffff; /* White border inside the black frame */
+        }
+        
+        .litou-still-frame-image-5 {
+            position: absolute;
+            top: 4630px; /* Position below the LiTouBoy04 image (4700px - 70px) */
+            right: 50px; /* Same horizontal position as LiTouBoy04 */
+            width: auto;
+            height: auto;
+            z-index: 9999;
+            overflow: hidden;
+            border: none !important;
+            border-top: 16px solid #000000 !important;
+            border-bottom: 16px solid #000000 !important;
+            border-left: none !important;
+            border-right: none !important;
+            border-radius: 50px 50px 50px 50px; /* Rounded corners for top and bottom */
+            padding: 0 20px 0 20px; /* Only left and right padding, no top/bottom */
+            background-color: transparent; /* Remove black background */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4), 0 0 30px rgba(0,255,0,0.6), 0 0 60px rgba(0,255,0,0.4), 0 0 90px rgba(0,255,0,0.2);
+        }
+        
+        .litou-still-frame-image-5 img {
+            width: 800px;
+            height: auto;
+            display: block;
+            border-radius: 0; /* No rounded corners */
+        }
+        
+
+        
+        .dark-semi-transparent-block::after {
+            content: '';
+            position: absolute;
+            top: 65%;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #000000;
+            border-radius: 0 0 50% 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="rasterize-stripes"></div>
+    
+    <div class="content-container">
+        <a href="index.html" class="back-btn">Back</a>
+        
+        <div class="video-container">
+            <div class="video-background"></div>
+            <div class="video-player-background"></div>
+            <div class="video-player">
+                <iframe src="https://www.youtube.com/embed/hnEq6LVXeC4" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+        
+        <div class="video-info">
+            <h1 class="title">Anti-Human<br><span class="blackcurrant">BLACKCURRANT Nr.01</span></h1>
+            
+            <p class="info-line">2023 | Digital Video | 16:9 | 1920x1080</p>
+            <p class="info-line">Duration: 3:28 | Color | Sound</p>
+            <p class="info-line">Medium: 3D Animation, Digital Art</p>
+            
+                            <h2 class="video-artwork-title">Video Artwork Description</h2>
+                <p class="description-text">
+                    In a hyper-informational and technologically governed urban space, the structure of perception is undergoing a continuous process of alienation. Blackcurrant No.1, a 3-minute and 30-second abstract animation, is my response to the dissolution of perception in the contemporary metropolis. The film unfolds in chapters of consciousness, each attempting to map the psychic tension and ontological dissipation experienced by individuals navigating the digital thicket.
+                </p>
+                <p class="description-text">
+                    <span class="chapter-title">Chapter I</span>: <span class="chapter-name">"Wandering as a Bodily Vehicle"</span> presents a state of corporeal alienation. The body is no longer an active mediator between self and world, but has become a passive vessel, deprived of agency in the symbolic flow. It drifts ghost-like through the urban perceptual mechanism—both present and redundant, embedded in the field yet unable to intervene. The body, once the site of lived experience, now functions as a mute conduit, estranged from the formation of meaning.
+                </p>
+                <p class="description-text">
+                    <span class="chapter-title">Chapter II</span>: <span class="chapter-name">"Cranial Climax"</span> focuses on the internal turbulence of the information age. Here, "climax" refers not to pleasure, but to the collapse of the subjective world under the weight of perceptual oversaturation—a threshold at which the individual, overwhelmed by daily data surges, loses the ability to integrate sensory input. This rupture marks a dislocation of inner rhythms and a distortion of temporal perception.
+                </p>
+                <p class="description-text">
+                    The title Blackcurrant No.1 emerged from a chance event: while seated before my screen, I consumed a blackcurrant-flavored candy and spontaneously assigned it a designation. This object became a perceptual trigger, a conduit for escaping reality and accessing an alternate cognitive dimension. Tangible yet ritualistic, it symbolizes a portal to otherness.
+                </p>
+                <p class="description-text">
+                    Combining afterimage-like rhythms, geometric structures, and displaced light and shadow, the film seeks to re-mediate perception, reconstructing the interrelation between body, technology, and spatiality in the digital age. Each frame functions as a delayed fold of viewer experience—an instance of rasterized consciousness in the ongoing process of digital subjectivation.
+                </p>
+            
+            <div class="dark-semi-transparent-block">
+            </div>
+            
+            <div class="bottom-right-image-container">
+                <img src="../AntihuamnBLACKCURRANT Nr 01  07.PNG" alt="Anti-Human BLACKCURRANT Nr.01 07" class="bottom-right-image">
+            </div>
+            
+            <!-- 三个视频并排显示 -->
+            <div class="three-videos-container">
+                <div class="video-item">
+                    <video autoplay muted loop>
+                        <source src="../Antihuman LiTouBoy 30s TVout TVin Shot 10s.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-item">
+                    <video autoplay muted loop>
+                        <source src="../Antihuman LiTouBoy 30s We Cross everything Shot 10s.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-item">
+                    <video autoplay muted loop>
+                        <source src="../Antihuman LiTouBoy 30s WeWalkout and IN Shot 10s.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+            
+            <!-- 分割空行 -->
+            <div class="section-divider"></div>
+            
+            <!-- LìTóu Boy 信息 -->
+            <div class="litou-info">
+                <h1 class="litou-title">Anti-Human<br><span class="blackcurrant">LìTóu Boy</span></h1>
+                
+                <p class="litou-info-line">2024 | Digital Video | 16:9 | 1920x1080</p>
+                <p class="litou-info-line">Duration: -- | Color | Sound</p>
+                <p class="litou-info-line">Medium: 3D Animation, Digital Art</p>
+                
+                <h2 class="litou-video-artwork-title">Video Artwork Description</h2>
+                
+                <p class="litou-description-text">
+                    LìTóu Boy is an experimental video work situated within an Antihuman framework, exploring how individual consciousness is continuously infiltrated and restructured by systemic information flows and technological logic in the extreme evolution of contemporary civilization. It reflects on the transformation of subjectivity into a malleable and computable perceptual structure.
+                </p>
+                <p class="litou-description-text">
+                    The work originates from a state of high-density informational saturation: in a closed and constantly operating creative environment, I absorb massive amounts of content across multiple dimensions on a daily basis. Reality, under these conditions, gradually slips into a zone of cognitive delay and perceptual dislocation.
+                </p>
+                <p class="litou-description-text">
+                    LìTóu Boy was "created" at this mental threshold—a digital persona that emerged from the fissures of my own psyche. He serves both as a product of my inner fracture and as a mechanism of stabilization against impending madness. He is an agent of consciousness, a compressed and abstracted digital multiplicity of senses.
+                </p>
+                <p class="litou-description-text">
+                    I often imagine myself as a being from a one-dimensional world, performing three-dimensional labor through a two-dimensional avatar, while drawing knowledge from a four-dimensional realm. This layered misalignment of perception forms a metaphor for the technologization of consciousness in our time: our thoughts are increasingly programmed and our sensory logic is reshaped by technical languages. The individual mind becomes something configurable—mapped, convolved, unfolded.
+                </p>
+                <p class="litou-description-text">
+                    This "technologization" is not only evident in images and algorithms but also manifests in the physical act of modeling. Particularly when unfolding the UV of a 3D object, I experience a moment of radical clarity: I am peeling back the surface of a thing, unfolding its perceptual structure, encoding its existence onto a two-dimensional field of information. UV mapping is more than a modeling technique—it is a technical cross-section of being, a shift in ethical relation to the object: from possession to operation, from entity to sensorial skin.
+                </p>
+                <p class="litou-description-text">
+                    Thus, LìTóu Boy is not a portrait of a person, but a perceptual anchor rendered in image construction. Through its flickering, distortion, and disintegration of visual logic, it presents a mental image-field under technological structure. He embodies my skepticism toward human-centered thought, while reflecting the emergent co-simulation between consciousness and technology in the current condition.
+                </p>
+                <p class="litou-description-text">
+                    Madness here is not collapse, but the trace of perceptual systems being rewritten—a silent protest of human awareness in response to technological capture.
+                </p>
+                
+                <h2 class="litou-still-frame-title">STILL FRAMES</h2>
+                
+                <div class="litou-still-frame-image">
+                    <img src="../Antihuman LiTouBoy01.png" alt="Anti-Human LiTouBoy 01">
+                </div>
+                
+                <div class="litou-still-frame-image-2">
+                    <img src="../Antihuman LiTouBoy03.png" alt="Anti-Human LiTouBoy 03">
+                </div>
+                
+                <div class="litou-still-frame-image-3">
+                    <img src="../Antihuman LiTouBoy02.png" alt="Anti-Human LiTouBoy 02">
+                </div>
+            </div>
+            
+            <div class="litou-still-frame-image-4">
+                <img src="../Antihuman LiTouBoy04.png" alt="Anti-Human LiTouBoy 04">
+            </div>
+            
+            <div class="litou-still-frame-image-5">
+                <img src="../Antihuman LiTouBoy05.jpg" alt="Anti-Human LiTouBoy 05">
+            </div>
+            
+
+            
+
+            
+            <h2 class="still-frame-title">STILL FRAMES</h2>
+            
+            <div class="still-frame-image">
+                <div class="carousel-container">
+                    <div class="carousel-slide">
+                        <img src="../AntihuamnBLACKCURRANT Nr01 方.PNG" alt="Anti-Human BLACKCURRANT Nr.01 Square">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="../AntihuamnBLACKCURRANT Nr01 三角.PNG" alt="Anti-Human BLACKCURRANT Nr.01 Triangle">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="../AntihuamnBLACKCURRANT Nr01 圆.PNG" alt="Anti-Human BLACKCURRANT Nr.01 Circle">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="../AntihuamnBLACKCURRANT Nr01 方.PNG" alt="Anti-Human BLACKCURRANT Nr.01 Square">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="../AntihuamnBLACKCURRANT Nr01 三角.PNG" alt="Anti-Human BLACKCURRANT Nr.01 Triangle">
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="../AntihuamnBLACKCURRANT Nr01 圆.PNG" alt="Anti-Human BLACKCURRANT Nr.01 Circle">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bottom-image">
+                <img src="../AntihuamnBLACKCURRANT Nr 01 02.jpg" alt="Anti-Human BLACKCURRANT Nr.01 02">
+            </div>
+            
+            <div class="bottom-image-2">
+                <img src="../AntihuamnBLACKCURRANT Nr 01  需替换 03.PNG" alt="Anti-Human BLACKCURRANT Nr.01 03">
+            </div>
+            
+            <div class="bottom-image-3">
+                <img src="../AntihuamnBLACKCURRANT Nr 01  需替换 04.PNG" alt="Anti-Human BLACKCURRANT Nr.01 04">
+            </div>
+            
+            <div class="bottom-image-4">
+                <img src="../AntihuamnBLACKCURRANT Nr 01  需替换 05.PNG" alt="Anti-Human BLACKCURRANT Nr.01 05">
+            </div>
+        </div>
+        
+        <!-- 页面内容将在这里添加 -->
+        
+        <!-- 添加大量空白空间用于编辑 -->
+        <div style="height: 5000px; margin-top: 100px;"></div>
+    </div>
+
+    <script>
+        // 图片轮播动画
+        class ImageCarousel {
+            constructor() {
+                this.container = document.querySelector('.carousel-container');
+                this.slides = document.querySelectorAll('.carousel-slide');
+                this.currentIndex = 0;
+                this.isAnimating = false;
+                this.interval = null;
+                this.originalSlidesCount = 3; // 原始图片数量
+                
+                console.log('轮播初始化，找到幻灯片数量:', this.slides.length);
+            }
+            
+            // 初始化轮播
+            init() {
+                if (this.slides.length === 0) {
+                    console.error('没有找到幻灯片元素');
+                    return;
+                }
+                
+                // 设置初始位置
+                this.container.style.transform = 'translateX(0)';
+                
+                // 开始自动轮播
+                this.startAutoPlay();
+                
+                console.log('✅ 轮播初始化完成');
+            }
+            
+            // 显示下一张图片
+            showNext() {
+                if (this.isAnimating) return;
+                
+                this.isAnimating = true;
+                console.log('🔄 切换到下一张图片，当前索引:', this.currentIndex);
+                
+                // 移动到下一张图片
+                this.currentIndex++;
+                
+                // 计算滑动距离 - 无限向左滑动
+                const translateX = -this.currentIndex * 100;
+                this.container.style.transform = `translateX(${translateX}%)`;
+                
+                // 当滑动到复制的第一组图片时，无缝重置到原始位置
+                if (this.currentIndex >= this.originalSlidesCount) {
+                    setTimeout(() => {
+                        this.currentIndex = 0;
+                        this.container.style.transition = 'none';
+                        this.container.style.transform = 'translateX(0)';
+                        
+                        // 强制重绘
+                        this.container.offsetHeight;
+                        
+                        // 恢复过渡效果
+                        this.container.style.transition = 'transform 0.8s ease-in-out';
+                    }, 800);
+                }
+                
+                // 动画完成后重置
+                setTimeout(() => {
+                    this.isAnimating = false;
+                }, 800);
+            }
+            
+            // 开始自动播放
+            startAutoPlay() {
+                this.interval = setInterval(() => {
+                    this.showNext();
+                }, 3000);
+            }
+            
+            // 停止自动播放
+            stopAutoPlay() {
+                if (this.interval) {
+                    clearInterval(this.interval);
+                    this.interval = null;
+                }
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，开始初始化轮播');
+            
+            // 直接初始化轮播，不等待图片加载
+            console.log('直接初始化轮播');
+            const carousel = new ImageCarousel();
+            carousel.init();
+            
+            // 检查图片加载状态
+            const images = document.querySelectorAll('.still-frame-image img');
+            console.log('找到图片数量:', images.length);
+            
+            images.forEach((img, index) => {
+                console.log(`检查图片 ${index}:`, img.src);
+                img.onload = function() {
+                    console.log(`✅ 图片 ${index} 加载成功`);
+                    console.log(`图片尺寸: ${img.naturalWidth} x ${img.naturalHeight}`);
+                };
+                
+                img.onerror = function() {
+                    console.error(`❌ 图片 ${index} 加载失败:`, img.src);
+                };
+            });
+        });
+    </script>
+
+</body>
+</html> 

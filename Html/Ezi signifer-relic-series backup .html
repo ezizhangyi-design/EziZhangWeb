@@ -1,0 +1,2434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ezi.Zhang - The Signifer Relic Series</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <style>
+        html, body {
+            min-height: 7500vh;
+            margin: 0;
+            padding: 0;
+            background: #0041ff;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            overflow-x: hidden;
+            overflow-y: auto;
+            image-rendering: pixelated;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #fac800;
+            color: #fac800;
+            padding: 15px 25px;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 99999;
+        }
+        
+        .back-btn:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+        
+        .main-image-container {
+            position: absolute;
+            top: 160px;
+            left: 93px;
+            width: 60vw;
+            max-width: 800px;
+            height: 105vh;
+            z-index: 10;
+        }
+        
+        /* 现代浏览器增强 - 使用min()函数提供更好的比例控制 */
+        @supports (width: min(60vw, 1000px)) {
+            .main-image-container {
+                width: min(60vw, 1000px);
+                height: min(105vh, 900px);
+            }
+        }
+        
+        .black-background {
+            position: absolute;
+            top: -40px;
+            left: -50px;
+            width: calc(100% + 100px);
+            height: calc(100% + 80px);
+            background: black;
+            z-index: 1;
+        }
+        
+        .blue-background {
+            position: absolute;
+            top: 30px;
+            left: 20px;
+            width: calc(100% - 40px);
+            height: calc(100% - 60px);
+            background: #c0c0c0;
+            z-index: 2;
+        }
+        
+        /* 第三组到第六组作品的灰色容器特殊样式 */
+        .blue-background-compact {
+            position: absolute;
+            top: -10px;
+            left: 50px;
+            width: calc(100% - 100px);
+            height: calc(100% + 20px);
+            background: #c0c0c0;
+            z-index: 2;
+        }
+        
+        .main-image {
+            position: absolute;
+            top: 35px;
+            left: 35px;
+            width: calc(100% - 70px);
+            height: calc(100% - 70px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        .artwork-info {
+            position: absolute;
+            top: calc(160px + 105vh / 2);
+            right: 50px;
+            transform: translateY(-50%);
+            text-align: right;
+            z-index: 10;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            color: white;
+            line-height: 1.8;
+        }
+        
+        .artwork-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .artwork-subtitle {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .artwork-medium {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .artwork-dimensions {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .artwork-year {
+            font-size: 14px;
+        }
+        
+        /* 基础响应式设计 - 兼容所有浏览器 */
+        @media (max-width: 768px) {
+            .main-image-container {
+                width: 85vw;
+                height: 50vh;
+                margin: 0 30px;
+            }
+            
+            .artwork-info {
+                left: 30px !important;
+                right: 30px !important;
+                font-size: 14px !important;
+            }
+            
+            .artwork-title {
+                font-size: 16px !important;
+            }
+            
+            .artwork-subtitle {
+                font-size: 16px !important;
+            }
+        }
+        
+        /* 现代浏览器响应式增强 */
+        @supports (width: min(60vw, 1000px)) {
+            @media (max-width: 768px) {
+                .main-image-container {
+                    width: min(85vw, 600px);
+                    height: min(50vh, 400px);
+                    margin: 0 30px;
+                }
+                
+                .artwork-info {
+                    left: 30px !important;
+                    right: 30px !important;
+                    font-size: min(14px, 3.5vw) !important;
+                }
+                
+                .artwork-title {
+                    font-size: min(16px, 4vw) !important;
+                }
+                
+                .artwork-subtitle {
+                    font-size: min(16px, 4vw) !important;
+                }
+            }
+        }
+        
+        /* 第7-9组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-7,
+        .artwork-group-9,
+        .artwork-group-34,
+        .artwork-group-35,
+        .artwork-group-36,
+        .artwork-group-37,
+        .artwork-group-38,
+        .artwork-group-39,
+        .artwork-group-40,
+        .artwork-group-41,
+        .artwork-group-42 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第10组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-10 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第11组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-11 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第12组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-12 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第13组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-13 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第14组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-14 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第15组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-15 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第16组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-16 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第17组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-17 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第18组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-18 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第19组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-19 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第20组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-20 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第21组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-21 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        .artwork-group-22 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        .artwork-group-23 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第24组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-24 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第25组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-25 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第26组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-26 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第27组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-27 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第28组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-28 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第29组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-29 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第30组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-30 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第31组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-31 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第32组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-32 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        /* 第33组作品基础样式 - 兼容所有浏览器 */
+        .artwork-group-33 {
+            position: absolute;
+            z-index: 5;
+            left: -11px;
+            right: -381px;
+            height: 400px;
+            width: calc(100vw + 392px);
+            max-width: 1592px;
+        }
+        
+        .artwork-group-8 {
+            position: absolute !important;
+            z-index: 5 !important;
+            left: calc(60vw - 270px) !important;
+            max-width: 800px !important;
+            height: 105vh !important;
+            width: 60vw !important;
+        }
+        
+        .artwork-group-8-black {
+            position: absolute !important;
+            top: 180px !important;
+            left: -50px !important;
+            width: calc(100% + 100px) !important;
+            height: calc(100% - 300px) !important;
+            background: black !important;
+            z-index: 1 !important;
+        }
+        
+        .artwork-group-8-image {
+            position: absolute !important;
+            top: -15px !important;
+            left: 35px !important;
+            width: calc(100% - 70px) !important;
+            height: calc(100% - 70px) !important;
+            object-fit: contain !important;
+            z-index: 3 !important;
+        }
+        
+
+        
+        /* 现代浏览器第7-9组基础增强 */
+        @supports (width: min(60vw, 1000px)) {
+            .artwork-group-8 {
+                left: calc(min(60vw, 1000px) - 270px);
+                height: min(105vh, 900px);
+            }
+        }
+        
+        /* 第7-9组作品基础响应式设计 - 兼容所有浏览器 */
+        @media (max-width: 768px) {
+            .artwork-group-7,
+            .artwork-group-9,
+            .artwork-group-14,
+            .artwork-group-15,
+            .artwork-group-16,
+            .artwork-group-17,
+            .artwork-group-18,
+            .artwork-group-19,
+            .artwork-group-20,
+            .artwork-group-21,
+            .artwork-group-22 {
+                left: 30px !important;
+                right: 30px !important;
+                height: 300px !important;
+                width: calc(100vw - 60px) !important;
+                max-width: none !important;
+            }
+            
+            .artwork-group-8 {
+                left: 30px !important;
+                right: 30px !important;
+                max-width: calc(100vw - 60px) !important;
+            }
+            
+            .artwork-group-10,
+            .artwork-group-14,
+            .artwork-group-15,
+            .artwork-group-16,
+            .artwork-group-17,
+            .artwork-group-18,
+            .artwork-group-19,
+            .artwork-group-20,
+            .artwork-group-21,
+            .artwork-group-22 {
+                left: 30px !important;
+                right: 30px !important;
+                height: 300px !important;
+                width: calc(100vw - 60px) !important;
+                max-width: none !important;
+            }
+            
+            .artwork-group-11 {
+                left: 30px !important;
+                right: 30px !important;
+                height: 300px !important;
+                width: calc(100vw - 60px) !important;
+                max-width: none !important;
+            }
+            
+            .artwork-group-12 {
+                left: 30px !important;
+                right: 30px !important;
+                height: 300px !important;
+                width: calc(100vw - 60px) !important;
+                max-width: none !important;
+            }
+            
+            .artwork-group-13 {
+                left: 30px !important;
+                right: 30px !important;
+                height: 300px !important;
+                width: calc(100vw - 60px) !important;
+                max-width: none !important;
+            }
+        }
+        
+        /* 现代浏览器第7-9组响应式增强 */
+        @supports (width: min(60vw, 1000px)) {
+            @media (max-width: 768px) {
+                .artwork-group-7,
+                .artwork-group-9,
+                .artwork-group-14,
+                .artwork-group-16,
+                .artwork-group-17,
+                .artwork-group-18,
+                .artwork-group-19,
+                .artwork-group-20,
+                .artwork-group-21,
+                .artwork-group-22,
+                .artwork-group-23,
+                .artwork-group-24,
+                .artwork-group-25,
+                .artwork-group-26,
+                .artwork-group-27,
+                .artwork-group-28,
+                .artwork-group-29 {
+                    left: 30px !important;
+                    right: 30px !important;
+                    height: min(300px, 40vh) !important;
+                    width: min(calc(100vw - 60px), 600px) !important;
+                    max-width: none !important;
+                }
+                
+                .artwork-group-8 {
+                    left: 30px !important;
+                    right: 30px !important;
+                    max-width: min(calc(100vw - 60px), 600px) !important;
+                }
+                
+                .artwork-group-10,
+                .artwork-group-14,
+                .artwork-group-16,
+                .artwork-group-17,
+                .artwork-group-18,
+                .artwork-group-19,
+                .artwork-group-20,
+                .artwork-group-21,
+                .artwork-group-22,
+                .artwork-group-23,
+                .artwork-group-24,
+                .artwork-group-25,
+                .artwork-group-26,
+                .artwork-group-27,
+                .artwork-group-28,
+                .artwork-group-29 {
+                    left: 30px !important;
+                    right: 30px !important;
+                    height: min(300px, 40vh) !important;
+                    width: min(calc(100vw - 60px), 600px) !important;
+                    max-width: none !important;
+                }
+                
+                .artwork-group-11,
+                .artwork-group-14,
+                .artwork-group-15,
+                .artwork-group-16,
+                .artwork-group-17,
+                .artwork-group-18,
+                .artwork-group-19,
+                .artwork-group-23,
+                .artwork-group-24,
+                .artwork-group-25,
+                .artwork-group-26,
+                .artwork-group-27,
+                .artwork-group-28,
+                .artwork-group-29 {
+                    left: 30px !important;
+                    right: 30px !important;
+                    height: min(300px, 40vh) !important;
+                    width: min(calc(100vw - 60px), 600px) !important;
+                    max-width: none !important;
+                }
+                
+                .artwork-group-12,
+                .artwork-group-14,
+                .artwork-group-15,
+                .artwork-group-16,
+                .artwork-group-17,
+                .artwork-group-18,
+                .artwork-group-19,
+                .artwork-group-23,
+                .artwork-group-24,
+                .artwork-group-25,
+                .artwork-group-26,
+                .artwork-group-27,
+                .artwork-group-28,
+                .artwork-group-29 {
+                    left: 30px !important;
+                    right: 30px !important;
+                    height: min(300px, 40vh) !important;
+                    width: min(calc(100vw - 60px), 600px) !important;
+                    max-width: none !important;
+                }
+                
+                .artwork-group-13,
+                .artwork-group-14,
+                .artwork-group-15,
+                .artwork-group-16,
+                .artwork-group-17,
+                .artwork-group-18,
+                .artwork-group-19,
+                .artwork-group-23,
+                .artwork-group-24,
+                .artwork-group-25,
+                .artwork-group-26,
+                .artwork-group-27,
+                .artwork-group-28,
+                .artwork-group-29 {
+                    left: 30px !important;
+                    right: 30px !important;
+                    height: min(300px, 40vh) !important;
+                    width: min(calc(100vw - 60px), 600px) !important;
+                    max-width: none !important;
+                }
+            }
+        }
+        
+        /* 超小屏幕优化 - 手机竖屏 */
+        @media (max-width: 480px) {
+            .main-image-container {
+                width: 90vw !important;
+                height: 45vh !important;
+                margin: 0 20px !important;
+            }
+            
+            .artwork-info {
+                left: 20px !important;
+                right: 20px !important;
+                font-size: 12px !important;
+            }
+            
+            .artwork-title {
+                font-size: 14px !important;
+            }
+            
+            .artwork-subtitle {
+                font-size: 14px !important;
+            }
+            
+            .artwork-group-7,
+            .artwork-group-9,
+            .artwork-group-10,
+            .artwork-group-11,
+            .artwork-group-12,
+            .artwork-group-13,
+            .artwork-group-14,
+            .artwork-group-15,
+            .artwork-group-16,
+            .artwork-group-17,
+            .artwork-group-18,
+            .artwork-group-19 {
+                left: 20px !important;
+                right: 20px !important;
+                height: 250px !important;
+                width: calc(100vw - 40px) !important;
+            }
+            
+            .artwork-group-8 {
+                left: 20px !important;
+                right: 20px !important;
+                max-width: calc(100vw - 40px) !important;
+            }
+        }
+        
+        /* 超大屏幕优化 - 4K显示器 */
+        @media (min-width: 1920px) {
+            .main-image-container {
+                width: min(60vw, 1200px) !important;
+                height: min(105vh, 1000px) !important;
+            }
+            
+            .artwork-group-7,
+            .artwork-group-9,
+            .artwork-group-10,
+            .artwork-group-11,
+            .artwork-group-12,
+            .artwork-group-13,
+            .artwork-group-14,
+            .artwork-group-15,
+            .artwork-group-16,
+            .artwork-group-17,
+            .artwork-group-18,
+            .artwork-group-19 {
+                max-width: 1800px !important;
+            }
+        }
+        
+        /* 横屏模式优化 */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .main-image-container {
+                height: 80vh !important;
+            }
+            
+            .artwork-group-7,
+            .artwork-group-9,
+            .artwork-group-10,
+            .artwork-group-11,
+            .artwork-group-12,
+            .artwork-group-13,
+            .artwork-group-14,
+            .artwork-group-15,
+            .artwork-group-16,
+            .artwork-group-17,
+            .artwork-group-18,
+            .artwork-group-19 {
+                height: 250px !important;
+            }
+        }
+        
+        /* 高DPI屏幕优化 */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .main-image,
+            .artwork-group-7 img,
+            .artwork-group-8 img,
+            .artwork-group-9 img,
+            .artwork-group-10 img,
+            .artwork-group-11 img,
+            .artwork-group-12 img,
+            .artwork-group-13 img,
+            .artwork-group-14 img,
+            .artwork-group-15 img,
+            .artwork-group-16 img,
+            .artwork-group-17 img,
+            .artwork-group-18 img,
+            .artwork-group-19 img {
+                image-rendering: -webkit-optimize-contrast !important;
+                image-rendering: crisp-edges !important;
+            }
+        }
+        
+        /* 触摸设备优化 */
+        @media (hover: none) and (pointer: coarse) {
+            .back-btn {
+                padding: 20px 30px !important;
+                font-size: 14px !important;
+            }
+            
+            .artwork-info {
+                font-size: 16px !important;
+            }
+            
+            .artwork-title {
+                font-size: 18px !important;
+            }
+            
+            .artwork-subtitle {
+                font-size: 18px !important;
+            }
+        }
+        
+
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+    
+    <div class="main-image-container">
+        <div class="black-background"></div>
+        <div class="blue-background"></div>
+                    <img src="../提示符 多栖思维 白木 木刻 2025 100x90cm_.jpg" alt="The Signifer Relic Series - 多栖思维" class="main-image" style="transform: scale(0.99);">
+    </div>
+    
+    <div class="artwork-info">
+        <div class="artwork-title">Signifier Relics — Composite Modular Mind Core · λ</div>
+        <div class="artwork-subtitle">提示符遗迹 — 模组化思维核 · λ</div>
+        <div class="artwork-medium">Woodcut , Ink</div>
+        <div class="artwork-medium">木刻 , 油墨</div>
+        <div class="artwork-dimensions">100 * 90 cm</div>
+        <div class="artwork-year">2025</div>
+    </div>
+    
+    <!-- 第二个作品组 -->
+    <div class="main-image-container" style="top: calc(160px + 150vh); left: 144px; transform: rotate(90deg) scale(1.02);">
+        <div class="black-background"></div>
+        <div class="blue-background"></div>
+        <img src="../提示符 赐形仪 白木 木刻 2025 100x90cm_.jpg" alt="The Signifer Relic Series - 赐形仪" class="main-image" style="transform: rotate(-90deg) scale(1.1);">
+    </div>
+    
+    <div class="artwork-info" style="top: calc(160px + 150vh + 105vh * 1.02 / 2);">
+        <div class="artwork-title">Signifier Relics - Form-Giving Device · Δ</div>
+        <div class="artwork-subtitle">提示符遗迹 - 赐形仪·Δ</div>
+        <div class="artwork-medium">100 * 90 cm Woodcut , Ink</div>
+        <div class="artwork-medium">木刻 , 油墨</div>
+        <div class="artwork-dimensions">100 * 90 cm</div>
+        <div class="artwork-year">2025</div>
+    </div>
+    
+    <!-- 第三个作品组 -->
+    <div class="main-image-container" style="top: calc(160px + 300vh); left: 127px; transform: rotate(90deg) scale(0.92);">
+        <div class="black-background" style="left: -5px; width: calc(100% + 10px); top: -75px; height: calc(100% + 150px);"></div>
+        <div class="blue-background-compact"></div>
+        <img src="../提示符 绵延整体 松木 丙烯 油墨 .png" alt="The Signifer Relic Series - 绵延整体" class="main-image" style="transform: rotate(-90deg) scale(1.2);">
+    </div>
+    
+    <div class="artwork-info" style="top: calc(160px + 300vh + 105vh * 1.02 / 2);">
+        <div class="artwork-title">Signifier Relics - Extended Proto-Construct · ψ</div>
+        <div class="artwork-subtitle">提示符遗迹 - 延全构体 · ψ</div>
+        <div class="artwork-medium">Woodcut , Ink</div>
+        <div class="artwork-medium">木刻 , 油墨</div>
+        <div class="artwork-dimensions">60 * 80 cm</div>
+        <div class="artwork-year">2024</div>
+    </div>
+    
+    <!-- 第四个作品组 -->
+    <div class="main-image-container" style="top: calc(160px + 450vh); left: 127px; transform: rotate(0deg) scale(0.92);">
+        <div class="black-background" style="left: -5px; width: calc(100% + 10px); top: -75px; height: calc(100% + 150px);"></div>
+        <div class="blue-background-compact"></div>
+        <img src="../提示符 恒常联结.jpg" alt="The Signifer Relic Series - 恒常联结" class="main-image" style="transform: rotate(0deg) scale(1.05);">
+    </div>
+    
+    <div class="artwork-info" style="top: calc(160px + 450vh + 105vh * 0.92 / 2);">
+        <div class="artwork-title">Signifier Relics - Coupling Stele · φ</div>
+        <div class="artwork-subtitle">提示符遗迹 - 耦合碑片 · φ</div>
+        <div class="artwork-medium">Woodcut , Ink</div>
+        <div class="artwork-medium">木刻 , 油墨</div>
+        <div class="artwork-dimensions">60 * 80 cm</div>
+        <div class="artwork-year">2024</div>
+    </div>
+
+    <!-- 第五个作品组 -->
+    <div class="main-image-container" style="top: calc(160px + 600vh); left: 127px; transform: rotate(90deg) scale(0.92);">
+        <div class="black-background" style="left: -5px; width: calc(100% + 10px); top: -75px; height: calc(100% + 150px);"></div>
+        <div class="blue-background-compact"></div>
+        <img src="../提示符想象物.jpg" alt="The Signifer Relic Series - 想象物" class="main-image" style="transform: rotate(-90deg) scale(1.2);">
+    </div>
+    
+    <div class="artwork-info" style="top: calc(160px + 600vh + 105vh * 0.92 / 2);">
+        <div class="artwork-title">Signifier Relics - Imaginary Object</div>
+        <div class="artwork-subtitle">提示符遗迹 - 想象物</div>
+        <div class="artwork-medium">Woodcut , Ink</div>
+        <div class="artwork-medium">木刻 , 油墨</div>
+        <div class="artwork-dimensions">60 * 80 cm</div>
+        <div class="artwork-year">2024</div>
+    </div>
+
+    <!-- 第六个作品组 -->
+    <div class="main-image-container" style="top: calc(160px + 750vh); left: 127px; transform: rotate(90deg) scale(0.92);">
+        <div class="black-background" style="left: -5px; width: calc(100% + 10px); top: -75px; height: calc(100% + 150px);"></div>
+        <div class="blue-background-compact"></div>
+        <img src="../提示符永久视域 .png" alt="The Signifer Relic Series - 永久视域" class="main-image" style="transform: rotate(-90deg) scale(1.2);">
+    </div>
+    
+    <div class="artwork-info" style="top: calc(160px + 750vh + 105vh * 0.92 / 2);">
+        <div class="artwork-title">Signifier Relics - Eternal Perspective</div>
+        <div class="artwork-subtitle">提示符遗迹 - 永久视域</div>
+        <div class="artwork-medium">Woodcut , Ink</div>
+        <div class="artwork-medium">木刻 , 油墨</div>
+        <div class="artwork-dimensions">60 * 80 cm</div>
+        <div class="artwork-year">2024</div>
+    </div>
+
+    <!-- 音序器动画 -->
+    <div style="position: absolute; top: calc(160px + 850vh + 220px); left: 50px; right: 50px; height: 30px; z-index: 5;">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; gap: 200px;">
+            <div class="sequencer-step" style="width: 15px; height: 15px; background: #c0c0c0; animation: pulse 3s steps(1) infinite;"></div>
+            <div class="sequencer-step" style="width: 15px; height: 15px; background: #c0c0c0; animation: pulse 3s steps(1) infinite 0.375s;"></div>
+            <div class="sequencer-step" style="width: 15px; height: 15px; background: #c0c0c0; animation: pulse 3s steps(1) infinite 0.75s;"></div>
+            <div class="sequencer-step" style="width: 15px; height: 15px; background: #c0c0c0; animation: pulse 3s steps(1) infinite 1.125s;"></div>
+            <div class="sequencer-step" style="width: 15px; height: 15px; background: #c0c0c0; animation: pulse 3s steps(1) infinite 1.5s;"></div>
+            <div class="sequencer-step" style="width: 15px; height: 15px; background: #c0c0c0; animation: pulse 3s steps(1) infinite 1.875s;"></div>
+            <div class="sequencer-step" style="width: 15px; height: 15px; background: #c0c0c0; animation: pulse 3s steps(1) infinite 2.25s;"></div>
+            <div class="sequencer-step" style="width: 15px; height: 15px; background: #c0c0c0; animation: pulse 3s steps(1) infinite 2.625s;"></div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes pulse {
+            0%, 12.5% { background: white; }
+            12.5%, 100% { background: black; }
+        }
+        
+        @keyframes pulse-red {
+            0%, 12.5% { background: red; }
+            12.5%, 100% { background: black; }
+        }
+        
+        /* 逆势而为超级异形音序器动画 */
+        @keyframes sequencer-animation-15 {
+            0%, 2.8% { 
+                background: black; 
+                transform: scale(1) rotate(0deg); 
+                border-radius: 0;
+            }
+            2.8%, 100% { 
+                background: white; 
+                transform: scale(1) rotate(0deg); 
+                border-radius: 0;
+            }
+        }
+        
+        /* 邪典膜拜音序器动画 - 割裂异形不完整化 */
+        @keyframes sequencer-animation-cult {
+            0%, 4% { 
+                background: black; 
+                opacity: 1;
+            }
+            4.1%, 8% { 
+                background: white; 
+                opacity: 1;
+            }
+            8.1%, 100% { 
+                background: transparent; 
+                opacity: 0;
+            }
+        }
+        
+        /* 灵忆再创音序器动画 - 完全不同的基础结构 */
+        @keyframes sequencer-animation-soul {
+            0%, 4% { 
+                background: black; 
+                opacity: 1;
+            }
+            4.1%, 100% { 
+                background: white; 
+                opacity: 1;
+            }
+        }
+        
+        /* 三角形专用动画 - 统一黑白变化 */
+        @keyframes sequencer-animation-triangle {
+            0%, 4% { 
+                background: black; 
+                opacity: 1;
+            }
+            4.1%, 8% { 
+                background: white; 
+                opacity: 1;
+            }
+            8.1%, 100% { 
+                background: transparent; 
+                opacity: 0;
+            }
+        }
+
+        /* 决定性瞬间音序器动画 - 基于旁门左道的变异版本 */
+        @keyframes sequencer-animation-decisive {
+            0%, 3% { 
+                background: white; 
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+            3.1%, 6% { 
+                background: black; 
+                opacity: 1;
+                transform: scale(1.1) rotate(5deg);
+            }
+            6.1%, 9% { 
+                background: white; 
+                opacity: 0.8;
+                transform: scale(0.9) rotate(-3deg);
+            }
+            9.1%, 12% { 
+                background: black; 
+                opacity: 1;
+                transform: scale(1.2) rotate(8deg);
+            }
+            12.1%, 15% { 
+                background: white; 
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+            15.1%, 18% { 
+                background: black; 
+                opacity: 0.9;
+                transform: scale(1.05) rotate(-2deg);
+            }
+            18.1%, 100% { 
+                background: white; 
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        /* 决定性瞬间轨迹动画 - 不同轨迹路径 */
+        @keyframes trajectory-1 {
+            0% { transform: translateX(0px) translateY(0px); }
+            25% { transform: translateX(20px) translateY(-10px); }
+            50% { transform: translateX(0px) translateY(-20px); }
+            75% { transform: translateX(-20px) translateY(-10px); }
+            100% { transform: translateX(0px) translateY(0px); }
+        }
+
+        @keyframes trajectory-2 {
+            0% { transform: translateX(0px) translateY(0px); }
+            25% { transform: translateX(-15px) translateY(15px); }
+            50% { transform: translateX(-30px) translateY(0px); }
+            75% { transform: translateX(-15px) translateY(-15px); }
+            100% { transform: translateX(0px) translateY(0px); }
+        }
+
+        @keyframes trajectory-3 {
+            0% { transform: translateX(0px) translateY(0px); }
+            25% { transform: translateX(10px) translateY(20px); }
+            50% { transform: translateX(20px) translateY(10px); }
+            75% { transform: translateX(10px) translateY(-10px); }
+            100% { transform: translateX(0px) translateY(0px); }
+        }
+
+        @keyframes trajectory-4 {
+            0% { transform: translateX(0px) translateY(0px); }
+            25% { transform: translateX(-10px) translateY(-15px); }
+            50% { transform: translateX(0px) translateY(-25px); }
+            75% { transform: translateX(10px) translateY(-15px); }
+            100% { transform: translateX(0px) translateY(0px); }
+        }
+
+        /* 红色小圆触发动画 - 只在音序经过时显示 */
+        @keyframes red-dot-trigger {
+            0%, 93% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+            93.1%, 100% { 
+                background: #ff0000; 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes red-dot-trigger-2 {
+            0%, 32% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+            32.1%, 37% { 
+                background: #ff0000; 
+                opacity: 1;
+                transform: scale(1);
+            }
+            37.1%, 66% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+            66.1%, 71% { 
+                background: #ff0000; 
+                opacity: 1;
+                transform: scale(1);
+            }
+            71.1%, 94% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+            94.1%, 99% { 
+                background: #ff0000; 
+                opacity: 1;
+                transform: scale(1);
+            }
+            99.1%, 100% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        /* 邪典膜拜音序器红色圆点触发动画 - 每行完成轨迹时触发 */
+        @keyframes red-dot-trigger-cult {
+            0%, 38% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+            38.1%, 43% { 
+                background: #ff0000; 
+                opacity: 1;
+                transform: scale(1);
+            }
+            43.1%, 68% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+            68.1%, 73% { 
+                background: #ff0000; 
+                opacity: 1;
+                transform: scale(1);
+            }
+            73.1%, 1% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+            1.1%, 6% { 
+                background: #ff0000; 
+                opacity: 1;
+                transform: scale(1);
+            }
+            6.1%, 31% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+            31.1%, 36% { 
+                background: #ff0000; 
+                opacity: 1;
+                transform: scale(1);
+            }
+            36.1%, 100% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        @keyframes red-dot-trigger-3 {
+            0%, 45% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+            45.1%, 50% { 
+                background: #ff0000; 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50.1%, 100% { 
+                background: transparent; 
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+    </style>
+
+    <!-- 第七个作品组 -->
+    <div class="main-image-container" style="top: calc(160px + 900vh); left: -71px; transform: rotate(0deg) scale(0.62);">
+        <div class="black-background" style="left: -5px; width: calc(100% + 10px); top: 25px; height: calc(100% - 50px);"></div>
+        <img src="../石刻工具 .jpg" alt="The Signifer Relic Series - 石刻工具" class="main-image" style="transform: rotate(0deg) scale(0.95);">
+    </div>
+
+    <!-- 第八个作品组 - 石刻实体合集 -->
+    <div class="artwork-group-8" style="top: calc(160px + 900vh + 10px); transform: rotate(0deg) scale(1.02);">
+        <div class="artwork-group-8-black"></div>
+        <img src="../石刻 实体 合集.png" alt="The Signifer Relic Series - 石刻实体合集" class="artwork-group-8-image" style="transform: rotate(0deg) scale(1.12);">
+        <div class="artwork-description" style="position: absolute; top: 735px; left: 15px; width: calc(100% - 30px); color: white; font-size: 16px; line-height: 1.6; text-align: left; z-index: 10;">
+            The pictures of some characters and patterns that appear in the woodcuts and stone carvings are the combination of the strokes that I have taken from the Chinese fonts, such as regular（Kai） script, seal（Zhuan） script, golden（Jin） script, cursive (Cao)script, and pictographic script.
+        </div>
+    </div>
+
+    <!-- Ping Body 作品 -->
+    <div class="artwork-group-7" style="top: calc(160px + 1050vh);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../石刻 提示符 网包探索器体 .png" alt="Ping Body" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 50%; left: calc(45% + 40px); right: 20px; transform: translateY(-50%); color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../石刻 提示符 网包探索器体 01.png" alt="Web Capsule Seeker 01" style="max-width: 60%; max-height: 100px; object-fit: contain; margin-bottom: 20px;">
+            <div style="font-size: 19px;">Signifier — Web Capsule Seeker</div>
+            <div style="font-size: 19px;">提示符 — 网包探索器体</div>
+            <div style="height: 10px;"></div>
+            <div>aper、Ink</div>
+            <div>纸本 、油墨</div>
+            <div style="height: 10px;"></div>
+            <div>4*5 cm</div>
+            <div style="height: 10px;"></div>
+            <div>2023</div>
+            <div style="height: 30px;"></div>
+            <div style="font-size: 19px; font-weight: bold;">Ping Body</div>
+            <div style="height: 10px;"></div>
+            <div style="font-size: 14px; line-height: 1.8;">
+                A device designed to monitor and analyze the real-time response times between biological organisms and external stimuli. Utilizing a network-inspired "ping" system, the Ping Body tracks the neural and emotional feedback loops within the organism, providing data on the synchronization or lag between thought, action, and response. Originally developed for neuro-synchronization studies, the device was integral in understanding the biofeedback mechanisms between conscious and unconscious states. While its original protocol has been lost, the faint signals still pulse through the system, offering glimpses into its once-central role in cognitive research.
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 第九个作品组 - 旁门左道 -->
+    <div class="artwork-group-9" style="top: calc(160px + 1150vh);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../石刻 提示符 旁门左道.png.jpg" alt="Unorthodox Path" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 0; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../石刻 提示符 旁门左道01.png" alt="Unorthodox Path 01" style="max-width: 50%; max-height: 80px; object-fit: contain; margin-bottom: 20px; position: relative; top: -60px;">
+            <div style="position: relative; top: -60px;">
+                <div style="font-size: 19px;">Signifier — Unorthodox Path</div>
+                <div style="font-size: 19px;">提示符 — 旁门左道</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2023</div>
+                
+                <!-- 异形音序器动画 -->
+                <div style="margin-top: 80px; height: 120px; display: flex; align-items: center; gap: 15px;">
+                    <div class="sequencer-step" style="width: 25px; height: 25px; background: white; animation: pulse 8s steps(1) infinite;"></div>
+                    <div class="sequencer-step" style="width: 38px; height: 15px; background: white; animation: pulse 8s steps(1) infinite 1.0s;"></div>
+                    <div class="sequencer-step" style="width: 15px; height: 40px; background: white; animation: pulse 8s steps(1) infinite 2.0s;"></div>
+                    <div class="sequencer-step" style="width: 32px; height: 32px; background: white; animation: pulse 8s steps(1) infinite 3.0s;"></div>
+                    <div class="sequencer-step" style="width: 23px; height: 50px; background: white; animation: pulse 8s steps(1) infinite 4.0s;"></div>
+                    <div class="sequencer-step" style="width: 44px; height: 13px; background: white; animation: pulse 8s steps(1) infinite 5.0s;"></div>
+                    <div class="sequencer-step" style="width: 13px; height: 38px; background: white; animation: pulse 8s steps(1) infinite 6.0s;"></div>
+                    <div class="sequencer-step" style="width: 35px; height: 25px; background: white; animation: pulse 8s steps(1) infinite 7.0s;"></div>
+                    <!-- 红色小圆 - 作为音序器的最后一个元素 -->
+                    <div class="sequencer-step" style="width: 32px; height: 32px; border-radius: 50%; background: transparent; animation: red-dot-trigger 8s steps(1) infinite 7.8s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <!-- 第十个作品组 - 寄主空间（复制旁门左道，向下100vh） -->
+        <div class="artwork-group-10" style="top: calc(160px + 1250vh - 30px);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 寄住空间 .jpg" alt="Host Space" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: -50px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../提示符 寄住空间01 .png" alt="Host Space 01" style="max-width: 40%; max-height: 60px; object-fit: contain; margin-bottom: 20px; position: relative; top: -20px;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — Host Space</div>
+                <div style="font-size: 19px;">提示符 — 寄主空间</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2023</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">Host Space</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    Host Space is an intermediary structure anchored in physical reality, designed to sustain the positional reference and feedback of a conscious entity within virtual environments. When cognition is projected into virtual layers, the body still requires a native physical coordinate — Host Space becomes the scaffold of this residual presence.
+                </div>
+                <div style="height: 20px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    Legacy systems once relied on Host Space to synchronize user movement and neural feedback. Today, most protocols have shifted toward full cognitive surrogacy. Yet in certain relic devices, the residual frequencies of Host Space still echo — the final trace of memory between the human and the virtual threshold.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第十一个作品组 - 脑雕塑（复制寄主空间，向下100vh） -->
+    <div class="artwork-group-11" style="top: calc(160px + 1250vh - 30px + 100vh);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -44px; left: 115px; right: 115px; height: calc(100% + 88px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 11px; left: 166px; right: 166px; height: calc(100% - 22px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 40px; left: 40px; width: calc(100% - 80px); height: calc(100% - 80px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 脑雕塑.jpg" alt="Brain Sculpture" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.07);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: -50px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../提示符 脑雕塑01.png" alt="Brain Sculpture 01" style="max-width: 50%; max-height: 80px; object-fit: contain; margin-bottom: 20px; position: relative; top: -20px;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — Brain Sculpture</div>
+                <div style="font-size: 19px;">提示符 — 脑雕塑</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*4 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">Signifier — Brain Sculpture</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    Brain Sculpture is a creative approach that shapes self-awareness in real-time through sculpture. This work uses stone carving as a medium to explore the complexity and mystery of the brain, presenting the intertwining of thought and structure. The creative method combines both figurative and abstract carving techniques, aiming to map the operation of consciousness and the boundaries of matter, thereby providing a more intuitive understanding of self-awareness and the dynamic processes of thought.
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <!-- 第十二个作品组 - 铅垂线（复制寄主空间，脑雕塑下方100vh） -->
+        <div class="artwork-group-12" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh);">
+            <!-- 图片容器 - 蓝底黑底 -->
+            <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+                <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+                <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+                <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                    <img src="../提示符 铅垂线.png" alt="Plumb Line" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+                </div>
+            </div>
+            <!-- 文字信息 -->
+            <div style="position: absolute; top: -50px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+                <img src="../提示符 铅垂线01 .jpg" alt="Plumb Line 01" style="max-width: 40%; max-height: 60px; object-fit: contain; margin-bottom: 20px; position: relative; top: -20px;">
+                <div style="position: relative; top: -40px;">
+                    <div style="font-size: 19px;">Plumb Line</div>
+                    <div style="font-size: 19px;">铅垂线</div>
+                    <div style="height: 10px;"></div>
+                    <div>Paper、Ink</div>
+                    <div>纸本 、油墨</div>
+                    <div style="height: 10px;"></div>
+                    <div>4*5 cm</div>
+                    <div style="height: 10px;"></div>
+                    <div>2022</div>
+                    
+                    <div style="height: 30px;"></div>
+                    <div style="font-size: 19px; font-weight: bold;">Plumb Line</div>
+                    <div style="height: 10px;"></div>
+                    <div style="font-size: 14px; line-height: 1.8;">
+                        Using a thin rope or string to suspend a weight in order to test the depth of water or calibrate vertical alignment—this method not only immediately evokes the idea of measurement but also brings to mind the balance and imbalance (the lack of verticality) between opposing factors.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- 第十三个作品组 - 锥形视域（复制网包探索器体，铅垂线下方100vh） -->
+    <div class="artwork-group-13" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 锥形视域.png" alt="Cone of Vision" style="max-width: 98%; max-height: 98%; object-fit: contain;">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 50%; left: calc(45% + 40px); right: 20px; transform: translateY(-50%); color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../提示符 锥形视域01 .jpeg" alt="Cone of Vision 01" style="max-width: 60%; max-height: 100px; object-fit: contain; margin-bottom: 20px;">
+            <div style="font-size: 19px;">Signifier — Cone of Vision</div>
+            <div style="font-size: 19px;">提示符 — 锥形视域</div>
+            <div style="height: 10px;"></div>
+            <div>Paper、Ink</div>
+            <div>纸本 、油墨</div>
+            <div style="height: 10px;"></div>
+            <div>4*5 cm</div>
+            <div style="height: 10px;"></div>
+            <div>2022</div>
+            <div style="height: 30px;"></div>
+            <div style="font-size: 19px; font-weight: bold;">Cone of Vision</div>
+            <div style="height: 10px;"></div>
+            <div style="font-size: 14px; line-height: 1.8;">
+                Cone of Vision refers to the range of vision in both visual perception and painting, where the observer's field of view forms a conical shape.
+            </div>
+            <div style="height: 10px;"></div>
+            <div style="font-size: 14px; line-height: 1.8;">
+                It is a key concept that aids in understanding and applying perspective.
+            </div>
+            <div style="height: 10px;"></div>
+            <div style="font-size: 14px; line-height: 1.8;">
+                Exaggerated or distorted perspective effects typically occur in areas outside the cone of vision.
+            </div>
+        </div>
+    </div>
+
+    <!-- 第十四个作品组 - 退隐未来（复制铅垂线，锥形视域下方100vh） -->
+    <div class="artwork-group-14" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 隐退未来.png" alt="Retreating Future" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: -20px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — Retreating Future</div>
+                <div style="font-size: 19px;">提示符 — 退隐未来</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">Retreating Future</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    "Retiring into the Future" could be a way of life in the future.
+                </div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    In a highly technological society, it involves finding a way to live in harmony with nature.
+                </div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    People may seek to return to nature while using advanced technology, enjoying the convenience brought by technology while maintaining a connection to the natural world.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第十五个作品组 - 逆势而为（复制退隐未来，向下平移100vh） -->
+    <div class="artwork-group-15" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 逆势而为 01.png" alt="Going Against the Grain" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: -20px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../提示符 逆势而为 02.png" alt="Going Against the Grain 02" style="max-width: 40%; max-height: 60px; object-fit: contain; margin-bottom: 20px; position: relative; top: -20px;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — Going Against the Grain</div>
+                <div style="font-size: 19px;">提示符 — 逆势而为</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                
+                <!-- 超级异形横向长方形音序器动画 -->
+                <div style="position: relative; display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(3, 1fr); gap: 3px; width: 360px; height: 90px; margin: 20px 0;">
+                    <div class="sequencer-cell" style="background: white; width: 27px; height: 24px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 17.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 18px; height: 27px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 17.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 36px; height: 18px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 16.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 24px; height: 21px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 16.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 30px; height: 15px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 15.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 21px; height: 24px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 15.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 33px; height: 12px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 14.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 15px; height: 27px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 14.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 39px; height: 9px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 13.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 12px; height: 30px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 13.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 22px; height: 18px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 12.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 42px; height: 6px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 12.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 9px; height: 33px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 11.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 19px; height: 21px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 11.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 25px; height: 15px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 10.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 45px; height: 3px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 10.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 6px; height: 36px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 9.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 16px; height: 24px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 9.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 28px; height: 12px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 8.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 48px; height: 1px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 8.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 3px; height: 39px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 7.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 13px; height: 27px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 7.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 31px; height: 9px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 6.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 51px; height: 1px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 6.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 1px; height: 42px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 5.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 10px; height: 30px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 5.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 34px; height: 6px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 4.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 54px; height: 1px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 4.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 1px; height: 45px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 3.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 7px; height: 33px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 3.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 37px; height: 3px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 2.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 4px; height: 36px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 2.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 40px; height: 1px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 1.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 1px; height: 39px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 1.0s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 43px; height: 1px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 0.5s;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 27px; height: 24px; animation: sequencer-animation-15 18s steps(1) infinite; animation-delay: 0s;"></div>
+                    <!-- 红色小圆 - 每行音序组完成轨迹时触发 -->
+                    <div style="position: absolute; width: 28px; height: 28px; border-radius: 50%; top: 30px; left: 280px; z-index: 10; animation: red-dot-trigger-2 18s steps(1) infinite 6s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第十六个作品组 - 永恒回归（复制脑雕塑，逆势而为下方100vh） -->
+    <div class="artwork-group-16" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -44px; left: 115px; right: 115px; height: calc(100% + 88px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 11px; left: 166px; right: 166px; height: calc(100% - 22px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 40px; left: 40px; width: calc(100% - 80px); height: calc(100% - 80px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 永恒回归 红 .png" alt="Eternal Return" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.07);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 250px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../提示符 永恒回归 01.png" alt="Eternal Return 01" style="max-width: 50%; max-height: 80px; object-fit: contain; margin-bottom: 20px; position: relative; top: -20px;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — Eternal Return</div>
+                <div style="font-size: 19px;">提示符 — 永恒回归</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*4 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">Eternal Return</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    Eternal Recurrence involves multiple dimensions such as time, existence, morality, psychology, and culture. It challenges traditional views on life and time, urging people to live in a more meaningful and responsible way in every moment. If we accept the idea of eternal recurrence, we will strive to make every choice and action worthy of being repeated infinitely.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第十七个作品组 - 永恒回归蓝色版（向上调整） -->
+    <div class="artwork-group-17" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -44px; left: 115px; right: 115px; height: calc(100% + 88px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 11px; left: 166px; right: 166px; height: calc(100% - 22px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 40px; left: 40px; width: calc(100% - 80px); height: calc(100% - 80px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 永恒回归 蓝.png" alt="Eternal Return Blue" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.07);">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第十八个作品组 - 邪典膜拜红色版（等比缩小25%） -->
+    <div class="artwork-group-18" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh); left: 0; transform: scale(0.75); transform-origin: left top;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 邪典膜拜 红 .png" alt="Cult Value Red" style="max-width: 98%; max-height: 98%; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第十九个作品组 - 邪典膜拜蓝色版（右侧，等比缩小25%） -->
+    <div class="artwork-group-19" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh); left: calc(75% * 0.75 - 525px); transform: scale(0.75); transform-origin: left top;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 邪典膜拜 蓝 .png" alt="Cult Value Blue" style="max-width: 98%; max-height: 98%; object-fit: contain;">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 50%; left: calc(45% + 40px); right: 20px; transform: translateY(-50%); color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left; transform: scale(1.33); transform-origin: left center;">
+            <img src="../提示符 邪典膜拜 01 .png" alt="Cult Value 01" style="max-width: 60%; max-height: 100px; object-fit: contain; margin-bottom: 20px;">
+            <div style="font-size: 19px;">Signifier — Cult Value</div>
+            <div style="font-size: 19px;">提示符 — 邪典膜拜</div>
+            <div style="height: 10px;"></div>
+            <div>Paper、Ink</div>
+            <div>纸本 、油墨</div>
+            <div style="height: 10px;"></div>
+            <div>4*5 cm</div>
+            <div style="height: 10px;"></div>
+            <div>2022</div>
+            
+            <div style="height: 30px;"></div>
+            
+            <!-- 邪典膜拜音序器动画 - 割裂异形不完整化 -->
+            <div style="display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(4, 1fr); gap: 3px; width: 320px; height: 120px; margin: 20px 0; position: relative;">
+                <!-- 红色小圆 - 每行音序组完成轨迹时触发 -->
+                <div style="position: absolute; width: 18px; height: 18px; border-radius: 50%; top: 50px; left: 120px; z-index: 10; animation: red-dot-trigger-cult 12s steps(1) infinite 3s;"></div>
+                
+                <!-- 从左至右的方块，创造割裂感 -->
+                <div class="sequencer-cell" style="background: black; width: 38px; height: 22px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 0s; position: absolute; top: 3px; left: 5px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 18px; height: 42px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 11.0s; position: absolute; top: 8px; left: 48px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 45px; height: 12px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 10.5s; position: absolute; top: 2px; left: 85px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 12px; height: 48px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 10.0s; position: absolute; top: 5px; left: 135px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 28px; height: 28px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 9.5s; position: absolute; top: 7px; left: 165px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 52px; height: 8px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 9.0s; position: absolute; top: 4px; left: 205px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 8px; height: 52px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 8.5s; position: absolute; top: 1px; left: 260px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 55px; height: 6px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 8.0s; position: absolute; top: 6px; left: 285px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 6px; height: 55px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 7.5s; position: absolute; top: 32px; left: 8px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 42px; height: 18px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 7.0s; position: absolute; top: 28px; left: 25px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 22px; height: 38px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 6.5s; position: absolute; top: 33px; left: 68px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 48px; height: 15px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 6.0s; position: absolute; top: 35px; left: 105px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 15px; height: 48px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 5.5s; position: absolute; top: 28px; left: 155px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 32px; height: 32px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 5.0s; position: absolute; top: 32px; left: 185px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 58px; height: 12px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 4.5s; position: absolute; top: 26px; left: 225px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 12px; height: 58px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 4.0s; position: absolute; top: 27px; left: 280px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 62px; height: 8px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 3.5s; position: absolute; top: 34px; left: 305px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 8px; height: 62px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 3.0s; position: absolute; top: 65px; left: 12px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 35px; height: 28px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 2.5s; position: absolute; top: 58px; left: 45px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 28px; height: 35px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 2.0s; position: absolute; top: 62px; left: 88px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 50px; height: 18px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 1.5s; position: absolute; top: 65px; left: 125px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 18px; height: 50px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 1.0s; position: absolute; top: 58px; left: 175px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 38px; height: 38px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 0.5s; position: absolute; top: 67px; left: 205px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 65px; height: 10px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 0s; position: absolute; top: 62px; left: 245px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 10px; height: 65px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 11.5s; position: absolute; top: 55px; left: 300px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 68px; height: 6px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 11.0s; position: absolute; top: 95px; left: 3px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 6px; height: 68px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 10.5s; position: absolute; top: 92px; left: 65px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 40px; height: 30px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 10.0s; position: absolute; top: 88px; left: 85px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 30px; height: 40px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 9.5s; position: absolute; top: 95px; left: 130px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 55px; height: 22px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 9.0s; position: absolute; top: 93px; left: 165px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 22px; height: 55px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 8.5s; position: absolute; top: 87px; left: 215px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 45px; height: 45px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 8.0s; position: absolute; top: 92px; left: 245px;"></div>
+                <div class="sequencer-cell" style="background: black; width: 72px; height: 8px; animation: sequencer-animation-cult 12s steps(1) infinite; animation-delay: 7.5s; position: absolute; top: 88px; left: 285px;"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二十个作品组 - 邪典膜拜红色版复制（向下平移一个容器高度） -->
+    <div class="artwork-group-20" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px); left: 0; transform: scale(0.75); transform-origin: left top;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 邪典膜拜 绿 .png" alt="Cult Value Green Copy" style="max-width: 98%; max-height: 98%; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二十一个作品组 - 邪典膜拜蓝色版复制（向下平移一个容器高度） -->
+    <div class="artwork-group-21" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px); left: calc(75% * 0.75 - 525px); transform: scale(0.75); transform-origin: left top;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 邪典膜拜 黄 .png" alt="Cult Value Yellow Copy" style="max-width: 98%; max-height: 98%; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二十二个作品组 - 身临其境（复制锥形视域，邪典膜拜绿下方100vh） -->
+    <div class="artwork-group-22" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px + 100vh);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 身临其境 蓝.png" alt="Immersive" style="max-width: 98%; max-height: 98%; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二十三个作品组 - 身临其境红色版（向下平移一个容器高度） -->
+    <div class="artwork-group-23" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px + 100vh + 500px);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 身临其境红.png" alt="Immersive Red" style="max-width: 98%; max-height: 98%; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二十四个作品组 - 抑子思考皮克驱动红色版（复制逆势而为，身临其境红下方100vh） -->
+    <div class="artwork-group-24" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px + 100vh + 500px + 100vh);">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 抑子思考皮克驱动 红.png" alt="The Eziscopic Drive Red" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 250px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../提示符 抑子思考皮克驱动 01.png" alt="The Eziscopic Drive 01" style="max-width: 40%; max-height: 60px; object-fit: contain; margin-bottom: 20px; position: relative; top: -20px;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — The Eziscopic Drive</div>
+                <div style="font-size: 19px;">提示符 — 抑子思考皮克驱动</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">The Eziscopic Drive</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    The scopic drive is different from the assertion or desire to immerse us in and act as an image, it is to ensure that Ezi, a viewer who is out of sight and thus beyond Zhang Yi.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二十五个作品组 - 抑子思考皮克驱动蓝色版（红色版容器下方，左右对齐） -->
+    <div class="artwork-group-25" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px + 100vh + 500px + 100vh + 550px); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 抑子思考皮克驱动 蓝.png" alt="The Eziscopic Drive Blue" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二十六个作品组 - 无影点红色版（复制抑子思考皮克驱动，蓝色版下方100vh） -->
+    <div class="artwork-group-26" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px + 100vh + 500px + 100vh + 550px + 100vh); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 无影点 红 .png" alt="Vanishing Point Red" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 250px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../提示符 无影点 01 .png" alt="Vanishing Point 01" style="max-width: 40%; max-height: 60px; object-fit: contain; margin-bottom: 20px; position: relative; top: -20px;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — Vanishing Point</div>
+                <div style="font-size: 19px;">提示符 — 无影点</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">The Vanishing Point</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    The vanishing point is a key element in creating depth and a sense of reality in two-dimensional art forms.
+                </div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    It is the point where parallel lines appear to converge in the distance, creating the illusion of depth and three-dimensional effects on a two-dimensional surface.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二十七个作品组 - 无影点蓝色版（红色版容器下方，参考抑子思考皮克驱动间距） -->
+    <div class="artwork-group-27" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px + 100vh + 500px + 100vh + 550px + 100vh + 550px); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 无影点 蓝 .png" alt="Vanishing Point Blue" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二十八个作品组 - 灵忆再创红色版（复制无影点，蓝色版下方100vh） -->
+    <div class="artwork-group-28" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px + 100vh + 500px + 100vh + 550px + 100vh + 550px + 100vh); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 灵忆二创 红黑.png" alt="R.E. Creation of Soul Memory Red" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 250px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — R.E. Creation of Soul Memory</div>
+                <div style="font-size: 19px;">提示符 — 灵忆再创</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                
+                <!-- 灵忆再创音序器动画 - 基础结构改变版本 -->
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(4, 1fr); gap: 3px; width: 480px; height: 200px; margin: 20px 0; position: relative; margin-left: 30px; margin-top: 120px;">
+                    <!-- 红色小圆 - 只有一个放大的圆点 -->
+                    <div style="position: absolute; width: 26px; height: 26px; border-radius: 50%; top: 100px; left: 240px; z-index: 10; animation: red-dot-trigger 15s steps(1) infinite 3s;"></div>
+                    
+                    <!-- 第一行 - 基础矩形结构 从左至右 -->
+                    <div class="sequencer-cell" style="background: white; width: 45px; height: 28px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 0s; position: absolute; top: -8px; left: 5px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 8px; height: 55px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 0.5s; position: absolute; top: 15px; left: 55px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 58px; height: 6px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 1.0s; position: absolute; top: 8px; left: 85px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 6px; height: 62px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 1.5s; position: absolute; top: 25px; left: 145px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 35px; height: 35px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 2.0s; position: absolute; top: 12px; left: 165px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 65px; height: 4px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 2.5s; position: absolute; top: 18px; left: 205px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 4px; height: 68px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 3.0s; position: absolute; top: 35px; left: 275px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 70px; height: 3px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 3.5s; position: absolute; top: 22px; left: 295px;"></div>
+                    
+                    <!-- 第二行 - 基础矩形结构 从左至右 -->
+                    <div class="sequencer-cell" style="background: white; width: 3px; height: 72px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 4.0s; position: absolute; top: 45px; left: 8px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 55px; height: 22px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 4.5s; position: absolute; top: 55px; left: 25px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 10px; height: 48px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 5.0s; position: absolute; top: 60px; left: 85px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 62px; height: 5px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 5.5s; position: absolute; top: 68px; left: 115px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 5px; height: 62px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 6.0s; position: absolute; top: 75px; left: 180px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 42px; height: 42px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 6.5s; position: absolute; top: 82px; left: 205px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 75px; height: 4px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 7.0s; position: absolute; top: 90px; left: 250px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 4px; height: 75px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 7.5s; position: absolute; top: 95px; left: 330px;"></div>
+                    
+                    <!-- 第三行 - 基础矩形结构 从左至右 -->
+                    <div class="sequencer-cell" style="background: white; width: 80px; height: 3px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 8.0s; position: absolute; top: 105px; left: 350px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 3px; height: 80px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 8.5s; position: absolute; top: 110px; left: 12px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 45px; height: 35px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 9.0s; position: absolute; top: 115px; left: 45px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 35px; height: 45px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 9.5s; position: absolute; top: 125px; left: 95px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 68px; height: 6px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 10.0s; position: absolute; top: 135px; left: 135px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 6px; height: 68px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 10.5s; position: absolute; top: 140px; left: 205px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 52px; height: 52px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 11.0s; position: absolute; top: 145px; left: 230px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 85px; height: 4px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 11.5s; position: absolute; top: 155px; left: 285px;"></div>
+                    
+                    <!-- 第四行 - 基础矩形结构 从左至右 -->
+                    <div class="sequencer-cell" style="background: white; width: 5px; height: 85px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 12.0s; position: absolute; top: 165px; left: 375px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 90px; height: 2px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 12.5s; position: absolute; top: 170px; left: 3px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 2px; height: 90px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 13.0s; position: absolute; top: 175px; left: 95px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 55px; height: 38px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 13.5s; position: absolute; top: 180px; left: 105px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 38px; height: 55px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 14.0s; position: absolute; top: 185px; left: 165px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 72px; height: 6px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 14.5s; position: absolute; top: 190px; left: 205px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 6px; height: 72px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 15.0s; position: absolute; top: 195px; left: 280px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 60px; height: 60px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 15.5s; position: absolute; top: 200px; left: 310px;"></div>
+                    
+                    <!-- 第一行扩展 - 额外4个元素 -->
+                    <div class="sequencer-cell" style="background: white; width: 25px; height: 35px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 4.0s; position: absolute; top: 5px; left: 345px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 35px; height: 25px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 4.5s; position: absolute; top: 8px; left: 375px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 20px; height: 40px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 5.0s; position: absolute; top: 3px; left: 415px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 40px; height: 20px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 5.5s; position: absolute; top: 10px; left: 440px;"></div>
+                    
+                    <!-- 第二行扩展 - 额外4个元素 -->
+                    <div class="sequencer-cell" style="background: white; width: 30px; height: 30px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 8.0s; position: absolute; top: 35px; left: 295px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 15px; height: 45px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 8.5s; position: absolute; top: 30px; left: 330px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 45px; height: 15px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 9.0s; position: absolute; top: 40px; left: 350px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 20px; height: 50px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 9.5s; position: absolute; top: 25px; left: 400px;"></div>
+                    
+                    <!-- 第三行扩展 - 额外4个元素 -->
+                    <div class="sequencer-cell" style="background: white; width: 50px; height: 20px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 12.0s; position: absolute; top: 70px; left: 295px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 25px; height: 45px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 12.5s; position: absolute; top: 60px; left: 350px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 35px; height: 35px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 13.0s; position: absolute; top: 70px; left: 380px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 15px; height: 55px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 13.5s; position: absolute; top: 55px; left: 420px;"></div>
+                    
+                    <!-- 第四行扩展 - 额外4个元素 -->
+                    <div class="sequencer-cell" style="background: white; width: 55px; height: 15px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 16.0s; position: absolute; top: 100px; left: 295px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 20px; height: 60px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 16.5s; position: absolute; top: 85px; left: 355px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 40px; height: 40px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 17.0s; position: absolute; top: 95px; left: 380px;"></div>
+                    <div class="sequencer-cell" style="background: white; width: 25px; height: 55px; animation: sequencer-animation-soul 15s steps(1) infinite; animation-delay: 17.5s; position: absolute; top: 80px; left: 425px;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二十九个作品组 - 灵忆再创蓝色版（红色版容器下方） -->
+    <div class="artwork-group-29" style="top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px + 100vh + 500px + 100vh + 550px + 100vh + 550px + 100vh + 550px); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 灵忆二创.png" alt="R.E. Creation of Soul Memory Blue" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三十个作品组 - 决定性瞬间黑色版（复制身临其境，灵忆再创蓝下方100vh） -->
+    <div class="artwork-group-30" style="top: 2800vh;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 决定性瞬间 黑.png" alt="The Decisive Moment Black" style="max-width: 98%; max-height: 98%; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三十一个作品组 - 决定性瞬间红色版（向上移动减少间距） -->
+    <div class="artwork-group-31" style="top: 2855vh;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 决定性瞬间 红.png" alt="The Decisive Moment Red" style="max-width: 98%; max-height: 98%; object-fit: contain;">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: -130px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../提示符 决定性瞬间 01 .png" alt="The Decisive Moment 01" style="max-width: 40%; max-height: 60px; object-fit: contain; margin-bottom: 20px; position: relative; top: -20px;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — The Decisive Moment</div>
+                <div style="font-size: 19px;">提示符 — 决定性瞬间</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+            </div>
+            
+            <!-- 决定性瞬间音序器动画 - 多层错乱结构（删除左下角超细格子） -->
+            <div style="margin-top: 80px; height: 160px; position: relative;">
+                <!-- 红色小圆 - 只有一个放大的圆点 -->
+                <div style="position: absolute; width: 20px; height: 20px; border-radius: 50%; top: 80px; left: 200px; z-index: 10; animation: red-dot-trigger 8s steps(1) infinite 2s;"></div>
+                
+                <!-- 第一层 - 基础错乱 -->
+                <div class="sequencer-step" style="width: 45px; height: 45px; background: white; animation: pulse 8s steps(1) infinite; position: absolute; top: 10px; left: 20px; z-index: 1;"></div>
+                <div class="sequencer-step" style="width: 60px; height: 20px; background: white; animation: pulse 8s steps(1) infinite 1.0s; position: absolute; top: 5px; left: 85px; z-index: 2;"></div>
+                <div class="sequencer-step" style="width: 20px; height: 60px; background: white; animation: pulse 8s steps(1) infinite 2.0s; position: absolute; top: 25px; left: 155px; z-index: 1;"></div>
+                <div class="sequencer-step" style="width: 50px; height: 50px; background: white; animation: pulse 8s steps(1) infinite 3.0s; position: absolute; top: 15px; left: 185px; z-index: 3;"></div>
+                
+                <!-- 第二层 - 重叠错乱 -->
+                <div class="sequencer-step" style="width: 35px; height: 70px; background: white; animation: pulse 8s steps(1) infinite 4.0s; position: absolute; top: 45px; left: 245px; z-index: 2;"></div>
+                <div class="sequencer-step" style="width: 70px; height: 15px; background: white; animation: pulse 8s steps(1) infinite 5.0s; position: absolute; top: 60px; left: 290px; z-index: 1;"></div>
+                <div class="sequencer-step" style="width: 15px; height: 70px; background: white; animation: pulse 8s steps(1) infinite 6.0s; position: absolute; top: 35px; left: 370px; z-index: 3;"></div>
+                <div class="sequencer-step" style="width: 40px; height: 40px; background: white; animation: pulse 8s steps(1) infinite 7.0s; position: absolute; top: 70px; left: 395px; z-index: 2;"></div>
+                
+                <!-- 第三层 - 极细元素（删除左下角三个超细格子） -->
+                <div class="sequencer-step" style="width: 25px; height: 25px; background: white; animation: pulse 8s steps(1) infinite 2.5s; position: absolute; top: 110px; left: 220px; z-index: 3;"></div>
+                <div class="sequencer-step" style="width: 55px; height: 8px; background: white; animation: pulse 8s steps(1) infinite 3.5s; position: absolute; top: 125px; left: 280px; z-index: 1;"></div>
+                
+                <!-- 第四层 - 微小元素（删除左下角三个超细格子） -->
+                <div class="sequencer-step" style="width: 30px; height: 30px; background: white; animation: pulse 8s steps(1) infinite 5.5s; position: absolute; top: 130px; left: 380px; z-index: 1;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三十二个作品组 - 实验性思想绿色版（复制灵忆再创，决定性瞬间红下方100vh） -->
+    <div class="artwork-group-32" style="top: 2955vh;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 实验性思想 绿.png" alt="Experimental Thinking Green" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+    </div>
+
+        <!-- 第三十三个作品组 - 实验性思想红色版（绿色版容器下方，效仿灵忆再创间距） -->
+    <div class="artwork-group-33" style="top: calc(2955vh + 550px); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 实验性思想 红.png" alt="Experimental Thinking Red" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: -200px; left: calc(45% + 40px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../提示符 实验性思想 01.png" alt="Experimental Thinking 01" style="max-width: 40%; max-height: 60px; object-fit: contain; margin-bottom: 20px; position: relative; top: -20px;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — Experimental Thinking</div>
+                <div style="font-size: 19px;">提示符 — 实验性思想</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">Experimental Thinking</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    We should work hard to desystematize our systematical mind and kick the walls that are erected around our own minds!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三十四个作品组 - 生命沉醉（复制逆势而为，实验性思想红下方100vh） -->
+    <div class="artwork-group-34" style="top: calc(2955vh + 550px + 100vh); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 141px; right: 141px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 生命沉醉.png" alt="Anima Intoxicated" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.2);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 50%; left: calc(45% + 40px); right: 20px; transform: translateY(-50%); color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <div style="position: relative;">
+                <div style="font-size: 19px;">Signifier — Anima Intoxicated</div>
+                <div style="font-size: 19px;">提示符 — 生命沉醉</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">Anima Intoxicated</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    Life Intoxication refers to a profound and intense life experience, where individuals are fully immersed in the present moment, feeling the vitality and fulfillment of life. This state is similar to bliss, flow, or the 'beauty of existence' in existential philosophy.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三十五个作品组 - 入解脱门（复制脑雕塑，生命沉醉下方100vh） -->
+    <div class="artwork-group-35" style="top: calc(2955vh + 550px + 100vh + 100vh); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -44px; left: 115px; right: 115px; height: calc(100% + 88px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 11px; left: 166px; right: 166px; height: calc(100% - 22px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 40px; left: 40px; width: calc(100% - 80px); height: calc(100% - 80px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 入解脱门.png" alt="Into The Door Of Relief" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.07);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 50%; left: calc(45% + 40px); right: 20px; transform: translateY(-50%); color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <div style="position: relative;">
+                <div style="font-size: 19px;">Signifier — Into The Door Of Relief</div>
+                <div style="font-size: 19px;">提示符 — 入解脱门</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*4 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">Into The Door Of Relief</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    It symbolizes the attainment of liberation and enlightenment through practice and the accumulation of wisdom. This concept holds profound significance not only in religion and philosophy but also offers important insights for the psychological and spiritual growth of modern individuals. Through practice and self-reflection, people can gradually free themselves from inner troubles and constraints, achieving true freedom and inner peace.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三十六个作品组 - 高频联觉（复制入解脱门，向下100vh） -->
+    <div class="artwork-group-36" style="top: calc(2955vh + 550px + 100vh + 100vh + 100vh); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -44px; left: 115px; right: 115px; height: calc(100% + 88px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 11px; left: 166px; right: 166px; height: calc(100% - 22px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 40px; left: 40px; width: calc(100% - 80px); height: calc(100% - 80px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 高频联觉.png" alt="High Frequency Synesthesia" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.07);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 50%; left: calc(45% + 40px); right: 20px; transform: translateY(-50%); color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <div style="position: relative;">
+                <div style="font-size: 19px;">Signifier — High Frequency Synesthesia</div>
+                <div style="font-size: 19px;">提示符 — 高频联觉</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*4 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">High Frequency Synesthesia</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    When individuals receive multiple sensory inputs, there can be crossovers and associations between these inputs. This phenomenon may lead to a mixed experience of sensations, cognition, and emotions, creating a very intense and complex state of feeling. This synesthesia is likely caused by the interaction between different areas of the brain, and is more likely to occur when the input of information is rich or the stimuli are particularly intense. High-frequency synesthesia is often used in artistic, literary, and musical creations to express complex emotions and ideas.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三十七个作品组 - 屁股庙（复制高频联觉，向下100vh） -->
+    <div class="artwork-group-37" style="top: calc(2955vh + 550px + 100vh + 100vh + 100vh + 100vh); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%;">
+            <div style="position: absolute; top: -34px; left: 95px; right: 95px; height: calc(100% + 68px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 21px; left: 146px; right: 146px; height: calc(100% - 42px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 35px; left: 35px; width: calc(100% - 70px); height: calc(100% - 70px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 屁股庙 .png" alt="The A.S.S temple" style="max-width: 98%; max-height: 98%; object-fit: contain;">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 50%; left: calc(45% + 40px); right: 20px; transform: translateY(-50%); color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <div style="position: relative;">
+                <div style="font-size: 19px;">Signifier — The A.S.S temple</div>
+                <div style="font-size: 19px;">提示符 — 屁股庙</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*5 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                <div style="font-size: 19px; font-weight: bold;">The A.S.S temple</div>
+                <div style="height: 10px;"></div>
+                <div style="font-size: 14px; line-height: 1.8;">
+                    The buttocks are a temple, within which there are mountains, rivers, rain, and dreams.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三十八个作品组 - 醍醐灌顶（复制高频联觉，屁股庙下方100vh） -->
+    <div class="artwork-group-38" style="top: calc(2955vh + 550px + 100vh + 100vh + 100vh + 100vh + 100vh); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -44px; left: 115px; right: 115px; height: calc(100% + 88px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 11px; left: 166px; right: 166px; height: calc(100% - 22px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 40px; left: 40px; width: calc(100% - 80px); height: calc(100% - 80px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 醍醐灌顶 .png" alt="To Be Enlightened" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.07);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 50%; left: calc(45% + 40px); right: 20px; transform: translateY(-50%); color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <img src="../提示符 醍醐灌顶 01 .png" alt="To Be Enlightened 01" style="max-width: 50%; max-height: 80px; object-fit: contain; margin-bottom: 20px; position: relative; top: -20px;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — To Be Enlightened</div>
+                <div style="font-size: 19px;">提示符 — 醍醐灌顶</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*4 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                
+                <!-- 极简音序器动画 -->
+                <div style="display: flex; align-items: center; gap: 8px; margin: 20px 0;">
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6s steps(1) infinite;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6s steps(1) infinite 1s;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6s steps(1) infinite 2s;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6s steps(1) infinite 3s;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6s steps(1) infinite 4s;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6s steps(1) infinite 5s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三十九个作品组 - 智者陶土版（复制永恒回归，醍醐灌顶下方100vh） -->
+    <div class="artwork-group-39" style="top: calc(2955vh + 550px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh); left: -50px; transform-origin: left top;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg) scale(0.85);">
+            <div style="position: absolute; top: -44px; left: 115px; right: 115px; height: calc(100% + 88px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 11px; left: 166px; right: 166px; height: calc(100% - 22px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 40px; left: 40px; width: calc(100% - 80px); height: calc(100% - 80px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 智者 陶土 .png" alt="Sage Clay" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.07);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: calc(50% + 100px); left: calc(75% - 80px); right: 20px; color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <div style="position: relative; top: -40px;">
+                <div style="font-size: 19px;">Signifier — Sage</div>
+                <div style="font-size: 19px;">提示符 — 智者</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*4 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                
+                <!-- 极简音序器动画 -->
+                <div style="display: flex; align-items: center; gap: 4px; margin: 20px 0;">
+                    <div class="sequencer-step" style="width: 3px; height: 3px; background: white; animation: pulse-red 3.6s steps(1) infinite;"></div>
+                    <div class="sequencer-step" style="width: 32px; height: 32px; background: white; animation: pulse 3.6s steps(1) infinite 0.2s;"></div>
+                    <div class="sequencer-step" style="width: 2px; height: 2px; background: white; animation: pulse-red 3.6s steps(1) infinite 0.4s;"></div>
+                    <div class="sequencer-step" style="width: 35px; height: 35px; background: white; animation: pulse 3.6s steps(1) infinite 0.6s;"></div>
+                    <div class="sequencer-step" style="width: 1px; height: 1px; background: white; animation: pulse-red 3.6s steps(1) infinite 0.8s;"></div>
+                    <div class="sequencer-step" style="width: 25px; height: 25px; background: white; animation: pulse 3.6s steps(1) infinite 1.0s;"></div>
+                    <div class="sequencer-step" style="width: 5px; height: 5px; background: white; animation: pulse-red 3.6s steps(1) infinite 1.2s;"></div>
+                    <div class="sequencer-step" style="width: 38px; height: 38px; background: white; animation: pulse 3.6s steps(1) infinite 1.4s;"></div>
+                    <div class="sequencer-step" style="width: 7px; height: 7px; background: white; animation: pulse-red 3.6s steps(1) infinite 1.6s;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 3.6s steps(1) infinite 1.8s;"></div>
+                    <div class="sequencer-step" style="width: 0.5px; height: 0.5px; background: white; animation: pulse-red 3.6s steps(1) infinite 2.0s;"></div>
+                    <div class="sequencer-step" style="width: 40px; height: 40px; background: white; animation: pulse 3.6s steps(1) infinite 2.2s;"></div>
+                    <div class="sequencer-step" style="width: 9px; height: 9px; background: white; animation: pulse-red 3.6s steps(1) infinite 2.4s;"></div>
+                    <div class="sequencer-step" style="width: 15px; height: 15px; background: white; animation: pulse 3.6s steps(1) infinite 2.6s;"></div>
+                    <div class="sequencer-step" style="width: 0.1px; height: 0.1px; background: white; animation: pulse-red 3.6s steps(1) infinite 2.8s;"></div>
+                    <div class="sequencer-step" style="width: 45px; height: 45px; background: white; animation: pulse 3.6s steps(1) infinite 3.0s;"></div>
+                    <div class="sequencer-step" style="width: 11px; height: 11px; background: white; animation: pulse-red 3.6s steps(1) infinite 3.2s;"></div>
+                    <div class="sequencer-step" style="width: 13px; height: 13px; background: white; animation: pulse 3.6s steps(1) infinite 3.4s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第四十个作品组 - 智者朱砂版（向上调整） -->
+    <div class="artwork-group-40" style="top: calc(2955vh + 550px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 450px); left: -50px; transform-origin: left top;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg) scale(0.85);">
+            <div style="position: absolute; top: -44px; left: 115px; right: 115px; height: calc(100% + 88px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 11px; left: 166px; right: 166px; height: calc(100% - 22px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 40px; left: 40px; width: calc(100% - 80px); height: calc(100% - 80px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 智者 朱砂.png" alt="Sage Cinnabar" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.07);">
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 第四十一个作品组 - 智者绿1版（右侧，垂直居中于左边两个容器） -->
+    <div class="artwork-group-41" style="top: calc(2955vh + 550px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 225px); left: calc(75% - 870px); transform-origin: left top;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg) scale(0.85);">
+            <div style="position: absolute; top: -44px; left: 115px; right: 115px; height: calc(100% + 88px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 11px; left: 166px; right: 166px; height: calc(100% - 22px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 40px; left: 40px; width: calc(100% - 80px); height: calc(100% - 80px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 智者 绿 1.png" alt="Sage Green 1" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.07);">
+            </div>
+        </div>
+    </div>
+
+    <!-- 第四十二个作品组 - 百点阵化图（复制醍醐灌顶，智者作品组下方100vh） -->
+    <div class="artwork-group-42" style="position: absolute; top: calc(2955vh + 550px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 225px + 100vh); left: -11px;">
+        <!-- 图片容器 - 蓝底黑底 -->
+        <div style="position: absolute; top: 0; left: 0; width: 45%; height: 100%; transform: rotate(90deg);">
+            <div style="position: absolute; top: -44px; left: 115px; right: 115px; height: calc(100% + 88px); background: black; z-index: 1;"></div>
+            <div style="position: absolute; top: 11px; left: 166px; right: 166px; height: calc(100% - 22px); background: #c0c0c0; z-index: 2;"></div>
+            <div style="position: absolute; top: 40px; left: 40px; width: calc(100% - 80px); height: calc(100% - 80px); display: flex; align-items: center; justify-content: center; z-index: 3;">
+                <img src="../提示符 百点阵化图.png" alt="Rasterize" style="max-width: 100%; max-height: 100%; object-fit: contain; transform: rotate(-90deg) scale(1.07);">
+            </div>
+        </div>
+        <!-- 文字信息 -->
+        <div style="position: absolute; top: 50%; left: calc(45% + 40px); right: 20px; transform: translateY(-50%); color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+            <div style="position: relative;">
+                <div style="font-size: 19px;">Signifier — Rasterize</div>
+                <div style="font-size: 19px;">提示符 — 百点阵化图</div>
+                <div style="height: 10px;"></div>
+                <div>Paper、Ink</div>
+                <div>纸本 、油墨</div>
+                <div style="height: 10px;"></div>
+                <div>4*4 cm</div>
+                <div style="height: 10px;"></div>
+                <div>2022</div>
+                
+                <div style="height: 30px;"></div>
+                
+                <!-- 极简音序器动画 -->
+                <div style="display: flex; align-items: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; max-width: 300px;">
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 0.8s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.6s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.4s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.2s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.0s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.8s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.6s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 0.1s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 0.9s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.7s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.5s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.3s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.1s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.9s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.7s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 0.2s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.0s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.8s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.6s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.4s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.2s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.0s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.8s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 0.3s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.1s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.9s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.7s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.5s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.3s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.1s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.9s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 0.4s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.2s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.0s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.8s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.6s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.4s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.2s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 6.0s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 0.5s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.3s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.1s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.9s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.7s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.5s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.3s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 6.1s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 0.6s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.4s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.2s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.0s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.8s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.6s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.4s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 6.2s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 0.7s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.5s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.3s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.1s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.9s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.7s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.5s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 6.3s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 0.8s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 1.6s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 2.4s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 3.2s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.0s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 4.8s; opacity: 0;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 5.6s; opacity: 1;"></div>
+                    <div class="sequencer-step" style="width: 20px; height: 20px; background: white; animation: pulse 6.4s steps(1) infinite 6.4s; opacity: 0;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 身临其境文字信息（在两个容器之间的居中位置） -->
+    <div style="position: absolute; top: calc(160px + 1250vh - 30px + 100vh + 100vh + 100vh + 100vh + 100vh + 100vh + 500px + 100vh + 380px + 100vh + 450px); left: calc(45% + 40px); right: 20px; transform: translateY(-50%); color: white; font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace; font-size: 16px; line-height: 1.6; text-align: left;">
+        <img src="../提示符 身临其境01 .png" alt="Immersive 01" style="max-width: 60%; max-height: 100px; object-fit: contain; margin-bottom: 20px;">
+        <div style="font-size: 19px;">Signifier — Immersive</div>
+        <div style="font-size: 19px;">提示符 — 身临其境</div>
+        <div style="height: 10px;"></div>
+        <div>Paper、Ink</div>
+        <div>纸本 、油墨</div>
+        <div style="height: 10px;"></div>
+        <div>4*5 cm</div>
+        <div style="height: 10px;"></div>
+        <div>2022</div>
+        <div style="height: 30px;"></div>
+        <div style="font-size: 19px; font-weight: bold;">Immersive</div>
+        <div style="height: 10px;"></div>
+        <div style="font-size: 14px; line-height: 1.8;">
+            A highly realistic and immersive experience that makes one feel as if they are truly there.
+        </div>
+        <div style="height: 10px;"></div>
+        <div style="font-size: 14px; line-height: 1.8;">
+            Each artistic creation makes me feel as if I am present in the moment.
+        </div>
+        <div style="height: 10px;"></div>
+        <div style="font-size: 14px; line-height: 1.8;">
+            With the development of modern technology, new technologies like virtual reality have made the 'being there' experience more widespread and real.
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

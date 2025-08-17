@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Album 3 - PrintSHIFT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+        }
+
+        html, body {
+            background-color: #0041ff;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            color: white;
+            overflow-x: hidden;
+            overflow-y: auto;
+            image-rendering: pixelated;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
+            margin: 0;
+            padding: 0;
+            min-height: 120vh;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            left: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+        
+        .album-cover {
+            position: absolute;
+            top: 50%;
+            left: 25%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            object-fit: cover;
+            border: 2px outset #c0c0c0;
+            box-shadow: 
+                0 0 0 1px #000,
+                inset 1px 1px 0 #fff,
+                inset -1px -1px 0 #404040;
+        }
+        
+        .audio-player {
+            position: absolute;
+            top: 50%;
+            left: 75%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            border-radius: 0;
+            padding: 30px;
+            box-shadow: 
+                0 0 0 1px #000,
+                inset 1px 1px 0 #fff,
+                inset -1px -1px 0 #404040;
+        }
+        
+        .audio-player h3 {
+            color: #000;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #404040;
+            padding-bottom: 10px;
+        }
+        
+        .track {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border: 2px inset #fff;
+            border-radius: 0;
+            position: relative;
+        }
+        
+        .track::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #404040;
+        }
+        
+        .track-title {
+            color: #000;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .track audio {
+            width: 100%;
+            height: 50px;
+            border-radius: 0;
+            background: #c0c0c0;
+        }
+        
+        .track audio::-webkit-media-controls-panel {
+            background: #c0c0c0;
+            border: 2px inset #c0c0c0;
+        }
+        
+        .track audio::-webkit-media-controls-play-button {
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            border-radius: 0;
+        }
+        
+        .track audio::-webkit-media-controls-play-button:hover {
+            border: 2px inset #c0c0c0;
+        }
+        
+        .track audio::-webkit-media-controls-timeline {
+            background: #fff;
+            border: 2px inset #fff;
+        }
+        
+        .track audio::-webkit-media-controls-current-time-display,
+        .track audio::-webkit-media-controls-time-remaining-display {
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .album-description {
+            position: absolute;
+            top: calc(50% + 330px);
+            left: 25%;
+            transform: translateX(-50%);
+            width: 600px;
+            color: white;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: left;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+    </style>
+</head>
+<body>
+            <a href="index.html" class="back-btn">Back</a>
+    <img src="../Album PrintSHIFT.jpg" alt="Album Cover" class="album-cover">
+    
+    <div class="album-description">
+        E found an ancient printer in the ruins. Powered by the last remaining electricity, it was reactivated. As the printer started up, an ancient and mysterious force was awakened. The creaking sound seemed to struggle as it tried to reconstruct the lost world... Just Print the shit.
+    </div>
+    
+    <div class="audio-player">
+        <h3>TRACKS</h3>
+        <div class="track">
+            <div class="track-title">1. PrintSHIFT</div>
+            <audio controls>
+                <source src="../Album PrintSHIT.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+    </div>
+</body>
+</html> 

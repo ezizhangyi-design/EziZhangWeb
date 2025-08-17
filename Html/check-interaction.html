@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>交互检测</title>
+    <style>
+        body { 
+            background: #0041ff; 
+            color: white; 
+            font-family: Arial; 
+            padding: 20px; 
+        }
+        
+        .test-container {
+            position: relative;
+            margin: 20px;
+            display: inline-block;
+        }
+        
+        .black-img {
+            width: 150px;
+            height: 200px;
+            object-fit: contain;
+            filter: brightness(0);
+            border: 3px solid #fac800;
+            cursor: pointer;
+        }
+        
+        .color-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150px;
+            height: 200px;
+            object-fit: contain;
+            opacity: 0;
+            border: 3px solid #fac800;
+            transition: opacity 0.3s ease;
+        }
+        
+        .color-img.show {
+            opacity: 1;
+        }
+        
+        .status {
+            margin: 20px;
+            padding: 10px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+    <h1>交互效果检测</h1>
+    
+    <div class="status">
+        <h3>检测状态：</h3>
+        <p>1. 您应该能看到黑色图片（因为filter: brightness(0)）</p>
+        <p>2. 鼠标悬停时应该看到彩色原图</p>
+        <p>3. 鼠标离开时原图应该消失</p>
+    </div>
+    
+    <div class="test-container">
+        <img src="../Tangential%20%20EMMA01.png" class="black-img" id="testImg">
+        <img src="../Tangential%20%20EMMA01.png" class="color-img" id="testHidden">
+    </div>
+    
+    <div class="status">
+        <h3>请告诉我：</h3>
+        <p>1. 您能看到黑色图片吗？</p>
+        <p>2. 鼠标悬停时有反应吗？</p>
+        <p>3. 浏览器控制台有错误信息吗？</p>
+    </div>
+    
+    <script>
+        const testImg = document.getElementById('testImg');
+        const testHidden = document.getElementById('testHidden');
+        
+        testImg.addEventListener('mouseenter', function() {
+            console.log('鼠标进入测试图片');
+            testHidden.classList.add('show');
+        });
+        
+        testImg.addEventListener('mouseleave', function() {
+            console.log('鼠标离开测试图片');
+            testHidden.classList.remove('show');
+        });
+        
+        // 检查图片加载
+        window.addEventListener('load', function() {
+            console.log('页面加载完成');
+            if (testImg.complete && testImg.naturalWidth !== 0) {
+                console.log('测试图片加载成功');
+            } else {
+                console.log('测试图片加载失败');
+            }
+        });
+    </script>
+</body>
+</html> 

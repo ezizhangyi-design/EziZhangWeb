@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>调试03图片交互</title>
+    <style>
+        body { 
+            background: #0041ff; 
+            color: white; 
+            font-family: Arial; 
+            padding: 20px; 
+        }
+        
+        .debug-container {
+            position: relative;
+            margin: 20px;
+            border: 2px solid red;
+        }
+        
+        .emma-03 {
+            position: absolute;
+            top: 2185px;
+            left: 840px;
+            width: 180px;
+            height: 400px;
+            object-fit: contain;
+            filter: brightness(0);
+            border: 2px solid yellow;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .hidden-03 {
+            position: absolute;
+            top: 2185px;
+            left: 840px;
+            width: 180px;
+            height: 400px;
+            object-fit: contain;
+            opacity: 0;
+            border: 2px solid green;
+            transition: opacity 0.1s ease;
+            z-index: 15;
+        }
+        
+        .hidden-03.show {
+            opacity: 1;
+        }
+        
+        .info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border: 1px solid white;
+            z-index: 1000;
+        }
+        
+        .log {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border: 1px solid white;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h3>03图片调试</h3>
+        <p>黄色边框：黑色图片</p>
+        <p>绿色边框：隐藏原图</p>
+        <p>位置：top: 2185px, left: 840px</p>
+        <p>尺寸：180x400px</p>
+        <p>z-index: 黑色=10, 隐藏=15</p>
+    </div>
+    
+    <div class="log" id="log"></div>
+    
+    <div class="debug-container">
+        <img src="../Tangential%20%20EMMA03.jpg" class="emma-03" id="black03">
+        <img src="../Tangential%20%20EMMA03.jpg" class="hidden-03" id="hidden03">
+    </div>
+    
+    <script>
+        function log(message) {
+            console.log(message);
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += message + '<br>';
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            log('页面加载完成');
+            
+            const black03 = document.getElementById('black03');
+            const hidden03 = document.getElementById('hidden03');
+            
+            log('黑色图片元素:', black03);
+            log('隐藏图片元素:', hidden03);
+            
+            // 检查图片加载状态
+            if (black03.complete && black03.naturalWidth !== 0) {
+                log('黑色图片加载成功');
+            } else {
+                log('黑色图片加载失败');
+            }
+            
+            if (hidden03.complete && hidden03.naturalWidth !== 0) {
+                log('隐藏图片加载成功');
+            } else {
+                log('隐藏图片加载失败');
+            }
+            
+            // 测试图片1
+            black03.addEventListener('mouseenter', function(e) {
+                log('鼠标进入03图片');
+                hidden03.classList.add('show');
+                log('03图片显示原图');
+            });
+            
+            black03.addEventListener('mouseleave', function(e) {
+                log('鼠标离开03图片');
+                hidden03.classList.remove('show');
+                log('03图片隐藏原图');
+            });
+            
+            // 添加点击测试
+            black03.addEventListener('click', function(e) {
+                log('点击03图片');
+            });
+            
+            // 添加鼠标移动跟踪
+            document.addEventListener('mousemove', function(e) {
+                const rect = black03.getBoundingClientRect();
+                const isOver = e.clientX >= rect.left && e.clientX <= rect.right && 
+                              e.clientY >= rect.top && e.clientY <= rect.bottom;
+                
+                if (isOver) {
+                    log('鼠标在03图片区域内');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

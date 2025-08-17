@@ -1,0 +1,2224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ezi.Zhang - R.G.B. Star History Series</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <style>
+        html, body {
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #0041ff;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            overflow-x: hidden;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            left: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 99999;
+        }
+        .back-btn:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+        
+        .top-image {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -320px;
+            max-width: 480px;
+            height: auto;
+            transition: margin-left 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .top-image:hover {
+            margin-left: -240px;
+            filter: brightness(1);
+            transition: margin-left 0.3s ease, filter 0.5s ease;
+        }
+        
+        .top-image-2 {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 260px;
+            max-width: 350px;
+            height: auto;
+            transition: margin-left 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .top-image-2:hover {
+            margin-left: 340px;
+            filter: brightness(1);
+            transition: margin-left 0.3s ease, filter 0.5s ease;
+        }
+        
+        .top-image-3 {
+            position: absolute;
+            top: 160px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -300px;
+            max-width: 550px;
+            height: auto;
+            transition: margin-left 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .top-image-3:hover {
+            margin-left: -220px;
+            filter: brightness(1);
+            transition: margin-left 0.3s ease, filter 0.5s ease;
+        }
+        
+        .top-image-4 {
+            position: absolute;
+            top: 160px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 270px;
+            max-width: 300px;
+            height: auto;
+            transition: margin-left 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .top-image-4:hover {
+            margin-left: 350px;
+            filter: brightness(1);
+            transition: margin-left 0.3s ease, filter 0.5s ease;
+        }
+        
+        .top-image-5 {
+            position: absolute;
+            top: 250px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -340px;
+            max-width: 450px;
+            height: auto;
+            z-index: 10;
+            transition: margin-left 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .top-image-5:hover {
+            margin-left: -260px;
+            filter: brightness(1);
+            transition: margin-left 0.3s ease, filter 0.5s ease;
+        }
+        
+        .top-image-6 {
+            position: absolute;
+            top: 260px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 200px;
+            max-width: 420px;
+            height: auto;
+            z-index: 10;
+            transition: margin-left 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .top-image-6:hover {
+            margin-left: 280px;
+            filter: brightness(1);
+            transition: margin-left 0.3s ease, filter 0.5s ease;
+        }
+        
+        .top-image-7 {
+            position: absolute;
+            top: 380px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -300px;
+            max-width: 450px;
+            height: auto;
+            z-index: 10;
+            transition: margin-left 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .top-image-7:hover {
+            margin-left: -220px;
+            filter: brightness(1);
+            transition: margin-left 0.3s ease, filter 0.5s ease;
+        }
+        
+        .top-image-8 {
+            position: absolute;
+            top: 390px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 220px;
+            max-width: 400px;
+            height: auto;
+            z-index: 10;
+            transition: margin-left 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .top-image-8:hover {
+            margin-left: 300px;
+            filter: brightness(1);
+            transition: margin-left 0.3s ease, filter 0.5s ease;
+        }
+        
+        .top-image-9 {
+            position: absolute;
+            top: 539px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -60px;
+            max-width: 950px;
+            height: auto;
+            z-index: 10;
+            transition: margin-left 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .top-image-9:hover {
+            margin-left: 20px;
+            filter: brightness(1);
+            transition: margin-left 0.3s ease, filter 0.5s ease;
+        }
+        
+        .preview-image-container-5 {
+            position: absolute;
+            top: 700px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -410px;
+            width: 970px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        .preview-image-container-6 {
+            position: absolute;
+            top: 700px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 410px;
+            width: 970px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        .outer-black-frame-6 {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-black-frame-6 {
+            position: absolute;
+            top: 12.705%;
+            left: 11.025%;
+            right: 11.025%;
+            bottom: 12.705%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-yellow-frame-6 {
+            position: absolute;
+            top: calc(12.705% + 51px);
+            left: calc(11.025% + 63px);
+            right: calc(11.025% + 63px);
+            bottom: calc(12.705% + 51px);
+            background: #cfcfcf;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+        
+        .preview-image-6 {
+            position: absolute;
+            top: calc(12.705% + 64px);
+            left: calc(11.025% + 64px);
+            right: calc(11.025% + 64px);
+            bottom: calc(12.705% + 64px);
+            width: calc(77.95% - 128px);
+            height: calc(74.59% - 128px);
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 9999;
+        }
+        
+        .artwork-info-5 {
+            position: absolute;
+            top: 540px;
+            right: 120px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        .artwork-info-6 {
+            position: absolute;
+            top: 540px;
+            right: 120px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        .series-2-image-1 {
+            position: absolute;
+            top: 1800px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 1100px;
+            height: auto;
+            z-index: 10;
+            transition: all 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .series-2-image-1:hover {
+            filter: brightness(1);
+            transform: translateX(-50%) scale(1.15);
+            transition: all 0.3s ease, filter 0.5s ease;
+        }
+        
+        .series-2-image-2 {
+            position: absolute;
+            top: 1950px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 900px;
+            height: auto;
+            z-index: 10;
+            transition: all 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .series-2-image-2:hover {
+            filter: brightness(1);
+            transform: translateX(-50%) scale(1.15);
+            transition: all 0.3s ease, filter 0.5s ease;
+        }
+        
+        .series-2-image-3 {
+            position: absolute;
+            top: 2080px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 800px;
+            height: auto;
+            z-index: 10;
+            transition: all 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .series-2-image-3:hover {
+            filter: brightness(1);
+            transform: translateX(-50%) scale(1.15);
+            transition: all 0.3s ease, filter 0.5s ease;
+        }
+        
+        .series-2-image-4 {
+            position: absolute;
+            top: 2160px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 700px;
+            height: auto;
+            z-index: 10;
+            transition: all 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .series-2-image-4:hover {
+            filter: brightness(1);
+            transform: translateX(-50%) scale(1.15);
+            transition: all 0.3s ease, filter 0.5s ease;
+        }
+        
+        .series-2-image-5 {
+            position: absolute;
+            top: 2340px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 600px;
+            height: auto;
+            z-index: 10;
+            transition: all 0.3s ease, filter 0.5s ease 2s;
+            filter: brightness(0);
+        }
+        
+        .series-2-image-5:hover {
+            filter: brightness(1);
+            transform: translateX(-50%) scale(1.15);
+            transition: all 0.3s ease, filter 0.5s ease;
+        }
+        
+        .preview-image-container-7 {
+            position: absolute;
+            top: 2550px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -410px;
+            width: 970px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        .preview-image-container-8 {
+            position: absolute;
+            top: 2550px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 410px;
+            width: 970px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        .outer-black-frame-7 {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-black-frame-7 {
+            position: absolute;
+            top: 12.705%;
+            left: 11.025%;
+            right: 11.025%;
+            bottom: 12.705%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-yellow-frame-7 {
+            position: absolute;
+            top: calc(12.705% + 51px);
+            left: calc(11.025% + 63px);
+            right: calc(11.025% + 63px);
+            bottom: calc(12.705% + 51px);
+            background: #cfcfcf;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+        
+        .preview-image-7 {
+            position: absolute;
+            top: calc(12.705% + 64px);
+            left: calc(11.025% + 64px);
+            right: calc(11.025% + 64px);
+            bottom: calc(12.705% + 64px);
+            width: calc(77.95% - 128px);
+            height: calc(74.59% - 128px);
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 9999;
+        }
+        
+        .outer-black-frame-8 {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-black-frame-8 {
+            position: absolute;
+            top: 12.705%;
+            left: 11.025%;
+            right: 11.025%;
+            bottom: 12.705%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-yellow-frame-8 {
+            position: absolute;
+            top: calc(12.705% + 51px);
+            left: calc(11.025% + 63px);
+            right: calc(11.025% + 63px);
+            bottom: calc(12.705% + 51px);
+            background: #cfcfcf;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+        
+        .preview-image-8 {
+            position: absolute;
+            top: calc(12.705% + 64px);
+            left: calc(11.025% + 64px);
+            right: calc(11.025% + 64px);
+            bottom: calc(12.705% + 64px);
+            width: calc(77.95% - 128px);
+            height: calc(74.59% - 128px);
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 9999;
+        }
+        
+        .artwork-info-7 {
+            position: absolute;
+            top: 540px;
+            right: 120px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        .artwork-info-8 {
+            position: absolute;
+            top: 540px;
+            right: 120px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        /* 容器9样式 - 黑色03 */
+        .preview-image-container-9 {
+            position: absolute;
+            top: 4850px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -450px;
+            width: 2000px;
+            height: 1235px;
+            z-index: 10;
+        }
+        
+        .outer-black-frame-9 {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            background: black;
+            box-sizing: border-box;
+            display: none;
+        }
+        
+        .inner-black-frame-9 {
+            position: absolute;
+            top: calc(12.705% - 20px);
+            left: calc(11.025% + 478px);
+            width: calc(77.95% - 956px);
+            bottom: calc(12.705% - 20px);
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-yellow-frame-9 {
+            position: absolute;
+            top: calc(12.705% + 51px);
+            left: calc(11.025% + 549px);
+            right: calc(11.025% + 549px);
+            bottom: calc(12.705% + 51px);
+            background: #cfcfcf;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+        
+        .preview-image-9 {
+            position: absolute;
+            top: calc(12.705% + 64px);
+            left: calc(11.025% + 304px);
+            right: calc(11.025% + 304px);
+            bottom: calc(12.705% + 64px);
+            width: calc(77.95% - 608px);
+            height: calc(74.59% - 128px);
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 9999;
+        }
+        
+        .artwork-info-9 {
+            position: absolute;
+            top: 1110px;
+            right: 710px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        /* 复制的容器9样式 - 向右平移500px */
+        .preview-image-container-9-copy {
+            position: absolute;
+            top: 4850px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 450px;
+            width: 2000px;
+            height: 1235px;
+            z-index: 10;
+        }
+        
+        .outer-black-frame-9-copy {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            background: black;
+            box-sizing: border-box;
+            display: none;
+        }
+        
+        .inner-black-frame-9-copy {
+            position: absolute;
+            top: calc(12.705% - 20px);
+            left: calc(11.025% + 478px);
+            width: calc(77.95% - 956px);
+            bottom: calc(12.705% - 20px);
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-yellow-frame-9-copy {
+            position: absolute;
+            top: calc(12.705% + 51px);
+            left: calc(11.025% + 549px);
+            right: calc(11.025% + 549px);
+            bottom: calc(12.705% + 51px);
+            background: #cfcfcf;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+        
+        .preview-image-9-copy {
+            position: absolute;
+            top: calc(12.705% + 64px);
+            left: calc(11.025% + 304px);
+            right: calc(11.025% + 304px);
+            bottom: calc(12.705% + 64px);
+            width: calc(77.95% - 608px);
+            height: calc(74.59% - 128px);
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 9999;
+        }
+        
+        .artwork-info-9-copy {
+            position: absolute;
+            top: 1110px;
+            right: 710px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+
+        
+        .series-3-image-1 {
+            position: absolute;
+            top: 3790px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -580px;
+            max-width: 280px;
+            height: auto;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.5s ease;
+        }
+        
+        .series-3-image-1.revealed {
+            filter: brightness(1);
+        }
+        
+        .series-3-image-3 {
+            position: absolute;
+            top: 4340px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -580px;
+            max-width: 280px;
+            height: auto;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.5s ease;
+        }
+        
+        .series-3-image-3.revealed {
+            filter: brightness(1);
+        }
+        
+
+        
+        .triangle-arrow-up {
+            position: absolute;
+            top: 4300px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -580px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 30px solid white;
+            z-index: 15;
+            animation: arrowPulse 1.5s infinite;
+        }
+        
+        @keyframes arrowPulse {
+            0% {
+                opacity: 0.6;
+                transform: translateX(-50%) scale(0.8);
+            }
+            25% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.2);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.2);
+            }
+            100% {
+                opacity: 0.6;
+                transform: translateX(-50%) scale(0.8);
+            }
+        }
+        
+        .arrow-gradient-line {
+            position: absolute;
+            bottom: calc(100vh - 4300px);
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -580px;
+            width: 4px;
+            height: 0px;
+            background: linear-gradient(to top, white, transparent);
+            z-index: 10;
+            animation: gradientLineUp 2s infinite;
+            animation-delay: 0.5s;
+        }
+        
+
+        
+        .triangle-arrow-right {
+            position: absolute;
+            top: 3880px;
+            left: calc(50% - 370px);
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 30px solid white;
+            z-index: 15;
+            animation: arrowPulse 1.5s infinite;
+        }
+        
+        .arrow-gradient-line-right {
+            position: absolute;
+            top: 3899px;
+            left: calc(50% - 355px);
+            width: 0px;
+            height: 4px;
+            background: linear-gradient(to right, white, transparent);
+            z-index: 10;
+            animation: gradientLineRight 2s infinite;
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes gradientLineRight {
+            0% {
+                width: 0px;
+                opacity: 0;
+            }
+            20% {
+                width: 0px;
+                opacity: 1;
+            }
+            60% {
+                width: 380px;
+                opacity: 1;
+            }
+            80% {
+                width: 380px;
+                opacity: 0.5;
+            }
+            100% {
+                width: 380px;
+                opacity: 0;
+            }
+        }
+        
+        .triangle-arrow-right-2 {
+            position: absolute;
+            top: 4027px;
+            left: calc(50% + 235px);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid white;
+            z-index: 15;
+            animation: arrowPulse 1.5s infinite;
+        }
+        
+        .triangle-arrow-right-3 {
+            position: absolute;
+            top: 4284px;
+            left: calc(50% + 465px);
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 21px solid white;
+            z-index: 15;
+            animation: arrowPulse 1.5s infinite;
+        }
+        
+        .arrow-gradient-line-right-2 {
+            position: absolute;
+            top: 4047px;
+            left: calc(50% + 233px);
+            width: 4px;
+            height: 0px;
+            background: linear-gradient(to bottom, white, transparent);
+            z-index: 10;
+            animation: gradientLineDown-2 2s infinite;
+            animation-delay: 0.5s;
+        }
+        
+        .arrow-gradient-line-right-3 {
+            position: absolute;
+            top: 4307px;
+            left: calc(50% + 462px);
+            width: 6px;
+            height: 0px;
+            background: linear-gradient(to bottom, white, transparent);
+            z-index: 10;
+            animation: gradientLineDown 2s infinite;
+            animation-delay: 0.5s;
+        }
+        
+        .arrow-gradient-line-right-3-rotated {
+            position: absolute;
+            top: 4617px;
+            right: calc(50% - 362px);
+            width: 0px;
+            height: 4px;
+            background: white;
+            z-index: 10;
+            animation: gradientLineLeft 2s infinite;
+            animation-delay: 0.5s;
+        }
+        
+        .arrow-gradient-line-copied {
+            position: absolute;
+            bottom: calc(100vh - 4620px);
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -220px;
+            width: 4px;
+            height: 0px;
+            background: linear-gradient(to top, white, transparent);
+            z-index: 10;
+            animation: gradientLineUp 2s infinite;
+            animation-delay: 1.5s;
+        }
+        
+
+        
+
+        
+
+        
+
+        
+        .triangle-arrow-left-4 {
+            position: absolute;
+            top: 4597px;
+            left: calc(50% + 380px);
+            width: 0;
+            height: 0;
+            border-top: 22px solid transparent;
+            border-bottom: 22px solid transparent;
+            border-right: 33px solid white;
+            z-index: 15;
+            animation: arrowPulse 1.5s infinite;
+        }
+        
+
+        
+
+        
+        @keyframes gradientLineLeft {
+            0% {
+                width: 0px;
+                height: 4px;
+                opacity: 0;
+            }
+            20% {
+                width: 0px;
+                height: 4px;
+                opacity: 1;
+            }
+            60% {
+                width: 584px;
+                height: 4px;
+                opacity: 1;
+            }
+            80% {
+                width: 584px;
+                height: 4px;
+                opacity: 0.5;
+            }
+            100% {
+                width: 584px;
+                height: 4px;
+                opacity: 0;
+            }
+        }
+        
+        @keyframes gradientLineUpExtension {
+            0% {
+                height: 0px;
+                opacity: 0;
+                transform: translateY(0);
+            }
+            20% {
+                height: 0px;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            60% {
+                height: 150px;
+                opacity: 1;
+                transform: translateY(-150px);
+            }
+            80% {
+                height: 150px;
+                opacity: 1;
+                transform: translateY(-150px);
+            }
+            100% {
+                height: 150px;
+                opacity: 0;
+                transform: translateY(-150px);
+            }
+        }
+        
+
+        
+
+        
+        @keyframes gradientLineLeftReverse {
+            0% {
+                width: 0px;
+                opacity: 0;
+            }
+            20% {
+                width: 0px;
+                opacity: 1;
+            }
+            60% {
+                width: 100px;
+                opacity: 1;
+            }
+            80% {
+                width: 100px;
+                opacity: 0.5;
+            }
+            100% {
+                width: 100px;
+                opacity: 0;
+            }
+        }
+        
+        @keyframes gradientLineDown-4 {
+            0% {
+                height: 0px;
+                opacity: 0;
+            }
+            20% {
+                height: 0px;
+                opacity: 1;
+            }
+            60% {
+                height: 100px;
+                opacity: 1;
+            }
+            80% {
+                height: 100px;
+                opacity: 0.5;
+            }
+            100% {
+                height: 100px;
+                opacity: 0;
+            }
+        }
+        
+        @keyframes gradientLineUp {
+            0% {
+                height: 0px;
+                opacity: 0;
+            }
+            20% {
+                height: 0px;
+                opacity: 1;
+            }
+            60% {
+                height: 240px;
+                opacity: 1;
+            }
+            80% {
+                height: 240px;
+                opacity: 0.5;
+            }
+            100% {
+                height: 240px;
+                opacity: 0;
+            }
+        }
+        
+        @keyframes gradientLineDown {
+            0% {
+                height: 0px;
+                opacity: 0;
+            }
+            20% {
+                height: 0px;
+                opacity: 1;
+            }
+            60% {
+                height: 100px;
+                opacity: 1;
+            }
+            80% {
+                height: 100px;
+                opacity: 0.5;
+            }
+            100% {
+                height: 100px;
+                opacity: 0;
+            }
+        }
+        
+        @keyframes gradientLineDown-2 {
+            0% {
+                height: 0px;
+                opacity: 0;
+            }
+            20% {
+                height: 0px;
+                opacity: 1;
+            }
+            60% {
+                height: 50px;
+                opacity: 1;
+            }
+            80% {
+                height: 50px;
+                opacity: 0.5;
+            }
+            100% {
+                height: 50px;
+                opacity: 0;
+            }
+        }
+        
+
+        
+
+        
+        .series-3-image-2 {
+            position: absolute;
+            top: 3955px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -230px;
+            max-width: 280px;
+            height: auto;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.5s ease;
+        }
+        
+        .series-3-image-2.revealed {
+            filter: brightness(1);
+        }
+        
+        .series-3-image-2.final-glow {
+            filter: brightness(1);
+            animation: finalGlow 3s ease-in-out;
+            position: relative;
+        }
+        
+        .series-3-image-2.final-glow::before {
+            content: '';
+            position: absolute;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 35px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        .series-3-image-2.final-glow::after {
+            content: '';
+            position: absolute;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 35px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        .series-3-image-2.final-glow::before {
+            background: linear-gradient(90deg, transparent, #fac800, #ff6b00, #fac800, transparent);
+            height: 15px;
+            top: -60px;
+            border-radius: 7.5px;
+            animation: lightGlow1 1.5s ease-in-out infinite;
+            box-shadow: 0 0 100px #fac800, 0 0 200px #fac800, 0 0 300px #fac800, 0 0 400px #fac800, 0 0 500px #fac800;
+        }
+        
+        .series-3-image-2.final-glow::after {
+            background: linear-gradient(90deg, transparent, #fac800, #ff6b00, #fac800, transparent);
+            height: 15px;
+            top: -50px;
+            border-radius: 7.5px;
+            animation: lightGlow2 1.5s ease-in-out infinite;
+            animation-delay: 0.3s;
+            box-shadow: 0 0 100px #fac800, 0 0 200px #fac800, 0 0 300px #fac800, 0 0 400px #fac800, 0 0 500px #fac800;
+        }
+        
+        /* 添加更多光芒线 */
+        .series-3-image-2.final-glow {
+            box-shadow: 0 0 200px #fac800, 0 0 400px #fac800, 0 0 600px #fac800, 0 0 800px #fac800;
+        }
+        
+        .series-3-image-2.final-glow::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150%;
+            height: 20px;
+            background: radial-gradient(ellipse, #fac800 0%, #ff6b00 50%, transparent 100%);
+            z-index: 9999;
+            pointer-events: none;
+            animation: extraGlow1 2s ease-in-out infinite;
+        }
+        
+        .series-3-image-2.final-glow::after {
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150%;
+            height: 20px;
+            background: radial-gradient(ellipse, #fac800 0%, #ff6b00 50%, transparent 100%);
+            z-index: 9999;
+            pointer-events: none;
+            animation: extraGlow2 2s ease-in-out infinite;
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes extraGlow1 {
+            0%, 100% { 
+                opacity: 0.8;
+                transform: translateX(-50%) scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: translateX(-50%) scale(1.2);
+            }
+        }
+        
+        @keyframes extraGlow2 {
+            0%, 100% { 
+                opacity: 0.8;
+                transform: translateX(-50%) scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: translateX(-50%) scale(1.2);
+            }
+        }
+        
+
+        
+        @keyframes lightGlow1 {
+            0%, 100% { 
+                opacity: 1;
+                box-shadow: 0 0 150px #fac800, 0 0 300px #fac800, 0 0 450px #fac800, 0 0 600px #fac800, 0 0 750px #fac800;
+                filter: brightness(4);
+            }
+            50% { 
+                opacity: 1;
+                box-shadow: 0 0 200px #fac800, 0 0 400px #fac800, 0 0 600px #fac800, 0 0 800px #fac800, 0 0 1000px #fac800, 0 0 1200px #fac800;
+                filter: brightness(8);
+            }
+        }
+        
+        @keyframes lightGlow2 {
+            0%, 100% { 
+                opacity: 1;
+                box-shadow: 0 0 150px #fac800, 0 0 300px #fac800, 0 0 450px #fac800, 0 0 600px #fac800, 0 0 750px #fac800;
+                filter: brightness(4);
+            }
+            50% { 
+                opacity: 1;
+                box-shadow: 0 0 200px #fac800, 0 0 400px #fac800, 0 0 600px #fac800, 0 0 800px #fac800, 0 0 1000px #fac800, 0 0 1200px #fac800;
+                filter: brightness(8);
+            }
+        }
+        
+        .series-3-color-1 {
+            position: absolute;
+            top: 3800px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 220px;
+            max-width: 280px;
+            height: auto;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.5s ease;
+        }
+        
+        .series-3-color-1.revealed {
+            filter: brightness(1);
+        }
+        
+        .series-3-color-2 {
+            position: absolute;
+            top: 4105px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 370px;
+            max-width: 400px;
+            height: auto;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.5s ease;
+        }
+        
+        .series-3-color-2.revealed {
+            filter: brightness(1);
+        }
+        
+        .series-3-color-3 {
+            position: absolute;
+            top: 4425px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 570px;
+            max-width: 300px;
+            height: auto;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.5s ease;
+        }
+        
+        .series-3-color-3.revealed {
+            filter: brightness(1);
+        }
+        
+        /* 第四组作品图片样式 - 上下错位归位效果 */
+        .series-4-image-1 {
+            position: absolute;
+            top: 6800px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -600px;
+            height: 800px;
+            width: auto;
+            object-fit: contain;
+            z-index: 10;
+            filter: brightness(0);
+            transition: top 0.8s ease, filter 0.5s ease;
+        }
+        
+        .series-4-image-2 {
+            position: absolute;
+            top: 6800px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -300px;
+            height: 800px;
+            width: auto;
+            object-fit: contain;
+            z-index: 10;
+            filter: brightness(0);
+            transition: top 0.8s ease, filter 0.5s ease;
+        }
+        
+        .series-4-image-3 {
+            position: absolute;
+            top: 6800px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 0px;
+            height: 800px;
+            width: auto;
+            object-fit: contain;
+            z-index: 10;
+            filter: brightness(0);
+            transition: top 0.8s ease, filter 0.5s ease;
+        }
+        
+        .series-4-image-4 {
+            position: absolute;
+            top: 6800px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 300px;
+            height: 800px;
+            width: auto;
+            object-fit: contain;
+            z-index: 10;
+            filter: brightness(0);
+            transition: top 0.8s ease, filter 0.5s ease;
+        }
+        
+        .series-4-image-5 {
+            position: absolute;
+            top: 6800px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 600px;
+            height: 800px;
+            width: auto;
+            object-fit: contain;
+            z-index: 10;
+            filter: brightness(0);
+            transition: top 0.8s ease, filter 0.5s ease;
+        }
+        
+        /* 第四组图片显示状态 */
+        .series-4-image-1.revealed,
+        .series-4-image-2.revealed,
+        .series-4-image-3.revealed,
+        .series-4-image-4.revealed,
+        .series-4-image-5.revealed {
+            filter: brightness(1);
+        }
+        
+        /* 第四组图片发光效果 */
+        .series-4-image-1.glow,
+        .series-4-image-2.glow,
+        .series-4-image-3.glow,
+        .series-4-image-4.glow,
+        .series-4-image-5.glow {
+            box-shadow: 0 0 20px #fac800, 0 0 40px #fac800, 0 0 60px #fac800;
+            animation: glowPulse 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 20px #fac800, 0 0 40px #fac800, 0 0 60px #fac800;
+            }
+            100% {
+                box-shadow: 0 0 30px #fac800, 0 0 60px #fac800, 0 0 90px #fac800;
+            }
+        }
+        
+        /* 第四组黑白图片三层裱框样式 */
+        .series-4-black-white-container {
+            position: absolute;
+            top: 7800px;
+            left: calc(50% - 220px);
+            transform: translateX(-50%);
+            width: 2200px;
+            height: 1320px;
+            z-index: 10;
+        }
+        
+        .outer-black-frame-4 {
+            position: absolute;
+            width: calc(50% - 600px);
+            height: calc(50% + 80px);
+            top: calc(25% - 40px);
+            left: calc(25% + 300px);
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-black-frame-4 {
+            position: absolute;
+            top: calc(12.705% - 25px);
+            left: calc(11.025% + 345px);
+            right: calc(11.025% + 345px);
+            bottom: calc(12.705% - 25px);
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-yellow-frame-4 {
+            position: absolute;
+            top: calc(12.705% + 51px);
+            left: calc(11.025% + 430px);
+            right: calc(11.025% + 430px);
+            bottom: calc(12.705% + 51px);
+            background: #cfcfcf;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+        
+        /* 第四组黑白图片样式 */
+        .series-4-black-white {
+            position: absolute;
+            top: calc(12.705% + 64px);
+            left: calc(11.025% + 64px);
+            right: calc(11.025% + 64px);
+            bottom: calc(12.705% + 64px);
+            width: calc(77.95% - 128px);
+            height: calc(74.59% - 128px);
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 9999;
+        }
+        
+        .artwork-info-4 {
+            position: absolute;
+            top: 540px;
+            right: 120px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        /* 复制的第四组黑白图片容器样式 */
+        .series-4-black-white-container-copy {
+            position: absolute;
+            top: 9400px;
+            left: calc(50% - 220px);
+            transform: translateX(-50%);
+            width: 2200px;
+            height: 1320px;
+            z-index: 10;
+        }
+        
+        .outer-black-frame-4-copy {
+            position: absolute;
+            width: calc(50% - 600px);
+            height: calc(50% + 80px);
+            top: calc(25% - 40px);
+            left: calc(25% + 300px);
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-black-frame-4-copy {
+            position: absolute;
+            top: calc(12.705% - 25px);
+            left: calc(11.025% + 345px);
+            right: calc(11.025% + 345px);
+            bottom: calc(12.705% - 25px);
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-yellow-frame-4-copy {
+            position: absolute;
+            top: calc(12.705% + 51px);
+            left: calc(11.025% + 433px);
+            right: calc(11.025% + 433px);
+            bottom: calc(12.705% + 51px);
+            background: #cfcfcf;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+        
+        .series-4-black-white-copy {
+            position: absolute;
+            top: calc(12.705% + 64px);
+            left: calc(11.025% + 64px);
+            right: calc(11.025% + 64px);
+            bottom: calc(12.705% + 64px);
+            width: calc(77.95% - 128px);
+            height: calc(74.59% - 128px);
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 9999;
+        }
+        
+        .artwork-info-4-copy {
+            position: absolute;
+            top: 540px;
+            right: 120px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        /* RGB星史达克塞系列图片样式 */
+        .darkside-image-1 {
+            position: absolute;
+            top: 11200px;
+            left: 20%;
+            transform: translateX(-50%);
+            max-width: 400px;
+            height: auto;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.5s ease;
+        }
+        
+        .darkside-image-2 {
+            position: absolute;
+            top: 11200px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 400px;
+            height: auto;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.5s ease;
+        }
+        
+        .darkside-image-3 {
+            position: absolute;
+            top: 11200px;
+            left: 80%;
+            transform: translateX(-50%);
+            max-width: 400px;
+            height: auto;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.5s ease;
+        }
+        
+        .darkside-image-4 {
+            position: absolute;
+            top: 12000px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 1400px;
+            height: auto;
+            z-index: 10;
+        }
+        
+        .gray-background {
+            position: absolute;
+            top: 11990px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1420px;
+            height: 1090px;
+            background: #cfcfcf;
+            z-index: 5;
+        }
+        
+        .black-background {
+            position: absolute;
+            top: 11935px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1530px;
+            height: 1200px;
+            background: black;
+            z-index: 4;
+        }
+        
+        .darkside-artwork-info {
+            position: absolute;
+            top: 1180px;
+            right: -55px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 20;
+            color: white;
+        }
+        
+        /* 像素灯泡样式 */
+        .pixel-bulb-1 {
+            position: absolute;
+            top: 11000px;
+            left: 20%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: black;
+            box-shadow: none;
+            z-index: 15;
+            transition: all 0.3s ease;
+        }
+        
+        .pixel-bulb-2 {
+            position: absolute;
+            top: 11000px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: black;
+            box-shadow: none;
+            z-index: 15;
+            transition: all 0.3s ease;
+        }
+        
+        .pixel-bulb-3 {
+            position: absolute;
+            top: 11000px;
+            left: 80%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: black;
+            box-shadow: none;
+            z-index: 15;
+            transition: all 0.3s ease;
+        }
+        
+        /* 灯泡激活状态 */
+        .pixel-bulb-1.active {
+            background: #ff4444;
+            box-shadow: 0 0 40px #ff4444, 0 0 80px #ff4444, 0 0 120px #ff4444, 0 0 160px #ff4444;
+            animation: bulbGlowRed 2s ease-in-out infinite alternate;
+        }
+        
+        .pixel-bulb-2.active {
+            background: #44ff44;
+            box-shadow: 0 0 40px #44ff44, 0 0 80px #44ff44, 0 0 120px #44ff44, 0 0 160px #44ff44;
+            animation: bulbGlowGreen 2s ease-in-out infinite alternate;
+        }
+        
+        .pixel-bulb-3.active {
+            background: #4488ff;
+            box-shadow: 0 0 40px #4488ff, 0 0 80px #4488ff, 0 0 120px #4488ff, 0 0 160px #4488ff;
+            animation: bulbGlowBlue 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes bulbGlowRed {
+            0% {
+                box-shadow: 0 0 40px #ff4444, 0 0 80px #ff4444, 0 0 120px #ff4444, 0 0 160px #ff4444;
+            }
+            100% {
+                box-shadow: 0 0 60px #ff4444, 0 0 120px #ff4444, 0 0 180px #ff4444, 0 0 240px #ff4444;
+            }
+        }
+        
+        @keyframes bulbGlowGreen {
+            0% {
+                box-shadow: 0 0 40px #44ff44, 0 0 80px #44ff44, 0 0 120px #44ff44, 0 0 160px #44ff44;
+            }
+            100% {
+                box-shadow: 0 0 60px #44ff44, 0 0 120px #44ff44, 0 0 180px #44ff44, 0 0 240px #44ff44;
+            }
+        }
+        
+        @keyframes bulbGlowBlue {
+            0% {
+                box-shadow: 0 0 40px #4488ff, 0 0 80px #4488ff, 0 0 120px #4488ff, 0 0 160px #4488ff;
+            }
+            100% {
+                box-shadow: 0 0 60px #4488ff, 0 0 120px #4488ff, 0 0 180px #4488ff, 0 0 240px #4488ff;
+            }
+        }
+
+
+        
+
+        
+        /* 第四组图片激活状态 - 渐变显示并滑动到起始位置 */
+        .series-4-image-1.activated,
+        .series-4-image-2.activated,
+        .series-4-image-3.activated,
+        .series-4-image-4.activated,
+        .series-4-image-5.activated {
+            filter: brightness(1);
+            top: 6800px !important;
+            transition: filter 0.8s ease, top 1.2s ease;
+        }
+        
+        /* 第四组图片归位状态 */
+        .series-4-image-1.aligned,
+        .series-4-image-2.aligned,
+        .series-4-image-3.aligned,
+        .series-4-image-4.aligned,
+        .series-4-image-5.aligned {
+            top: 6800px;
+        }
+        
+
+        
+
+        
+
+        
+        .outer-black-frame-5 {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-black-frame-5 {
+            position: absolute;
+            top: 12.705%;
+            left: 11.025%;
+            right: 11.025%;
+            bottom: 12.705%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-yellow-frame-5 {
+            position: absolute;
+            top: calc(12.705% + 51px);
+            left: calc(11.025% + 63px);
+            right: calc(11.025% + 63px);
+            bottom: calc(12.705% + 51px);
+            background: #cfcfcf;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+        
+        .preview-image-5 {
+            position: absolute;
+            top: calc(12.705% + 64px);
+            left: calc(11.025% + 64px);
+            right: calc(11.025% + 64px);
+            bottom: calc(12.705% + 64px);
+            width: calc(77.95% - 128px);
+            height: calc(74.59% - 128px);
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 9999;
+        }
+        
+        .bottom-spacer {
+            height: 15000px;
+            width: 100%;
+        }
+        
+        @keyframes finalGlow {
+            0% {
+                box-shadow: 0 0 0px #fac800;
+            }
+            50% {
+                box-shadow: 0 0 50px #fac800, 0 0 100px #fac800, 0 0 150px #fac800;
+            }
+            100% {
+                box-shadow: 0 0 0px #fac800;
+            }
+        }
+    </style>
+</head>
+<body>
+            <a href="index.html" class="back-btn">Back</a>
+    
+
+    
+    <img src="/RGB星史 I 黑白01 .png" alt="RGB星史 I 黑白01" class="top-image">
+    <img src="/RGB星史 I 黑白02 .png" alt="RGB星史 I 黑白02" class="top-image-2">
+    <img src="/RGB星史 I 黑白03 .jpg" alt="RGB星史 I 黑白03" class="top-image-3">
+    <img src="/RGB星史 I 黑白04 .jpg" alt="RGB星史 I 黑白04" class="top-image-4">
+    <img src="/RGB星史 I 黑白05 .png" alt="RGB星史 I 黑白05" class="top-image-5">
+    <img src="/RGB星史 I 黑白06 .png" alt="RGB星史 I 黑白06" class="top-image-6">
+    <img src="/RGB星史 I 黑白07 .jpg" alt="RGB星史 I 黑白07" class="top-image-7">
+    <img src="/RGB星史 I 黑白08 .jpg" alt="RGB星史 I 黑白08" class="top-image-8">
+    <img src="/RGB星史 I 黑白09 .png" alt="RGB星史 I 黑白09" class="top-image-9">
+    
+    <!-- 预览图三层裱框 -->
+    <div class="preview-image-container-5">
+        <div class="outer-black-frame-5"></div>
+        <div class="inner-black-frame-5"></div>
+        <div class="inner-yellow-frame-5"></div>
+        <img src="/RGB星史 I 黑白 .png" alt="R.G.B. Star History Series Preview" class="preview-image-5">
+        <div class="artwork-info-5">
+            R.G.B. Star History Ⅰ<br>
+            R.G.B 星史 Ⅰ<br>
+            <br>
+            Paper、Ink<br>
+            纸本、油墨<br>
+            <br>
+            25×13 cm<br>
+            <br>
+            2022
+        </div>
+    </div>
+    
+    <!-- 右侧预览图三层裱框 -->
+    <div class="preview-image-container-6">
+        <div class="outer-black-frame-6"></div>
+        <div class="inner-black-frame-6"></div>
+        <div class="inner-yellow-frame-6"></div>
+        <img src="/RGB星史 I 彩色 .jpg" alt="R.G.B. Star History Series Color Preview" class="preview-image-6">
+        <div class="artwork-info-6">
+            R.G.B. Star History Ⅰ<br>
+            R.G.B 星史 Ⅰ<br>
+            <br>
+            Paper 、Ink、Watercolor、Acrylic<br>
+            纸本、油墨、水彩、 丙烯<br>
+            <br>
+            25×13 cm<br>
+            <br>
+            2022
+        </div>
+    </div>
+    
+    <!-- 第二组作品图片 -->
+    <img src="/RGB星史 II 01_.jpg" alt="RGB星史 II 01" class="series-2-image-1">
+    <img src="/RGB星史 II 02 .jpg" alt="RGB星史 II 02" class="series-2-image-2">
+    <img src="/RGB星史 II 03 .png" alt="RGB星史 II 03" class="series-2-image-3">
+    <img src="/RGB星史 II 04 .jpg" alt="RGB星史 II 04" class="series-2-image-4">
+    <img src="/RGB星史 II 05 .png" alt="RGB星史 II 05" class="series-2-image-5">
+    
+    <!-- 复制的预览图三层裱框 -->
+    <div class="preview-image-container-7">
+        <div class="outer-black-frame-7"></div>
+        <div class="inner-black-frame-7"></div>
+        <div class="inner-yellow-frame-7"></div>
+        <img src="/RGB星史 II 黑白 .jpg" alt="R.G.B. Star History Series Preview" class="preview-image-7">
+        <div class="artwork-info-7">
+            R.G.B. Star History Ⅱ<br>
+            R.G.B 星史 Ⅱ<br>
+            <br>
+            Paper、Ink<br>
+            纸本、油墨<br>
+            <br>
+            25×13 cm<br>
+            <br>
+            2022
+        </div>
+    </div>
+    
+    <!-- 复制的右侧预览图三层裱框 -->
+    <div class="preview-image-container-8">
+        <div class="outer-black-frame-8"></div>
+        <div class="inner-black-frame-8"></div>
+        <div class="inner-yellow-frame-8"></div>
+        <img src="/RGB星史 II 彩色 .jpg" alt="R.G.B. Star History Series Color Preview" class="preview-image-8">
+        <div class="artwork-info-8">
+            R.G.B. Star History Ⅱ<br>
+            R.G.B 星史 Ⅱ<br>
+            <br>
+            Paper 、Ink、Watercolor、Acrylic<br>
+            纸本、油墨、水彩、 丙烯<br>
+            <br>
+            25×13 cm<br>
+            <br>
+            2022
+        </div>
+    </div>
+    
+    <!-- 第三组作品图片 -->
+    <img src="/RGB星史 III 黑白01.png" alt="RGB星史 III 黑白01" class="series-3-image-1">
+    <img src="/RGB星史 III 黑白02.png" alt="RGB星史 III 黑白02" class="series-3-image-2">
+    <img src="/RGB星史 III 黑白03.png" alt="RGB星史 III 黑白03" class="series-3-image-3">
+    <img src="/RGB星史 III 彩01.png" alt="RGB星史 III 彩01" class="series-3-color-1">
+    <img src="/RGB星史 III 彩02.jpg" alt="RGB星史 III 彩02" class="series-3-color-2">
+    <img src="/RGB星史 III 彩03.png" alt="RGB星史 III 彩03" class="series-3-color-3">
+    
+    <!-- 第四组作品图片 - 水平排列 -->
+    <img src="/RGB星史IV01.jpg" alt="RGB星史 IV 01" class="series-4-image-1">
+    <img src="/RGB星史IV02.jpg" alt="RGB星史 IV 02" class="series-4-image-2">
+    <img src="/RGB星史IV03.jpg" alt="RGB星史 IV 03" class="series-4-image-3">
+    <img src="/RGB星史IV04.jpg" alt="RGB星史 IV 04" class="series-4-image-4">
+    <img src="/RGB星史IV05.jpg" alt="RGB星史 IV 05" class="series-4-image-5">
+    
+    <!-- 第四组黑白图片三层裱框 -->
+    <div class="series-4-black-white-container">
+        <div class="outer-black-frame-4"></div>
+        <div class="inner-black-frame-4"></div>
+        <div class="inner-yellow-frame-4"></div>
+        <img src="/RGB星史Ⅳ 黑白.jpeg" alt="RGB星史 IV 黑白" class="series-4-black-white">
+        <div class="artwork-info-4">
+            R.G.B. Star History Ⅳ<br>
+            R.G.B 星史 Ⅳ<br>
+            <br>
+            Paper、Ink<br>
+            纸本、油墨<br>
+            <br>
+            25×13 cm<br>
+            <br>
+            2024
+        </div>
+    </div>
+    
+    <!-- 复制的第四组黑白图片容器 -->
+    <div class="series-4-black-white-container-copy">
+        <div class="outer-black-frame-4-copy"></div>
+        <div class="inner-black-frame-4-copy"></div>
+        <div class="inner-yellow-frame-4-copy"></div>
+        <img src="/RGB星史Ⅳ 彩.jpeg" alt="RGB星史 IV 彩色 Copy" class="series-4-black-white-copy">
+        <div class="artwork-info-4-copy">
+            R.G.B. Star History Ⅳ<br>
+            R.G.B 星史 Ⅳ<br>
+            <br>
+            Paper 、Ink、Watercolor、Acrylic<br>
+            纸本、油墨、水彩、 丙烯<br>
+            <br>
+            45×45 cm<br>
+            <br>
+            2023
+        </div>
+    </div>
+    
+    <!-- RGB星史达克塞系列图片 -->
+    <div class="pixel-bulb-1"></div>
+    <div class="pixel-bulb-2"></div>
+    <div class="pixel-bulb-3"></div>
+    <img src="/RGB星史 达克塞01.jpeg" alt="RGB星史 达克塞01" class="darkside-image-1">
+    <img src="/RGB星史 达克塞02.jpeg" alt="RGB星史 达克塞02" class="darkside-image-2">
+    <img src="/RGB星史 达克塞03.jpeg" alt="RGB星史 达克塞03" class="darkside-image-3">
+    <img src="/RGB星史 达克·塞.jpg" alt="RGB星史 达克·塞" class="darkside-image-4">
+    <div class="black-background"></div>
+    <div class="gray-background">
+        <div class="darkside-artwork-info">
+            R.G.B. Star History - Dark · Psy<br>
+            R.G.B 星史 - 达克·塞<br>
+            <br>
+            Pine wood、Acrylic<br>
+            松木、丙烯<br>
+            <br>
+            60*80 cm<br>
+            <br>
+            2024
+        </div>
+    </div>
+    
+
+    
+
+    
+    <!-- 黑色03容器 -->
+    <div class="preview-image-container-9">
+        <div class="outer-black-frame-9"></div>
+        <div class="inner-black-frame-9"></div>
+        <div class="inner-yellow-frame-9"></div>
+        <img src="/RGB星史 III 黑白.png" alt="R.G.B. Star History III Preview" class="preview-image-9">
+        <div class="artwork-info-9">
+            R.G.B. Star History Ⅲ<br>
+            R.G.B 星史 Ⅲ<br>
+            <br>
+            Paper、Ink<br>
+            纸本、油墨<br>
+            <br>
+            25×13 cm<br>
+            <br>
+            2023
+        </div>
+    </div>
+    
+    <!-- 复制的黑色03容器 -->
+    <div class="preview-image-container-9-copy">
+        <div class="outer-black-frame-9-copy"></div>
+        <div class="inner-black-frame-9-copy"></div>
+        <div class="inner-yellow-frame-9-copy"></div>
+        <img src="/RGB星史 III 彩色.jpg" alt="R.G.B. Star History III Color Preview Copy" class="preview-image-9-copy">
+        <div class="artwork-info-9-copy">
+            R.G.B. Star History Ⅲ<br>
+            R.G.B 星史 Ⅲ<br>
+            <br>
+            Paper 、Ink、Watercolor、Acrylic<br>
+            纸本、油墨、水彩、 丙烯<br>
+            <br>
+            25×13 cm<br>
+            <br>
+            2023
+        </div>
+    </div>
+    
+
+    
+    <!-- 像素风格向上箭标 -->
+            <div class="triangle-arrow-up"></div>
+        <div class="arrow-gradient-line"></div>
+        <div class="triangle-arrow-right"></div>
+        <div class="arrow-gradient-line-right"></div>
+        <div class="triangle-arrow-right-2"></div>
+        <div class="arrow-gradient-line-right-2"></div>
+        <div class="triangle-arrow-right-3"></div>
+        <div class="arrow-gradient-line-right-3"></div>
+        <div class="arrow-gradient-line-right-3-rotated"></div>
+        <div class="arrow-gradient-line-copied"></div>
+        <div class="triangle-arrow-left-4"></div>
+    
+    <div class="bottom-spacer"></div>
+    
+
+    
+
+    
+    <script>
+        // 第三组作品交互逻辑
+        const series3Images = {
+            'series-3-image-3': 'RGB星史 III 黑白03.png', // 黑色03
+            'series-3-image-1': 'RGB星史 III 黑白01.png', // 黑色01
+            'series-3-color-1': 'RGB星史 III 彩01.png',   // 彩色01
+            'series-3-color-2': 'RGB星史 III 彩02.jpg',   // 彩色02
+            'series-3-color-3': 'RGB星史 III 彩03.png',   // 彩色03
+            'series-3-image-2': 'RGB星史 III 黑白02.png'  // 黑色02 (最终)
+        };
+        
+        let currentStep = 0;
+        let isSequenceComplete = false;
+        
+        // 鼠标移动检测
+        document.addEventListener('mousemove', function(e) {
+            if (isSequenceComplete) return;
+            
+            const imageClasses = Object.keys(series3Images);
+            const currentImageClass = imageClasses[currentStep];
+            const currentImage = document.querySelector('.' + currentImageClass);
+            
+            if (currentImage) {
+                const rect = currentImage.getBoundingClientRect();
+                if (e.clientX >= rect.left && e.clientX <= rect.right && 
+                    e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                    
+                    // 显示当前图片
+                    currentImage.classList.add('revealed');
+                    
+                    // 0.5秒后变黑
+                    setTimeout(() => {
+                        currentImage.classList.remove('revealed');
+                    }, 500);
+                    
+                    // 如果是最后一张图片（黑色02），触发最终效果
+                    if (currentStep === imageClasses.length - 1) {
+                        currentImage.classList.add('final-glow');
+                        isSequenceComplete = true;
+                        
+                        // 3秒后显示所有图片
+                        setTimeout(() => {
+                            Object.keys(series3Images).forEach(className => {
+                                const img = document.querySelector('.' + className);
+                                if (img) {
+                                    img.classList.add('revealed');
+                                }
+                            });
+                            
+                            // 再3秒后移除所有revealed类
+                            setTimeout(() => {
+                                Object.keys(series3Images).forEach(className => {
+                                    const img = document.querySelector('.' + className);
+                                    if (img) {
+                                        img.classList.remove('revealed', 'final-glow');
+                                    }
+                                });
+                                isSequenceComplete = false;
+                                currentStep = 0;
+                            }, 3000);
+                        }, 3000);
+                    } else {
+                        currentStep++;
+                    }
+                }
+            }
+        });
+        
+        // 第四组图片动画效果 - 上下错位归位
+        const series4Images = [
+            document.querySelector('.series-4-image-1'),
+            document.querySelector('.series-4-image-2'),
+            document.querySelector('.series-4-image-3'),
+            document.querySelector('.series-4-image-4'),
+            document.querySelector('.series-4-image-5')
+        ];
+        
+        // 随机上下错位函数
+        function randomizeSeries4Positions() {
+            series4Images.forEach((img) => {
+                if (img) {
+                    // 每张图片独立的随机上下偏移 (-200px 到 +200px)
+                    const randomOffset = Math.random() * 400 - 200;
+                    img.style.top = (6800 + randomOffset) + 'px';
+                }
+            });
+        }
+        
+        // 归位函数
+        function alignSeries4Images() {
+            series4Images.forEach((img) => {
+                if (img) {
+                    img.style.top = '6800px';
+                }
+            });
+        }
+        
+        // 页面加载时先保持对齐，然后延迟错位
+        window.addEventListener('load', () => {
+            // 先确保图片在正确位置
+            alignSeries4Images();
+            // 5秒后开始错位效果（只错位一次）
+            setTimeout(randomizeSeries4Positions, 5000);
+        });
+        
+        // 跟踪每张图片的状态
+        let series4States = [false, false, false, false, false]; // 是否已点亮
+        let glowTimeout = null;
+        let individualTimeouts = [null, null, null, null, null]; // 单张图片的定时器
+        let isGlowing = false; // 是否正在发光
+        
+        // 为每个图片添加鼠标触碰事件
+        series4Images.forEach((img, index) => {
+            if (img) {
+                img.addEventListener('mouseenter', function() {
+                    // 如果这张图片还没点亮过且不在发光状态
+                    if (!series4States[index] && !isGlowing) {
+                        // 归位并亮起
+                        this.style.top = '6800px';
+                        this.style.filter = 'brightness(1)';
+                        series4States[index] = true;
+                        
+                        // 清除之前的定时器
+                        if (individualTimeouts[index]) {
+                            clearTimeout(individualTimeouts[index]);
+                        }
+                        
+                        // 2秒后变黑并回到错位位置
+                        individualTimeouts[index] = setTimeout(() => {
+                            if (!isGlowing) { // 只有在不发光时才执行
+                                this.style.filter = 'brightness(0)';
+                                const randomOffset = Math.random() * 400 - 200;
+                                this.style.top = (6800 + randomOffset) + 'px';
+                            }
+                        }, 2000);
+                        
+                        // 检查是否所有图片都点亮了
+                        if (series4States.every(state => state)) {
+                            // 设置发光状态
+                            isGlowing = true;
+                            
+                            // 清除所有单张图片的定时器
+                            individualTimeouts.forEach(timeout => {
+                                if (timeout) clearTimeout(timeout);
+                            });
+                            
+                            // 清除之前的发光定时器
+                            if (glowTimeout) {
+                                clearTimeout(glowTimeout);
+                            }
+                            
+                            // 所有图片归位并添加发光效果
+                            series4Images.forEach((image) => {
+                                if (image) {
+                                    image.style.top = '6800px';
+                                    image.style.filter = 'brightness(1)';
+                                    image.classList.add('glow');
+                                }
+                            });
+                            
+                            // 3秒后移除发光效果并马上变黑，然后回到错位位置
+                            glowTimeout = setTimeout(() => {
+                                series4Images.forEach((image) => {
+                                    if (image) {
+                                        image.classList.remove('glow');
+                                        image.style.filter = 'brightness(0)';
+                                        const randomOffset = Math.random() * 400 - 200;
+                                        image.style.top = (6800 + randomOffset) + 'px';
+                                    }
+                                });
+                                // 重置状态
+                                series4States = [false, false, false, false, false];
+                                isGlowing = false;
+                                individualTimeouts = [null, null, null, null, null];
+                            }, 3000);
+                        }
+                    }
+                });
+            }
+        });
+        
+        // 达克塞图片灯泡交互
+        const darksideImages = document.querySelectorAll('.darkside-image-1, .darkside-image-2, .darkside-image-3');
+        const pixelBulbs = document.querySelectorAll('.pixel-bulb-1, .pixel-bulb-2, .pixel-bulb-3');
+        const darksideTimeouts = [null, null, null];
+        
+
+        
+        darksideImages.forEach((img, index) => {
+            if (img && pixelBulbs[index]) {
+                img.addEventListener('mouseenter', function() {
+                    // 清除之前的定时器
+                    if (darksideTimeouts[index]) {
+                        clearTimeout(darksideTimeouts[index]);
+                    }
+                    
+                    // 图片变亮
+                    this.style.filter = 'brightness(1)';
+                    
+                    // 灯泡亮起
+                    pixelBulbs[index].classList.add('active');
+                    
+                    // 3秒后图片变黑，灯泡熄灭
+                    darksideTimeouts[index] = setTimeout(() => {
+                        this.style.filter = 'brightness(0)';
+                        pixelBulbs[index].classList.remove('active');
+                    }, 3000);
+                });
+                
+                img.addEventListener('mouseleave', function() {
+                    // 鼠标离开时不立即熄灭，让定时器继续运行
+                    // 只有在没有定时器的情况下才立即熄灭
+                    if (!darksideTimeouts[index]) {
+                        this.style.filter = 'brightness(0)';
+                        pixelBulbs[index].classList.remove('active');
+                    }
+                });
+            }
+        });
+
+
+
+    </script>
+</body>
+</html> 

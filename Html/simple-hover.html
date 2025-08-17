@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>简单Hover测试</title>
+    <style>
+        body { 
+            background: #0041ff; 
+            color: white; 
+            font-family: Arial; 
+            padding: 20px; 
+        }
+        
+        .container {
+            position: relative;
+            display: inline-block;
+            margin: 20px;
+        }
+        
+        .black-img {
+            width: 200px;
+            height: 150px;
+            object-fit: contain;
+            filter: brightness(0);
+            border: 2px solid #fac800;
+        }
+        
+        .color-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 150px;
+            object-fit: contain;
+            opacity: 0;
+            border: 2px solid #fac800;
+            transition: opacity 0.3s ease;
+        }
+        
+        .color-img.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>简单Hover测试</h1>
+    
+    <div class="container">
+        <img src="../Tangential%20%20EMMA01.png" class="black-img" id="black1">
+        <img src="../Tangential%20%20EMMA01.png" class="color-img" id="color1">
+    </div>
+    
+    <div class="container">
+        <img src="../Tangential%20%20EMMA02.png" class="black-img" id="black2">
+        <img src="../Tangential%20%20EMMA02.png" class="color-img" id="color2">
+    </div>
+    
+    <script>
+        // 测试图片1
+        const black1 = document.getElementById('black1');
+        const color1 = document.getElementById('color1');
+        
+        black1.addEventListener('mouseenter', function() {
+            console.log('鼠标进入图片1');
+            color1.classList.add('show');
+        });
+        
+        black1.addEventListener('mouseleave', function() {
+            console.log('鼠标离开图片1');
+            color1.classList.remove('show');
+        });
+        
+        // 测试图片2
+        const black2 = document.getElementById('black2');
+        const color2 = document.getElementById('color2');
+        
+        black2.addEventListener('mouseenter', function() {
+            console.log('鼠标进入图片2');
+            color2.classList.add('show');
+        });
+        
+        black2.addEventListener('mouseleave', function() {
+            console.log('鼠标离开图片2');
+            color2.classList.remove('show');
+        });
+        
+        // 检查图片加载状态
+        window.addEventListener('load', function() {
+            console.log('页面加载完成');
+            const images = document.querySelectorAll('img');
+            images.forEach((img, index) => {
+                if (img.complete && img.naturalWidth !== 0) {
+                    console.log(`图片 ${index + 1} 加载成功`);
+                } else {
+                    console.log(`图片 ${index + 1} 加载失败`);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

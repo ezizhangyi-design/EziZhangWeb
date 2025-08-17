@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>本地服务器测试</title>
+    <style>
+        body { background: #0041ff; color: white; padding: 20px; }
+        .test { margin: 20px; border: 2px solid #fac800; padding: 10px; }
+        img { max-width: 200px; border: 1px solid white; }
+    </style>
+</head>
+<body>
+    <h1>本地服务器图片测试</h1>
+    <p>请访问: <a href="http://localhost:8000/Html/server-test.html" style="color: #fac800;">http://localhost:8000/Html/server-test.html</a></p>
+    
+    <div class="test">
+        <h3>测试1：题外话图片</h3>
+        <img src="../题外话 .png" alt="题外话" onload="console.log('题外话加载成功')" onerror="console.log('题外话加载失败')">
+    </div>
+    
+    <div class="test">
+        <h3>测试2：白色芯片</h3>
+        <img src="../白色芯片.png" alt="白色芯片" onload="console.log('白色芯片加载成功')" onerror="console.log('白色芯片加载失败')">
+    </div>
+    
+    <div class="test">
+        <h3>测试3：EMMA01</h3>
+        <img src="../Tangential  EMMA01.png" alt="EMMA01" onload="console.log('EMMA01加载成功')" onerror="console.log('EMMA01加载失败')">
+    </div>
+    
+    <script>
+        // 检查所有图片的加载状态
+        window.addEventListener('load', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach((img, index) => {
+                if (img.complete && img.naturalWidth !== 0) {
+                    console.log(`图片 ${index + 1} 加载成功`);
+                } else {
+                    console.log(`图片 ${index + 1} 加载失败`);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

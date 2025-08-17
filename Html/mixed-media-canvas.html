@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ezi.Zhang - Mixed Media on Canvas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #0041ff;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            overflow-x: hidden;
+            image-rendering: pixelated;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            left: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 1000;
+        }
+        
+        .back-btn:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+        
+        .page-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4.1667vw; /* 80px */
+            padding: 8.3333vh 4.1667vw; /* 160px 80px */
+            box-sizing: border-box;
+        }
+
+        .artwork-section {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .artwork-frame {
+            background: white;
+            padding: 3.125vw; /* 60px - doubled from 30px */
+            padding-top: 1.5625vw; /* 30px - inward indentation */
+            padding-bottom: 1.5625vw; /* 30px - inward indentation */
+            border-radius: 0; /* 0px - right angles */
+            box-shadow: 0 0.4167vw 0.8333vw rgba(0,0,0,0.3); /* 0 8px 16px */
+            margin-bottom: 2.0833vh; /* 40px */
+        }
+
+        .artwork-image {
+            max-width: 95vw; /* 1824px - increased from 1600px */
+            max-height: 110vh; /* 2112px - increased from 1920px */
+            width: auto;
+            height: auto;
+            display: block;
+            border-radius: 0; /* 0px - right angles */
+        }
+
+        .info-section {
+            flex: 1;
+            max-width: 31.25vw; /* 600px */
+            padding: 2.0833vh 0; /* 40px 0 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 恢复居中对齐 */
+            align-items: flex-start; /* 左对齐 */
+            border-left: 0.1042vw solid transparent; /* 透明左边线用于对齐 */
+            padding-left: 10.4167vw; /* 200px 进一步增加左边距，与第二组文字位置对齐 */
+        }
+
+        .artwork-title {
+            font-size: 1.6vw; /* 31px - 进一步缩小字体 */
+            color: white;
+            margin-bottom: 1.5625vh; /* 30px - 统一间距 */
+            letter-spacing: -0.05em; /* 缩减词间距 */
+        }
+
+        .artwork-title-chinese {
+            font-size: 1.3vw; /* 25px - 进一步缩小字体 */
+            color: white;
+            margin-bottom: 2.6042vh; /* 50px - 统一间距 */
+            letter-spacing: -0.05em; /* 缩减词间距 */
+        }
+
+        .artwork-materials {
+            font-size: 1vw; /* 19px - 缩小字体 */
+            line-height: 1.6;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 1.5625vh; /* 30px - 统一间距 */
+        }
+
+        .artwork-materials-chinese {
+            font-size: 1vw; /* 19px - 缩小字体 */
+            line-height: 1.6;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 2.6042vh; /* 50px - 统一间距 */
+        }
+
+        .artwork-size {
+            font-size: 1.2vw; /* 23px - 缩小字体 */
+            color: white;
+            margin-bottom: 2.6042vh; /* 50px - 统一间距 */
+            font-weight: bold;
+        }
+
+        .artwork-year {
+            font-size: 1.2vw; /* 23px - 缩小字体 */
+            color: white;
+            font-weight: bold;
+        }
+
+        /* 第二组作品信息样式 - 保持居中对齐 */
+        .info-section-small {
+            flex: 1;
+            max-width: 41.6667vw; /* 800px - 增加宽度避免换行 */
+            padding: 2.0833vh 0; /* 40px 0 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 保持居中对齐 */
+            align-items: flex-start; /* 左对齐 */
+            border-left: 0.1042vw solid transparent; /* 透明左边线用于对齐 */
+            padding-left: 8.3333vw; /* 160px 向左平移 */
+        }
+
+        /* 第三组作品信息样式 - 参考第二组位置 */
+        .info-section-small-2 {
+            flex: 1;
+            max-width: 31.25vw; /* 600px */
+            padding: 2.0833vh 0; /* 40px 0 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 保持居中对齐 */
+            align-items: flex-start; /* 左对齐 */
+            border-left: 0.1042vw solid transparent; /* 透明左边线用于对齐 */
+            padding-left: 10.4167vw; /* 200px 与第二组文字信息对齐 */
+        }
+
+        /* 第二组作品样式 - 缩小一圈 */
+        .artwork-frame-small {
+            background: white;
+            padding: 2.6042vw; /* 50px - 缩小一圈 */
+            padding-top: 2.3438vw; /* 45px - 继续向外拉伸 */
+            padding-bottom: 2.3438vw; /* 45px - 继续向外拉伸 */
+            border-radius: 0; /* 0px - right angles */
+            box-shadow: 0 0.4167vw 0.8333vw rgba(0,0,0,0.3); /* 0 8px 16px */
+            margin-bottom: 2.0833vh; /* 40px */
+        }
+
+        .artwork-image-small {
+            max-width: 79.1667vw; /* 1520px - 缩小一圈 */
+            max-height: 91.6667vh; /* 1760px - 缩小一圈 */
+            width: auto;
+            height: auto;
+            display: block;
+            border-radius: 0; /* 0px - right angles */
+        }
+
+        /* 超大播放器样式 */
+        .player-frame {
+            background: white;
+            padding: 4.1667vw; /* 80px - 超大尺寸 */
+            padding-top: 3.125vw; /* 60px */
+            padding-bottom: 3.125vw; /* 60px */
+            border-radius: 0; /* 0px - right angles */
+            box-shadow: 0 0.4167vw 0.8333vw rgba(0,0,0,0.3); /* 0 8px 16px */
+            margin-bottom: 2.0833vh; /* 40px */
+        }
+
+        .player-placeholder {
+            width: 120vw; /* 超大宽度 */
+            height: 140vh; /* 超大高度 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 2vw;
+            background: rgba(0,0,0,0.1);
+            border: 0.2083vw dashed rgba(255,255,255,0.3);
+        }
+
+        /* 纸本绘画播放器样式 - 参考exhibition设计 */
+        .paper-slideshow-container {
+            margin-top: 1.5625vh;
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5208vw;
+            padding: 1.0417vh;
+            border: 0.1042vw solid rgba(250,200,0,0.3);
+        }
+        
+        .slideshow-wrapper {
+            position: relative;
+            width: 100%;
+            height: 115vh; /* 稍微缩小播放器高度 */
+            overflow: hidden;
+            border-radius: 0.4167vw;
+            background: #000;
+        }
+        
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+            transform: translateX(100%);
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+        
+        .slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .slide img,
+        .slideshow-image {
+            max-width: 90% !important; /* 稍微放大一点点图片最大宽度 */
+            max-height: 90% !important; /* 稍微放大一点点图片最大高度 */
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            background: #000;
+            transition: opacity 0.3s ease;
+            /* 确保图片不被拉伸 */
+            flex-shrink: 0 !important;
+        }
+        
+        .slide img:not(.loaded),
+        .slideshow-image:not(.loaded) {
+            opacity: 0.3;
+            background: #333;
+        }
+        
+        .slide img.loaded,
+        .slideshow-image.loaded {
+            opacity: 1;
+            background: #000;
+        }
+        
+        /* 确保图片容器始终可见 */
+        .slide {
+            min-height: 200px;
+            background: #000;
+        }
+        
+        /* 强制覆盖任何全局样式 */
+        .paper-slideshow-container .slideshow-wrapper .slide img,
+        .paper-slideshow-container .slideshow-wrapper .slideshow-image {
+            max-width: 90% !important; /* 稍微放大一点点图片最大宽度 */
+            max-height: 90% !important; /* 稍微放大一点点图片最大高度 */
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            flex-shrink: 0 !important;
+        }
+        
+        /* 根据图片比例优化播放器形状 */
+        .paper-slideshow-container .slideshow-wrapper {
+            aspect-ratio: auto;
+            min-height: 90vh; /* 稍微缩小最小高度 */
+            max-height: 130vh; /* 稍微缩小最大高度 */
+        }
+        
+        /* 竖版图片优化 */
+        .paper-slideshow-container .slideshow-wrapper.portrait {
+            aspect-ratio: 5/7;
+            height: auto;
+        }
+        
+        /* 横版图片优化 */
+        .paper-slideshow-container .slideshow-wrapper.landscape {
+            aspect-ratio: 7/5;
+            height: auto;
+        }
+        
+        .slideshow-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.0417vh;
+            padding: 0 0.5208vw;
+        }
+        
+        .prev-btn-paper, .next-btn-paper {
+            background: rgba(250,200,0,0.1);
+            border: 0.1042vw solid #fac800;
+            color: #fac800;
+            padding: 0.625vh 1.0417vw;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.625vw;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0.2083vw;
+        }
+        
+        .prev-btn-paper:hover, .next-btn-paper:hover {
+            background: rgba(250,200,0,0.2);
+            transform: scale(1.05);
+        }
+        
+        .slide-counter {
+            font-size: 0.8333vw;
+            color: #fac800;
+            font-weight: bold;
+        }
+        
+        .slideshow-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.4167vw;
+            margin-top: 0.7813vh;
+        }
+        
+        .indicator-paper {
+            width: 0.625vw;
+            height: 0.625vw;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        /* Color cycling: Red, Yellow, Blue, Green */
+        .indicator-paper:nth-child(4n+1) {
+            background: rgba(255, 0, 0, 0.7);
+        }
+        
+        .indicator-paper:nth-child(4n+2) {
+            background: rgba(255, 255, 0, 0.7);
+        }
+        
+        .indicator-paper:nth-child(4n+3) {
+            background: rgba(0, 100, 255, 0.7);
+        }
+        
+        .indicator-paper:nth-child(4n+4) {
+            background: rgba(0, 255, 0, 0.7);
+        }
+        
+        .indicator-paper.active {
+            transform: scale(1.3);
+            box-shadow: 0 0 0.5208vw currentColor;
+        }
+        
+        .indicator-paper.active:nth-child(4n+1) {
+            background: #ff0000;
+        }
+        
+        .indicator-paper.active:nth-child(4n+2) {
+            background: #ffff00;
+        }
+        
+        .indicator-paper.active:nth-child(4n+3) {
+            background: #0064ff;
+        }
+        
+        .indicator-paper.active:nth-child(4n+4) {
+            background: #00ff00;
+        }
+        
+        .indicator-paper:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+        
+        /* 播放器下方的作品信息样式 */
+        .slideshow-info {
+            margin-top: -1vh; /* 继续向上平移作品信息 */
+            padding: 2.0833vh 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            max-width: 31.25vw;
+            border-left: 0.3125vw solid transparent;
+            padding-left: 2vw; /* 向左平移作品信息 */
+        }
+        
+        .slideshow-info .artwork-title {
+            font-size: 1.25vw;
+            color: #fff;
+            margin: 0 0 1.5625vh 0;
+            font-weight: bold;
+            text-shadow: none;
+        }
+        
+        .slideshow-info .artwork-title-chinese {
+            font-size: 1.0417vw;
+            color: #fff;
+            margin: 0 0 2.0833vh 0;
+            font-weight: bold;
+            text-shadow: none;
+        }
+        
+        .slideshow-info .artwork-materials,
+        .slideshow-info .artwork-materials-chinese {
+            font-size: 0.9375vw;
+            color: #fff;
+            margin: 0.5208vh 0;
+            line-height: 1.6;
+            text-shadow: none;
+        }
+        
+        .slideshow-info .artwork-size,
+        .slideshow-info .artwork-year {
+            font-size: 1.0417vw;
+            color: #fff;
+            margin: 0.5208vh 0;
+            font-weight: bold;
+            text-shadow: none;
+        }
+        
+        /* 综合材料拼贴播放器样式 */
+        .collage-slideshow-container {
+            margin-top: 1.5625vh;
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5208vw;
+            padding: 1.0417vh;
+            border: 0.1042vw solid rgba(250,200,0,0.3);
+        }
+        
+        .collage-slideshow-container .slideshow-wrapper {
+            height: 85vh;
+            min-height: 65vh;
+            max-height: 95vh;
+        }
+        
+        .collage-slideshow-container .slideshow-wrapper .slide img,
+        .collage-slideshow-container .slideshow-wrapper .slideshow-image {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .prev-btn-collage, .next-btn-collage {
+            background: rgba(250,200,0,0.1);
+            border: 0.1042vw solid #fac800;
+            color: #fac800;
+            padding: 0.625vh 1.0417vw;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.625vw;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0.2083vw;
+        }
+        
+        .prev-btn-collage:hover, .next-btn-collage:hover {
+            background: rgba(250,200,0,0.2);
+            transform: scale(1.05);
+        }
+        
+        .indicator-collage {
+            width: 0.625vw;
+            height: 0.625vw;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .indicator-collage:nth-child(4n+1) {
+            background: rgba(255, 0, 0, 0.6);
+        }
+        
+        .indicator-collage:nth-child(4n+2) {
+            background: rgba(255, 255, 0, 0.6);
+        }
+        
+        .indicator-collage:nth-child(4n+3) {
+            background: rgba(0, 0, 255, 0.6);
+        }
+        
+        .indicator-collage:nth-child(4n+4) {
+            background: rgba(0, 255, 0, 0.6);
+        }
+        
+        .indicator-collage.active {
+            transform: scale(1.3);
+            box-shadow: 0 0 0.5208vw currentColor;
+        }
+        
+        .indicator-collage:nth-child(4n+1).active {
+            background: rgba(255, 0, 0, 1);
+        }
+        
+        .indicator-collage:nth-child(4n+2).active {
+            background: rgba(255, 255, 0, 1);
+        }
+        
+        .indicator-collage:nth-child(4n+3).active {
+            background: rgba(0, 0, 255, 1);
+        }
+        
+        .indicator-collage:nth-child(4n+4).active {
+            background: rgba(0, 255, 0, 1);
+        }
+        
+        .indicator-collage:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        /* 第五本书播放器样式 */
+        .fifth-book-slideshow-container {
+            margin-top: 1.5625vh;
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5208vw;
+            padding: 1.0417vh;
+            border: 0.1042vw solid rgba(250,200,0,0.3);
+        }
+        
+        .fifth-book-slideshow-container .slideshow-wrapper {
+            height: 85vh;
+            min-height: 65vh;
+            max-height: 95vh;
+        }
+        
+        .fifth-book-slideshow-container .slideshow-wrapper .slide img,
+        .fifth-book-slideshow-container .slideshow-wrapper .slideshow-image {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .prev-btn-fifth-book, .next-btn-fifth-book {
+            background: rgba(250,200,0,0.1);
+            border: 0.1042vw solid #fac800;
+            color: #fac800;
+            padding: 0.625vh 1.0417vw;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.625vw;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0.2083vw;
+        }
+        
+        .prev-btn-fifth-book:hover, .next-btn-fifth-book:hover {
+            background: rgba(250,200,0,0.2);
+            transform: scale(1.05);
+        }
+        
+        .indicator-fifth-book {
+            width: 0.625vw;
+            height: 0.625vw;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .indicator-fifth-book:nth-child(4n+1) {
+            background: rgba(255, 0, 0, 0.6);
+        }
+        
+        .indicator-fifth-book:nth-child(4n+2) {
+            background: rgba(255, 255, 0, 0.6);
+        }
+        
+        .indicator-fifth-book:nth-child(4n+3) {
+            background: rgba(0, 0, 255, 0.6);
+        }
+        
+        .indicator-fifth-book:nth-child(4n+4) {
+            background: rgba(0, 255, 0, 0.6);
+        }
+        
+        .indicator-fifth-book.active {
+            transform: scale(1.3);
+            box-shadow: 0 0 0.5208vw currentColor;
+        }
+        
+        .indicator-fifth-book:nth-child(4n+1).active {
+            background: rgba(255, 0, 0, 1);
+        }
+        
+        .indicator-fifth-book:nth-child(4n+2).active {
+            background: rgba(255, 255, 0, 1);
+        }
+        
+        .indicator-fifth-book:nth-child(4n+3).active {
+            background: rgba(0, 0, 255, 1);
+        }
+        
+        .indicator-fifth-book:nth-child(4n+4).active {
+            background: rgba(0, 255, 0, 1);
+        }
+        
+        .indicator-fifth-book:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        .blank-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4.1667vw; /* 80px */
+            padding: 8.3333vh 4.1667vw; /* 160px 80px */
+            box-sizing: border-box;
+            margin-top: 100vh; /* 添加100vh间距 */
+        }
+
+        .blank-frame {
+            background: transparent;
+            padding: 3.125vw; /* 60px */
+            padding-top: 1.5625vw; /* 30px */
+            padding-bottom: 1.5625vw; /* 30px */
+            border-radius: 0;
+            margin-bottom: 2.0833vh; /* 40px */
+            width: 95vw;
+            height: 110vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            font-size: 1.25vw;
+        }
+
+        .blank-info {
+            flex: 1;
+            max-width: 31.25vw;
+            padding: 2.0833vh 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+        }
+
+        .blank-title {
+            font-size: 2.5vw;
+            margin-bottom: 2.0833vh;
+        }
+
+        .blank-title-chinese {
+            font-size: 2vw;
+            margin-bottom: 3.125vh;
+        }
+
+        .blank-materials {
+            font-size: 1.25vw;
+            line-height: 1.6;
+            margin-bottom: 2.0833vh;
+        }
+
+        .blank-materials-chinese {
+            font-size: 1.25vw;
+            line-height: 1.6;
+            margin-bottom: 3.125vh;
+        }
+
+        .blank-size {
+            font-size: 1.5vw;
+            margin-bottom: 3.125vh;
+            font-weight: bold;
+        }
+
+        .blank-year {
+            font-size: 1.5vw;
+            font-weight: bold;
+        }
+
+
+
+        .blank-title {
+            font-size: 2.5vw;
+            margin-bottom: 2.0833vh;
+        }
+
+        .blank-title-chinese {
+            font-size: 2vw;
+            margin-bottom: 3.125vh;
+        }
+
+        .blank-materials {
+            font-size: 1.25vw;
+            line-height: 1.6;
+            margin-bottom: 2.0833vh;
+        }
+
+        .blank-materials-chinese {
+            font-size: 1.25vw;
+            line-height: 1.6;
+            margin-bottom: 3.125vh;
+        }
+
+        .blank-size {
+            font-size: 1.5vw;
+            margin-bottom: 3.125vh;
+            font-weight: bold;
+        }
+
+        .blank-year {
+            font-size: 1.5vw;
+            font-weight: bold;
+        }
+
+        .page-title {
+            text-align: center;
+            padding: 4.1667vh 0; /* 80px */
+            margin-bottom: 2.0833vh; /* 40px */
+        }
+
+        .page-title h1 {
+            font-size: 3.125vw; /* 60px */
+            color: white;
+            margin: 0;
+            text-shadow: 0 0.1042vw 0.2083vw rgba(0,0,0,0.5); /* 0 2px 4px */
+        }
+
+        /* 响应式媒体查询 */
+        @media (max-width: 768px) {
+            .page-container,
+            .blank-page {
+                flex-direction: column;
+                gap: 2.0833vh; /* 40px */
+                padding: 6.25vh 2.0833vw; /* 120px 40px */
+            }
+
+            .artwork-frame,
+            .blank-frame {
+                padding: 2.0833vw; /* 40px - doubled from 20px */
+                padding-top: 1.0417vw; /* 20px - inward indentation */
+                padding-bottom: 1.0417vw; /* 20px - inward indentation */
+            }
+
+            .artwork-image {
+                max-width: 200vw; /* increased from 160vw */
+                max-height: 140vh; /* increased from 120vh */
+            }
+
+            .info-section,
+            .info-section-small,
+            .info-section-small-2,
+            .blank-info {
+                max-width: 80vw;
+                border-left: 0.2083vw solid transparent;
+                padding-left: 4.1667vw;
+            }
+
+            .info-section-small {
+                max-width: 90vw; /* 增加宽度避免换行 */
+                padding-left: 10vw; /* 向左平移 */
+            }
+
+            .info-section {
+                padding-left: 12.5vw; /* 进一步增加左边距，与第二组文字位置对齐 */
+            }
+
+            .info-section-small-2 {
+                padding-left: 12.5vw; /* 与第二组文字信息对齐 */
+            }
+
+            .artwork-title,
+            .blank-title {
+                font-size: 3.2vw;
+            }
+
+            .artwork-title-chinese,
+            .blank-title-chinese {
+                font-size: 2.8vw;
+            }
+
+            .artwork-materials,
+            .artwork-materials-chinese,
+            .blank-materials,
+            .blank-materials-chinese {
+                font-size: 2.8vw;
+            }
+
+            .artwork-size,
+            .artwork-year,
+            .blank-size,
+            .blank-year {
+                font-size: 3.2vw;
+            }
+
+            .back-btn {
+                top: 1vh;
+                left: 2vw;
+                padding: 1vh 2vw;
+                font-size: 2.5vw;
+            }
+
+            .page-title h1 {
+                font-size: 5vw;
+            }
+
+            .blank-page {
+                flex-direction: column;
+                gap: 2.0833vh;
+                padding: 6.25vh 2.0833vw;
+            }
+
+            .blank-frame {
+                padding: 2.0833vw;
+                padding-top: 1.0417vw;
+                padding-bottom: 1.0417vw;
+                background: transparent;
+                color: transparent;
+            }
+
+            .blank-info {
+                max-width: 80vw;
+            }
+
+            .blank-title {
+                font-size: 5vw;
+            }
+
+            .blank-title-chinese {
+                font-size: 4.5vw;
+            }
+
+            .blank-materials,
+            .blank-materials-chinese {
+                font-size: 3.5vw;
+            }
+
+            .blank-size,
+            .blank-year {
+                font-size: 4vw;
+            }
+
+            .artwork-frame-small {
+                padding: 1.5625vw;
+                padding-top: 1.4063vw;
+                padding-bottom: 1.4063vw;
+            }
+
+            .artwork-image-small {
+                max-width: 130vw;
+                max-height: 100vh;
+            }
+
+            .player-frame {
+                padding: 3.125vw;
+                padding-top: 2.3438vw;
+                padding-bottom: 2.3438vw;
+            }
+
+            .player-placeholder {
+                width: 150vw;
+                height: 120vh;
+                font-size: 3vw;
+            }
+
+            .slideshow-wrapper {
+                height: 115vh; /* 稍微缩小播放器高度 */
+            }
+            
+            .paper-slideshow-container .slideshow-wrapper.portrait {
+                aspect-ratio: 5/7;
+                height: auto;
+            }
+            
+            .paper-slideshow-container .slideshow-wrapper.landscape {
+                aspect-ratio: 7/5;
+                height: auto;
+            }
+
+            .prev-btn-paper, .next-btn-paper {
+                padding: 1vh 2vw;
+                font-size: 2.5vw;
+            }
+
+            .slide-counter {
+                font-size: 3vw;
+            }
+
+            .indicator-paper {
+                width: 2vw;
+                height: 2vw;
+            }
+            
+            /* 响应式设计中的播放器信息样式 */
+            .slideshow-info {
+                max-width: 90vw;
+                padding-left: 4vw; /* 向左平移作品信息 */
+            }
+            
+            .slideshow-info .artwork-title {
+                font-size: 3.8vw;
+            }
+            
+            .slideshow-info .artwork-title-chinese {
+                font-size: 3.4vw;
+            }
+            
+            .slideshow-info .artwork-materials,
+            .slideshow-info .artwork-materials-chinese {
+                font-size: 3.6vw;
+            }
+            
+            .slideshow-info .artwork-size,
+            .slideshow-info .artwork-year {
+                font-size: 4vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-container,
+            .blank-page {
+                padding: 4.1667vh 1.0417vw; /* 80px 20px */
+            }
+
+            .artwork-frame,
+            .blank-frame {
+                padding: 1.5625vw; /* 30px - doubled from 15px */
+                padding-top: 0.7813vw; /* 15px - inward indentation */
+                padding-bottom: 0.7813vw; /* 15px - inward indentation */
+            }
+
+            .artwork-image {
+                max-width: 280vw; /* increased from 220vw */
+                max-height: 120vh; /* increased from 100vh */
+            }
+
+            .info-section,
+            .info-section-small,
+            .info-section-small-2,
+            .blank-info {
+                max-width: 90vw;
+                border-left: 0.3125vw solid transparent;
+                padding-left: 6.25vw;
+            }
+
+            .info-section-small {
+                max-width: 95vw; /* 增加宽度避免换行 */
+                padding-left: 12.5vw; /* 向左平移 */
+            }
+
+            .info-section {
+                padding-left: 15.625vw; /* 进一步增加左边距，与第二组文字位置对齐 */
+            }
+
+            .info-section-small-2 {
+                padding-left: 15.625vw; /* 与第二组文字信息对齐 */
+            }
+
+            .artwork-title,
+            .blank-title {
+                font-size: 3.8vw;
+            }
+
+            .artwork-title-chinese,
+            .blank-title-chinese {
+                font-size: 3.4vw;
+            }
+
+            .artwork-materials,
+            .artwork-materials-chinese,
+            .blank-materials,
+            .blank-materials-chinese {
+                font-size: 3.6vw;
+            }
+
+            .artwork-size,
+            .artwork-year,
+            .blank-size,
+            .blank-year {
+                font-size: 4vw;
+            }
+
+            .artwork-frame-small {
+                padding: 1.0417vw;
+                padding-top: 0.9375vw;
+                padding-bottom: 0.9375vw;
+            }
+
+            .artwork-image-small {
+                max-width: 180vw;
+                max-height: 80vh;
+            }
+
+            .player-frame {
+                padding: 2.0833vw;
+                padding-top: 1.5625vw;
+                padding-bottom: 1.5625vw;
+            }
+
+            .player-placeholder {
+                width: 200vw;
+                height: 100vh;
+                font-size: 4vw;
+            }
+
+            .slideshow-wrapper {
+                height: 115vh; /* 稍微缩小播放器高度 */
+            }
+            
+            .paper-slideshow-container .slideshow-wrapper.portrait {
+                aspect-ratio: 5/7;
+                height: auto;
+            }
+            
+            .paper-slideshow-container .slideshow-wrapper.landscape {
+                aspect-ratio: 7/5;
+                height: auto;
+            }
+
+            .prev-btn-paper, .next-btn-paper {
+                padding: 0.8vh 1.5vw;
+                font-size: 3vw;
+            }
+
+            .slide-counter {
+                font-size: 3.5vw;
+            }
+
+            .indicator-paper {
+                width: 2.5vw;
+                height: 2.5vw;
+            }
+
+            .back-btn {
+                top: 0.5vh;
+                left: 1vw;
+                padding: 0.8vh 1.5vw;
+                font-size: 3vw;
+            }
+
+            .page-title h1 {
+                font-size: 6vw;
+            }
+
+            .blank-page {
+                padding: 4.1667vh 1.0417vw;
+            }
+
+            .blank-frame {
+                padding: 1.5625vw;
+                padding-top: 0.7813vw;
+                padding-bottom: 0.7813vw;
+                background: transparent;
+                color: transparent;
+            }
+
+            .blank-info {
+                max-width: 90vw;
+            }
+
+            .blank-title {
+                font-size: 6vw;
+            }
+
+            .blank-title-chinese {
+                font-size: 5.5vw;
+            }
+
+            .blank-materials,
+            .blank-materials-chinese {
+                font-size: 4.5vw;
+            }
+
+            .blank-size,
+            .blank-year {
+                font-size: 5vw;
+            }
+            
+            /* 移动端播放器信息样式 */
+            .slideshow-info {
+                max-width: 95vw;
+                padding-left: 6vw; /* 向左平移作品信息 */
+            }
+            
+            .slideshow-info .artwork-title {
+                font-size: 3.8vw;
+            }
+            
+            .slideshow-info .artwork-title-chinese {
+                font-size: 3.4vw;
+            }
+            
+            .slideshow-info .artwork-materials,
+            .slideshow-info .artwork-materials-chinese {
+                font-size: 3.6vw;
+            }
+            
+            .slideshow-info .artwork-size,
+            .slideshow-info .artwork-year {
+                font-size: 4vw;
+            }
+        }
+    </style>
+    <script>
+        // 纸本绘画播放器 JavaScript - 参考exhibition设计
+        let currentSlidePaper = 0;
+        let slidesPaper, indicatorsPaper, totalSlidesPaper, currentSlidePaperSpan, totalSlidesPaperSpan;
+        
+        const artworkInfo = [
+            { 
+                en: 'Landing Ship I', 
+                zh: '登陆舰Ⅰ',
+                materials: 'Paper、Watercolor、Oil Pastels',
+                materialsZh: '纸本、水彩、油画棒',
+                size: '21×13 cm',
+                year: '2022'
+            },
+            { 
+                en: 'Landing Ship II', 
+                zh: '登陆舰Ⅱ',
+                materials: 'Paper、Watercolor、Oil Pastels',
+                materialsZh: '纸本、水彩、油画棒',
+                size: '21×13 cm',
+                year: '2022'
+            },
+            { 
+                en: 'Landing Ship III', 
+                zh: '登陆舰Ⅲ',
+                materials: 'Paper、Watercolor、Oil Pastels',
+                materialsZh: '纸本、水彩、油画棒',
+                size: '21×13 cm',
+                year: '2022'
+            },
+            { 
+                en: 'Blue Planet I', 
+                zh: '蓝色星球Ⅰ',
+                materials: 'Paper、Watercolor、Oil Pastels',
+                materialsZh: '纸本、水彩、油画棒',
+                size: '21×13 cm',
+                year: '2022'
+            },
+            { 
+                en: 'Blue Planet II', 
+                zh: '蓝色星球ⅠⅠ',
+                materials: 'Paper、Watercolor、Oil Pastels',
+                materialsZh: '纸本、水彩、油画棒',
+                size: '21×13 cm',
+                year: '2022'
+            },
+            { 
+                en: 'Blue Planet III', 
+                zh: '蓝色星球ⅡⅠ',
+                materials: 'Paper、Watercolor、Oil Pastels',
+                materialsZh: '纸本、水彩、油画棒',
+                size: '21×13 cm',
+                year: '2022'
+            }
+        ];
+        
+        // Initialize paper slideshow
+        function initSlideshowPaper() {
+            slidesPaper = document.querySelectorAll('.paper-slideshow-container .slide');
+            indicatorsPaper = document.querySelectorAll('.indicator-paper');
+            totalSlidesPaper = slidesPaper.length;
+            currentSlidePaperSpan = document.querySelector('.current-slide-paper');
+            totalSlidesPaperSpan = document.querySelector('.total-slides-paper');
+            
+            if (totalSlidesPaperSpan) {
+                totalSlidesPaperSpan.textContent = totalSlidesPaper;
+            }
+            updateSlideshowPaper();
+        }
+        
+        // Update paper slideshow display
+        function updateSlideshowPaper() {
+            // Hide all slides
+            slidesPaper.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlidePaper) {
+                    slide.classList.add('active');
+                } else if (index < currentSlidePaper) {
+                    slide.classList.add('prev');
+                }
+            });
+            
+            // Update indicators
+            indicatorsPaper.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlidePaper);
+            });
+            
+            // Update counter
+            if (currentSlidePaperSpan) {
+                currentSlidePaperSpan.textContent = currentSlidePaper + 1;
+            }
+            
+            // Update artwork information
+            if (currentSlidePaper < artworkInfo.length) {
+                const titleElement = document.getElementById('slideshow-title');
+                const titleChineseElement = document.getElementById('slideshow-title-chinese');
+                const materialsElement = document.querySelector('.slideshow-info .artwork-materials');
+                const materialsChineseElement = document.querySelector('.slideshow-info .artwork-materials-chinese');
+                const sizeElement = document.querySelector('.slideshow-info .artwork-size');
+                const yearElement = document.querySelector('.slideshow-info .artwork-year');
+                
+                if (titleElement && titleChineseElement) {
+                    titleElement.textContent = artworkInfo[currentSlidePaper].en;
+                    titleChineseElement.textContent = artworkInfo[currentSlidePaper].zh;
+                }
+                if (materialsElement) {
+                    materialsElement.textContent = artworkInfo[currentSlidePaper].materials;
+                }
+                if (materialsChineseElement) {
+                    materialsChineseElement.textContent = artworkInfo[currentSlidePaper].materialsZh;
+                }
+                if (sizeElement) {
+                    sizeElement.textContent = artworkInfo[currentSlidePaper].size;
+                }
+                if (yearElement) {
+                    yearElement.textContent = artworkInfo[currentSlidePaper].year;
+                }
+            }
+            
+            // 根据当前图片调整播放器形状
+            adjustPlayerShape();
+        }
+        
+        // 根据图片比例调整播放器形状
+        function adjustPlayerShape() {
+            const slideshowWrapper = document.querySelector('.slideshow-wrapper');
+            const activeSlide = slidesPaper[currentSlidePaper];
+            const activeImage = activeSlide.querySelector('img');
+            
+            if (slideshowWrapper && activeImage) {
+                // 移除之前的形状类
+                slideshowWrapper.classList.remove('portrait', 'landscape');
+                
+                // 等待图片加载完成后检测比例
+                if (activeImage.complete) {
+                    detectAndAdjustShape(activeImage, slideshowWrapper);
+                } else {
+                    activeImage.addEventListener('load', () => {
+                        detectAndAdjustShape(activeImage, slideshowWrapper);
+                    });
+                }
+            }
+        }
+        
+        function detectAndAdjustShape(image, wrapper) {
+            const ratio = image.naturalWidth / image.naturalHeight;
+            
+            if (ratio < 1) {
+                // 竖版图片
+                wrapper.classList.add('portrait');
+            } else {
+                // 横版图片
+                wrapper.classList.add('landscape');
+            }
+        }
+        
+        // Go to next slide (paper)
+        function nextSlidePaper() {
+            currentSlidePaper = (currentSlidePaper + 1) % totalSlidesPaper;
+            updateSlideshowPaper();
+        }
+        
+        // Go to previous slide (paper)
+        function prevSlidePaper() {
+            currentSlidePaper = (currentSlidePaper - 1 + totalSlidesPaper) % totalSlidesPaper;
+            updateSlideshowPaper();
+        }
+        
+        // Go to specific slide (paper)
+        function goToSlidePaper(slideIndex) {
+            currentSlidePaper = slideIndex;
+            updateSlideshowPaper();
+        }
+        
+        // Paper event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const nextBtnPaper = document.querySelector('.next-btn-paper');
+            const prevBtnPaper = document.querySelector('.prev-btn-paper');
+            const indicatorsPaper = document.querySelectorAll('.indicator-paper');
+            
+            if (nextBtnPaper) nextBtnPaper.addEventListener('click', nextSlidePaper);
+            if (prevBtnPaper) prevBtnPaper.addEventListener('click', prevSlidePaper);
+            
+            // Paper indicator click events
+            indicatorsPaper.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => goToSlidePaper(index));
+            });
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextSlidePaper();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlidePaper();
+            }
+        });
+        
+        // Touch support for mobile devices
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        function initTouchSupport() {
+            const slideshowWrapper = document.querySelector('.slideshow-wrapper');
+            if (slideshowWrapper) {
+                slideshowWrapper.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+                
+                slideshowWrapper.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+            }
+        }
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe left - next slide
+                    nextSlidePaper();
+                } else {
+                    // Swipe right - previous slide
+                    prevSlidePaper();
+                }
+            }
+        }
+        
+        // Auto-play functionality (optional - uncomment to enable)
+        // let autoPlayInterval;
+        // function startAutoPlay() {
+        //     autoPlayInterval = setInterval(nextSlidePaper, 4000);
+        // }
+        // function stopAutoPlay() {
+        //     clearInterval(autoPlayInterval);
+        // }
+        // 
+        // // Start auto-play when page loads
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     initSlideshowPaper();
+        //     startAutoPlay();
+        // });
+        // 
+        // // Pause auto-play on user interaction
+        // slideshowWrapper.addEventListener('mouseenter', stopAutoPlay);
+        // slideshowWrapper.addEventListener('mouseleave', startAutoPlay);
+        
+        // Image loading optimization
+        function preloadImages() {
+            const images = document.querySelectorAll('.paper-slideshow-container img, .slideshow-image');
+            images.forEach(img => {
+                if (img.complete) {
+                    img.classList.add('loaded');
+                } else {
+                    img.addEventListener('load', () => {
+                        img.classList.add('loaded');
+                    });
+                    img.addEventListener('error', (e) => {
+                        console.error('Failed to load image:', img.src, e);
+                        // 显示错误信息
+                        img.style.border = '2px solid red';
+                        img.alt = '图片加载失败: ' + img.src;
+                    });
+                }
+            });
+        }
+        
+        // Initialize paper slideshow when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initSlideshowPaper();
+            initCollageSlideshow();
+            initFifthBookSlideshow();
+            initTouchSupport();
+            preloadImages();
+            
+            // 确保第一张图片显示
+            setTimeout(() => {
+                const firstSlide = document.querySelector('.paper-slideshow-container .slide.active');
+                const firstImage = firstSlide ? firstSlide.querySelector('img') : null;
+                if (firstImage && !firstImage.classList.contains('loaded')) {
+                    firstImage.classList.add('loaded');
+                }
+            }, 1000);
+        });
+        
+        // 备用初始化 - 如果DOMContentLoaded失败
+        window.addEventListener('load', () => {
+            const slideshow = document.querySelector('.paper-slideshow-container');
+            if (slideshow && !slideshow.querySelector('.slide.active img.loaded')) {
+                initSlideshowPaper();
+                initCollageSlideshow();
+                initFifthBookSlideshow();
+                preloadImages();
+            }
+        });
+        
+        // 综合材料拼贴播放器 JavaScript
+        let currentSlideCollage = 0;
+        let slidesCollage, indicatorsCollage, totalSlidesCollage, currentSlideCollageSpan, totalSlidesCollageSpan;
+        
+        function initCollageSlideshow() {
+            slidesCollage = document.querySelectorAll('.collage-slideshow-container .slide');
+            indicatorsCollage = document.querySelectorAll('.indicator-collage');
+            totalSlidesCollage = slidesCollage.length;
+            currentSlideCollageSpan = document.querySelector('.current-slide-collage');
+            totalSlidesCollageSpan = document.querySelector('.total-slides-collage');
+            
+            if (totalSlidesCollageSpan) {
+                totalSlidesCollageSpan.textContent = totalSlidesCollage;
+            }
+            
+            // Add event listeners
+            const prevBtnCollage = document.querySelector('.prev-btn-collage');
+            const nextBtnCollage = document.querySelector('.next-btn-collage');
+            
+            if (prevBtnCollage) {
+                prevBtnCollage.addEventListener('click', prevSlideCollage);
+            }
+            if (nextBtnCollage) {
+                nextBtnCollage.addEventListener('click', nextSlideCollage);
+            }
+            
+            // Add indicator event listeners
+            indicatorsCollage.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => goToSlideCollage(index));
+            });
+            
+            updateCollageSlideshow();
+        }
+        
+        function updateCollageSlideshow() {
+            slidesCollage.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlideCollage) {
+                    slide.classList.add('active');
+                } else if (index < currentSlideCollage) {
+                    slide.classList.add('prev');
+                }
+            });
+            
+            indicatorsCollage.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlideCollage);
+            });
+            
+            if (currentSlideCollageSpan) {
+                currentSlideCollageSpan.textContent = currentSlideCollage + 1;
+            }
+        }
+        
+        function nextSlideCollage() {
+            currentSlideCollage = (currentSlideCollage + 1) % totalSlidesCollage;
+            updateCollageSlideshow();
+        }
+        
+        function prevSlideCollage() {
+            currentSlideCollage = (currentSlideCollage - 1 + totalSlidesCollage) % totalSlidesCollage;
+            updateCollageSlideshow();
+        }
+        
+        function goToSlideCollage(slideIndex) {
+            currentSlideCollage = slideIndex;
+            updateCollageSlideshow();
+        }
+
+        // 第五本书播放器 JavaScript
+        let currentSlideFifthBook = 0;
+        let slidesFifthBook, indicatorsFifthBook, totalSlidesFifthBook, currentSlideFifthBookSpan, totalSlidesFifthBookSpan;
+        
+        function initFifthBookSlideshow() {
+            slidesFifthBook = document.querySelectorAll('.fifth-book-slideshow-container .slide');
+            indicatorsFifthBook = document.querySelectorAll('.indicator-fifth-book');
+            totalSlidesFifthBook = slidesFifthBook.length;
+            currentSlideFifthBookSpan = document.querySelector('.current-slide-fifth-book');
+            totalSlidesFifthBookSpan = document.querySelector('.total-slides-fifth-book');
+            
+            if (totalSlidesFifthBookSpan) {
+                totalSlidesFifthBookSpan.textContent = totalSlidesFifthBook;
+            }
+            
+            // Add event listeners
+            const prevBtnFifthBook = document.querySelector('.prev-btn-fifth-book');
+            const nextBtnFifthBook = document.querySelector('.next-btn-fifth-book');
+            
+            if (prevBtnFifthBook) {
+                prevBtnFifthBook.addEventListener('click', prevSlideFifthBook);
+            }
+            if (nextBtnFifthBook) {
+                nextBtnFifthBook.addEventListener('click', nextSlideFifthBook);
+            }
+            
+            // Add indicator event listeners
+            indicatorsFifthBook.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => goToSlideFifthBook(index));
+            });
+            
+            updateFifthBookSlideshow();
+        }
+        
+        function updateFifthBookSlideshow() {
+            slidesFifthBook.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlideFifthBook) {
+                    slide.classList.add('active');
+                } else if (index < currentSlideFifthBook) {
+                    slide.classList.add('prev');
+                }
+            });
+            
+            indicatorsFifthBook.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlideFifthBook);
+            });
+            
+            if (currentSlideFifthBookSpan) {
+                currentSlideFifthBookSpan.textContent = currentSlideFifthBook + 1;
+            }
+        }
+        
+        function nextSlideFifthBook() {
+            currentSlideFifthBook = (currentSlideFifthBook + 1) % totalSlidesFifthBook;
+            updateFifthBookSlideshow();
+        }
+        
+        function prevSlideFifthBook() {
+            currentSlideFifthBook = (currentSlideFifthBook - 1 + totalSlidesFifthBook) % totalSlidesFifthBook;
+            updateFifthBookSlideshow();
+        }
+        
+        function goToSlideFifthBook(slideIndex) {
+            currentSlideFifthBook = slideIndex;
+            updateFifthBookSlideshow();
+        }
+    </script>
+</head>
+<body>
+    <a href="index.html" class="back-btn">Back</a>
+    
+    <!-- 综合材料木偶标题 -->
+    <div class="page-title" style="margin-top: 2.0833vh;">
+        <h1>Mixed Media Puppet</h1>
+        </div>
+        
+    <!-- 综合材料木偶作品 -->
+    <div class="page-container" style="margin-top: 4.1667vh;">
+        <div class="artwork-section">
+            <div class="artwork-frame-small">
+                <img src="../综合材料木偶%20R.E.Creation%20-%20部落勇士.jpeg" alt="R.E.Creation - Tribal Warrior" class="artwork-image-small">
+            </div>
+        </div>
+        
+        <div class="info-section-small">
+            <h1 class="artwork-title">R.E.Creation-Tribal Print Warrior</h1>
+            <h2 class="artwork-title-chinese">再造-部落平特勇士</h2>
+            
+            <p class="artwork-materials">
+                Pine Wood, Acrylic Board, Copper, Iron, Silver, Shell Fossils, Hemp Rope, Glue, Watercolor, Ink, Plaster
+            </p>
+            <p class="artwork-materials-chinese">
+                松木、亚克力板、铜、铁、银、贝类化石、麻绳、胶、水彩、油墨、石膏
+            </p>
+            
+            <p class="artwork-size">20x24x24 cm</p>
+            
+            <p class="artwork-year">2024</p>
+        </div>
+        </div>
+        
+    <!-- 页面标题 -->
+    <div class="page-title" style="margin-top: 50vh;">
+        <h1>Mixed Media on Canvas</h1>
+    </div>
+    
+    <!-- 第一页：Architect作品 -->
+    <div class="page-container">
+        <div class="artwork-section">
+            <div class="artwork-frame">
+                <img src="../综合材料绘画%20建筑师%20Archltect.png" alt="Architect" class="artwork-image">
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h1 class="artwork-title">Architect</h1>
+            <h2 class="artwork-title-chinese">建筑师</h2>
+            
+            <p class="artwork-materials">
+                Acrylic on canvas、Oil pastels、Lightweight clay、Pearlescent medium、Mixed media collage, Plaster
+            </p>
+            <p class="artwork-materials-chinese">
+                布面丙烯，油画棒，轻粘土，珠光媒介，综合材料拼贴，石膏
+            </p>
+            
+            <p class="artwork-size">60*80cm</p>
+            
+            <p class="artwork-year">2023</p>
+        </div>
+    </div>
+
+    <!-- 第二页：3U人型战士作品 -->
+    <div class="page-container" style="margin-top: 50vh;">
+        <div class="artwork-section">
+            <div class="artwork-frame-small">
+                <img src="../综合材料绘画%203U人型战士%20.jpg" alt="3U Humanoid Warrior" class="artwork-image-small">
+            </div>
+        </div>
+        
+        <div class="info-section-small">
+            <h1 class="artwork-title">3U Humanoid Warrior</h1>
+            <h2 class="artwork-title-chinese">3U人型战士</h2>
+            
+            <p class="artwork-materials">
+                Acrylic on canvas、Oil pastels、Lightweight clay、Pearlescent medium、Mixed media collage
+            </p>
+            <p class="artwork-materials-chinese">
+                布面丙烯，油画棒，轻粘土，珠光媒介，综合材料拼贴
+            </p>
+            
+            <p class="artwork-size">60*60cm</p>
+            
+            <p class="artwork-year">2023</p>
+        </div>
+    </div>
+
+    <!-- 第三页：指定路径作品 -->
+    <div class="page-container" style="margin-top: 50vh; margin-left: 0vw;">
+        <div class="artwork-section">
+            <div class="artwork-frame-small">
+                <img src="../综合材料绘画%20指定路径.jpg" alt="The Pathway" class="artwork-image-small">
+            </div>
+        </div>
+        
+        <div class="info-section-small-2">
+            <h1 class="artwork-title">The Pathway</h1>
+            <h2 class="artwork-title-chinese">指定路径</h2>
+            
+            <p class="artwork-materials">
+                Acrylic on Canvas、Oil Pastels、Light Clay、Pearl Pen、Glass Paint、Mixed Media Collage
+            </p>
+            <p class="artwork-materials-chinese">
+                布面丙烯，油画棒，轻粘土，珍珠笔，玻璃颜料，综合材料拼贴
+            </p>
+            
+            <p class="artwork-size">40×50cm</p>
+            
+            <p class="artwork-year">2023</p>
+        </div>
+    </div>
+
+    <!-- 第四页：泥螺河作品 -->
+    <div class="page-container" style="margin-top: 50vh;">
+        <div class="artwork-section">
+            <div class="artwork-frame-small">
+                <img src="../综合材料绘画%20泥螺河%20.jpg" alt="The Mud Snail River" class="artwork-image-small">
+            </div>
+        </div>
+        
+        <div class="info-section-small-2">
+            <h1 class="artwork-title">The Mud Snail River</h1>
+            <h2 class="artwork-title-chinese">泥螺河</h2>
+            
+            <p class="artwork-materials">
+                Canvas Acrylic、Oil Pastels、White Glue、Pearl Pen、Glass Paint、Texture Gel、Modeling Paste
+            </p>
+            <p class="artwork-materials-chinese">
+                布面丙烯，油画棒，白胶，珍珠笔，玻璃颜料，肌理结构胶，塑型膏
+            </p>
+            
+            <p class="artwork-size">40*50cm</p>
+            
+            <p class="artwork-year">2023</p>
+        </div>
+    </div>
+
+    <!-- 第五页：如此美丽作品 -->
+    <div class="page-container" style="margin-top: 50vh;">
+        <div class="artwork-section">
+            <div class="artwork-frame-small">
+                <img src="../综合材料绘画%20如此美丽%20.jpg" alt="So Pertty" class="artwork-image-small">
+            </div>
+        </div>
+        
+        <div class="info-section-small-2">
+            <h1 class="artwork-title">So Pertty</h1>
+            <h2 class="artwork-title-chinese">如此美丽</h2>
+            
+            <p class="artwork-materials">
+                Acrylic on canvas、Oil pastels、Lightweight clay、Pearlescent medium、Mixed media collage
+            </p>
+            <p class="artwork-materials-chinese">
+                布面丙烯，油画棒，轻粘土，珠光媒介，综合材料拼贴
+            </p>
+            
+            <p class="artwork-size">40*50cm</p>
+            
+            <p class="artwork-year">2023</p>
+        </div>
+    </div>
+
+    <!-- 纸本绘画标题 -->
+    <div class="page-title" style="margin-top: 60vh;">
+        <h1>Paper Drawing</h1>
+    </div>
+
+    <!-- 纸本绘画交互式播放器 -->
+    <div class="page-container" style="margin-top: 4.1667vh;">
+        <div class="artwork-section">
+            <div class="paper-slideshow-container">
+                <div class="slideshow-wrapper">
+                    <div class="slide active">
+                        <img src="../纸本%20绘画%20登陆舰Ⅰ.png" alt="Landing Ship I" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../纸本%20绘画%20登陆舰Ⅱ.png" alt="Landing Ship II" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../纸本%20绘画%20登陆舰Ⅲ.png" alt="Landing Ship III" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../纸本%20绘画%20蓝色星球Ⅰ.png" alt="Blue Planet I" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../纸本%20绘画%20蓝色星球ⅠⅠ.png" alt="Blue Planet II" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../纸本%20绘画%20蓝色星球ⅡⅠ.png" alt="Blue Planet III" class="slideshow-image">
+                    </div>
+                </div>
+                
+                <!-- Slideshow Controls -->
+                <div class="slideshow-controls">
+                    <button class="prev-btn-paper">◀ PREV</button>
+                    <div class="slide-counter">
+                        <span class="current-slide-paper">1</span> / <span class="total-slides-paper">6</span>
+                    </div>
+                    <button class="next-btn-paper">NEXT ▶</button>
+                </div>
+                
+                <!-- Slideshow Indicators -->
+                <div class="slideshow-indicators">
+                    <span class="indicator-paper active" data-slide="0"></span>
+                    <span class="indicator-paper" data-slide="1"></span>
+                    <span class="indicator-paper" data-slide="2"></span>
+                    <span class="indicator-paper" data-slide="3"></span>
+                    <span class="indicator-paper" data-slide="4"></span>
+                    <span class="indicator-paper" data-slide="5"></span>
+                </div>
+                
+            </div>
+        </div>
+        
+                        <!-- 作品信息 - 放在播放器下方 -->
+                <div class="slideshow-info">
+                    <h1 class="artwork-title" id="slideshow-title">Landing Ship I</h1>
+                    <h2 class="artwork-title-chinese" id="slideshow-title-chinese">登陆舰Ⅰ</h2>
+                    
+                    <p class="artwork-materials">
+                        Paper、Watercolor、Oil Pastels
+                    </p>
+                    <p class="artwork-materials-chinese">
+                        纸本、水彩、油画棒
+                    </p>
+                    
+                    <p class="artwork-size">21×13 cm</p>
+                    
+                    <p class="artwork-year">2022</p>
+                </div>
+    </div>
+
+    <!-- 综合材料拼贴标题 -->
+    <div class="page-title" style="margin-top: 60vh;">
+        <h1>Mixed Media Collage</h1>
+    </div>
+
+    <!-- 综合材料拼贴内容 -->
+    <div style="margin-top: 25vh; display: flex; gap: 4vw;">
+        <!-- 左侧播放器 -->
+        <div style="flex: 1; padding-left: 4.1667vw;">
+            <div class="collage-slideshow-container">
+                <div class="slideshow-wrapper">
+                    <div class="slide active">
+                        <img src="../综合材料绘本%2006小鬼跳%20X%202%20-2%202.jpg" alt="Collage 1" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006小鬼跳%20X%202%201-2.jpg" alt="Collage 2" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8667.jpg" alt="Collage 3" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8678.jpg" alt="Collage 4" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8684.jpg" alt="Collage 5" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8704.jpg" alt="Collage 6" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8731.jpg" alt="Collage 7" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8753.jpg" alt="Collage 8" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8769.jpg" alt="Collage 9" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8793.jpg" alt="Collage 10" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8809.jpg" alt="Collage 11" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8850.jpg" alt="Collage 12" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8867.jpg" alt="Collage 13" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8868.jpg" alt="Collage 14" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8889.jpg" alt="Collage 15" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2006DSCF8955.jpg" alt="Collage 16" class="slideshow-image">
+                    </div>
+                </div>
+                
+                <!-- Slideshow Controls -->
+                <div class="slideshow-controls">
+                    <button class="prev-btn-collage">◀ PREV</button>
+                    <div class="slide-counter">
+                        <span class="current-slide-collage">1</span> / <span class="total-slides-collage">16</span>
+                    </div>
+                    <button class="next-btn-collage">NEXT ▶</button>
+                </div>
+                
+                <!-- Slideshow Indicators -->
+                <div class="slideshow-indicators">
+                    <span class="indicator-collage active" data-slide="0"></span>
+                    <span class="indicator-collage" data-slide="1"></span>
+                    <span class="indicator-collage" data-slide="2"></span>
+                    <span class="indicator-collage" data-slide="3"></span>
+                    <span class="indicator-collage" data-slide="4"></span>
+                    <span class="indicator-collage" data-slide="5"></span>
+                    <span class="indicator-collage" data-slide="6"></span>
+                    <span class="indicator-collage" data-slide="7"></span>
+                    <span class="indicator-collage" data-slide="8"></span>
+                    <span class="indicator-collage" data-slide="9"></span>
+                    <span class="indicator-collage" data-slide="10"></span>
+                    <span class="indicator-collage" data-slide="11"></span>
+                    <span class="indicator-collage" data-slide="12"></span>
+                    <span class="indicator-collage" data-slide="13"></span>
+                    <span class="indicator-collage" data-slide="14"></span>
+                    <span class="indicator-collage" data-slide="15"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧图片和作品信息 -->
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding-right: 4.1667vw; margin-top: 2vh;">
+            <img src="../综合材料绘本%20Ezi的第六本书%20.jpg" alt="Ezi's Sixth Book" style="max-width: 25vw; height: auto; border-radius: 0.5vw; object-fit: contain; margin-bottom: 2vh;">
+            
+            <!-- 作品信息 -->
+            <div style="max-width: 25vw; padding: 1vh 0; text-align: left;">
+                <h1 style="font-size: 1.25vw; color: #fff; margin: 0 0 1vh 0; font-weight: bold; text-shadow: none;">Ezi·BooK 06</h1>
+                <h2 style="font-size: 1.0417vw; color: #fff; margin: 0 0 2vh 0; font-weight: bold; text-shadow: none;">Ezi的第六本书</h2>
+                
+                <p style="font-size: 0.9375vw; color: #fff; margin: 0.5vh 0; line-height: 1.6; text-shadow: none;">
+                    Paper、Acrylic、Oil pastels、Lightweight clay、Pearlescent medium、Mixed media collage, Plaster
+                </p>
+                <p style="font-size: 0.9375vw; color: #fff; margin: 0.5vh 0; line-height: 1.6; text-shadow: none;">
+                    纸本、丙烯，油画棒，轻粘土，珠光媒介，综合材料拼贴，石膏
+                </p>
+                
+                <p style="font-size: 1.0417vw; color: #fff; margin: 0.5vh 0; font-weight: bold; text-shadow: none;">16*20.5 cm</p>
+                
+                <p style="font-size: 1.0417vw; color: #fff; margin: 0.5vh 0; font-weight: bold; text-shadow: none;">2021</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第五本书作品组 -->
+    <div style="margin-top: 50vh; display: flex; justify-content: flex-end; padding-right: 14vw;">
+        <div style="max-width: 25vw; display: flex; flex-direction: column; align-items: center;">
+            <img src="../综合材料绘本%20Ezi的第五本书%20.jpeg" alt="Ezi's Fifth Book" style="max-width: 25vw; height: auto; border-radius: 0.5vw; object-fit: contain; margin-bottom: 2vh;">
+            
+            <!-- 作品信息 -->
+            <div style="max-width: 25vw; padding: 1vh 0; text-align: left;">
+                <h1 style="font-size: 1.25vw; color: #fff; margin: 0 0 1vh 0; font-weight: bold; text-shadow: none;">Ezi·BooK 05</h1>
+                <h2 style="font-size: 1.0417vw; color: #fff; margin: 0 0 2vh 0; font-weight: bold; text-shadow: none;">Ezi的第五本书</h2>
+                
+                <p style="font-size: 0.9375vw; color: #fff; margin: 0.5vh 0; line-height: 1.6; text-shadow: none;">
+                    Paper、Acrylic、Oil pastels、Lightweight clay、Pearlescent medium、Mixed media collage, Plaster
+                </p>
+                <p style="font-size: 0.9375vw; color: #fff; margin: 0.5vh 0; line-height: 1.6; text-shadow: none;">
+                    纸本、丙烯，油画棒，轻粘土，珠光媒介，综合材料拼贴，石膏
+                </p>
+                
+                <p style="font-size: 1.0417vw; color: #fff; margin: 0.5vh 0; font-weight: bold; text-shadow: none;">16*27.5 cm</p>
+                
+                <p style="font-size: 1.0417vw; color: #fff; margin: 0.5vh 0; font-weight: bold; text-shadow: none;">2020</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第五本书播放器组 -->
+    <div style="margin-top: -95vh; display: flex; gap: 4vw;">
+        <!-- 左侧播放器 -->
+        <div style="flex: 1; padding-left: 4.1667vw;">
+            <div class="fifth-book-slideshow-container">
+                <div class="slideshow-wrapper">
+                    <div class="slide active">
+                        <img src="../综合材料绘本%2005本子%2005%20第12张.png" alt="Fifth Book 1" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第17张.png" alt="Fifth Book 2" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第22张.png" alt="Fifth Book 3" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第34张.png" alt="Fifth Book 4" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第35张.png" alt="Fifth Book 5" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第41张.png" alt="Fifth Book 6" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第49张.png" alt="Fifth Book 7" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第50张.png" alt="Fifth Book 8" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第53张-2.png" alt="Fifth Book 9" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第53张.png" alt="Fifth Book 10" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第59张.png" alt="Fifth Book 11" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第63张.png" alt="Fifth Book 12" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第64张%201.png" alt="Fifth Book 13" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第70张%203.png" alt="Fifth Book 14" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第72张.jpg" alt="Fifth Book 15" class="slideshow-image">
+                    </div>
+                    <div class="slide">
+                        <img src="../综合材料绘本%2005本子%2005%20第73张.jpg" alt="Fifth Book 16" class="slideshow-image">
+                    </div>
+                </div>
+                
+                <!-- Slideshow Controls -->
+                <div class="slideshow-controls">
+                    <button class="prev-btn-fifth-book">◀ PREV</button>
+                    <div class="slide-counter">
+                        <span class="current-slide-fifth-book">1</span> / <span class="total-slides-fifth-book">16</span>
+                    </div>
+                    <button class="next-btn-fifth-book">NEXT ▶</button>
+                </div>
+                
+                <!-- Slideshow Indicators -->
+                <div class="slideshow-indicators">
+                    <span class="indicator-fifth-book active" data-slide="0"></span>
+                    <span class="indicator-fifth-book" data-slide="1"></span>
+                    <span class="indicator-fifth-book" data-slide="2"></span>
+                    <span class="indicator-fifth-book" data-slide="3"></span>
+                    <span class="indicator-fifth-book" data-slide="4"></span>
+                    <span class="indicator-fifth-book" data-slide="5"></span>
+                    <span class="indicator-fifth-book" data-slide="6"></span>
+                    <span class="indicator-fifth-book" data-slide="7"></span>
+                    <span class="indicator-fifth-book" data-slide="8"></span>
+                    <span class="indicator-fifth-book" data-slide="9"></span>
+                    <span class="indicator-fifth-book" data-slide="10"></span>
+                    <span class="indicator-fifth-book" data-slide="11"></span>
+                    <span class="indicator-fifth-book" data-slide="12"></span>
+                    <span class="indicator-fifth-book" data-slide="13"></span>
+                    <span class="indicator-fifth-book" data-slide="14"></span>
+                    <span class="indicator-fifth-book" data-slide="15"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧空白区域 -->
+        <div style="flex: 1; padding-right: 4.1667vw;">
+        </div>
+    </div>
+
+    <!-- 第十二页：空白页 -->
+    <div class="blank-page">
+        <div class="artwork-section">
+            <div class="blank-frame">
+                <span style="color: transparent;">作品图片位置</span>
+            </div>
+        </div>
+        
+        <div class="blank-info">
+            <h1 class="blank-title">作品标题</h1>
+            <h2 class="blank-title-chinese">作品标题</h2>
+            
+            <p class="blank-materials">
+                材料信息
+            </p>
+            <p class="blank-materials-chinese">
+                材料信息
+            </p>
+            
+            <p class="blank-size">尺寸</p>
+            
+            <p class="blank-year">年份</p>
+        </div>
+    </div>
+</body>
+</html>

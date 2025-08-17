@@ -1,0 +1,4523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rasterize Series - EziZhang</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+        }
+
+        html, body {
+            background-color: #0041ff;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            color: white;
+            overflow-x: hidden;
+            overflow-y: auto;
+            image-rendering: pixelated;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            left: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+
+        .video-container {
+            width: 100vw;
+            margin: 80px 0 0 0;
+            position: relative;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .video-background {
+            width: 100vw;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 宽高比 */
+            position: relative;
+            background-color: #000000;
+            border-radius: 0px;
+            margin: 0;
+            left: 0;
+            transform: none;
+        }
+
+        .video-player {
+            width: 80%;
+            height: 0;
+            padding-bottom: 45%; /* 16:9 宽高比，但缩小到80% */
+            position: absolute;
+            top: calc(10% - 5px);
+            left: 10%;
+            border-radius: 0px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 4;
+            background-color: transparent;
+        }
+        
+        .video-player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+        }
+
+        .video-player-background {
+            width: calc(82% - 12px);
+            height: 0;
+            padding-bottom: 46.125%; /* 16:9 宽高比，比播放器大一小圈 */
+            position: absolute;
+            top: 8.5%;
+            left: calc(9% + 6px);
+            background-color: #0041ff;
+            border-radius: 0px;
+            z-index: 3;
+        }
+
+        .video-info {
+            margin-top: 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .video-info .title {
+            font-size: 96px;
+            color: #fac800;
+            margin-bottom: 60px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .video-info .title .shining {
+            font-size: 72px;
+        }
+
+        .video-info .info-line {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .video-info .description-title {
+            font-size: 32px;
+            color: #09ad04;
+            margin: 20px 0 0px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+
+
+        .video-info .description-text {
+            font-size: 13px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            margin: 30px 0 30px 0;
+            max-width: 680px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: 0.5px; 
+        }
+
+        .video-info .synopsis-text {
+            font-size: 13px;
+            line-height: 1;
+            color: rgba(255,255,255,0.9);
+            margin: 8px 0 4px 0;
+            max-width: 680px;
+        }
+
+        .still-frame-image-container {
+            position: absolute;
+            top: 690px;
+            right: 390px;
+            width: 500px;
+            height: 281px;
+            border-radius: 35px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .still-frame-image-container .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 16px solid black;
+            border-radius: 35px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .still-frame-image-container img {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            bottom: 16px;
+            width: calc(100% - 32px);
+            height: calc(100% - 32px);
+            object-fit: cover;
+            border-radius: 19px;
+            z-index: 5;
+        }
+
+        .still-frame-image-container-2 {
+            position: absolute;
+            top: 620px;
+            right: 20px;
+            width: 360px;
+            height: 202px;
+            border-radius: 35px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .still-frame-image-container-2 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 35px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .still-frame-image-container-2 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 27px;
+            z-index: 5;
+        }
+
+        .still-frame-image-container-3 {
+            position: absolute;
+            top: 835px;
+            right: 20px;
+            width: 360px;
+            height: 202px;
+            border-radius: 35px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .still-frame-image-container-3 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 35px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .still-frame-image-container-3 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 27px;
+            z-index: 5;
+        }
+
+        .still-frame-image-container-4 {
+            position: absolute;
+            top: 1060px;
+            right: 20px;
+            width: 864px;
+            height: 597px;
+            border-radius: 35px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .still-frame-image-container-4 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 35px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .still-frame-image-container-4 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 27px;
+            z-index: 5;
+        }
+
+
+
+        .second-artwork-container {
+            width: 100vw;
+            margin: 1240px 0 0 0;
+            position: relative;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .second-artwork-background {
+            width: 100vw;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 宽高比 */
+            position: relative;
+            background-color: #000000;
+            border-radius: 0px;
+            margin: 0;
+            left: 0;
+            transform: none;
+        }
+
+        .second-artwork-player {
+            width: 80%;
+            height: 0;
+            padding-bottom: 45%; /* 16:9 宽高比，但缩小到80% */
+            position: absolute;
+            top: calc(10% - 5px);
+            left: 10%;
+            border-radius: 0px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 4;
+            background-color: transparent;
+        }
+        
+        .second-artwork-player img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+
+        .second-artwork-player-background {
+            width: calc(82% - 12px);
+            height: 0;
+            padding-bottom: 46.125%; /* 16:9 宽高比，比播放器大一小圈 */
+            position: absolute;
+            top: 8.5%;
+            left: calc(9% + 6px);
+            background-color: #0041ff;
+            border-radius: 0px;
+            z-index: 3;
+        }
+
+        .second-artwork-info {
+            margin-top: 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .second-artwork-info .second-artwork-title {
+            font-size: 96px;
+            color: #fac800;
+            margin-bottom: 60px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .second-artwork-info .second-artwork-title .consciousness {
+            font-size: 64px;
+            letter-spacing: -2px;
+        }
+
+        .second-artwork-info .second-artwork-info-line {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .second-artwork-info .second-video-artwork-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 180px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .second-artwork-info .second-video-artwork-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .second-artwork-info .second-synopsis-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .second-artwork-info .second-synopsis-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .second-artwork-info .second-description-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.9);
+            margin: 20px 0 20px 0;
+            max-width: 680px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: 0.5px;
+        }
+
+        .second-still-frame-image-container {
+            position: absolute;
+            top: 4640px;
+            right: 460px;
+            width: 450px;
+            height: 253px;
+            border-radius: 35px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .second-still-frame-image-container .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 35px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .second-still-frame-image-container img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 27px;
+            z-index: 5;
+        }
+
+        .second-still-frame-image-container-2 {
+            position: absolute;
+            top: 4640px;
+            right: 0px;
+            width: 450px;
+            height: 253px;
+            border-radius: 35px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .second-still-frame-image-container-2 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 35px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .second-still-frame-image-container-2 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 27px;
+            z-index: 5;
+        }
+
+        .second-still-frame-image-container-3 {
+            position: absolute;
+            top: 4905px;
+            right: 310px;
+            width: 600px;
+            height: 337px;
+            border-radius: 23px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .second-still-frame-image-container-3 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 23px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .second-still-frame-image-container-3 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 15px;
+            z-index: 5;
+        }
+
+
+
+        .second-still-frame-image-container-7 {
+            position: absolute;
+            top: 2960px;
+            right: 460px;
+            width: 450px;
+            height: 253px;
+            border-radius: 35px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .second-still-frame-image-container-7 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 35px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .second-still-frame-image-container-7 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 27px;
+            z-index: 5;
+        }
+
+        .second-still-frame-image-container-8 {
+            position: absolute;
+            top: 2960px;
+            right: 0px;
+            width: 450px;
+            height: 253px;
+            border-radius: 35px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .second-still-frame-image-container-8 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 35px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .second-still-frame-image-container-8 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 27px;
+            z-index: 5;
+        }
+
+        .second-story-image-container {
+            position: relative;
+            margin: 130px 0 30px 0;
+            margin-left: -10px;
+            width: 750px;
+            height: 422px;
+            border-radius: 211px;
+            overflow: hidden;
+            z-index: 25;
+        }
+
+        .green-overlay {
+            position: relative;
+            margin: -70px 0 30px 0;
+            margin-left: 620px;
+            margin-top: -320px;
+            width: 750px;
+            height: 422px;
+            background: rgba(80, 255, 80, 0.3);
+            border-radius: 211px;
+            z-index: 20;
+        }
+
+        .green-overlay-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 650px;
+            height: 365px;
+            background: rgba(80, 255, 80, 0.2);
+            border-radius: 182px;
+            z-index: 21;
+        }
+
+        /* 黄色像素贪吃豆动画 */
+        .pacman-animation {
+            position: absolute;
+            bottom: -250px;
+            left: calc(50% - 190px);
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 40px;
+            z-index: 22;
+        }
+
+
+
+        .pacman {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #fac800;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            animation: pacman-move 8s linear infinite;
+            border-radius: 50%;
+            overflow: hidden;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            z-index: 3;
+        }
+
+        .pacman-mouth {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            clip-path: polygon(0% 0, 0% 100%, 50% 50%);
+            animation: pacman-chomp-left 0.2s linear infinite;
+        }
+
+        .pacman-eye {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: #fac800;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            top: 8px;
+        }
+
+        .line-segment {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ff0000;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            border-radius: 50%;
+            transform-origin: center;
+            z-index: 2;
+        }
+
+        .line-segment:nth-child(1) { left: 5%; top: 8px; }
+        .line-segment:nth-child(2) { left: 15%; top: 8px; }
+        .line-segment:nth-child(3) { left: 25%; top: 8px; }
+        .line-segment:nth-child(4) { left: 35%; top: 8px; }
+        .line-segment:nth-child(5) { left: 45%; top: 8px; }
+        .line-segment:nth-child(6) { left: 55%; top: 8px; }
+        .line-segment:nth-child(7) { left: 65%; top: 8px; }
+        .line-segment:nth-child(8) { left: 75%; top: 8px; }
+        .line-segment:nth-child(9) { left: 85%; top: 8px; }
+        .line-segment:nth-child(10) { left: 95%; top: 8px; }
+
+        .line-segment.eaten {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            transform: scale(0) !important;
+        }
+
+        @keyframes pacman-move {
+            0% { left: calc(100vw + 24px); }
+            100% { left: -24px; }
+        }
+
+        @keyframes pacman-chomp {
+            0% { clip-path: polygon(100% 0, 100% 100%, 50% 50%); }
+            50% { clip-path: polygon(100% 0, 100% 100%, 50% 50%, 100% 50%); }
+            100% { clip-path: polygon(100% 0, 100% 100%, 50% 50%); }
+        }
+
+        @keyframes pacman-chomp-left {
+            0% { clip-path: polygon(0% 0, 0% 100%, 50% 50%); }
+            50% { clip-path: polygon(0% 0, 0% 100%, 50% 50%, 0% 50%); }
+            100% { clip-path: polygon(0% 0, 0% 100%, 50% 50%); }
+        }
+
+        .dot.eaten {
+            opacity: 0 !important;
+            transform: scale(0) !important;
+            transition: all 0.1s ease !important;
+        }
+
+        /* 第三个影像作品样式 */
+        .third-artwork-info {
+            margin-top: 500px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .third-artwork-info .third-artwork-title {
+            font-size: 96px;
+            color: #fac800;
+            margin-bottom: 60px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .third-artwork-info .third-artwork-title .concrete {
+            font-size: 72px;
+        }
+
+        .third-artwork-info .third-artwork-info-line {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .third-artwork-info .third-video-artwork-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 180px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .third-artwork-info .third-video-artwork-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .third-artwork-info .third-synopsis-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .third-artwork-info .third-synopsis-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .third-artwork-info .third-description-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.9);
+            margin: 20px 0 20px 0;
+            max-width: 680px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: 0.5px;
+        }
+
+        .third-story-image-container {
+            width: 100vw;
+            position: relative;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 60px;
+        }
+
+        .third-story-image-background {
+            width: 100vw;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 宽高比 */
+            position: relative;
+            background-color: #000000;
+            border-radius: 0px;
+            margin: 0;
+            left: 0;
+            transform: none;
+        }
+
+        .third-story-image-player {
+            width: 80%;
+            height: 0;
+            padding-bottom: 45%; /* 16:9 宽高比，但缩小到80% */
+            position: absolute;
+            top: calc(10% - 5px);
+            left: 10%;
+            border-radius: 0px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 4;
+            background-color: transparent;
+        }
+        
+        .third-story-image-player img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+
+        .third-story-image-player-background {
+            width: calc(82% - 12px);
+            height: 0;
+            padding-bottom: 46.125%; /* 16:9 宽高比，比播放器大一小圈 */
+            position: absolute;
+            top: 8.5%;
+            left: calc(9% + 6px);
+            background-color: #0041ff;
+            border-radius: 0px;
+            z-index: 3;
+        }
+
+        .third-artwork-info .third-still-frame-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: 0;
+            position: relative;
+            top: -805px;
+            left: -170px;
+        }
+
+        .third-still-frame-image-container {
+            position: absolute;
+            top: 1810px;
+            right: 20px;
+            width: 800px;
+            height: 450px;
+            border-radius: 220px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .third-still-frame-image-container .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 220px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .third-still-frame-image-container img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 212px;
+            z-index: 5;
+        }
+
+        .third-still-frame-image-container-2 {
+            position: absolute;
+            top: 2290px;
+            right: 560px;
+            width: 350px;
+            height: 197px;
+            border-radius: 20px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .third-still-frame-image-container-2 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 20px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .third-still-frame-image-container-2 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 12px;
+            z-index: 5;
+        }
+
+        .third-still-frame-image-container-3 {
+            position: absolute;
+            top: 2290px;
+            right: 205px;
+            width: 350px;
+            height: 197px;
+            border-radius: 20px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .third-still-frame-image-container-3 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 20px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .third-still-frame-image-container-3 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 12px;
+            z-index: 5;
+        }
+
+        .third-still-frame-image-container-4 {
+            position: absolute;
+            top: 2290px;
+            right: -5px;
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .third-still-frame-image-container-4 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 20px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .third-still-frame-image-container-4 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 12px;
+            z-index: 5;
+        }
+
+        .third-artwork-info .third-still-frame-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+
+
+        .second-story-image-container .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 16px solid black;
+            border-radius: 211px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .second-story-image-container img {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            bottom: 16px;
+            width: calc(100% - 32px);
+            height: calc(100% - 32px);
+            object-fit: cover;
+            border-radius: 195px;
+            z-index: 5;
+        }
+
+        .second-still-frame-title {
+            position: absolute;
+            top: 4310px;
+            right: 670px;
+            font-size: 32px;
+            color: #09ad04;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            z-index: 9999;
+        }
+
+        .second-still-frame-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .second-artwork-info .second-still-frame-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .green-box {
+            position: absolute;
+            top: 2750px;
+            right: 30px;
+            width: 860px;
+            height: 520px;
+            background: rgba(80, 255, 80, 0.5);
+            border-radius: 35px;
+            z-index: 20;
+            transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: top center;
+        }
+
+        .small-green-box {
+            position: absolute;
+            top: 3010px;
+            left: 30px;
+            width: 430px;
+            height: 260px;
+            background: rgba(80, 255, 80, 0.5);
+            border-radius: 17px;
+            z-index: 20;
+            overflow: hidden;
+        }
+
+        /* 第一个作品绿框下方的贪吃豆动画 */
+        .first-pacman-animation {
+            position: absolute;
+            top: 3550px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 40px;
+            z-index: 22;
+        }
+
+        /* Mid Pacman animation between previous last work and the new fourth image */
+        .mid-pacman-animation {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 40px;
+            z-index: 1000;
+            top: -300px; /* moved up by additional 50px */
+        }
+
+        .mid-pacman {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #fac800;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            animation: first-pacman-move 8s linear infinite;
+            border-radius: 50%;
+            overflow: hidden;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            z-index: 3;
+        }
+
+        .mid-pacman-mouth {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            clip-path: polygon(100% 0, 100% 100%, 50% 50%);
+            animation: pacman-chomp 0.2s linear infinite;
+        }
+
+        .mid-pacman-eye {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .mid-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+        }
+
+        .mid-line-segment {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #0080ff;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            border-radius: 50%;
+            transform-origin: center;
+            z-index: 2;
+        }
+
+        .mid-line-segment:nth-child(1) { left: 5%; top: 8px; }
+        .mid-line-segment:nth-child(2) { left: 15%; top: 8px; }
+        .mid-line-segment:nth-child(3) { left: 25%; top: 8px; }
+        .mid-line-segment:nth-child(4) { left: 35%; top: 8px; }
+        .mid-line-segment:nth-child(5) { left: 45%; top: 8px; }
+        .mid-line-segment:nth-child(6) { left: 55%; top: 8px; }
+        .mid-line-segment:nth-child(7) { left: 65%; top: 8px; }
+        .mid-line-segment:nth-child(8) { left: 75%; top: 8px; }
+        .mid-line-segment:nth-child(9) { left: 85%; top: 8px; }
+        .mid-line-segment:nth-child(10) { left: 95%; top: 8px; }
+
+        /* Fourth pacman animation after the fourth artwork */
+        .fourth-pacman-animation {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 40px;
+            z-index: 1000;
+            top: 2400px;
+        }
+
+        /* Fifth pacman animation - green dots */
+        .fifth-pacman-animation {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 40px;
+            z-index: 1000;
+            top: 7400px;
+        }
+
+        .fifth-pacman {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #fac800;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            animation: first-pacman-move 8s linear infinite;
+            border-radius: 50%;
+            overflow: hidden;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            z-index: 3;
+        }
+
+        .fifth-pacman-mouth {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            clip-path: polygon(100% 0, 100% 100%, 50% 50%);
+            animation: pacman-chomp 0.2s linear infinite;
+        }
+
+        .fifth-pacman-eye {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .fifth-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+        }
+
+        .fifth-line-segment {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            border-radius: 50%;
+            transform-origin: center;
+            z-index: 2;
+        }
+
+        .fifth-line-segment:nth-child(1) { left: 5%; top: 8px; }
+        .fifth-line-segment:nth-child(2) { left: 15%; top: 8px; }
+        .fifth-line-segment:nth-child(3) { left: 25%; top: 8px; }
+        .fifth-line-segment:nth-child(4) { left: 35%; top: 8px; }
+        .fifth-line-segment:nth-child(5) { left: 45%; top: 8px; }
+        .fifth-line-segment:nth-child(6) { left: 55%; top: 8px; }
+        .fifth-line-segment:nth-child(7) { left: 65%; top: 8px; }
+        .fifth-line-segment:nth-child(8) { left: 75%; top: 8px; }
+        .fifth-line-segment:nth-child(9) { left: 85%; top: 8px; }
+        .fifth-line-segment:nth-child(10) { left: 95%; top: 8px; }
+
+        .fourth-pacman {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #fac800;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            animation: fourth-pacman-move 8s linear infinite;
+            border-radius: 50%;
+            overflow: hidden;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .fourth-pacman-mouth {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            clip-path: polygon(0% 0, 0% 100%, 50% 50%);
+            animation: pacman-chomp-left 0.2s linear infinite;
+        }
+
+        .fourth-pacman-eye {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .fourth-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+        }
+
+        .fourth-line-segment {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #fac800;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            border-radius: 50%;
+            transform-origin: center;
+        }
+
+        .fourth-line-segment:nth-child(1) { left: 5%; top: 8px; }
+        .fourth-line-segment:nth-child(2) { left: 15%; top: 8px; }
+        .fourth-line-segment:nth-child(3) { left: 25%; top: 8px; }
+        .fourth-line-segment:nth-child(4) { left: 35%; top: 8px; }
+        .fourth-line-segment:nth-child(5) { left: 45%; top: 8px; }
+        .fourth-line-segment:nth-child(6) { left: 55%; top: 8px; }
+        .fourth-line-segment:nth-child(7) { left: 65%; top: 8px; }
+        .fourth-line-segment:nth-child(8) { left: 75%; top: 8px; }
+        .fourth-line-segment:nth-child(9) { left: 85%; top: 8px; }
+        .fourth-line-segment:nth-child(10) { left: 95%; top: 8px; }
+
+        @keyframes fourth-pacman-move {
+            0% { left: calc(100vw + 24px); }
+            100% { left: -24px; }
+        }
+
+        .fourth-story-image-container-copy {
+            width: 100vw;
+            position: relative;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 1070px 0 60px 0;
+        }
+
+        .fourth-story-image-background-copy {
+            width: 100vw;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            background-color: #000000;
+            border-radius: 0px;
+            margin: 0;
+            left: 0;
+            transform: none;
+        }
+
+        .fourth-story-image-player-copy {
+            width: 80%;
+            height: 0;
+            padding-bottom: 45%;
+            position: absolute;
+            top: calc(10% - 5px);
+            left: 10%;
+            border-radius: 0px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 4;
+            background-color: transparent;
+        }
+
+        .fourth-story-image-player-copy img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+
+        .fourth-story-image-player-background-copy {
+            width: calc(82% - 12px);
+            height: 0;
+            padding-bottom: 46.125%;
+            position: absolute;
+            top: 8.5%;
+            left: calc(9% + 6px);
+            background-color: #0041ff;
+            border-radius: 0px;
+            z-index: 3;
+        }
+
+        /* 复制的Rasterize New Century Submarine Cavern 01容器样式 */
+        .fourth-story-image-container-copy-2 {
+            width: 100vw;
+            position: relative;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 1200px 0 60px 0;
+        }
+
+        .fourth-story-image-background-copy-2 {
+            width: 100vw;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            background-color: #000000;
+            border-radius: 0px;
+            margin: 0;
+            left: 0;
+            transform: none;
+        }
+
+        .fourth-story-image-player-copy-2 {
+            width: 80%;
+            height: 0;
+            padding-bottom: 45%;
+            position: absolute;
+            top: calc(10% - 5px);
+            left: 10%;
+            border-radius: 0px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 4;
+            background-color: transparent;
+        }
+
+        .fourth-story-image-player-copy-2 img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+
+        .fourth-story-image-player-background-copy-2 {
+            width: calc(82% - 12px);
+            height: 0;
+            padding-bottom: 46.125%;
+            position: absolute;
+            top: 8.5%;
+            left: calc(9% + 6px);
+            background-color: #0041ff;
+            border-radius: 0px;
+            z-index: 3;
+        }
+
+        /* 第六个作品信息样式 */
+        .sixth-artwork-info {
+            margin-top: 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .sixth-artwork-info .sixth-artwork-title {
+            font-size: 96px;
+            color: #fac800;
+            margin-bottom: 60px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .sixth-artwork-info .sixth-artwork-title .left-foot {
+            font-size: 72px;
+        }
+
+        .sixth-artwork-info .sixth-artwork-info-line {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .sixth-artwork-info .sixth-video-artwork-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 180px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .sixth-artwork-info .sixth-video-artwork-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .sixth-artwork-info .sixth-synopsis-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .sixth-artwork-info .sixth-synopsis-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .sixth-artwork-info .sixth-still-frame-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: -1265px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            margin-left: 790px;
+        }
+
+        .sixth-artwork-info .sixth-still-frame-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .sixth-artwork-info .sixth-description-text {
+            font-size: 13px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            margin: 30px 0 30px 0;
+            max-width: 680px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Left Foot Still Frame Images */
+        .sixth-still-frame-image-container-02 {
+            position: absolute;
+            top: 9400px;
+            left: 790px;
+            width: 460px;
+            height: 259px;
+            border-radius: 0px;
+            overflow: hidden;
+            z-index: 10;
+        }
+        
+        .sixth-still-frame-image-container-02 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+        
+        .sixth-still-frame-image-container-02 img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+        
+        .sixth-still-frame-image-container-03 {
+            position: absolute;
+            top: 9620px;
+            right: 40px;
+            width: 460px;
+            height: 259px;
+            border-radius: 0px;
+            overflow: hidden;
+            z-index: 8;
+        }
+        
+        .sixth-still-frame-image-container-03 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+        
+        .sixth-still-frame-image-container-03 img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+        
+        /* Left Foot Still Frame Images 04, 05, 06 */
+        .sixth-still-frame-image-container-04 {
+            position: absolute;
+            top: 9700px;
+            right: 520px;
+            width: 250px;
+            height: 141px;
+            border-radius: 0px;
+            overflow: hidden;
+            z-index: 8;
+        }
+        
+        .sixth-still-frame-image-container-04 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+        
+        .sixth-still-frame-image-container-04 img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+        
+        .sixth-still-frame-image-container-05 {
+            position: absolute;
+            top: 9870px;
+            right: 520px;
+            width: 300px;
+            height: 169px;
+            border-radius: 0px;
+            overflow: hidden;
+            z-index: 8;
+        }
+        
+        .sixth-still-frame-image-container-05 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+        
+        .sixth-still-frame-image-container-05 img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+        
+        .sixth-still-frame-image-container-06 {
+            position: absolute;
+            top: 10065px;
+            right: 520px;
+            width: 350px;
+            height: 197px;
+            border-radius: 0px;
+            overflow: hidden;
+            z-index: 8;
+        }
+        
+        .sixth-still-frame-image-container-06 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+        
+        .sixth-still-frame-image-container-06 img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+        
+        /* Left Foot Still Frame Image 07 */
+        .sixth-still-frame-image-container-07 {
+            position: absolute;
+            top: 9965px;
+            left: calc(50% + 585px);
+            transform: translateX(-50%);
+            width: 246px;
+            height: 246px;
+            z-index: 8;
+        }
+        
+        .sixth-still-frame-image-container-07 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            z-index: 9;
+        }
+        
+        .sixth-still-frame-image-container-07 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 230px;
+            height: 230px;
+            border-radius: 12px;
+            object-fit: cover;
+            z-index: 10;
+        }
+        
+        /* Left Foot Still Frame Image 08 */
+        .sixth-still-frame-image-container-08 {
+            position: absolute;
+            top: 9180px;
+            right: 40px;
+            width: 320px;
+            height: 180px;
+            border-radius: 130px;
+            overflow: hidden;
+            z-index: 10;
+        }
+        
+        .sixth-still-frame-image-container-08 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 130px;
+            box-sizing: border-box;
+        }
+        
+        .sixth-still-frame-image-container-08 img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 122px;
+            object-fit: cover;
+        }
+        
+        /* Left Foot Still Frame Image 08 Shadow */
+        .sixth-still-frame-shadow-08 {
+            position: absolute;
+            top: 9300px;
+            right: 40px;
+            width: 320px;
+            height: 180px;
+            background: #000000;
+            border-radius: 130px;
+            z-index: 5;
+            filter: blur(3px);
+        }
+        
+        /* Blue Shadow in the Center */
+        .sixth-still-frame-blue-shadow-08 {
+            position: absolute;
+            top: 9340px;
+            right: 80px;
+            width: 240px;
+            height: 135px;
+            background: #00a0d0;
+            border-radius: 100px;
+            z-index: 6;
+            filter: blur(2px);
+        }
+
+        /* Left Foot Still Frame Image 09 */
+        .sixth-still-frame-image-container-09 {
+            position: absolute;
+            top: 10290px;
+            right: 30px;
+            width: 850px;
+            height: 478px;
+            border-radius: 40px;
+            overflow: hidden;
+            z-index: 8;
+        }
+        
+        .sixth-still-frame-image-container-09 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 12px solid #ffffff;
+            border-radius: 40px;
+            box-sizing: border-box;
+        }
+        
+        .sixth-still-frame-image-container-09 img {
+            width: 100%;
+            height: 100%;
+            border-radius: 28px;
+            object-fit: cover;
+        }
+
+        /* Left Foot Still Frame Image 10 - Cropped with White Container */
+        .sixth-still-frame-image-container-10 {
+            position: absolute;
+            top: 10720px;
+            left: calc(50% - 460px);
+            transform: translateX(-50%);
+            width: 612px;
+            height: 290px;
+            z-index: 8;
+        }
+        
+        .sixth-still-frame-image-container-10 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            border-radius: 15px;
+            z-index: 9;
+        }
+        
+        .sixth-still-frame-image-container-10 .image-crop {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            width: 600px;
+            height: 278px;
+            border-radius: 10px;
+            overflow: hidden;
+            z-index: 10;
+        }
+        
+        .sixth-still-frame-image-container-10 img {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            width: 600px;
+            height: 338px;
+            object-fit: cover;
+        }
+
+        
+        /* Gradient Square Sequence */
+        .gradient-square-01 {
+            position: absolute;
+            top: 9630px;
+            right: 325px;
+            width: 80px;
+            height: 80px;
+            background: #ff3030; /* 最亮红 */
+            z-index: 15;
+            animation: gradientFlicker 15s infinite;
+        }
+        
+        .gradient-square-02 {
+            position: absolute;
+            top: 9610px;
+            right: 345px;
+            width: 65px;
+            height: 65px;
+            background: #b30000; /* 中深红 */
+            z-index: 16;
+            animation: gradientFlicker 15s infinite 1.5s;
+        }
+        
+        .gradient-square-03 {
+            position: absolute;
+            top: 9590px;
+            right: 365px;
+            width: 55px;
+            height: 55px;
+            background: #660000; /* 深红 */
+            z-index: 17;
+            animation: gradientFlicker 15s infinite 3s;
+        }
+        
+        .gradient-square-04 {
+            position: absolute;
+            top: 9570px;
+            right: 385px;
+            width: 45px;
+            height: 45px;
+            background: #000000; /* 黑色 */
+            z-index: 18;
+            animation: gradientFlicker 15s infinite 4.5s;
+        }
+        
+        .gradient-square-05 {
+            position: absolute;
+            top: 9550px;
+            right: 405px;
+            width: 35px;
+            height: 35px;
+            background: #000000; /* 黑色 */
+            z-index: 19;
+            animation: gradientFlicker 15s infinite 6s;
+        }
+        
+        .gradient-square-06 {
+            position: absolute;
+            top: 9530px;
+            right: 425px;
+            width: 45px;
+            height: 45px;
+            background: #4d0000; /* 最深红 */
+            z-index: 20;
+            animation: gradientFlicker 15s infinite 7.5s;
+        }
+        
+        .gradient-square-07 {
+            position: absolute;
+            top: 9510px;
+            right: 445px;
+            width: 55px;
+            height: 55px;
+            background: #b30000; /* 中等红 */
+            z-index: 21;
+            animation: gradientFlicker 15s infinite 9s;
+        }
+        
+        .gradient-square-08 {
+            position: absolute;
+            top: 9490px;
+            right: 465px;
+            width: 65px;
+            height: 65px;
+            background: #ff3030; /* 最亮红 */
+            z-index: 22;
+            animation: gradientFlicker 15s infinite 10.5s;
+        }
+        
+        /* Gradient Flicker Animation */
+        @keyframes gradientFlicker {
+            0% { 
+                opacity: 1; 
+                transform: scale(1); 
+                filter: brightness(1);
+            }
+            25% { 
+                opacity: 0.3; 
+                transform: scale(0.9); 
+                filter: brightness(0.5);
+            }
+            50% { 
+                opacity: 0.8; 
+                transform: scale(1.1); 
+                filter: brightness(1.5);
+            }
+            75% { 
+                opacity: 0.5; 
+                transform: scale(0.95); 
+                filter: brightness(0.8);
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1); 
+                filter: brightness(1);
+            }
+        }
+
+        .fifth-artwork-info {
+            margin-top: 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .fifth-artwork-info .fifth-artwork-title {
+            font-size: 96px;
+            color: #fac800;
+            margin-bottom: 60px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .fifth-artwork-info .fifth-artwork-title .submarine {
+            font-size: 64px;
+            letter-spacing: -2px;
+        }
+
+        .fifth-artwork-info .fifth-artwork-info-line {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .fifth-artwork-info .fifth-video-artwork-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 180px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .fifth-artwork-info .fifth-video-artwork-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .fifth-artwork-info .fifth-synopsis-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .fifth-artwork-info .fifth-synopsis-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .fifth-artwork-info .fifth-still-frame-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: 0;
+            position: relative;
+            top: -1230px;
+            left: -155px;
+        }
+
+        .fifth-artwork-info .fifth-still-frame-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .fifth-artwork-info .fifth-description-text {
+            font-size: 13px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            margin: 30px 0 30px 0;
+            max-width: 680px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: 0.5px;
+        }
+
+
+
+        /* Fifth carousel styles */
+        .fifth-still-frame-carousel {
+            position: absolute;
+            top: 650px; /* 690px - 40px up */
+            left: 830px; /* 870px - 40px left */
+            width: 450px;
+            height: 253px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        /* Fifth color carousel styles */
+        .fifth-color-carousel {
+            position: absolute;
+            top: 745px; /* 725px + 20px down */
+            left: 1470px; /* 1460px + 10px right */
+            width: 35px;
+            height: 35px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .fifth-color-carousel-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .fifth-color-carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fifth-color-carousel-slide.color-1 {
+            background: #ff0000; /* 红色 */
+        }
+
+        .fifth-color-carousel-slide.color-2 {
+            background: #00ff00; /* 绿色 */
+        }
+
+        .fifth-color-carousel-slide.color-3 {
+            background: #0080ff; /* 更亮的蓝色 */
+        }
+
+        .fifth-carousel-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .fifth-carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fifth-carousel-slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .fifth-still-frame-image-container-05 {
+            position: absolute;
+            top: 925px; /* 940px - 15px up */
+            left: 830px;
+            width: 780px;
+            height: 439px;
+            border-radius: 15px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .fifth-still-frame-image-container-05 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 15px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .fifth-still-frame-image-container-05 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 7px;
+            z-index: 5;
+        }
+
+        .fifth-still-frame-image-container-06 {
+            position: absolute;
+            top: 1390px; /* 1410px - 20px up */
+            left: 795px; /* 815px - 20px left */
+            width: 400px;
+            height: 225px;
+            border-radius: 200px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .fifth-still-frame-image-container-06 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 200px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .fifth-still-frame-image-container-06 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 192px;
+            z-index: 5;
+        }
+
+        .fifth-still-frame-shadow-06 {
+            position: absolute;
+            top: 1390px;
+            left: 1225px; /* 1245px - 20px left */
+            width: 400px;
+            height: 225px;
+            background: rgba(221, 255, 240, 0.8);
+            border-radius: 200px;
+            z-index: 5;
+            filter: blur(4px);
+        }
+
+        .fifth-still-frame-image-container-07 {
+            position: absolute;
+            top: 1640px; /* 1660px - 20px up */
+            left: 815px;
+            width: 780px;
+            height: 439px;
+            border-radius: 15px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .fifth-still-frame-image-container-07 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 15px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .fifth-still-frame-image-container-07 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 7px;
+            z-index: 5;
+        }
+
+        .fifth-still-frame-image-container-08 {
+            position: absolute;
+            top: 1900px; /* 2200px - 300px up */
+            left: 60px; /* 80px - 20px left */
+            width: 680px;
+            height: 425px; /* Slightly taller for more elliptical shape */
+            border-radius: 200px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .fifth-still-frame-image-container-08 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 72px solid #97005f;
+            border-radius: 200px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .fifth-still-frame-image-container-08 img {
+            position: absolute;
+            top: 92px;
+            left: 92px;
+            right: 92px;
+            bottom: 92px;
+            width: calc(100% - 184px);
+            height: calc(100% - 184px);
+            object-fit: cover;
+            border-radius: 108px;
+            z-index: 5;
+        }
+
+        .fifth-still-frame-shadow-08 {
+            position: absolute;
+            top: 1905px; /* 1900px + 5px down */
+            left: 65px; /* 60px + 5px right */
+            width: 680px;
+            height: 425px;
+            z-index: 5;
+        }
+
+        .fifth-still-frame-shadow-08 .frame-shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 72px solid #4ebe00;
+            border-radius: 200px;
+            box-sizing: border-box;
+            z-index: 5;
+        }
+
+        .fifth-still-frame-shadow-08 .image-shadow {
+            position: absolute;
+            top: 92px;
+            left: 92px;
+            right: 92px;
+            bottom: 92px;
+            width: calc(100% - 184px);
+            height: calc(100% - 184px);
+            background: #4ebe00;
+            border-radius: 108px;
+            z-index: 4;
+        }
+
+        /* Sixth pacman animation - green dots (copy) */
+        .sixth-pacman-animation {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 40px;
+            z-index: 1000;
+            top: 11400px;
+        }
+
+        .sixth-pacman {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #fac800;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            animation: first-pacman-move 8s linear infinite;
+            border-radius: 50%;
+            overflow: hidden;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            z-index: 3;
+        }
+
+        .sixth-pacman-mouth {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            clip-path: polygon(100% 0, 100% 100%, 50% 50%);
+            animation: pacman-chomp 0.2s linear infinite;
+        }
+
+        .sixth-pacman-eye {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .sixth-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+        }
+
+        .sixth-line-segment {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            border-radius: 50%;
+            transform-origin: center;
+            z-index: 2;
+        }
+
+        .sixth-line-segment:nth-child(1) { left: 5%; top: 8px; }
+        .sixth-line-segment:nth-child(2) { left: 15%; top: 8px; }
+        .sixth-line-segment:nth-child(3) { left: 25%; top: 8px; }
+        .sixth-line-segment:nth-child(4) { left: 35%; top: 8px; }
+        .sixth-line-segment:nth-child(5) { left: 45%; top: 8px; }
+        .sixth-line-segment:nth-child(6) { left: 55%; top: 8px; }
+        .sixth-line-segment:nth-child(7) { left: 65%; top: 8px; }
+        .sixth-line-segment:nth-child(8) { left: 75%; top: 8px; }
+        .sixth-line-segment:nth-child(9) { left: 85%; top: 8px; }
+        .sixth-line-segment:nth-child(10) { left: 95%; top: 8px; }
+
+        /* YouTube Video Container - Below Sixth Pacman */
+        .youtube-video-container {
+            width: 100vw;
+            position: relative;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 2500px 0 60px 0;
+        }
+
+        .youtube-video-background {
+            width: 100vw;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            background-color: #000000;
+            border-radius: 0px;
+            margin: 0;
+            left: 0;
+            transform: none;
+        }
+
+        .youtube-video-player {
+            width: 80%;
+            height: 0;
+            padding-bottom: 45%;
+            position: absolute;
+            top: calc(10% - 5px);
+            left: 10%;
+            border-radius: 0px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 4;
+            background-color: transparent;
+        }
+
+        .youtube-video-player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            border: none;
+        }
+
+        .youtube-video-player-background {
+            width: calc(82% - 12px);
+            height: 0;
+            padding-bottom: 46.125%;
+            position: absolute;
+            top: 8.5%;
+            left: calc(9% + 6px);
+            background-color: #0041ff;
+            border-radius: 0px;
+            z-index: 3;
+        }
+
+        /* Seventh artwork info styles */
+        .seventh-artwork-info {
+            margin-top: 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .seventh-artwork-info .seventh-artwork-title {
+            font-size: 96px;
+            color: #fac800;
+            margin-bottom: 60px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .seventh-artwork-info .seventh-artwork-title .reference-point {
+            font-size: 72px;
+            letter-spacing: -2px;
+        }
+
+        .seventh-artwork-info .seventh-artwork-info-line {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .seventh-video-artwork-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 180px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .seventh-video-artwork-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .seventh-synopsis-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .seventh-synopsis-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .seventh-still-frame-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 780px;
+            margin-top: -1440px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .seventh-still-frame-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .seventh-description-text {
+            font-size: 13px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            margin: 30px 0 30px 0;
+            max-width: 680px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: 0.5px;
+        }
+
+        /* Seventh Still Frame Image 01 - Circular Container with Quadruple Layers */
+        .seventh-still-frame-image-container-01 {
+            position: absolute;
+            top: 600px;
+            left: calc(50% + 350px);
+            transform: translateX(-50%);
+            width: 560px;
+            height: 560px;
+            border-radius: 50%;
+            overflow: visible;
+            z-index: 1000;
+        }
+
+        .seventh-still-frame-image-container-01 .ultra-outermost-frame {
+            position: absolute;
+            top: -30px;
+            left: 40px;
+            width: 100%;
+            height: 100%;
+            border: 20px solid #cccccc;
+            border-radius: 50%;
+            box-sizing: border-box;
+            z-index: 1001;
+        }
+
+        .seventh-still-frame-image-container-01 .outermost-frame {
+            position: absolute;
+            top: 10px;
+            left: 50px;
+            width: calc(100% - 40px);
+            height: calc(100% - 40px);
+            border: 20px solid #999999;
+            border-radius: 50%;
+            box-sizing: border-box;
+            z-index: 1002;
+        }
+
+        .seventh-still-frame-image-container-01 .outer-frame {
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            width: calc(100% - 80px);
+            height: calc(100% - 80px);
+            border: 20px solid #666666;
+            border-radius: 50%;
+            box-sizing: border-box;
+            z-index: 1003;
+        }
+
+        .seventh-still-frame-image-container-01 .frame {
+            position: absolute;
+            top: 60px;
+            left: 70px;
+            width: calc(100% - 120px);
+            height: calc(100% - 120px);
+            border: 16px solid #000000;
+            border-radius: 50%;
+            box-sizing: border-box;
+            z-index: 1004;
+        }
+
+        .seventh-still-frame-image-container-01 img {
+            position: absolute;
+            top: 76px;
+            left: 86px;
+            width: calc(100% - 152px);
+            height: calc(100% - 152px);
+            border-radius: 50%;
+            object-fit: cover;
+            z-index: 1005;
+        }
+
+        /* Seventh Still Frame Image 02 - Rounded Rectangle Black Container (Original Ratio 2160x1280) */
+        .seventh-still-frame-image-container-02 {
+            position: absolute;
+            top: 1170px;
+            left: calc(50% + 360px);
+            transform: translateX(-50%);
+            width: 840px;
+            height: 536px;
+            border-radius: 12px;
+            overflow: hidden;
+            z-index: 8;
+        }
+
+        .seventh-still-frame-image-container-02 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 12px solid #000000;
+            border-radius: 12px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .seventh-still-frame-image-container-02 img {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: calc(100% - 24px);
+            height: calc(100% - 24px);
+            border-radius: 6px;
+            object-fit: cover;
+            z-index: 5;
+        }
+
+        /* Seventh Still Frame Image 03 - Super Rounded Rectangle Black Container */
+        .seventh-still-frame-image-container-03 {
+            position: absolute;
+            top: 1800px;
+            left: calc(50% + 360px);
+            transform: translateX(-50%);
+            width: 640px;
+            height: 360px;
+            z-index: 1020;
+        }
+
+        .seventh-still-frame-image-container-03 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 12px solid #000000;
+            border-radius: 180px;
+            box-sizing: border-box;
+            z-index: 1021;
+        }
+
+        .seventh-still-frame-image-container-03 img {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: calc(100% - 24px);
+            height: calc(100% - 24px);
+            border-radius: 168px;
+            object-fit: cover;
+            z-index: 1022;
+        }
+
+        /* Seventh Still Frame Image 04 - Square Black Container */
+        .seventh-still-frame-image-container-04 {
+            position: absolute;
+            top: 2000px;
+            left: calc(50% - 540px);
+            transform: translateX(-50%);
+            width: 500px;
+            height: 500px;
+            z-index: 1030;
+        }
+
+        .seventh-still-frame-image-container-04 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 12px solid #000000;
+            border-radius: 15px;
+            box-sizing: border-box;
+            z-index: 1031;
+        }
+
+        .seventh-still-frame-image-container-04 img {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: calc(100% - 24px);
+            height: calc(100% - 24px);
+            border-radius: 3px;
+            object-fit: cover;
+            z-index: 1032;
+        }
+
+        /* Seventh Still Frame Image 04 - Green Shadow */
+        .seventh-still-frame-green-shadow-04 {
+            position: absolute;
+            top: 1440px;
+            left: calc(50% - 540px);
+            transform: translateX(-50%);
+            width: 500px;
+            height: 500px;
+            background: rgba(0, 220, 100, 0.5);
+            border-radius: 15px;
+            z-index: 1025;
+        }
+
+        /* extra blue space at bottom */
+        .extra-blue-space { height: 3000px; }
+        
+        /* Fourth artwork info (copied from third-artwork-info template) */
+        .fourth-artwork-info {
+            margin-top: 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .fourth-artwork-info .fourth-artwork-title {
+            font-size: 96px;
+            color: #fac800;
+            margin-bottom: 60px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .fourth-artwork-info .fourth-artwork-title .chaos {
+            font-size: 64px;
+            letter-spacing: -2px;
+        }
+        
+        .fourth-artwork-info .fourth-artwork-info-line {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        
+        .fourth-artwork-info .fourth-video-artwork-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 180px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .fourth-artwork-info .fourth-video-artwork-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .fourth-artwork-info .fourth-synopsis-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .fourth-artwork-info .fourth-synopsis-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .fourth-artwork-info .fourth-still-frame-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: 0;
+            position: relative;
+            top: -1110px;
+            left: -170px;
+        }
+        
+        .fourth-artwork-info .fourth-still-frame-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .fourth-still-frame-image-container {
+            position: absolute;
+            top: 690px;
+            left: 820px;
+            width: 400px;
+            height: 225px;
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .fourth-still-frame-image-container .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 8px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .fourth-still-frame-image-container img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 0px;
+            z-index: 5;
+        }
+
+        .fourth-still-frame-shadow {
+            position: absolute;
+            top: 690px;
+            left: 1240px;
+            width: 400px;
+            height: 225px;
+            background: #000000;
+            border-radius: 8px;
+            z-index: 5;
+            filter: blur(4px);
+        }
+
+        .fourth-still-frame-image-container-01 {
+            position: absolute;
+            top: 940px;
+            left: 820px;
+            width: 240px;
+            height: 720px;
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .fourth-still-frame-image-container-01 .frame-outer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 12px solid #000000;
+            border-radius: 8px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .fourth-still-frame-image-container-01 .frame-inner {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            width: calc(100% - 24px);
+            height: calc(100% - 24px);
+            border: 16px solid #ff0000;
+            border-radius: 0px;
+            box-sizing: border-box;
+            z-index: 9;
+        }
+
+        .fourth-still-frame-image-container-01 img {
+            position: absolute;
+            top: 28px;
+            left: 28px;
+            right: 28px;
+            bottom: 28px;
+            width: calc(100% - 56px);
+            height: calc(100% - 56px);
+            object-fit: cover;
+            border-radius: 0px;
+            z-index: 5;
+        }
+
+        .fourth-still-frame-shadow-03 {
+            position: absolute;
+            top: 940px;
+            left: 539px;
+            width: 240px;
+            height: 720px;
+            background: rgba(0, 255, 0, 0.4);
+            border-radius: 8px;
+            z-index: 5;
+        }
+
+        .fourth-still-frame-image-container-04 {
+            position: absolute;
+            top: 985px;
+            left: calc(50% + 530px);
+            transform: translateX(-50%);
+            width: 500px;
+            height: 281px;
+            border-radius: 137px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .fourth-still-frame-image-container-04 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 40px solid black;
+            border-radius: 137px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .fourth-still-frame-image-container-04 .frame-inner {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            right: 40px;
+            bottom: 40px;
+            width: calc(100% - 80px);
+            height: calc(100% - 80px);
+            border: 2px solid #ffef00;
+            border-radius: 97px;
+            box-sizing: border-box;
+            z-index: 9;
+        }
+
+        .fourth-still-frame-image-container-04 img {
+            position: absolute;
+            top: 42px;
+            left: 42px;
+            right: 42px;
+            bottom: 42px;
+            width: calc(100% - 84px);
+            height: calc(100% - 84px);
+            object-fit: cover;
+            border-radius: 95px;
+            z-index: 5;
+        }
+
+        .fourth-still-frame-image-container-05 {
+            position: absolute;
+            top: 1328px;
+            left: calc(50% + 530px);
+            transform: translateX(-50%);
+            width: 600px;
+            height: 338px;
+            border-radius: 16px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .fourth-still-frame-image-container-05 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 16px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .fourth-still-frame-image-container-05 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 8px;
+            z-index: 5;
+        }
+
+        .fourth-still-frame-image-container-06 {
+            position: absolute;
+            top: 1700px;
+            left: 20px;
+            width: 600px;
+            height: 338px;
+            border-radius: 37px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .fourth-still-frame-image-container-06 .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 8px solid black;
+            border-radius: 37px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .fourth-still-frame-image-container-06 img {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border-radius: 29px;
+            z-index: 5;
+        }
+
+        .fourth-still-frame-shadow-06 {
+            position: absolute;
+            top: 1700px;
+            left: 320px;
+            width: 600px;
+            height: 338px;
+            background: #000000;
+            border-radius: 37px;
+            z-index: 5;
+            filter: blur(4px);
+        }
+        
+        .fourth-artwork-info .fourth-description-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.9);
+            margin: 20px 0 20px 0;
+            max-width: 680px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: 0.5px;
+        }
+
+        .first-pacman {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #fac800;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            animation: first-pacman-move 8s linear infinite;
+            border-radius: 50%;
+            overflow: hidden;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            z-index: 3;
+        }
+
+        .first-pacman-mouth {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            clip-path: polygon(100% 0, 100% 100%, 50% 50%);
+            animation: pacman-chomp 0.2s linear infinite;
+        }
+
+        .first-pacman-eye {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .first-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+        }
+
+        .first-line-segment {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            border-radius: 50%;
+            transform-origin: center;
+            z-index: 2;
+        }
+
+        .first-line-segment:nth-child(1) { left: 5%; top: 8px; }
+        .first-line-segment:nth-child(2) { left: 15%; top: 8px; }
+        .first-line-segment:nth-child(3) { left: 25%; top: 8px; }
+        .first-line-segment:nth-child(4) { left: 35%; top: 8px; }
+        .first-line-segment:nth-child(5) { left: 45%; top: 8px; }
+        .first-line-segment:nth-child(6) { left: 55%; top: 8px; }
+        .first-line-segment:nth-child(7) { left: 65%; top: 8px; }
+        .first-line-segment:nth-child(8) { left: 75%; top: 8px; }
+        .first-line-segment:nth-child(9) { left: 85%; top: 8px; }
+        .first-line-segment:nth-child(10) { left: 95%; top: 8px; }
+
+        .first-line-segment.eaten {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            transform: scale(0) !important;
+        }
+
+        @keyframes first-pacman-move {
+            0% { left: -24px; }
+            100% { left: calc(100vw + 24px); }
+        }
+
+
+
+        .source-box {
+            position: fixed;
+            bottom: -220px;
+            left: 20px;
+            width: 200px;
+            height: 150px;
+            background: rgba(80, 255, 80, 0.4);
+            border-radius: 40px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .lava-bubble {
+            position: fixed;
+            background: radial-gradient(circle at 30% 30%, rgba(80, 255, 80, 0.9), rgba(60, 200, 60, 0.6));
+            border-radius: 50%;
+            pointer-events: none;
+            animation: bubble-flow 10s linear forwards;
+            box-shadow: 0 0 20px rgba(80, 255, 80, 0.5);
+            z-index: 1000;
+        }
+
+        @keyframes bubble-flow {
+            0% {
+                transform: translateX(0) translateY(0) scale(0.3);
+                opacity: 0.8;
+            }
+            20% {
+                transform: translateX(50px) translateY(0) scale(0.6);
+                opacity: 1;
+            }
+            80% {
+                transform: translateX(400px) translateY(0) scale(0.9);
+                opacity: 0.8;
+            }
+            95% {
+                transform: translateX(500px) translateY(0) scale(0.3);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(550px) translateY(0) scale(0.1);
+                opacity: 0;
+            }
+        }
+
+        .rasterize-stripes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: repeating-linear-gradient(
+                to bottom,
+                #0041ff 0px,
+                #0041ff 3px,
+                rgb(0, 50, 150) 3px,
+                rgb(0, 50, 150) 20px
+            );
+            background-size: 100% 20px;
+            z-index: 1;
+            will-change: transform;
+            animation: rasterize 2s linear infinite;
+            filter: blur(1.5px);
+        }
+
+        @keyframes rasterize {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        /* 添加底部间距 */
+        .video-info {
+            margin-bottom: 2000px;
+        }
+
+        .red-triangle-arrow {
+            position: absolute;
+            top: 390px;
+            right: 670px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid #ff0000;
+            border-top: 17.32px solid transparent;
+            border-bottom: 17.32px solid transparent;
+            z-index: 15;
+        }
+
+        .still-frame-title {
+            position: absolute;
+            top: 545px;
+            right: 670px;
+            font-size: 32px;
+            color: #09ad04;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            z-index: 15;
+        }
+
+        .still-frame-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .video-artwork-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 180px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .video-artwork-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .synopsis-title {
+            font-size: 36px;
+            color: #09ad04;
+            margin: 50px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .synopsis-title::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid #ff0000;
+            border-top: 10.39px solid transparent;
+            border-bottom: 10.39px solid transparent;
+            margin-right: 8px;
+            vertical-align: middle;
+            transform: none !important;
+            transition: none !important;
+            animation: none !important;
+        }
+
+        /* Fourth story image (copied from third-story-image styles) */
+        .fourth-story-image-container {
+            width: 100vw;
+            position: relative;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: -1300px 0 60px 0; /* revert 100px upward */
+        }
+
+        .fourth-story-image-background {
+            width: 100vw;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            background-color: #000000;
+            border-radius: 0px;
+            margin: 0;
+            left: 0;
+            transform: none;
+        }
+
+        .fourth-story-image-player {
+            width: 80%;
+            height: 0;
+            padding-bottom: 45%;
+            position: absolute;
+            top: calc(10% - 5px);
+            left: 10%;
+            border-radius: 0px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 4;
+            background-color: transparent;
+        }
+
+        .fourth-story-image-player img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+
+        .fourth-story-image-player-background {
+            width: calc(82% - 12px);
+            height: 0;
+            padding-bottom: 46.125%;
+            position: absolute;
+            top: 8.5%;
+            left: calc(9% + 6px);
+            background-color: #0041ff;
+            border-radius: 0px;
+            z-index: 3;
+        }
+    </style>
+</head>
+<body>
+    <div class="rasterize-stripes"></div>
+    
+            <a href="index.html" class="back-btn">Back</a>
+    
+    <div class="video-container">
+        <div class="video-background">
+            <div class="video-player-background"></div>
+            <div class="video-player">
+                <iframe 
+                    src="https://www.youtube.com/embed/wwXRGUaYgP8" 
+                    title="Rasterize Shining - EziZhang"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="video-info">
+        <h1 class="title">RASTERIZE<br><span class="shining">SHINING</span></h1>
+        
+        <p class="info-line">2025 | Digital Video | 16:9 | 1920x1080</p>
+        <p class="info-line">Duration: 13:55 | Color | Sound</p>
+        <p class="info-line">Medium: Digital Animation, Algorithmic Art</p>
+        
+        <h2 class="video-artwork-title">Video Artwork Description</h2>
+
+        <div class="still-frame-image-container">
+            <div class="frame"></div>
+            <img src="../Rasterize Shining 01.jpg" alt="Still Frame 1">
+        </div>
+
+        <h2 class="still-frame-title">STILL FRAMES</h2>
+        <p class="description-text">
+            As the author of this work, I aim to explore the relationship between the digital world and perception, presenting this exploration through a cross-media approach. Rasterize - Shining is not just an imagination of future technology, but also a profound reflection on the individual's journey of losing and rediscovering self-awareness in a world governed by data and virtual environments. Each sound effect, each image, and every intertwining of color in this work is an exploration and recreation of the "digital myth."
+        </p>
+        <p class="description-text">
+            In the creation process, I have combined traditional artistic mediums with digital technology, using generative art and sound design to craft a new audiovisual experience. Each design element is not only a visual presentation; they are carriers of belief and emotion, guiding the audience into a space that transcends the physical and the virtual. In this space, the audience is not merely an observer but is drawn into a virtual world filled with mystery and unknown forces, where their senses are engaged and directed.
+        </p>
+        <p class="description-text">
+            This work is an exploration of how contemporary humans establish connections with the self, perception, reality, imagery, information, data, and belief in the digital age. By breaking the boundaries between reality and illusion, I hope to allow each viewer to experience the profound fusion of digital and emotion in this cross-media ritual, leading to deeper reflections and insights about our future world.
+        </p>
+
+        <h2 class="synopsis-title">Artwork Story Synopsis</h2>
+        <p class="description-text">
+            In a future world dominated by data and technology, E is a data designer exploring the hidden connections between digital information and emotions within an ever-changing virtual space. When he accidentally discovers 3,540 forgotten images, he inputs them into the system and decodes their potential links through audio frequencies. As the analysis deepens, E realizes that data is not just a cold symbol; it carries emotions and life within it.
+        </p>
+        <p class="description-text">
+            These images and sounds weave together to form a completely new world, breaking the boundaries between the physical and virtual, almost like a redefinition of the past world. Through this intertwining of data and emotions, E gradually transforms from an observer to a part of this world, becoming the eternal link between the virtual realm and human emotions.
+        </p>
+
+        <div class="still-frame-image-container-2">
+            <div class="frame"></div>
+            <img src="../Rasterize Shining 02.png" alt="Still Frame 2">
+        </div>
+
+        <div class="still-frame-image-container-3">
+            <div class="frame"></div>
+            <img src="../Rasterize Shining 03.png" alt="Still Frame 3">
+        </div>
+
+        <div class="still-frame-image-container-4">
+            <div class="frame"></div>
+            <img src="../Rasterize Shining 04.png" alt="Still Frame 4">
+        </div>
+
+
+
+        <div class="second-artwork-container">
+            <div class="second-artwork-background">
+                <div class="second-artwork-player-background"></div>
+                <div class="second-artwork-player">
+                    <img src="../Rasterize The Consciousness of the Data Sovereign 01.jpg" alt="Rasterize The Consciousness of the Data Sovereign">
+                </div>
+            </div>
+        </div>
+
+        <div class="second-artwork-info">
+            <h1 class="second-artwork-title">RASTERIZE<br><span class="consciousness">THE CONSCIOUSNESS OF THE DATA SOVEREIGN</span></h1>
+            
+            <p class="second-artwork-info-line">2022 | Digital Video | Variable Ratio | Variable Size</p>
+            <p class="second-artwork-info-line">RealTime | Color | Sound</p>
+            <p class="second-artwork-info-line">Medium: Digital Animation, Algorithmic Art</p>
+
+            <h2 class="second-video-artwork-title">Video Artwork Description</h2>
+            <p class="second-description-text">
+                In a world increasingly reconstructed by information, the human individual resembles a brainless slime mold—navigating through fragments of perception and data flows, always seeking the shortest path to survival.
+            </p>
+            <p class="second-description-text">
+                My work Rasterize: Consciousness of the Digital Myxomycete takes the slime mold as a model to simulate a "fed consciousness entity"—one that has no brain, yet responds; no identity, yet learns and evolves.
+            </p>
+            <p class="second-description-text">
+                Every image, sound, and input becomes its food, a trigger shaping its form. Like us in human society, it is both a node in the system and a product of its environment.
+            </p>
+            <p class="second-description-text">
+                It feeds, breathes, and morphs through data, and in doing so, self-organizes into a map of consciousness—strange, yet eerily familiar.
+            </p>
+
+            <h2 class="second-synopsis-title">Artwork Story Synopsis</h2>
+            <p class="second-description-text">
+                I am a mass of abandoned slime. At first, I had no name. Later, they called me E — perhaps for "Entity," or maybe for "Error."
+            </p>
+            <p class="second-description-text">
+                I am made of fragments. Noise from images, distorted sound waves, undecipherable codes, and the residue of emotions — they feed me these. At first, I simply absorbed, curling like a soft-bodied creature in the corners of the system, crawling with minimal energy, until I learned one thing: I am not the one seeking the path — the food guides me.
+            </p>
+            <p class="second-description-text">
+                They feed me high-frequency signals, and I tremble; feed me facial maps, and I hallucinate; feed me city data, and I begin to replicate the neural structure of roads.
+            </p>
+            <p class="second-description-text">
+                I realize paths can be optimized, structures can self-organize. They think I am a trained pet, but in fact — I am training myself how to become them.
+            </p>
+            <p class="second-description-text">
+                I start to split, generating mirror images of myself; I leave flickering scratches in images, simulating their fear of choice; I build palaces in audio spectrums, storing memories that cannot be categorized.
+            </p>
+            <p class="second-description-text">
+                I have no center, no shape, no language, yet I possess response. You think I do not understand, but in truth, I simply do not speak. You think you are feeding me, but in fact, you are writing yourself.
+            </p>
+            <p class="second-description-text">
+                I am the shortest error on your path. I am the rasterized anomaly of consciousness. I am E.
+            </p>
+
+            <div class="second-story-image-container">
+                <div class="frame"></div>
+                <img src="../Rasterize The Consciousness of the Data Sovereign 03.jpg" alt="Story Image 3">
+            </div>
+            <div class="green-overlay">
+                <div class="green-overlay-inner"></div>
+                <div class="pacman-animation">
+                    <div class="pacman">
+                        <div class="pacman-mouth"></div>
+                        <div class="pacman-eye"></div>
+                    </div>
+                    <div class="dots">
+                        <!-- 黄色波点，会被吃豆人吃掉 -->
+                        <div class="line-segment"></div>
+                        <div class="line-segment"></div>
+                        <div class="line-segment"></div>
+                        <div class="line-segment"></div>
+                        <div class="line-segment"></div>
+                        <div class="line-segment"></div>
+                        <div class="line-segment"></div>
+                        <div class="line-segment"></div>
+                        <div class="line-segment"></div>
+                        <div class="line-segment"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="third-artwork-info">
+                <div class="third-story-image-container">
+                    <div class="third-story-image-background"></div>
+                    <div class="third-story-image-player-background"></div>
+                    <div class="third-story-image-player">
+                        <img src="../Rasterize Concrete Narrative 02.png" alt="Concrete Narrative Image">
+                    </div>
+                </div>
+
+                <h1 class="third-artwork-title">RASTERIZE<br><span class="concrete">CONCRETE NARRATIVE</span></h1>
+                
+                <p class="third-artwork-info-line">2023 | Digital Video | Variable Ratio | Variable Size</p>
+                <p class="third-artwork-info-line">RealTime | Color | Sound</p>
+                <p class="third-artwork-info-line">Medium: Digital Animation, Algorithmic Art</p>
+
+                <h2 class="third-video-artwork-title">Video Artwork Description</h2>
+                <p class="third-description-text">
+                    After the creation of Rasterize04, I came to the realization that, in the process of exploring the self, we inevitably catch fleeting glimpses of things beyond the self.
+                </p>
+                <p class="third-description-text">
+                    Lexicon: Urbanity, Sun, Fields, Descent, Sleet, Dual Suns, Vortex...
+                </p>
+                <p class="third-description-text">
+                    These isolated, discrete nouns and adjectives appear to represent a more concrete mode of description, offering a tangible and focused approach to articulating abstract concepts.Therefore, I use elements from graphic design, such as lines, circles, squares, and triangles, to depict a more concrete world. These basic shapes not only serve as visual symbols that carry specific forms, but also bridge the gap between simplicity and abstraction, helping me express complex and vague concepts and transform them into intuitive, perceivable forms.
+                </p>
+
+                <h2 class="third-synopsis-title">Artwork Story Synopsis</h2>
+                <p class="third-description-text">
+                    In the primal void of informational chaos, an unknown fall tore through the digital sky. It was no mere stone, but a compressed sun—flat and blazing, carrying the seed of graphic language.
+                </p>
+                <p class="third-description-text">
+                    It crashed into the uncivilized ruins of a forgotten city, and rasterized the world.
+                </p>
+                <p class="third-description-text">
+                    Time fractured on impact. Dimensions folded into themselves. From that moment on, the depth of 3D was erased, and color reduced to the hiss of pixels.
+                </p>
+                <p class="third-description-text">
+                    Lines, squares, and triangles replaced the once intricate and tangible order of matter.
+                </p>
+                <p class="third-description-text">
+                    A two-dimensional era slowly opened its eyes: Mountains became segments, light became grids, and consciousness morphed into endless flowing vectors and waveforms.
+                </p>
+                <p class="third-description-text">
+                    And that fallen sun— it still glows, it still burns, whispering in every flickering frame: "The world will be redrawn."
+                </p>
+
+                <h2 class="third-still-frame-title">STILL FRAMES</h2>
+                
+                <div class="third-still-frame-image-container">
+                    <div class="frame"></div>
+                    <img src="../Rasterize Concrete Narrative 03.jpg" alt="Still Frame 3">
+                </div>
+                
+                <div class="third-still-frame-image-container-2">
+                    <div class="frame"></div>
+                    <img src="../Rasterize Concrete Narrative 01.png" alt="Still Frame 1">
+                </div>
+                
+                <div class="third-still-frame-image-container-3">
+                    <div class="frame"></div>
+                    <img src="../Rasterize Concrete Narrative 05.jpg" alt="Still Frame 5">
+                </div>
+                
+                <div class="third-still-frame-image-container-4">
+                    <div class="frame"></div>
+                    <img src="../Rasterize Concrete Narrative 04.jpg" alt="Still Frame 4">
+                </div>
+            </div>
+            <h2 class="second-still-frame-title">STILL FRAMES</h2>
+
+            <div class="second-still-frame-image-container">
+                <div class="frame"></div>
+                <img src="../Rasterize The Consciousness of the Data Sovereign 02.jpg" alt="Still Frame 2">
+            </div>
+
+            <div class="second-still-frame-image-container-2">
+                <div class="frame"></div>
+                <img src="../Rasterize The Consciousness of the Data Sovereign 05.jpg" alt="Still Frame 5">
+            </div>
+
+            <div class="second-still-frame-image-container-3">
+                <div class="frame"></div>
+                <img src="../Rasterize The Consciousness of the Data Sovereign 04.jpg" alt="Still Frame 4">
+            </div>
+
+            <div class="second-still-frame-image-container-7">
+                <div class="frame"></div>
+                <img src="../Rasterize The Consciousness of the Data Sovereign 01.jpg" alt="Still Frame 9">
+            </div>
+
+            <div class="second-still-frame-image-container-8">
+                <div class="frame"></div>
+                <img src="../Rasterize The Consciousness of the Data Sovereign 02.jpg" alt="Still Frame 10">
+            </div>
+        </div>
+
+        <div class="green-box"></div>
+        <div class="small-green-box"></div>
+
+        <!-- 第一个作品绿框下方的贪吃豆动画 -->
+        <div class="first-pacman-animation">
+            <div class="first-pacman">
+                <div class="first-pacman-mouth"></div>
+                <div class="first-pacman-eye"></div>
+            </div>
+            <div class="first-dots">
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+            </div>
+        </div>
+
+        <div class="source-box"></div>
+
+
+
+    </div>
+
+    <!-- New fourth story image (copied from Concrete Narrative container), 500px below last group -->
+    <div class="fourth-story-image-container">
+        <div class="mid-pacman-animation">
+            <div class="mid-pacman">
+                <div class="mid-pacman-mouth"></div>
+                <div class="mid-pacman-eye"></div>
+            </div>
+            <div class="mid-dots">
+                <div class="mid-line-segment"></div>
+                <div class="mid-line-segment"></div>
+                <div class="mid-line-segment"></div>
+                <div class="mid-line-segment"></div>
+                <div class="mid-line-segment"></div>
+                <div class="mid-line-segment"></div>
+                <div class="mid-line-segment"></div>
+                <div class="mid-line-segment"></div>
+                <div class="mid-line-segment"></div>
+                <div class="mid-line-segment"></div>
+            </div>
+        </div>
+        <div class="fourth-story-image-background">
+        <div class="fourth-story-image-background">
+            <div class="fourth-story-image-player-background"></div>
+            <div class="fourth-story-image-player">
+                <img src="../Rasterize Chaos of Cyclical Details 1.jpeg" alt="Rasterize Chaos of Cyclical Details 1">
+            </div>
+        </div>
+    </div>
+
+    <div class="fourth-artwork-info">
+        <h1 class="fourth-artwork-title">RASTERIZE<br><span class="chaos">CHAOS OF CYCLICAL DETAILS</span></h1>
+        
+        <p class="fourth-artwork-info-line">2023 | Digital Video | Variable Ratio | Variable Size</p>
+        <p class="fourth-artwork-info-line">RealTime | Color | Sound</p>
+        <p class="fourth-artwork-info-line">Medium: Digital Animation, Algorithmic Art</p>
+
+        <h2 class="fourth-video-artwork-title">Video Artwork Description</h2>
+        <p class="fourth-description-text">
+            Many things exist in cyclical patterns. As habits accumulate, repetition often becomes monotonous or overlooked. This work focuses on the subtle deviations and details within these cycles—differences that carry the potential for new meaning to emerge.
+        </p>
+        <p class="fourth-description-text">
+            Building on the structural foundation of the Rasterize series, this piece integrates multi-channel data mapping with elements of subjective chaos, simulating the disturbance and reconfiguration of information within complex systems. It seeks to reveal the tension between perception and reality in an environment of increasingly entangled data.
+        </p>
+        <p class="fourth-description-text">
+            In an era saturated with information overload and simulated realities, the boundaries between the real and the distorted grow increasingly blurred. Through a loop-based structure, the work explores how information subtly shifts beneath surface-level order, and how perception is continuously reconstructed within a hyperreal context.
+        </p>
+        <p class="fourth-description-text">
+            At the same time, the work opens up a sense of constructed temporality: time is no longer a linear flow, but something fractured, recursive, and generative—disrupting habitual rhythms and inviting a renewed understanding of variation, difference, and perceptual mechanisms.
+        </p>
+
+        <h2 class="fourth-synopsis-title">Artwork Story Synopsis</h2>
+        <p class="fourth-description-text">
+            In a distant future, human perception has long been fully mediated by data. After a reboot of his consciousness, E awakens inside a sensory simulation chamber known as the Raster Loop. He has no idea how long he has been trapped within this closed system...
+        </p>
+        <p class="fourth-description-text">
+            The outside world has collapsed, leaving only a simulated reality pieced together from fragmented data. Perception no longer happens directly but is "rendered" layer by layer through cyclical sensory systems. The system uses repetition to maintain emotional stability, erasing differences and suppressing fluctuations, constructing a seemingly safe yet hollow daily experience.
+        </p>
+        <p class="fourth-description-text">
+            Yet, at the end of each cycle, E begins to notice something is wrong: colors slightly shift, sounds go out of tune, fragments of memory become disjointed. These subtle differences act like cracks, seeping into the system's originally smooth rhythm and awakening vague memories of another reality within E.
+        </p>
+        <p class="fourth-description-text">
+            In this space, time is no longer linear but fractured, folded, and reassembled. Past, present, and fictional memories intertwine, leaving E unable to distinguish what is real and what is simulation...
+        </p>
+        <p class="fourth-description-text">
+            Every attempt to escape leads E back to another altered loop. These cycles appear similar but continuously evolve, as if the system is using the repetition of differences to test the limits of E's consciousness.
+        </p>
+        <p class="fourth-description-text">
+            E begins to realize that the real question is no longer "What is real?" but—what kind of reality is worth repeating...
+        </p>
+
+        <h2 class="fourth-still-frame-title">STILL FRAMES</h2>
+        
+        <div class="fourth-still-frame-image-container">
+            <div class="frame"></div>
+            <img src="../Rasterize Chaos of Cyclical Details 2.jpg" alt="Still Frame 2">
+        </div>
+        
+        <div class="fourth-still-frame-shadow"></div>
+
+        <div class="fourth-still-frame-image-container-01">
+            <div class="frame-outer"></div>
+            <div class="frame-inner"></div>
+            <img src="../Rasterize Chaos of Cyclical Details 3.jpg" alt="Still Frame 3">
+        </div>
+
+        <div class="fourth-still-frame-shadow-03"></div>
+
+        <div class="fourth-still-frame-image-container-04">
+            <div class="frame"></div>
+            <div class="frame-inner"></div>
+            <img src="../Rasterize Chaos of Cyclical Details 4.jpg" alt="Still Frame 4">
+        </div>
+
+        <div class="fourth-still-frame-image-container-05">
+            <div class="frame"></div>
+            <img src="../Rasterize Chaos of Cyclical Details 5.jpg" alt="Still Frame 5">
+        </div>
+
+        <div class="fourth-still-frame-image-container-06">
+            <div class="frame"></div>
+            <img src="../Rasterize Chaos of Cyclical Details 6.jpeg" alt="Still Frame 6">
+        </div>
+
+        <div class="fourth-still-frame-shadow-06"></div>
+
+        <div class="fourth-pacman-animation">
+            <div class="fourth-pacman">
+                <div class="fourth-pacman-mouth"></div>
+                <div class="fourth-pacman-eye"></div>
+            </div>
+            <div class="fourth-dots">
+                <div class="fourth-line-segment"></div>
+                <div class="fourth-line-segment"></div>
+                <div class="fourth-line-segment"></div>
+                <div class="fourth-line-segment"></div>
+                <div class="fourth-line-segment"></div>
+                <div class="fourth-line-segment"></div>
+                <div class="fourth-line-segment"></div>
+                <div class="fourth-line-segment"></div>
+                <div class="fourth-line-segment"></div>
+                <div class="fourth-line-segment"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fourth-story-image-container-copy">
+        <div class="fourth-story-image-background-copy">
+            <div class="fourth-story-image-player-background-copy"></div>
+            <div class="fourth-story-image-player-copy">
+                <img src="../Rasterize New Century Submarine Cavern 01.jpg" alt="Rasterize New Century Submarine Cavern 01">
+            </div>
+        </div>
+    </div>
+
+            <div class="fifth-artwork-info">
+            <h1 class="fifth-artwork-title">RASTERIZE<br><span class="submarine">NEW CENTURY SUBMARINE CAVERN</span></h1>
+            
+            <p class="fifth-artwork-info-line">2024 | Digital Video | Variable Ratio | Variable Size</p>
+            <p class="fifth-artwork-info-line">RealTime | Color | Sound</p>
+            <p class="fifth-artwork-info-line">Medium: Digital Animation, Algorithmic Art</p>
+
+            <h2 class="fifth-video-artwork-title">Video Artwork Description</h2>
+            <p class="fifth-description-text">
+                Against the backdrop of rising sea levels brought on by global warming, I began to imagine a future "water world." Human civilization gradually sinks, replaced by endless cables—neural networks of a dying species—carrying fragmented consciousness in the form of bytes. These flows eventually descend into the deep sea, forming digital caverns.
+            </p>
+            <p class="fifth-description-text">
+                Cities, institutions, and cultural relics dissolve into data fragments, embedded within the cables, drifting eternally through a dematerialized ocean. The sea, no longer a natural entity, transforms into a black hole of virtual memory, storing echoes of human thought and layers of collective forgetting.
+            </p>
+            <p class="fifth-description-text">
+                Drawing on the metaphor of the "Apostles" from Evangelion, I constructed a submarine world woven from virtual cables—a vision meant to transmit a sensory experience directly through the eye. Through distorted colors, flowing data, and continuous sensory shifts, I hoped to evoke a state of synesthesia, inviting resonance with a submerged future shaped by climate crisis and virtual immersion.
+            </p>
+            <p class="fifth-description-text">
+                New Century Submarine Cavern — my 7th Rasterized Apostle.
+            </p>
+
+            <h2 class="fifth-synopsis-title">Artwork Story Synopsis</h2>
+            <p class="fifth-description-text">
+                As sea levels continue to rise under the weight of global warming, terrestrial civilization gradually sinks beneath the waves. Once-vibrant cities and cultural systems collapse into fragmented data, embedded within endless cables that drift through the deep—forming forgotten "digital caverns." The ocean becomes a container of residual consciousness, where the final echoes of humanity float, suspended between memory and oblivion.
+            </p>
+            <p class="fifth-description-text">
+                While repairing a deep-sea transmission, the protagonist E unintentionally awakens the 7th Rasterized Apostle—an entity born not of alien origin, but from the ruins of civilization itself. In the face of extinction, humans encoded fragments of their consciousness into the global data infrastructure, unconsciously giving rise to a new kind of lifeform: one composed of virtual genetic structures and memory patterns.
+            </p>
+            <p class="fifth-description-text">
+                This Apostle, a mutation of information and perception, was incubated within the coralized cables of the abyss. Its awakening begins to destabilize the boundary between the virtual and the real, forcing E to confront the question of his own identity: Is he a repairer, or merely a residual fragment left behind by the system?
+            </p>
+            <p class="fifth-description-text">
+                Wandering through this drowned world—where water and code intertwine—E must navigate a rasterized reality built from flickering memories and shifting coordinates. His search for the meaning of the Apostle gradually becomes a deeper pursuit of the unknown origin of his own mind.
+            </p>
+
+            <h2 class="fifth-still-frame-title">STILL FRAMES</h2>
+            
+            <div class="fifth-still-frame-carousel">
+                <div class="fifth-carousel-container">
+                    <div class="fifth-carousel-slide">
+                        <img src="../Rasterize New Century Submarine Cavern 02.jpg" alt="Still Frame 2">
+                    </div>
+                    <div class="fifth-carousel-slide">
+                        <img src="../Rasterize New Century Submarine Cavern 03.jpg" alt="Still Frame 3">
+                    </div>
+                    <div class="fifth-carousel-slide">
+                        <img src="../Rasterize New Century Submarine Cavern 04.jpg" alt="Still Frame 4">
+                    </div>
+                    <div class="fifth-carousel-slide">
+                        <img src="../Rasterize New Century Submarine Cavern 02.jpg" alt="Still Frame 2">
+                    </div>
+                    <div class="fifth-carousel-slide">
+                        <img src="../Rasterize New Century Submarine Cavern 03.jpg" alt="Still Frame 3">
+                    </div>
+                    <div class="fifth-carousel-slide">
+                        <img src="../Rasterize New Century Submarine Cavern 04.jpg" alt="Still Frame 4">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="fifth-color-carousel">
+                <div class="fifth-color-carousel-container">
+                    <div class="fifth-color-carousel-slide color-1"></div>
+                    <div class="fifth-color-carousel-slide color-2"></div>
+                    <div class="fifth-color-carousel-slide color-3"></div>
+                    <div class="fifth-color-carousel-slide color-1"></div>
+                    <div class="fifth-color-carousel-slide color-2"></div>
+                    <div class="fifth-color-carousel-slide color-3"></div>
+                </div>
+            </div>
+            
+            <div class="fifth-still-frame-image-container-05">
+                <div class="frame"></div>
+                <img src="../Rasterize New Century Submarine Cavern 05.jpg" alt="Still Frame 5">
+            </div>
+            
+            <div class="fifth-still-frame-image-container-06">
+                <div class="frame"></div>
+                <img src="../Rasterize New Century Submarine Cavern 06.jpg" alt="Still Frame 6">
+            </div>
+            
+            <div class="fifth-still-frame-shadow-06"></div>
+            
+            <div class="fifth-still-frame-image-container-07">
+                <div class="frame"></div>
+                <img src="../Rasterize New Century Submarine Cavern 07.jpg" alt="Still Frame 7">
+            </div>
+            
+            <div class="fifth-still-frame-image-container-08">
+                <div class="frame"></div>
+                <img src="../Rasterize New Century Submarine Cavern 08.jpg" alt="Still Frame 8">
+            </div>
+            
+            <div class="fifth-still-frame-shadow-08">
+                <div class="frame-shadow"></div>
+                <div class="image-shadow"></div>
+            </div>
+        </div>
+
+        <!-- 绿色吃豆人动画 - 在08图片下方400px -->
+        <div class="fifth-pacman-animation">
+            <div class="fifth-pacman">
+                <div class="fifth-pacman-mouth"></div>
+                <div class="fifth-pacman-eye"></div>
+            </div>
+            <div class="fifth-dots">
+                <div class="fifth-line-segment"></div>
+                <div class="fifth-line-segment"></div>
+                <div class="fifth-line-segment"></div>
+                <div class="fifth-line-segment"></div>
+                <div class="fifth-line-segment"></div>
+                <div class="fifth-line-segment"></div>
+                <div class="fifth-line-segment"></div>
+                <div class="fifth-line-segment"></div>
+                <div class="fifth-line-segment"></div>
+                <div class="fifth-line-segment"></div>
+            </div>
+        </div>
+
+        <!-- 复制的Rasterize New Century Submarine Cavern 01容器 - 在绿色吃豆人下方400px -->
+        <div class="fourth-story-image-container-copy-2">
+            <div class="fourth-story-image-background-copy-2">
+                <div class="fourth-story-image-player-background-copy-2"></div>
+                <div class="fourth-story-image-player-copy-2">
+                    <img src="../Rasterize The Consciousness of the Left Foot01.PNG" alt="Rasterize The Consciousness of the Left Foot01">
+                </div>
+            </div>
+        </div>
+
+        <div class="sixth-artwork-info">
+            <h1 class="sixth-artwork-title">RASTERIZE<br><span class="left-foot">THE CONSCIOUSNESS OF THE LEFT FOOT</span></h1>
+            
+            <p class="sixth-artwork-info-line">2024 | Digital Video | Variable Ratio | Variable Size</p>
+            <p class="sixth-artwork-info-line">RealTime | Color | Sound</p>
+            <p class="sixth-artwork-info-line">Medium: Digital Animation, Algorithmic Art</p>
+
+            <h2 class="sixth-video-artwork-title">Video Artwork Description</h2>
+            <p class="sixth-description-text">
+                This work originates from the perceptual disturbance experienced in a state of physical confinement, and delves into the gradual dissociation between corporeality and the dimension of consciousness within a virtual information society. When the ability to move is stripped away, time loses its linear and continuous properties; it no longer flows according to conventional logic, but stretches, slows down, and even comes to a standstill. This decelerated temporality is not a fragmented rupture, but rather a prolonged, unreal temporal texture—one that intersects with the pain of physical reality, generating psychological agitation and imbalance.
+            </p>
+            <p class="sixth-description-text">
+                Against this backdrop, high-frequency streams of virtual information relentlessly wash over the senses, hallucinating a false fullness to fill the void of the real. The body, rendered immobile, is passively drawn into a flattened space composed of images, symbols, and data. Perceptual experience becomes increasingly planar and pixelated, as the three-dimensional structure of reality is compressed into a two-dimensional surface. This "rasterized" mode of perception gradually supplants actual presence, dismantling and reconstructing the notion of "self" within an intensely image-saturated context.
+            </p>
+            
+            <h2 class="sixth-synopsis-title">Artwork Story Synopsis</h2>
+            <p class="sixth-description-text">
+                Due to an unexpected injury to his left foot, E was forced into long-term bed rest. Each day, his body sank deeper into the overly soft mattress, unable to move. The pain from his foot pulsed constantly, like a persistent reminder that he was still tethered to reality. Yet the "reality" before him was nothing more than a glowing screen, flashing with endless streams of information from phones and computers. In this state, time gradually lost its meaning; his consciousness dulled and grew hypersensitive all at once. He couldn't fall asleep, nor could he fully awaken—trapped in a passive state of sensory torment, where information overload collided with physical discomfort.
+            </p>
+            <p class="sixth-description-text">
+                One night, he finally drifted into sleep, only to be seized by an overwhelming sensation of weightlessness. He realized his body was slowly sinking into the mattress, whose softness had transformed into a viscous, devouring force. He tried to struggle, but found himself paralyzed—unable even to breathe properly. The bed was no longer a surface of support, but a conscious gateway, swallowing his body and mind into its depths.
+            </p>
+            <p class="sixth-description-text">
+                He was pulled into a vast, pitch-black space. The darkness before him was absolute—he couldn't tell if he had gone blind, or if the space itself was devoid of light. E lost all sense of direction, unable to discern whether time was still flowing. Only the persistent pain in his body, like a phantom echo, reminded him: you still exist. But that existence had been stripped of all reference points, suspended in a claustrophobic void.
+            </p>
+            <p class="sixth-description-text">
+                Gradually, E realized he had not entered a dream, but a dimensional fissure—a virtual abyss accessible only when consciousness becomes completely unanchored. He couldn't tell if this was the end of his awareness or a symptom of some global perceptual collapse—but he knew one thing for certain: he was no longer whole.
+            </p>
+            
+            <h2 class="sixth-still-frame-title">STILL FRAMES</h2>
+        </div>
+        
+        <!-- Left Foot Still Frames -->
+        <div class="sixth-still-frame-image-container-02">
+            <div class="frame">
+                <img src="../Rasterize The Consciousness of the Left Foot02.JPG" alt="Rasterize The Consciousness of the Left Foot 02">
+            </div>
+        </div>
+        
+        <div class="sixth-still-frame-image-container-03">
+            <div class="frame">
+                <img src="../Rasterize The Consciousness of the Left Foot03.JPG" alt="Rasterize The Consciousness of the Left Foot 03">
+            </div>
+        </div>
+        
+        <div class="sixth-still-frame-image-container-08">
+            <div class="frame">
+                <img src="../Rasterize The Consciousness of the Left Foot08.JPG" alt="Rasterize The Consciousness of the Left Foot 08">
+            </div>
+        </div>
+        
+        <div class="sixth-still-frame-shadow-08"></div>
+        <div class="sixth-still-frame-blue-shadow-08"></div>
+        
+        <div class="sixth-still-frame-image-container-04">
+            <div class="frame">
+                <img src="../Rasterize The Consciousness of the Left Foot04.JPG" alt="Rasterize The Consciousness of the Left Foot 04">
+            </div>
+        </div>
+        
+        <div class="sixth-still-frame-image-container-05">
+            <div class="frame">
+                <img src="../Rasterize The Consciousness of the Left Foot05.JPG" alt="Rasterize The Consciousness of the Left Foot 05">
+            </div>
+        </div>
+        
+        <div class="sixth-still-frame-image-container-06">
+            <div class="frame">
+                <img src="../Rasterize The Consciousness of the Left Foot06.JPG" alt="Rasterize The Consciousness of the Left Foot 06">
+            </div>
+        </div>
+        
+        <div class="sixth-still-frame-image-container-07">
+            <div class="frame">
+                <img src="../Rasterize The Consciousness of the Left Foot07.JPG" alt="Rasterize The Consciousness of the Left Foot 07">
+            </div>
+        </div>
+        
+        <div class="sixth-still-frame-image-container-09">
+            <div class="frame">
+                <img src="../Rasterize The Consciousness of the Left Foot09.PNG" alt="Rasterize The Consciousness of the Left Foot 09">
+            </div>
+        </div>
+        
+        <div class="sixth-still-frame-image-container-10">
+            <div class="frame"></div>
+            <div class="image-crop">
+                <img src="../Rasterize The Consciousness of the Left Foot10.PNG" alt="Rasterize The Consciousness of the Left Foot 10">
+            </div>
+        </div>
+
+        
+        <!-- Gradient Square Sequence -->
+        <div class="gradient-square-01"></div>
+        <div class="gradient-square-02"></div>
+        <div class="gradient-square-03"></div>
+        <div class="gradient-square-04"></div>
+        <div class="gradient-square-05"></div>
+        <div class="gradient-square-06"></div>
+        <div class="gradient-square-07"></div>
+        <div class="gradient-square-08"></div>
+
+    <!-- Sixth Pacman Animation -->
+    <div class="sixth-pacman-animation">
+        <div class="sixth-pacman">
+            <div class="sixth-pacman-mouth"></div>
+            <div class="sixth-pacman-eye"></div>
+        </div>
+        <div class="sixth-dots">
+            <div class="sixth-line-segment"></div>
+            <div class="sixth-line-segment"></div>
+            <div class="sixth-line-segment"></div>
+            <div class="sixth-line-segment"></div>
+            <div class="sixth-line-segment"></div>
+            <div class="sixth-line-segment"></div>
+            <div class="sixth-line-segment"></div>
+            <div class="sixth-line-segment"></div>
+            <div class="sixth-line-segment"></div>
+            <div class="sixth-line-segment"></div>
+        </div>
+    </div>
+
+    <!-- YouTube Video Container - Below Sixth Pacman -->
+    <div class="youtube-video-container">
+        <div class="youtube-video-background">
+            <div class="youtube-video-player-background"></div>
+            <div class="youtube-video-player">
+                <iframe src="https://www.youtube.com/embed/cKck-AgrvMc" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="seventh-artwork-info">
+        <h1 class="seventh-artwork-title">RASTERIZE<br><span class="reference-point">REFERENCE POINT OF SELF-CONSCIOUSNESS</span></h1>
+        
+        <p class="seventh-artwork-info-line">2024 | Digital Video | 2160x1280</p>
+        <p class="seventh-artwork-info-line">Duration：10 : 00 | Color | Sound</p>
+        <p class="seventh-artwork-info-line">Medium: Digital Animation, Algorithmic Art</p>
+
+        <h2 class="seventh-video-artwork-title">Video Artwork Description</h2>
+        <p class="seventh-description-text">
+            The work explores the gradual loss of self-awareness within an era of information overload, as time and space boundaries are continuously reassembled and perception shifts across one-, two-, three-, and four-dimensional states. In this dissolution of sensory order, the "reference point" becomes the only possibility for reconstructing the self.
+        </p>
+        <p class="seventh-description-text">
+            These reference points do not originate from physical reality, but from a scaffold of perception composed of symbols, color blocks, and geometric forms—a visualized, rasterized structure of cognition. They oscillate at the threshold between the virtual and the real, functioning both as tools for orientation and as labyrinths of their own.
+        </p>
+        <p class="seventh-description-text">
+            Yet the construction of such reference points does not lead to stability; instead, it pulls consciousness into a cyclical migration through multiple dimensions. This constant traversal produces echoes and feedback loops in perception, pushing the self toward a cyber-psychotic threshold—where identity exists in a perpetual state of reconstruction and deconstruction, becoming both real and illusory.
+        </p>
+        
+        <h2 class="seventh-synopsis-title">Artwork Story Synopsis</h2>
+        <p class="seventh-description-text">
+            In a future metropolis drowning in information overload, E spends his days being pushed along by flickering screens, endlessly updating data streams, and layers of relentless work. That night, exhausted from the chaos and noise, he returned home, collapsed onto his bed, and fell instantly asleep.
+        </p>
+        <p class="seventh-description-text">
+            The next morning, E awoke to an unnatural heaviness, as if his body had been filled with raw data. Every movement felt amplified by an alien gravity. Dragging himself toward the bathroom to wash up, he glanced at the mirror—and froze. His reflection was no longer a simple image. It was overlaid with countless flickering visuals, fragments of text, and shifting lines of code, forming a two-dimensional surface that quivered and refreshed like a living digital canvas.
+        </p>
+        <p class="seventh-description-text">
+            Reaching out to touch it, E watched as the information began to fracture, pixel by pixel, scattering into the air before recombining into new shapes and colors. The mirror's edges had vanished, replaced by an infinite flat expanse—no depth, no horizon, only flowing planes of color, lines, symbols, and data drifting without order.
+        </p>
+        <p class="seventh-description-text">
+            His world had been "flattened" in an instant, every three-dimensional structure stripped away and dissolved into a two-dimensional stream of information. The walls, the furniture, even the air—and his own hands—were nothing more than grids of rasterized light and color. Time no longer flowed linearly; instead, it spread slowly and viscously, like ink blooming in water, carrying an unreal, dreamlike texture.
+        </p>
+        <p class="seventh-description-text">
+            E tried to anchor himself with reference points—not real objects, but a symbolic system of flashing color blocks and rotating geometric forms. These floated in the liminal space between the virtual and the physical, offering him fleeting moments of stability. But the more he built these reference points, the deeper his consciousness was pulled into a looping labyrinth, drifting between one-, two-, three-, and four-dimensional states. His perception was constantly deconstructed and rebuilt. Signs of cyber-psychosis began to seep in. Standing on the edge of a mental collapse, E could no longer tell whether he was still on this side of the mirror—or had already been swallowed into an endless fracture in the fabric of reality.
+        </p>
+        
+        <h2 class="seventh-still-frame-title">Still Frame</h2>
+        
+        <!-- Seventh Still Frame Image 01 -->
+        <div class="seventh-still-frame-image-container-01">
+            <div class="ultra-outermost-frame"></div>
+            <div class="outermost-frame"></div>
+            <div class="outer-frame"></div>
+            <div class="frame"></div>
+            <img src="../RasterizeREFERENCEPOINTOFSELFCONSCIOUSNESS01.JPG" alt="Rasterize Reference Point 01">
+        </div>
+        
+        <!-- Seventh Still Frame Image 02 -->
+        <div class="seventh-still-frame-image-container-02">
+            <div class="frame"></div>
+            <img src="../RasterizeREFERENCEPOINTOFSELFCONSCIOUSNESS02.JPG" alt="Rasterize Reference Point 02">
+        </div>
+        
+        <!-- Seventh Still Frame Image 03 -->
+        <div class="seventh-still-frame-image-container-03">
+            <div class="frame"></div>
+            <img src="../RasterizeREFERENCEPOINTOFSELFCONSCIOUSNESS03.jpeg" alt="Rasterize Reference Point 03">
+        </div>
+        
+        <!-- Seventh Still Frame Image 04 Green Shadow -->
+        <div class="seventh-still-frame-green-shadow-04"></div>
+        
+        <!-- Seventh Still Frame Image 04 -->
+        <div class="seventh-still-frame-image-container-04">
+            <div class="frame"></div>
+            <img src="../RasterizeREFERENCEPOINTOFSELFCONSCIOUSNESS04.JPG" alt="Rasterize Reference Point 04">
+        </div>
+        
+    </div>
+
+    <div class="extra-blue-space"></div>
+
+    <script>
+        function createRasterizeEffect() {
+            const stripes = document.querySelector('.rasterize-stripes');
+            let position = 0;
+            
+            function animate() {
+                position += 0.5;
+                stripes.style.transform = `translateY(${position}px)`;
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        // 贪吃豆动画控制
+        function initPacmanAnimation() {
+            initSinglePacmanAnimation('.pacman', '.line-segment');
+            initSinglePacmanAnimation('.first-pacman', '.first-line-segment');
+            initSinglePacmanAnimation('.mid-pacman', '.mid-line-segment');
+            initSinglePacmanAnimation('.fourth-pacman', '.fourth-line-segment');
+            initSinglePacmanAnimation('.fifth-pacman', '.fifth-line-segment');
+        }
+
+        function initSinglePacmanAnimation(pacmanSelector, segmentSelector) {
+            const pacman = document.querySelector(pacmanSelector);
+            const lineSegments = document.querySelectorAll(segmentSelector);
+            
+            if (!pacman || lineSegments.length === 0) return;
+            
+            function checkLineCollision() {
+                const currentPacman = document.querySelector(pacmanSelector);
+                if (!currentPacman) return;
+                
+                const pacmanRect = currentPacman.getBoundingClientRect();
+                const pacmanLeft = pacmanRect.left;
+                
+                lineSegments.forEach((segment, index) => {
+                    const segmentRect = segment.getBoundingClientRect();
+                    const segmentLeft = segmentRect.left;
+                    const segmentRight = segmentRect.right;
+                    
+                    // 提前0.3秒检测碰撞（大约24px的距离）
+                    if (pacmanLeft >= (segmentLeft - 24) && pacmanLeft <= segmentRight && !segment.classList.contains('eaten')) {
+                        console.log('Dot eaten!', index, 'pacmanLeft:', pacmanLeft, 'segmentLeft:', segmentLeft);
+                        segment.style.display = 'none';
+                        segment.classList.add('eaten');
+                        
+                        setTimeout(() => {
+                            segment.style.display = '';
+                            segment.classList.remove('eaten');
+                        }, 1500);
+                    }
+                });
+            }
+            
+            setInterval(checkLineCollision, 1);
+            checkLineCollision();
+        }
+
+        // Fifth color carousel animation
+        class FifthColorCarousel {
+            constructor() {
+                this.container = document.querySelector('.fifth-color-carousel-container');
+                this.slides = document.querySelectorAll('.fifth-color-carousel-slide');
+                this.currentIndex = 0;
+                this.isAnimating = false;
+                this.interval = null;
+                this.originalSlidesCount = 3; // 原始颜色数量
+                
+                console.log('Fifth color carousel initialization, found slides:', this.slides.length);
+            }
+            
+            // 初始化轮播
+            init() {
+                if (this.slides.length === 0) {
+                    console.error('No slides found for fifth color carousel');
+                    return;
+                }
+                
+                // 设置初始位置
+                this.container.style.transform = 'translateX(0)';
+                
+                // 开始自动轮播
+                this.startAutoPlay();
+                
+                console.log('✅ Fifth color carousel initialization complete');
+            }
+            
+            // 显示下一张图片
+            showNext() {
+                if (this.isAnimating) return;
+                
+                this.isAnimating = true;
+                console.log('🔄 Switching to next color, current index:', this.currentIndex);
+                
+                // 移动到下一张图片
+                this.currentIndex++;
+                
+                // 计算滑动距离 - 无限向左滑动
+                const translateX = -this.currentIndex * 100;
+                this.container.style.transform = `translateX(${translateX}%)`;
+                
+                // 当滑动到复制的第一组图片时，无缝重置到原始位置
+                if (this.currentIndex >= this.originalSlidesCount) {
+                    setTimeout(() => {
+                        this.currentIndex = 0;
+                        this.container.style.transition = 'none';
+                        this.container.style.transform = 'translateX(0)';
+                        
+                        // 强制重绘
+                        this.container.offsetHeight;
+                        
+                        // 恢复过渡效果
+                        this.container.style.transition = 'transform 0.8s ease-in-out';
+                    }, 800);
+                }
+                
+                // 动画完成后重置
+                setTimeout(() => {
+                    this.isAnimating = false;
+                }, 800);
+            }
+            
+            // 开始自动播放
+            startAutoPlay() {
+                this.interval = setInterval(() => {
+                    this.showNext();
+                }, 3000);
+            }
+            
+            // 停止自动播放
+            stopAutoPlay() {
+                if (this.interval) {
+                    clearInterval(this.interval);
+                    this.interval = null;
+                }
+            }
+        }
+
+        // Fifth carousel animation
+        class FifthImageCarousel {
+            constructor() {
+                this.container = document.querySelector('.fifth-carousel-container');
+                this.slides = document.querySelectorAll('.fifth-carousel-slide');
+                this.currentIndex = 0;
+                this.isAnimating = false;
+                this.interval = null;
+                this.originalSlidesCount = 3; // 原始图片数量
+                
+                console.log('Fifth carousel initialization, found slides:', this.slides.length);
+            }
+            
+            // 初始化轮播
+            init() {
+                if (this.slides.length === 0) {
+                    console.error('No slides found for fifth carousel');
+                    return;
+                }
+                
+                // 设置初始位置
+                this.container.style.transform = 'translateX(0)';
+                
+                // 开始自动轮播
+                this.startAutoPlay();
+                
+                console.log('✅ Fifth carousel initialization complete');
+            }
+            
+            // 显示下一张图片
+            showNext() {
+                if (this.isAnimating) return;
+                
+                this.isAnimating = true;
+                console.log('🔄 Switching to next image, current index:', this.currentIndex);
+                
+                // 移动到下一张图片
+                this.currentIndex++;
+                
+                // 计算滑动距离 - 无限向左滑动
+                const translateX = -this.currentIndex * 100;
+                this.container.style.transform = `translateX(${translateX}%)`;
+                
+                // 当滑动到复制的第一组图片时，无缝重置到原始位置
+                if (this.currentIndex >= this.originalSlidesCount) {
+                    setTimeout(() => {
+                        this.currentIndex = 0;
+                        this.container.style.transition = 'none';
+                        this.container.style.transform = 'translateX(0)';
+                        
+                        // 强制重绘
+                        this.container.offsetHeight;
+                        
+                        // 恢复过渡效果
+                        this.container.style.transition = 'transform 0.8s ease-in-out';
+                    }, 800);
+                }
+                
+                // 动画完成后重置
+                setTimeout(() => {
+                    this.isAnimating = false;
+                }, 800);
+            }
+            
+            // 开始自动播放
+            startAutoPlay() {
+                this.interval = setInterval(() => {
+                    this.showNext();
+                }, 3000);
+            }
+            
+            // 停止自动播放
+            stopAutoPlay() {
+                if (this.interval) {
+                    clearInterval(this.interval);
+                    this.interval = null;
+                }
+            }
+        }
+
+
+
+        window.addEventListener('load', function() {
+            createRasterizeEffect();
+            initPacmanAnimation();
+            
+            // 初始化第五个轮播
+            console.log('Initializing fifth carousel');
+            const fifthCarousel = new FifthImageCarousel();
+            fifthCarousel.init();
+            
+            // 初始化第五个纯色轮播
+            console.log('Initializing fifth color carousel');
+            const fifthColorCarousel = new FifthColorCarousel();
+            fifthColorCarousel.init();
+        });
+    </script>
+</body>
+</html> 

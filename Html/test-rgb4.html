@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RGB星史Ⅳ图片测试</title>
+    <style>
+        body {
+            background: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .test-image {
+            max-width: 300px;
+            margin: 10px;
+            border: 2px solid white;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>RGB星史Ⅳ图片加载测试</h1>
+    
+    <h2>测试1: 原始文件名</h2>
+    <img src="../RGB星史Ⅳ01.jpg" alt="RGB星史Ⅳ01" class="test-image" onerror="this.style.border='2px solid red'; this.nextElementSibling.innerHTML='❌ 加载失败'; this.nextElementSibling.className='error';" onload="this.nextElementSibling.innerHTML='✅ 加载成功'; this.nextElementSibling.className='success';">
+    <div>状态: 加载中...</div>
+    
+    <img src="../RGB星史Ⅳ02.jpg" alt="RGB星史Ⅳ02" class="test-image" onerror="this.style.border='2px solid red'; this.nextElementSibling.innerHTML='❌ 加载失败'; this.nextElementSibling.className='error';" onload="this.nextElementSibling.innerHTML='✅ 加载成功'; this.nextElementSibling.className='success';">
+    <div>状态: 加载中...</div>
+    
+    <img src="../RGB星史Ⅳ03.jpg" alt="RGB星史Ⅳ03" class="test-image" onerror="this.style.border='2px solid red'; this.nextElementSibling.innerHTML='❌ 加载失败'; this.nextElementSibling.className='error';" onload="this.nextElementSibling.innerHTML='✅ 加载成功'; this.nextElementSibling.className='success';">
+    <div>状态: 加载中...</div>
+    
+    <img src="../RGB星史Ⅳ04.jpg" alt="RGB星史Ⅳ04" class="test-image" onerror="this.style.border='2px solid red'; this.nextElementSibling.innerHTML='❌ 加载失败'; this.nextElementSibling.className='error';" onload="this.nextElementSibling.innerHTML='✅ 加载成功'; this.nextElementSibling.className='success';">
+    <div>状态: 加载中...</div>
+    
+    <img src="../RGB星史Ⅳ05.jpg" alt="RGB星史Ⅳ05" class="test-image" onerror="this.style.border='2px solid red'; this.nextElementSibling.innerHTML='❌ 加载失败'; this.nextElementSibling.className='error';" onload="this.nextElementSibling.innerHTML='✅ 加载成功'; this.nextElementSibling.className='success';">
+    <div>状态: 加载中...</div>
+    
+    <h2>测试2: URL编码文件名</h2>
+    <img src="../RGB%E6%98%9F%E5%8F%B2%E2%85%A301.jpg" alt="RGB星史Ⅳ01编码" class="test-image" onerror="this.style.border='2px solid red'; this.nextElementSibling.innerHTML='❌ 加载失败'; this.nextElementSibling.className='error';" onload="this.nextElementSibling.innerHTML='✅ 加载成功'; this.nextElementSibling.className='success';">
+    <div>状态: 加载中...</div>
+    
+    <script>
+        // 检查当前路径
+        console.log('当前页面路径:', window.location.href);
+        console.log('当前目录:', window.location.pathname);
+    </script>
+</body>
+</html> 

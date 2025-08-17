@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>简单03测试</title>
+    <style>
+        body { 
+            background: #0041ff; 
+            color: white; 
+            font-family: Arial; 
+            padding: 20px; 
+        }
+        
+        .test-container {
+            position: relative;
+            margin: 20px;
+            display: inline-block;
+        }
+        
+        .black-img {
+            width: 180px;
+            height: 400px;
+            object-fit: contain;
+            filter: brightness(0);
+            border: 2px solid #fac800;
+            cursor: pointer;
+        }
+        
+        .color-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 180px;
+            height: 400px;
+            object-fit: contain;
+            opacity: 0;
+            border: 2px solid #fac800;
+            transition: opacity 0.1s ease;
+        }
+        
+        .color-img.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>简单03测试</h1>
+    
+    <div class="test-container">
+        <img src="../Tangential%20%20EMMA03.jpg" class="black-img" id="black03">
+        <img src="../Tangential%20%20EMMA03.jpg" class="color-img" id="color03">
+    </div>
+    
+    <script>
+        const black03 = document.getElementById('black03');
+        const color03 = document.getElementById('color03');
+        
+        black03.addEventListener('mouseenter', function() {
+            console.log('鼠标进入03图片');
+            color03.classList.add('show');
+        });
+        
+        black03.addEventListener('mouseleave', function() {
+            console.log('鼠标离开03图片');
+            color03.classList.remove('show');
+        });
+        
+        // 检查图片加载状态
+        window.addEventListener('load', function() {
+            console.log('页面加载完成');
+            const images = document.querySelectorAll('img');
+            images.forEach((img, index) => {
+                if (img.complete && img.naturalWidth !== 0) {
+                    console.log(`图片 ${index + 1} 加载成功`);
+                } else {
+                    console.log(`图片 ${index + 1} 加载失败`);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

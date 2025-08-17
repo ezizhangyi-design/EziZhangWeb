@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Painting - EziZhang (Fully Responsive)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+        }
+
+        html, body {
+            background-color: #0041ff;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            color: white;
+            overflow-x: hidden;
+            overflow-y: auto;
+            image-rendering: pixelated;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
+            margin: 0;
+            padding: 0;
+            min-height: 900vh;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            left: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+
+        .content-container {
+            position: relative;
+            z-index: 10;
+            min-height: 900vh;
+            width: 100%;
+        }
+
+        /* 第一个作品组 - TMD,爱你无限次 */
+        .preview-image-container-3 {
+            position: absolute;
+            top: 20vh;
+            left: calc(50% - 20.8333vw);
+            transform: translateX(-50%);
+            width: 40.625vw;
+            height: 60.9375vw;
+            z-index: 5;
+        }
+
+        .outer-black-frame-3 {
+            position: absolute;
+            width: 100%;
+            height: calc(100% + 0.5208vw);
+            top: -0.2604vw;
+            background-color: black;
+            border-radius: 0;
+            box-sizing: border-box;
+        }
+
+        .inner-gray-frame-3 {
+            position: absolute;
+            top: 4.8438vw;
+            left: 5.7292vw;
+            right: 5.7292vw;
+            bottom: 4.8438vw;
+            background-color: #cfcfcf;
+            border-radius: 0;
+            box-sizing: border-box;
+        }
+
+        .preview-image-3 {
+            position: absolute;
+            top: 5.3125vw;
+            left: 5.3125vw;
+            right: 5.3125vw;
+            bottom: 5.3125vw;
+            width: calc(100% - 10.625vw);
+            height: calc(100% - 10.625vw);
+            object-fit: contain;
+            border-radius: 0;
+        }
+
+        .artwork-info {
+            position: absolute;
+            top: 60vh;
+            right: 5.2083vw;
+            width: 20.8333vw;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            z-index: 10;
+        }
+
+        .artwork-title {
+            font-size: 0.9375vw;
+            font-weight: bold;
+            margin-bottom: 0.5208vw;
+            line-height: 1.4;
+            text-align: right;
+        }
+
+        .artwork-subtitle {
+            font-size: 0.9375vw;
+            font-weight: bold;
+            margin-bottom: 1.5625vw;
+            line-height: 1.4;
+            text-align: right;
+        }
+
+        .artwork-medium {
+            font-size: 0.9375vw;
+            margin-bottom: 0.5208vw;
+            line-height: 1.4;
+            text-align: right;
+        }
+
+        .artwork-medium-chinese {
+            font-size: 0.9375vw;
+            margin-bottom: 1.5625vw;
+            line-height: 1.4;
+            text-align: right;
+        }
+
+        .artwork-size {
+            font-size: 0.9375vw;
+            margin-bottom: 0.7813vw;
+            line-height: 1.4;
+            text-align: right;
+        }
+
+        .artwork-year {
+            font-size: 0.9375vw;
+            line-height: 1.4;
+            text-align: right;
+        }
+
+        /* 第二个作品组 - 人形军曹的迷失 */
+        .preview-image-container-4 {
+            position: absolute;
+            top: 220vh;
+            left: calc(50% - 20.8333vw);
+            transform: translateX(-50%);
+            width: 40.625vw;
+            height: 60.9375vw;
+            z-index: 5;
+        }
+
+        .outer-black-frame-4 {
+            position: absolute;
+            width: 100%;
+            height: calc(100% + 0.5208vw);
+            top: -0.2604vw;
+            background-color: black;
+            border-radius: 0;
+            box-sizing: border-box;
+        }
+
+        .inner-gray-frame-4 {
+            position: absolute;
+            top: 4.8438vw;
+            left: 5.7292vw;
+            right: 5.7292vw;
+            bottom: 4.8438vw;
+            background-color: #cfcfcf;
+            border-radius: 0;
+            box-sizing: border-box;
+        }
+
+        .preview-image-4 {
+            position: absolute;
+            top: 5.3125vw;
+            left: 5.3125vw;
+            right: 5.3125vw;
+            bottom: 5.3125vw;
+            width: calc(100% - 10.625vw);
+            height: calc(100% - 10.625vw);
+            object-fit: contain;
+            border-radius: 0;
+        }
+
+        .artwork-info-2 {
+            position: absolute;
+            top: 260vh;
+            right: 5.2083vw;
+            width: 20.8333vw;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            z-index: 10;
+        }
+
+        /* 第三个作品组 - 无限对折魔王 */
+        .preview-image-container-5 {
+            position: absolute;
+            top: 420vh;
+            left: calc(50% - 20.8333vw);
+            transform: translateX(-50%);
+            width: 40.625vw;
+            height: 60.9375vw;
+            z-index: 5;
+        }
+
+        .outer-black-frame-5 {
+            position: absolute;
+            width: 100%;
+            height: calc(100% + 0.5208vw);
+            top: -0.2604vw;
+            background-color: black;
+            border-radius: 0;
+            box-sizing: border-box;
+        }
+
+        .inner-gray-frame-5 {
+            position: absolute;
+            top: 4.8438vw;
+            left: 5.7292vw;
+            right: 5.7292vw;
+            bottom: 4.8438vw;
+            background-color: #cfcfcf;
+            border-radius: 0;
+            box-sizing: border-box;
+        }
+
+        .preview-image-5 {
+            position: absolute;
+            top: 5.3125vw;
+            left: 5.3125vw;
+            right: 5.3125vw;
+            bottom: 5.3125vw;
+            width: calc(100% - 10.625vw);
+            height: calc(100% - 10.625vw);
+            object-fit: contain;
+            border-radius: 0;
+        }
+
+        .artwork-info-3 {
+            position: absolute;
+            top: 460vh;
+            right: 5.2083vw;
+            width: 20.8333vw;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            z-index: 10;
+        }
+
+        /* 第四个作品组 - 猩红极客矿场 */
+        .preview-image-container-6 {
+            position: absolute;
+            top: 620vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 62.5vw;
+            height: 41.6667vw;
+            z-index: 5;
+        }
+
+        .outer-black-frame-6 {
+            position: absolute;
+            width: calc(100% + 10.4167vw);
+            height: calc(100% + 0.5208vw);
+            top: -0.2604vw;
+            left: -5.2083vw;
+            background-color: black;
+            border-radius: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .inner-gray-frame-6 {
+            position: absolute;
+            top: 5.7292vw;
+            left: 4.8958vw;
+            right: 4.8958vw;
+            bottom: 5.7292vw;
+            background-color: #cfcfcf;
+            border-radius: 0;
+            box-sizing: border-box;
+        }
+
+        .preview-image-6 {
+            position: absolute;
+            top: 5.3125vw;
+            left: 5.3125vw;
+            right: 5.3125vw;
+            bottom: 5.3125vw;
+            width: calc(100% - 10.625vw);
+            height: calc(100% - 10.625vw);
+            object-fit: contain;
+            border-radius: 0;
+        }
+
+        .artwork-info-4 {
+            position: absolute;
+            top: 700vh;
+            right: 15.625vw;
+            width: 20.8333vw;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            z-index: 10;
+        }
+
+        /* 第五个作品组 - 雪花频道1台 */
+        .preview-image-container-7 {
+            position: absolute;
+            top: 770vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 62.5vw;
+            height: 41.6667vw;
+            z-index: 5;
+        }
+
+        .outer-black-frame-7 {
+            position: absolute;
+            width: calc(100% + 10.4167vw);
+            height: calc(100% + 0.5208vw);
+            top: -0.2604vw;
+            left: -5.2083vw;
+            background-color: black;
+            border-radius: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .inner-gray-frame-7 {
+            position: absolute;
+            top: 5.7292vw;
+            left: 4.8958vw;
+            right: 4.8958vw;
+            bottom: 5.7292vw;
+            background-color: #cfcfcf;
+            border-radius: 0;
+            box-sizing: border-box;
+        }
+
+        .preview-image-7 {
+            position: absolute;
+            top: 5.3125vw;
+            left: 5.3125vw;
+            right: 5.3125vw;
+            bottom: 5.3125vw;
+            width: calc(100% - 10.625vw);
+            height: calc(100% - 10.625vw);
+            object-fit: contain;
+            border-radius: 0;
+        }
+
+        .artwork-info-5 {
+            position: absolute;
+            top: 850vh;
+            right: 15.625vw;
+            width: 20.8333vw;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            z-index: 10;
+        }
+
+        /* 响应式媒体查询 */
+        @media (max-width: 1200px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5 {
+                transform: translateX(-50%) scale(0.9);
+            }
+            
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                transform: translateX(-50%) scale(0.9);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5 {
+                transform: translateX(-50%) scale(0.7);
+            }
+            
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                transform: translateX(-50%) scale(0.7);
+            }
+            
+            .artwork-info,
+            .artwork-info-2,
+            .artwork-info-3,
+            .artwork-info-4,
+            .artwork-info-5 {
+                width: 30vw;
+                right: 2vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5 {
+                transform: translateX(-50%) scale(0.5);
+            }
+            
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                transform: translateX(-50%) scale(0.5);
+            }
+            
+            .artwork-info,
+            .artwork-info-2,
+            .artwork-info-3,
+            .artwork-info-4,
+            .artwork-info-5 {
+                width: 40vw;
+                right: 1vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <a href="index.html" class="back-btn">Back</a>
+        
+        <!-- 第一个作品 -->
+        <div class="preview-image-container-3">
+            <div class="outer-black-frame-3"></div>
+            <div class="inner-gray-frame-3"></div>
+            <img src="../TDMovieOut.106 TMD 爱你无限次God Damn love U Infinity Times.jpg" alt="Digital Painting Preview" class="preview-image-3">
+        </div>
+        
+        <!-- 第一个作品信息 -->
+        <div class="artwork-info">
+            <h1 class="artwork-title">God Damn,love U Infinity Times</h1>
+            <h2 class="artwork-subtitle">TMD,爱你无限次</h2>
+            <p class="artwork-medium">Archival-Quality Giclée Print, Mounted on Aluminium Composite Panel</p>
+            <p class="artwork-medium-chinese">收藏级微喷，铝塑板装裱</p>
+            <p class="artwork-size">200*112.5 cm</p>
+            <p class="artwork-year">2025</p>
+        </div>
+        
+        <!-- 第二个作品 -->
+        <div class="preview-image-container-4">
+            <div class="outer-black-frame-4"></div>
+            <div class="inner-gray-frame-4"></div>
+            <img src="../TDMovieOut.99The Lost Humanoid Sergeant人形军曹的迷失.jpg" alt="The Lost Humanoid Sergeant" class="preview-image-4">
+        </div>
+        
+        <!-- 第二个作品信息 -->
+        <div class="artwork-info-2">
+            <h1 class="artwork-title">The Lost Humanoid Sergeant</h1>
+            <h2 class="artwork-subtitle">人形军曹的迷失</h2>
+            <p class="artwork-medium">Archival-Quality Giclée Print, Mounted on Aluminium Composite Panel</p>
+            <p class="artwork-medium-chinese">收藏级微喷，铝塑板装裱</p>
+            <p class="artwork-size">200*112.5 cm</p>
+            <p class="artwork-year">2025</p>
+        </div>
+        
+        <!-- 第三个作品 -->
+        <div class="preview-image-container-5">
+            <div class="outer-black-frame-5"></div>
+            <div class="inner-gray-frame-5"></div>
+            <img src="../TDMovieOut.139 无限对折魔.jpg" alt="无限对折魔" class="preview-image-5">
+        </div>
+        
+        <!-- 第三个作品信息 -->
+        <div class="artwork-info-3">
+            <h1 class="artwork-title">Infinite Folding Demon King</h1>
+            <h2 class="artwork-subtitle">无限对折魔王</h2>
+            <p class="artwork-medium">Archival-Quality Giclée Print, Mounted on Aluminium Composite Panel</p>
+            <p class="artwork-medium-chinese">收藏级微喷，铝塑板装裱</p>
+            <p class="artwork-size">200*112.5 cm</p>
+            <p class="artwork-year">2025</p>
+        </div>
+        
+        <!-- 第四个作品 -->
+        <div class="preview-image-container-6">
+            <div class="outer-black-frame-6"></div>
+            <div class="inner-gray-frame-6"></div>
+            <img src="../TDMovieOut.213猩红极客矿场.jpg" alt="猩红极客矿场" class="preview-image-6">
+        </div>
+        
+        <!-- 第四个作品信息 -->
+        <div class="artwork-info-4">
+            <h1 class="artwork-title">Crimson Geek Mining Farm</h1>
+            <h2 class="artwork-subtitle">猩红极客矿场</h2>
+            <p class="artwork-medium">Archival-Quality Giclée Print, Mounted on Aluminium Composite Panel</p>
+            <p class="artwork-medium-chinese">收藏级微喷，铝塑板装裱</p>
+            <p class="artwork-size">200*112.5 cm</p>
+            <p class="artwork-year">2025</p>
+        </div>
+        
+        <!-- 第五个作品 -->
+        <div class="preview-image-container-7">
+            <div class="outer-black-frame-7"></div>
+            <div class="inner-gray-frame-7"></div>
+            <img src="../TDMovieOut.196 雪花频道1台.jpg" alt="雪花频道1台" class="preview-image-7">
+        </div>
+        
+        <!-- 第五个作品信息 -->
+        <div class="artwork-info-5">
+            <h1 class="artwork-title">Snowflake Channel 1</h1>
+            <h2 class="artwork-subtitle">雪花频道1台</h2>
+            <p class="artwork-medium">Archival-Quality Giclée Print, Mounted on Aluminium Composite Panel</p>
+            <p class="artwork-medium-chinese">收藏级微喷，铝塑板装裱</p>
+            <p class="artwork-size">200*112.5 cm</p>
+            <p class="artwork-year">2025</p>
+        </div>
+        
+        <!-- 页面底部空白 -->
+        <div style="height: 5vh; margin-top: 2vh;"></div>
+    </div>
+</body>
+</html>

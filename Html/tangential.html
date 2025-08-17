@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ezi.Zhang - Tangential Series</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <style>
+        html, body {
+            min-height: 1400vh;
+            margin: 0;
+            padding: 0;
+            background: #0041ff;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            overflow-x: hidden;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            left: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 99999;
+        }
+        .back-btn:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+        
+        /* 题外话图片容器样式 */
+        .tangential-image-container {
+            position: absolute;
+            top: calc(50% - 30px);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        /* 黑底图层 */
+        .black-background-tangential {
+            position: absolute;
+            top: 0;
+            left: -50px;
+            width: calc(100% + 100px);
+            height: 100%;
+            background: black;
+            z-index: 1;
+        }
+        
+        /* 蓝底图层 */
+        .blue-background-tangential {
+            position: absolute;
+            top: 75px;
+            left: 20px;
+            width: calc(100% - 40px);
+            height: calc(100% - 150px);
+            background: #0041ff;
+            z-index: 2;
+        }
+        
+        /* 题外话图片 */
+        .tangential-image {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            width: calc(100% - 80px);
+            height: calc(100% - 80px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        /* RGB Star History 静态裱框容器样式 */
+        .preview-image-container-5 {
+            position: absolute;
+            top: 1040px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -410px;
+            width: 970px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        .preview-image-container-6 {
+            position: absolute;
+            top: 980px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 410px;
+            width: 970px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        .outer-black-frame-5 {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-black-frame-5 {
+            position: absolute;
+            top: 12.705%;
+            left: 11.025%;
+            right: 11.025%;
+            bottom: 12.705%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-yellow-frame-5 {
+            position: absolute;
+            top: calc(12.705% + 51px);
+            left: calc(11.025% + 63px);
+            right: calc(11.025% + 63px);
+            bottom: calc(12.705% + 51px);
+            background: #cfcfcf;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+        
+        .preview-image-5 {
+            position: absolute;
+            top: calc(12.705% + 64px);
+            left: calc(11.025% + 64px);
+            right: calc(11.025% + 64px);
+            bottom: calc(12.705% + 64px);
+            width: calc(77.95% - 128px);
+            height: calc(74.59% - 128px);
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 9999;
+        }
+        
+        .outer-black-frame-6 {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-black-frame-6 {
+            position: absolute;
+            top: calc(12.705% - 60px);
+            left: 11.025%;
+            right: 11.025%;
+            bottom: calc(12.705% - 60px);
+            background: black;
+            box-sizing: border-box;
+        }
+        
+        .inner-yellow-frame-6 {
+            position: absolute;
+            top: calc(12.705% - 25px);
+            left: calc(11.025% + 29px);
+            right: calc(11.025% + 29px);
+            bottom: calc(12.705% - 25px);
+            background: #cfcfcf;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+        
+        .preview-image-6 {
+            position: absolute;
+            top: calc(12.705% - 16px);
+            left: calc(11.025% - 16px);
+            right: calc(11.025% - 16px);
+            bottom: calc(12.705% - 16px);
+            width: calc(77.95% + 32px);
+            height: calc(74.59% + 32px);
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 9999;
+        }
+        
+        .artwork-info-5 {
+            position: absolute;
+            top: 540px;
+            right: 120px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        .artwork-info-6 {
+            position: absolute;
+            top: 600px;
+            right: 120px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        /* EMMA图片容器样式 */
+        .emma-image-container {
+            position: absolute;
+            top: 2100px;
+            left: -80px;
+            width: 800px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        /* EMMA黑色容器 */
+        .emma-black-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100% - 270px);
+            height: calc(100% + 105px);
+            background: black;
+            z-index: 1;
+        }
+        
+        /* EMMA灰色容器 */
+        .emma-gray-container {
+            position: absolute;
+            top: -15px;
+            left: 175px;
+            width: calc(100% - 350px);
+            height: calc(100% + 30px);
+            background: #cfcfcf;
+            z-index: 2;
+        }
+        
+        .emma-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 3;
+        }
+        
+        .emma-artwork-info {
+            position: absolute;
+            top: 50%;
+            right: -900px;
+            transform: translateY(-50%);
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+            width: 280px;
+        }
+        
+        /* Emma Alley 容器样式 */
+        .emma-alley-container {
+            position: absolute;
+            top: 3150px;
+            left: -200px;
+            width: 800px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        /* Emma Alley 黑色容器 */
+        .emma-alley-black-container {
+            position: absolute;
+            top: 20px;
+            left: 245px;
+            width: calc(100% - 490px);
+            height: calc(100% - 40px);
+            background: black;
+            z-index: 1;
+        }
+        
+        /* Emma Alley 灰色容器 */
+        .emma-alley-gray-container {
+            position: absolute;
+            top: 50px;
+            left: 277px;
+            width: calc(100% - 554px);
+            height: calc(100% - 100px);
+            background: #cfcfcf;
+            z-index: 2;
+        }
+        
+        /* Emma Alley 图片 */
+        .emma-alley-image {
+            position: absolute;
+            top: 60px;
+            left: 277px;
+            width: calc(100% - 554px);
+            height: calc(100% - 120px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        /* Emma Alley 红色版本容器 */
+        .emma-alley-red-container {
+            position: absolute;
+            top: 3150px;
+            left: 160px;
+            width: 800px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        /* Emma Alley 红色版本黑色容器 */
+        .emma-alley-red-black-container {
+            position: absolute;
+            top: 20px;
+            left: 245px;
+            width: calc(100% - 490px);
+            height: calc(100% - 40px);
+            background: black;
+            z-index: 1;
+        }
+        
+        /* Emma Alley 红色版本灰色容器 */
+        .emma-alley-red-gray-container {
+            position: absolute;
+            top: 50px;
+            left: 277px;
+            width: calc(100% - 554px);
+            height: calc(100% - 100px);
+            background: #cfcfcf;
+            z-index: 2;
+        }
+        
+        /* Emma Alley 红色版本图片 */
+        .emma-alley-red-image {
+            position: absolute;
+            top: 60px;
+            left: 187px;
+            width: calc(100% - 374px);
+            height: calc(100% - 120px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        /* Emma Alley 系列图片样式 */
+        .emma-alley-series-image {
+            position: absolute;
+            width: 180px;
+            height: 135px;
+            object-fit: contain;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .emma-alley-series-image:hover {
+            filter: brightness(1);
+        }
+        
+        .emma-alley-series-image-1 {
+            top: 3323px;
+            left: 880px;
+        }
+        
+        .emma-alley-series-image-2 {
+            top: 3407px;
+            left: 881px;
+        }
+        
+        .emma-alley-series-image-3 {
+            top: 3120px;
+            left: 880px;
+        }
+        
+        .emma-alley-series-image-4 {
+            top: 3520px;
+            left: 880px;
+        }
+        
+        /* 03和04的更大尺寸 */
+        .emma-alley-series-image-3 {
+            width: 360px;
+            height: 270px;
+        }
+        
+        .emma-alley-series-image-4 {
+            width: 360px;
+            height: 270px;
+        }
+        
+        /* 黑白方块容器 */
+        .black-white-square {
+            position: absolute;
+            top: 3335px;
+            left: 1120px;
+            width: 120px;
+            height: 120px;
+            background: black;
+            z-index: 10;
+        }
+        
+        /* 白色方块 */
+        .white-square {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: white;
+            cursor: pointer;
+            z-index: 15;
+        }
+        
+        /* Emma Alley 光芒效果 */
+        .emma-alley-glow {
+            position: absolute;
+            width: 150px;
+            height: 7px;
+            background: linear-gradient(90deg, transparent, #fac800, #fac800, #fac800, #fac800, transparent);
+            box-shadow: 0 0 30px #fac800, 0 0 45px #fac800, 0 0 60px #fac800, 0 0 75px #fac800, 0 0 90px #fac800, 0 0 105px #fac800;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 25;
+        }
+        
+        .emma-alley-glow.show {
+            opacity: 1;
+        }
+        
+        .emma-alley-glow-1 {
+            top: 3320px;
+            left: 920px;
+        }
+        
+        .emma-alley-glow-2 {
+            top: 3535px;
+            left: 921px;
+        }
+        
+        /* 复制的Emma Alley系列图片样式 */
+        .emma-alley-series-image-copy-1 {
+            top: 4308px;
+            left: 919px;
+        }
+        
+        .emma-alley-series-image-copy-2 {
+            top: 4377px;
+            left: 921px;
+        }
+        
+        .emma-alley-series-image-copy-3 {
+            top: 4195px;
+            left: 795px;
+        }
+        
+        .emma-alley-series-image-copy-4 {
+            top: 4490px;
+            left: 795px;
+        }
+        
+        /* 01和02的更大尺寸 */
+        .emma-alley-series-image-copy-3 {
+            width: 270px;
+            height: 202px;
+        }
+        
+        .emma-alley-series-image-copy-4 {
+            width: 270px;
+            height: 202px;
+        }
+        
+        /* 复制的黑白方块容器 */
+        .black-white-square-copy {
+            position: absolute;
+            top: 4365px;
+            left: 1150px;
+            width: 80px;
+            height: 80px;
+            background: black;
+            z-index: 10;
+        }
+        
+        /* 复制的白色方块 */
+        .white-square-copy {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 46px;
+            height: 46px;
+            background: white;
+            cursor: pointer;
+            z-index: 15;
+        }
+        
+        /* 复制的Emma Alley 光芒效果 */
+        .emma-alley-glow-copy-1 {
+            top: 4330px;
+            left: 950px;
+        }
+        
+        .emma-alley-glow-copy-2 {
+            top: 4505px;
+            left: 951px;
+        }
+        
+        /* Emma Alley 作品信息复制 */
+        .emma-alley-info-copy {
+            position: absolute;
+            top: 4380px;
+            right: 80px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        /* 第三组I 4 SEE U系列图片样式 */
+        .emma-alley-series-image-copy2-1 {
+            top: 5160px;
+            left: 1279px;
+            width: 270px;
+            height: 202px;
+        }
+        
+        .emma-alley-series-image-copy2-2 {
+            top: 5485px;
+            left: 1281px;
+            width: 270px;
+            height: 202px;
+        }
+        
+        .emma-alley-series-image-copy2-3 {
+            top: 5250px;
+            left: 1435px;
+            width: 430px;
+            height: 340px;
+        }
+        
+        .emma-alley-series-image-copy2-4 {
+            top: 5258px;
+            left: 1415px;
+            width: 415px;
+            height: 325px;
+        }
+        
+        /* 第三组黑白方块容器 */
+        .black-white-square-copy2 {
+            position: absolute;
+            top: 5355px;
+            left: 1030px;
+            width: 130px;
+            height: 130px;
+            background: black;
+            z-index: 10;
+        }
+        
+        /* 第三组白色方块 */
+        .white-square-copy2 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 46px;
+            height: 46px;
+            background: white;
+            cursor: pointer;
+            z-index: 15;
+        }
+        
+        /* 第三组Emma Alley 光芒效果 */
+        .emma-alley-glow-copy2-1 {
+            top: 5330px;
+            left: 1020px;
+        }
+        
+        .emma-alley-glow-copy2-2 {
+            top: 5505px;
+            left: 1021px;
+        }
+        
+        /* 第三组Emma Alley 作品信息 */
+        .emma-alley-info-copy2 {
+            position: absolute;
+            top: 5320px;
+            right: 80px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        /* 第三组Emma Alley 容器样式 */
+        .emma-alley-container-copy2 {
+            position: absolute;
+            top: 5150px;
+            left: -100px;
+            width: 700px;
+            height: 525px;
+            z-index: 10;
+        }
+        
+        /* 第三组Emma Alley 黑色容器 */
+        .emma-alley-black-container-copy2 {
+            position: absolute;
+            top: 0px;
+            left: 145px;
+            width: calc(100% - 290px);
+            height: calc(100% + 10px);
+            background: black;
+            z-index: 1;
+        }
+        
+        /* 第三组Emma Alley 灰色容器 */
+        .emma-alley-gray-container-copy2 {
+            position: absolute;
+            top: 50px;
+            left: 193px;
+            width: calc(100% - 386px);
+            height: calc(100% - 100px);
+            background: #cfcfcf;
+            z-index: 2;
+        }
+        
+        /* 第三组Emma Alley 图片 */
+        .emma-alley-image-copy2 {
+            position: absolute;
+            top: 60px;
+            left: 187px;
+            width: calc(100% - 374px);
+            height: calc(100% - 120px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        /* 第三组Emma Alley 红色版本容器 */
+        .emma-alley-red-container-copy2 {
+            position: absolute;
+            top: 5150px;
+            left: 350px;
+            width: 700px;
+            height: 525px;
+            z-index: 10;
+        }
+        
+        /* 第三组Emma Alley 红色版本黑色容器 */
+        .emma-alley-red-black-container-copy2 {
+            position: absolute;
+            top: 0px;
+            left: 145px;
+            width: calc(100% - 290px);
+            height: calc(100% + 10px);
+            background: black;
+            z-index: 1;
+        }
+        
+        /* 第三组Emma Alley 红色版本灰色容器 */
+        .emma-alley-red-gray-container-copy2 {
+            position: absolute;
+            top: 50px;
+            left: 193px;
+            width: calc(100% - 386px);
+            height: calc(100% - 100px);
+            background: #cfcfcf;
+            z-index: 2;
+        }
+        
+        /* 第三组Emma Alley 红色版本图片 */
+        .emma-alley-red-image-copy2 {
+            position: absolute;
+            top: 60px;
+            left: 187px;
+            width: calc(100% - 374px);
+            height: calc(100% - 120px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        /* 第四组苦BB系列容器样式 */
+        .kubb-container-1 {
+            position: absolute;
+            top: 6125px;
+            left: 5px;
+            width: 450px;
+            height: 350px;
+            z-index: 10;
+        }
+        
+        .kubb-container-2 {
+            position: absolute;
+            top: 6425px;
+            left: 5px;
+            width: 450px;
+            height: 350px;
+            z-index: 10;
+        }
+        
+        .kubb-container-3 {
+            position: absolute;
+            top: 6725px;
+            left: 5px;
+            width: 450px;
+            height: 350px;
+            z-index: 10;
+        }
+        
+        .kubb-container-4 {
+            position: absolute;
+            top: 7025px;
+            left: 5px;
+            width: 450px;
+            height: 350px;
+            z-index: 10;
+        }
+        
+        /* 第四组苦BB系列黑色容器 */
+        .kubb-black-container {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            width: calc(100% - 100px);
+            height: calc(100% - 80px);
+            background: black;
+            z-index: 1;
+        }
+        
+        /* 第四组苦BB系列灰色容器 */
+        .kubb-gray-container {
+            position: absolute;
+            top: 64px;
+            left: 70px;
+            width: calc(100% - 140px);
+            height: calc(100% - 128px);
+            background: #cfcfcf;
+            z-index: 2;
+        }
+        
+        /* 第四组苦BB系列图片 */
+        .kubb-image {
+            position: absolute;
+            top: 50px;
+            left: 80px;
+            width: calc(100% - 160px);
+            height: calc(100% - 100px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        /* 第四组苦BB系列小图片样式 */
+        .kubb-series-image {
+            position: absolute;
+            width: auto;
+            height: 350px;
+            filter: brightness(0);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .kubb-series-image-1 {
+            left: 540px;
+            top: 6540px;
+            transition: top 0.5s ease;
+        }
+        
+        .kubb-series-image-2 {
+            left: 640px;
+            top: 6620px;
+            transition: top 0.5s ease;
+        }
+        
+        .kubb-series-image-3 {
+            left: 720px;
+            top: 6535px;
+            transition: top 0.5s ease;
+        }
+        
+        .kubb-series-image-4 {
+            left: 805px;
+            top: 6625px;
+            transition: top 0.5s ease;
+        }
+        
+        .kubb-series-image-5 {
+            left: 900px;
+            top: 6555px;
+            transition: top 0.5s ease;
+        }
+        
+        .kubb-series-image-6 {
+            left: 990px;
+            top: 6605px;
+            transition: top 0.5s ease;
+        }
+        
+        .kubb-series-image-7 {
+            left: 1040px;
+            top: 6540px;
+            transition: top 0.5s ease;
+        }
+        
+        .kubb-series-image-8 {
+            left: 1120px;
+            top: 6620px;
+            transition: top 0.5s ease;
+        }
+        
+        /* 归位状态 */
+        .kubb-series-image.aligned {
+            top: 6580px !important;
+        }
+        
+        /* 第四组苦BB作品信息 */
+        .kubb-info {
+            position: absolute;
+            top: 6630px;
+            right: 80px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        /* 第五组宇宙Jin容器样式 */
+        .cosmic-jin-container {
+            position: absolute;
+            top: 7630px;
+            left: -80px;
+            width: 900px;
+            height: 700px;
+            z-index: 10;
+        }
+        
+        /* 第五组宇宙Jin红色容器样式 */
+        .cosmic-jin-red-container-wrapper {
+            position: absolute;
+            top: 7680px;
+            left: -80px;
+            width: 900px;
+            height: 700px;
+            z-index: 10;
+        }
+        
+        /* 宇宙Jin黑色容器 */
+        .cosmic-jin-black-container {
+            position: absolute;
+            top: -50px;
+            left: 141px;
+            width: calc(100% - 282px);
+            height: calc(50% + 100px);
+            background: black;
+            z-index: 1;
+        }
+        
+        /* 宇宙Jin灰色容器 */
+        .cosmic-jin-gray-container {
+            position: absolute;
+            top: 5px;
+            left: 205px;
+            width: calc(100% - 410px);
+            height: calc(50% - 10px);
+            background: #cfcfcf;
+            z-index: 2;
+        }
+        
+        /* 宇宙Jin红色容器 */
+        .cosmic-jin-red-container {
+            position: absolute;
+            top: calc(50% + 70px);
+            left: 141px;
+            width: calc(100% - 282px);
+            height: calc(50% + 100px);
+            background: black;
+            z-index: 1;
+        }
+        
+        /* 宇宙Jin红色灰色容器 */
+        .cosmic-jin-red-gray-container {
+            position: absolute;
+            top: calc(50% + 125px);
+            left: 205px;
+            width: calc(100% - 410px);
+            height: calc(50% - 10px);
+            background: #cfcfcf;
+            z-index: 2;
+        }
+        
+        /* 宇宙Jin图片样式 */
+        .cosmic-jin-image {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: calc(100% - 40px);
+            height: calc(50% - 40px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        .cosmic-jin-red-image {
+            position: absolute;
+            top: calc(50% + 140px);
+            left: 20px;
+            width: calc(100% - 40px);
+            height: calc(50% - 40px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        /* 宇宙Jin系列小图片样式 */
+        .cosmic-jin-series-image {
+            position: absolute;
+            width: auto;
+            height: 200px;
+            filter: brightness(0);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .cosmic-jin-series-image-1 {
+            height: 300px;
+        }
+        
+        .cosmic-jin-series-image-2 {
+            height: 300px;
+        }
+        
+        .cosmic-jin-series-image-3 {
+            height: 80px;
+        }
+        
+        .cosmic-jin-series-image-4 {
+            height: 80px;
+        }
+        
+        .cosmic-jin-series-image-1 {
+            left: 800px;
+            top: 7930px;
+        }
+        
+        .cosmic-jin-series-image-2 {
+            left: 980px;
+            top: 7930px;
+        }
+        
+        .cosmic-jin-series-image-3 {
+            left: 885px;
+            top: 8240px;
+        }
+        
+        .cosmic-jin-series-image-4 {
+            left: 890px;
+            top: 7840px;
+        }
+        
+        .cosmic-jin-series-image-6 {
+            left: 1380px;
+            top: 7850px;
+            height: 100px;
+        }
+        
+        .cosmic-jin-series-image-7 {
+            left: 1380px;
+            top: 8180px;
+            height: 100px;
+        }
+        
+        /* 宇宙Jin按钮样式 */
+        .cosmic-jin-button {
+            position: absolute;
+            left: 1220px;
+            top: 8040px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            z-index: 10000;
+            border: none;
+            padding: 0;
+            background: none;
+        }
+        
+        .cosmic-jin-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 1;
+        }
+        
+        .cosmic-jin-button::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            z-index: 2;
+        }
+        
+        .cosmic-jin-button:hover::after {
+            background: white;
+        }
+        
+        /* 宇宙Jin光芒效果 */
+        .cosmic-jin-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: 
+                linear-gradient(45deg, transparent 20%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.06) 60%, transparent 70%),
+                linear-gradient(-45deg, transparent 20%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.06) 60%, transparent 70%),
+                linear-gradient(0deg, transparent 20%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.06) 60%, transparent 70%),
+                linear-gradient(90deg, transparent 20%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.06) 60%, transparent 70%);
+            filter: blur(3px);
+            pointer-events: none;
+            z-index: 11;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .cosmic-jin-glow.show {
+            opacity: 1;
+        }
+        
+        .cosmic-jin-glow-1 {
+            left: 690px;
+            top: 7845px;
+        }
+        
+        .cosmic-jin-glow-2 {
+            left: 880px;
+            top: 7845px;
+        }
+        
+        /* 第五组宇宙Jin作品信息 */
+        .cosmic-jin-info {
+            position: absolute;
+            top: 7970px;
+            right: 90px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        /* Emma Alley 容器复制样式 */
+        .emma-alley-container-copy {
+            position: absolute;
+            top: 4150px;
+            left: -200px;
+            width: 800px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        /* Emma Alley 黑色容器复制 */
+        .emma-alley-black-container-copy {
+            position: absolute;
+            top: 20px;
+            left: 245px;
+            width: calc(100% - 490px);
+            height: calc(100% - 40px);
+            background: black;
+            z-index: 1;
+        }
+        
+        /* Emma Alley 灰色容器复制 */
+        .emma-alley-gray-container-copy {
+            position: absolute;
+            top: 50px;
+            left: 277px;
+            width: calc(100% - 554px);
+            height: calc(100% - 100px);
+            background: #cfcfcf;
+            z-index: 2;
+        }
+        
+        /* Emma Alley 图片复制 */
+        .emma-alley-image-copy {
+            position: absolute;
+            top: 60px;
+            left: 277px;
+            width: calc(100% - 554px);
+            height: calc(100% - 120px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        /* Emma Alley 红色版本容器复制 */
+        .emma-alley-red-container-copy {
+            position: absolute;
+            top: 4150px;
+            left: 160px;
+            width: 800px;
+            height: 600px;
+            z-index: 10;
+        }
+        
+        /* Emma Alley 红色版本黑色容器复制 */
+        .emma-alley-red-black-container-copy {
+            position: absolute;
+            top: 20px;
+            left: 245px;
+            width: calc(100% - 490px);
+            height: calc(100% - 40px);
+            background: black;
+            z-index: 1;
+        }
+        
+        /* Emma Alley 红色版本灰色容器复制 */
+        .emma-alley-red-gray-container-copy {
+            position: absolute;
+            top: 50px;
+            left: 277px;
+            width: calc(100% - 554px);
+            height: calc(100% - 100px);
+            background: #cfcfcf;
+            z-index: 2;
+        }
+        
+        /* Emma Alley 红色版本图片复制 */
+        .emma-alley-red-image-copy {
+            position: absolute;
+            top: 60px;
+            left: 187px;
+            width: calc(100% - 374px);
+            height: calc(100% - 120px);
+            object-fit: contain;
+            z-index: 3;
+        }
+        
+        /* 01的更大尺寸 */
+        .emma-alley-series-image-1 {
+            width: 170px;
+            height: 127px;
+        }
+        
+        /* Emma Alley 作品信息 */
+        .emma-alley-info {
+            position: absolute;
+            top: 3400px;
+            right: 80px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+            z-index: 10000;
+            color: white;
+        }
+        
+        /* EMMA系列图片样式 */
+        .emma-series-image {
+            position: absolute;
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 10;
+            filter: brightness(0);
+            transition: filter 0.1s ease;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        
+        .emma-series-image:hover {
+            filter: brightness(0.3);
+        }
+        
+        .emma-series-image.revealed {
+            filter: brightness(1);
+        }
+        
+        /* 隐藏的图片容器 */
+        .hidden-image {
+            position: absolute;
+            object-fit: contain;
+            border-radius: 0px;
+            z-index: 15;
+            opacity: 0;
+            transition: opacity 0.1s ease;
+            pointer-events: none;
+        }
+        
+        .hidden-image.show {
+            opacity: 1;
+        }
+        
+        /* 隐藏图片位置设置 - 与黑色图片完全绑定 */
+        .hidden-image.emma-series-image-1 {
+            top: 2370px;
+            left: 695px;
+            width: 130px;
+            height: 223px;
+        }
+        
+        .hidden-image.emma-series-image-2 {
+            top: 2185px;
+            left: 700px;
+            width: 120px;
+            height: 143px;
+        }
+        
+        .hidden-image.emma-series-image-3 {
+            top: 2200px;
+            left: 860px;
+            width: 180px;
+            height: 400px;
+        }
+        
+        .hidden-image.emma-series-image-4 {
+            top: 2195px;
+            left: 1100px;
+            width: 110px;
+            height: 184px;
+        }
+        
+        .hidden-image.emma-series-image-5 {
+            top: 2405px;
+            left: 1095px;
+            width: 200px;
+            height: 200px;
+        }
+        
+        /* 光芒线条样式 */
+        .light-lines {
+            position: absolute;
+            top: 2125px;
+            left: 700px;
+            width: 120px;
+            height: 20px;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .light-line {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #fac800, #fac800, #fac800, #fac800, transparent);
+            box-shadow: 0 0 25px #fac800, 0 0 35px #fac800, 0 0 45px #fac800, 0 0 55px #fac800, 0 0 65px #fac800;
+        }
+        
+        .light-line:nth-child(1) {
+            top: 0;
+        }
+        
+        .light-line:nth-child(2) {
+            top: 9px;
+        }
+        
+        .light-line:nth-child(3) {
+            top: 18px;
+        }
+        
+        .light-lines.show {
+            opacity: 1;
+        }
+        
+        .emma-series-image-1 {
+            top: 2370px;
+            left: 695px;
+            width: 130px;
+            height: 223px;
+        }
+        
+        .emma-series-image-2 {
+            top: 2185px;
+            left: 700px;
+            width: 120px;
+            height: 143px;
+        }
+        
+        .emma-series-image-3 {
+            top: 2200px;
+            left: 860px;
+            width: 180px;
+            height: 400px;
+        }
+        
+
+        
+        .emma-series-image-4 {
+            top: 2195px;
+            left: 1100px;
+            width: 110px;
+            height: 184px;
+        }
+        
+        .emma-series-image-5 {
+            top: 2405px;
+            left: 1095px;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+    
+</head>
+<body>
+            <a href="index.html" class="back-btn">Back</a>
+    
+    <!-- 题外话图片容器 -->
+    <div class="tangential-image-container">
+        <!-- 黑底图层 -->
+        <div class="black-background-tangential"></div>
+        <!-- 蓝底图层 -->
+        <div class="blue-background-tangential"></div>
+        <!-- 题外话图片 -->
+        <img src="../题外话 .png" alt="题外话" class="tangential-image">
+    </div>
+    
+    <!-- RGB Star History 静态裱框容器 -->
+    <div class="preview-image-container-5">
+        <div class="outer-black-frame-5"></div>
+        <div class="inner-black-frame-5"></div>
+        <div class="inner-yellow-frame-5"></div>
+        <img src="../白色芯片.png" alt="白色芯片" class="preview-image-5">
+        <div class="artwork-info-5">
+            White Chip<br>
+            白色芯片<br>
+            <br>
+            Paper、Watercolor、Ink<br>
+            纸本、水彩、油墨<br>
+            <br>
+            29.5× 21 cm<br>
+            <br>
+            2022
+        </div>
+    </div>
+    
+    <!-- 右侧预览图三层裱框 -->
+    <div class="preview-image-container-6">
+        <div class="outer-black-frame-6"></div>
+        <div class="inner-black-frame-6"></div>
+        <div class="inner-yellow-frame-6"></div>
+        <img src="../Tangential%20%20蓝色芯片.png" alt="Tangential 蓝色芯片" class="preview-image-6">
+        <div class="artwork-info-6">
+            Blue Chip<br>
+            蓝色芯片<br>
+            <br>
+            Paper、Watercolor、Ink<br>
+            纸本、水彩、油墨<br>
+            <br>
+            29.5× 21 cm<br>
+            <br>
+            2022
+        </div>
+    </div>
+    
+    <!-- EMMA图片容器 -->
+    <div class="emma-image-container">
+        <!-- 黑色容器 -->
+        <div class="emma-black-container"></div>
+        <!-- 灰色容器 -->
+        <div class="emma-gray-container"></div>
+        <!-- EMMA图片 -->
+        <img src="../Tangential%20%20EMMA.jpg" alt="Tangential EMMA" class="emma-image">
+        <!-- EMMA作品信息 -->
+        <div class="emma-artwork-info">
+            EMMA<br>
+            <br>
+            Paper、Ink、Watercolor、Marker Pens<br>
+            纸本 油墨，水彩，马克笔<br>
+            <br>
+            21×14.5cm<br>
+            <br>
+            2021
+        </div>
+    </div>
+    
+    <!-- Emma Alley 容器 -->
+    <div class="emma-alley-container">
+        <!-- 黑色容器 -->
+        <div class="emma-alley-black-container"></div>
+        <!-- 灰色容器 -->
+        <div class="emma-alley-gray-container"></div>
+        <!-- Emma Alley 图片 -->
+        <img src="../Tangential%20%20Emma%20Alley%20black%20.jpg" alt="Tangential Emma Alley Black" class="emma-alley-image">
+    </div>
+    
+    <!-- Emma Alley 红色版本容器 -->
+    <div class="emma-alley-red-container">
+        <!-- 黑色容器 -->
+        <div class="emma-alley-red-black-container"></div>
+        <!-- 灰色容器 -->
+        <div class="emma-alley-red-gray-container"></div>
+        <!-- Emma Alley 红色版本图片 -->
+        <img src="../Tangential%20%20Emma%20Alley%20red%20.jpg" alt="Tangential Emma Alley Red" class="emma-alley-red-image">
+    </div>
+    
+    <!-- Emma Alley 系列图片 -->
+    <img src="../Tangential%20%20Emma%20Alley%2001%20.png" alt="Tangential Emma Alley 01" class="emma-alley-series-image emma-alley-series-image-1">
+    <img src="../Tangential%20%20Emma%20Alley%2002%20.png" alt="Tangential Emma Alley 02" class="emma-alley-series-image emma-alley-series-image-2">
+    <img src="../Tangential%20%20Emma%20Alley%2003%20.png" alt="Tangential Emma Alley 03" class="emma-alley-series-image emma-alley-series-image-3">
+    <img src="../Tangential%20%20Emma%20Alley%2004%20.png" alt="Tangential Emma Alley 04" class="emma-alley-series-image emma-alley-series-image-4">
+    
+    <!-- 黑白方块 -->
+    <div class="black-white-square">
+        <div class="white-square"></div>
+    </div>
+    
+    <!-- Emma Alley 光芒效果 -->
+    <div class="emma-alley-glow emma-alley-glow-1"></div>
+    <div class="emma-alley-glow emma-alley-glow-2"></div>
+    
+    <!-- Emma Alley 作品信息 -->
+    <div class="emma-alley-info">
+        Emma Alley<br>
+        <br>
+        Paper、Ink、Watercolor、Marker Pens<br>
+        纸本 油墨，水彩，马克笔<br>
+        <br>
+        5×10.5cm ×2<br>
+        <br>
+        2021
+    </div>
+    
+    <!-- 复制的Emma Alley 系列图片 -->
+    <img src="../Tangential%20I%204%20SEE%20U%2003.png" alt="Tangential I 4 SEE U 03 Copy" class="emma-alley-series-image emma-alley-series-image-copy-1">
+    <img src="../Tangential%20I%204%20SEE%20U%2004.png" alt="Tangential I 4 SEE U 04 Copy" class="emma-alley-series-image emma-alley-series-image-copy-2">
+    <img src="../Tangential%20I%204%20SEE%20U%2001%20.png" alt="Tangential I 4 SEE U 01 Copy" class="emma-alley-series-image emma-alley-series-image-copy-3">
+    <img src="../Tangential%20I%204%20SEE%20U%2002%20.png" alt="Tangential I 4 SEE U 02 Copy" class="emma-alley-series-image emma-alley-series-image-copy-4">
+    
+    <!-- 复制的黑白方块 -->
+    <div class="black-white-square-copy">
+        <div class="white-square-copy"></div>
+    </div>
+    
+    <!-- 复制的Emma Alley 光芒效果 -->
+    <div class="emma-alley-glow emma-alley-glow-copy-1"></div>
+    <div class="emma-alley-glow emma-alley-glow-copy-2"></div>
+    
+    <!-- Emma Alley 作品信息复制 -->
+    <div class="emma-alley-info-copy">
+        I 4 SEE U<br>
+        <br>
+        Paper、Ink、Watercolor、Marker Pens<br>
+        纸本、油墨、水彩、马克笔<br>
+        <br>
+        5×10.5cm ×2<br>
+        <br>
+        2021
+    </div>
+    
+    <!-- Emma Alley 容器复制 -->
+    <div class="emma-alley-container-copy">
+        <!-- 黑色容器 -->
+        <div class="emma-alley-black-container-copy"></div>
+        <!-- 灰色容器 -->
+        <div class="emma-alley-gray-container-copy"></div>
+        <!-- Emma Alley 图片 -->
+        <img src="../Tangential%20I%204%20SEE%20U%20black.jpg" alt="Tangential I 4 SEE U Black Copy" class="emma-alley-image-copy">
+    </div>
+    
+    <!-- Emma Alley 红色版本容器复制 -->
+    <div class="emma-alley-red-container-copy">
+        <!-- 黑色容器 -->
+        <div class="emma-alley-red-black-container-copy"></div>
+        <!-- 灰色容器 -->
+        <div class="emma-alley-red-gray-container-copy"></div>
+        <!-- Emma Alley 红色版本图片 -->
+        <img src="../Tangential%20I%204%20SEE%20U%20red%20.jpg" alt="Tangential I 4 SEE U Red Copy" class="emma-alley-red-image-copy">
+    </div>
+    
+    <!-- 第三组盲从 系列图片 -->
+    <img src="../Tangential%20盲从%2001%20.png" alt="Tangential 盲从 01 Copy2" class="emma-alley-series-image emma-alley-series-image-copy2-1">
+    <img src="../Tangential%20盲从%2002%20.png" alt="Tangential 盲从 02 Copy2" class="emma-alley-series-image emma-alley-series-image-copy2-2">
+    <img src="../Tangential%20盲从%2003%20.png" alt="Tangential 盲从 03 Copy2" class="emma-alley-series-image emma-alley-series-image-copy2-3">
+    <img src="../Tangential%20盲从%2004%20.png" alt="Tangential 盲从 04 Copy2" class="emma-alley-series-image emma-alley-series-image-copy2-4">
+    
+    <!-- 第三组黑白方块 -->
+    <div class="black-white-square-copy2">
+        <div class="white-square-copy2"></div>
+    </div>
+    
+    <!-- 第三组Emma Alley 光芒效果 -->
+    <div class="emma-alley-glow emma-alley-glow-copy2-1"></div>
+    <div class="emma-alley-glow emma-alley-glow-copy2-2"></div>
+    
+    <!-- 第三组Emma Alley 作品信息 -->
+    <div class="emma-alley-info-copy2">
+        Blind Following<br>
+        <br>
+        盲从<br>
+        <br>
+        Paper、Ink、Watercolor、Marker Pens<br>
+        纸本、油墨、水彩、马克笔<br>
+        <br>
+        7×10.5 cm ×2<br>
+        <br>
+        2021
+    </div>
+    
+    <!-- 第三组Emma Alley 容器 -->
+    <div class="emma-alley-container-copy2">
+        <!-- 黑色容器 -->
+        <div class="emma-alley-black-container-copy2"></div>
+        <!-- 灰色容器 -->
+        <div class="emma-alley-gray-container-copy2"></div>
+        <!-- Emma Alley 图片 -->
+        <img src="../Tangential%20盲从%20black.jpg" alt="Tangential 盲从 Black Copy2" class="emma-alley-image-copy2">
+    </div>
+    
+    <!-- 第三组Emma Alley 红色版本容器 -->
+    <div class="emma-alley-red-container-copy2">
+        <!-- 黑色容器 -->
+        <div class="emma-alley-red-black-container-copy2"></div>
+        <!-- 灰色容器 -->
+        <div class="emma-alley-red-gray-container-copy2"></div>
+        <!-- Emma Alley 红色版本图片 -->
+        <img src="../Tangential%20盲从%20red%20.jpg" alt="Tangential 盲从 Red Copy2" class="emma-alley-red-image-copy2">
+    </div>
+    
+    <!-- 第四组苦BB系列容器 -->
+    <div class="kubb-container-1">
+        <!-- 黑色容器 -->
+        <div class="kubb-black-container"></div>
+        <!-- 灰色容器 -->
+        <div class="kubb-gray-container"></div>
+        <!-- 苦BB grey图片 -->
+        <img src="../Tangential%20苦%20BB%20grey.png" alt="Tangential 苦 BB Grey" class="kubb-image">
+    </div>
+    
+    <div class="kubb-container-2">
+        <!-- 黑色容器 -->
+        <div class="kubb-black-container"></div>
+        <!-- 灰色容器 -->
+        <div class="kubb-gray-container"></div>
+        <!-- 苦BB black图片 -->
+        <img src="../Tangential%20苦%20BB%20black.png" alt="Tangential 苦 BB Black" class="kubb-image">
+    </div>
+    
+    <div class="kubb-container-3">
+        <!-- 黑色容器 -->
+        <div class="kubb-black-container"></div>
+        <!-- 灰色容器 -->
+        <div class="kubb-gray-container"></div>
+        <!-- 苦BB red图片 -->
+        <img src="../Tangential%20苦%20BB%20red.png" alt="Tangential 苦 BB Red" class="kubb-image">
+    </div>
+    
+    <div class="kubb-container-4">
+        <!-- 黑色容器 -->
+        <div class="kubb-black-container"></div>
+        <!-- 灰色容器 -->
+        <div class="kubb-gray-container"></div>
+        <!-- 苦BB color图片 -->
+        <img src="../Tangential%20苦%20BB%20color.png" alt="Tangential 苦 BB Color" class="kubb-image">
+    </div>
+    
+    <!-- 第四组苦BB系列小图片 -->
+    <img src="../Tangential%20苦BB%2001.png" alt="Tangential 苦BB 01" class="kubb-series-image kubb-series-image-1">
+    <img src="../Tangential%20苦BB%2002.png" alt="Tangential 苦BB 02" class="kubb-series-image kubb-series-image-2">
+    <img src="../Tangential%20苦BB%2003.png" alt="Tangential 苦BB 03" class="kubb-series-image kubb-series-image-3">
+    <img src="../Tangential%20苦BB%2004.png" alt="Tangential 苦BB 04" class="kubb-series-image kubb-series-image-4">
+    <img src="../Tangential%20苦BB%2005.png" alt="Tangential 苦BB 05" class="kubb-series-image kubb-series-image-5">
+    <img src="../Tangential%20苦BB%2006.png" alt="Tangential 苦BB 06" class="kubb-series-image kubb-series-image-6">
+    <img src="../Tangential%20苦BB%2007.png" alt="Tangential 苦BB 07" class="kubb-series-image kubb-series-image-7">
+    <img src="../Tangential%20苦BB%2008.png" alt="Tangential 苦BB 08" class="kubb-series-image kubb-series-image-8">
+    
+    <!-- 第四组苦BB作品信息 -->
+    <div class="kubb-info">
+        Pain BB<br>
+        <br>
+        苦 BB<br>
+        <br>
+        Paper、Ink、Watercolor、Marker Pens<br>
+        纸本 油墨，水彩，马克笔<br>
+        <br>
+        7 * 5 cm ×4<br>
+        <br>
+        2021
+    </div>
+    
+    <!-- 第五组宇宙Jin容器 -->
+    <div class="cosmic-jin-container">
+                <!-- 黑色容器 -->
+        <div class="cosmic-jin-black-container"></div>
+        <!-- 灰色容器 -->
+        <div class="cosmic-jin-gray-container"></div>
+        <!-- 宇宙Jin black图片 -->
+        <img src="../Tangential%20宇宙%20Jin%20black%20.jpg" alt="Tangential 宇宙 Jin Black" class="cosmic-jin-image">
+    </div>
+    
+    <!-- 第五组宇宙Jin红色容器 -->
+    <div class="cosmic-jin-red-container-wrapper">
+                <!-- 红色黑色容器 -->
+        <div class="cosmic-jin-red-container"></div>
+        <!-- 红色灰色容器 -->
+        <div class="cosmic-jin-red-gray-container"></div>
+        <!-- 宇宙Jin red图片 -->
+        <img src="../Tangential%20宇宙Jin%20red.jpg" alt="Tangential 宇宙 Jin Red" class="cosmic-jin-red-image">
+    </div>
+    
+    <!-- 第五组宇宙Jin系列小图片 -->
+    <img src="../Tangential%20宇宙Jin%2001.png" alt="Tangential 宇宙Jin 01" class="cosmic-jin-series-image cosmic-jin-series-image-1">
+    <div class="cosmic-jin-glow cosmic-jin-glow-1"></div>
+    <img src="../Tangential%20宇宙Jin%2002.png" alt="Tangential 宇宙Jin 02" class="cosmic-jin-series-image cosmic-jin-series-image-2">
+    <div class="cosmic-jin-glow cosmic-jin-glow-2"></div>
+    <button class="cosmic-jin-button">按钮</button>
+    <img src="../Tangential%20宇宙Jin%2003.png" alt="Tangential 宇宙Jin 03" class="cosmic-jin-series-image cosmic-jin-series-image-3">
+    <img src="../Tangential%20宇宙Jin%2004.png" alt="Tangential 宇宙Jin 04" class="cosmic-jin-series-image cosmic-jin-series-image-4">
+    <img src="../Tangential%20宇宙Jin%2006.png" alt="Tangential 宇宙Jin 06" class="cosmic-jin-series-image cosmic-jin-series-image-6">
+    <img src="../Tangential%20宇宙Jin%2007.png" alt="Tangential 宇宙Jin 07" class="cosmic-jin-series-image cosmic-jin-series-image-7">
+    
+    <!-- 第五组宇宙Jin作品信息 -->
+    <div class="cosmic-jin-info">
+        宇宙Jin<br>
+        <br>
+        Cosmic Entity<br>
+        <br>
+        Paper、Ink、Marker Pens<br>
+        纸本、油墨、马克笔<br>
+        <br>
+        7*5 cm ×2<br>
+        <br>
+        2021
+    </div>
+    
+    <!-- EMMA系列图片（黑色版本） -->
+    <img src="../Tangential%20%20EMMA01.png" alt="Tangential EMMA01" class="emma-series-image emma-series-image-1">
+    <img src="../Tangential%20%20EMMA02.png" alt="Tangential EMMA02" class="emma-series-image emma-series-image-2">
+    <img src="../Tangential%20%20EMMA03.jpg" alt="Tangential EMMA03" class="emma-series-image emma-series-image-3">
+    <img src="../Tangential%20%20EMMA04.png" alt="Tangential EMMA04" class="emma-series-image emma-series-image-4">
+    <img src="../Tangential%20%20EMMA05.png" alt="Tangential EMMA05" class="emma-series-image emma-series-image-5">
+    
+    <!-- 隐藏的原图（用于显现） -->
+    <img src="../Tangential%20%20EMMA01.png" alt="Tangential EMMA01 Original" class="hidden-image emma-series-image-1">
+    <img src="../Tangential%20%20EMMA02.png" alt="Tangential EMMA02 Original" class="hidden-image emma-series-image-2">
+    <img src="../Tangential%20%20EMMA03.jpg" alt="Tangential EMMA03 Original" class="hidden-image emma-series-image-3">
+    <img src="../Tangential%20%20EMMA04.png" alt="Tangential EMMA04 Original" class="hidden-image emma-series-image-4">
+    <img src="../Tangential%20%20EMMA05.png" alt="Tangential EMMA05 Original" class="hidden-image emma-series-image-5">
+    
+    <!-- 光芒线条 -->
+    <div class="light-lines">
+        <div class="light-line"></div>
+        <div class="light-line"></div>
+        <div class="light-line"></div>
+    </div>
+    
+    <script>
+        // 等待页面加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...'); // 调试信息
+            
+            // 跟踪已显现的图片
+            let revealedImages = new Set();
+            let timeouts = {};
+            let lightLinesTimeout = null;
+            
+            // 为每个EMMA系列图片添加事件监听器
+            const emmaImages = document.querySelectorAll('.emma-series-image');
+            console.log('Found', emmaImages.length, 'EMMA images'); // 调试信息
+            
+            emmaImages.forEach((img, index) => {
+                console.log('Setting up event listener for image', index, img); // 调试信息
+                
+                img.addEventListener('mouseenter', function(e) {
+                    console.log('Mouse enter on image', index, e); // 调试信息
+                    
+                    // 获取对应的隐藏原图
+                    const hiddenImage = document.querySelector(`.hidden-image.emma-series-image-${index + 1}`);
+                    console.log('Hidden image found:', hiddenImage); // 调试信息
+                    
+                    if (hiddenImage) {
+                        // 立即显现原图
+                        hiddenImage.classList.add('show');
+                        revealedImages.add(index);
+                        console.log('Image revealed, total:', revealedImages.size); // 调试信息
+                        
+                        // 清除之前的定时器
+                        if (timeouts[index]) {
+                            clearTimeout(timeouts[index]);
+                        }
+                        
+                        // 3秒后自动隐藏原图
+                        timeouts[index] = setTimeout(() => {
+                            hiddenImage.classList.remove('show');
+                            revealedImages.delete(index);
+                            console.log('Image auto-hidden after 3s, total:', revealedImages.size); // 调试信息
+                            checkAllRevealed();
+                        }, 3000);
+                        
+                        checkAllRevealed();
+                    } else {
+                        console.error('Hidden image not found for index', index + 1);
+                    }
+                });
+                
+                // 移除鼠标离开事件，让图片保持显现3秒
+                // img.addEventListener('mouseleave', function(e) {
+                //     // 不再立即隐藏，让3秒定时器处理
+                // });
+                
+                // 添加点击事件作为备用
+                img.addEventListener('click', function(e) {
+                    console.log('Click on image', index, e); // 调试信息
+                    this.dispatchEvent(new Event('mouseenter'));
+                });
+            });
+            
+            // 检查是否所有图片都显现
+            function checkAllRevealed() {
+                const lightLines = document.querySelector('.light-lines');
+                console.log('Checking all revealed, count:', revealedImages.size); // 调试信息
+                
+                // 如果所有5张EMMA图片都显现，显示光芒线条
+                if (revealedImages.size === 5) {
+                    lightLines.style.display = 'block';
+                    console.log('All images revealed, showing light lines'); // 调试信息
+                    
+                    // 2秒后隐藏光芒线条
+                    setTimeout(() => {
+                        lightLines.style.display = 'none';
+                        console.log('Light lines hidden after 2s'); // 调试信息
+                    }, 2000);
+                }
+            }
+            
+            // 为白色方块添加点击事件
+            const whiteSquare = document.querySelector('.white-square');
+            if (whiteSquare) {
+                whiteSquare.addEventListener('click', function() {
+                    console.log('White square clicked, revealing all Emma Alley images'); // 调试信息
+                    
+                    // 获取所有Emma Alley系列图片
+                    const emmaAlleyImages = document.querySelectorAll('.emma-alley-series-image');
+                    
+                    // 获取光芒元素
+                    const glow1 = document.querySelector('.emma-alley-glow-1');
+                    const glow2 = document.querySelector('.emma-alley-glow-2');
+                    
+                    // 立即渐变显现所有图片
+                    emmaAlleyImages.forEach((img, index) => {
+                        img.style.filter = 'brightness(1)';
+                        console.log('Revealed Emma Alley image', index + 1); // 调试信息
+                    });
+                    
+                    // 显示01和02的光芒
+                    if (glow1) glow1.classList.add('show');
+                    if (glow2) glow2.classList.add('show');
+                    
+                    // 3秒后渐变还原为黑底并隐藏光芒
+                    setTimeout(() => {
+                        emmaAlleyImages.forEach((img, index) => {
+                            img.style.filter = 'brightness(0)';
+                            console.log('Restored Emma Alley image', index + 1, 'to black'); // 调试信息
+                        });
+                        
+                        // 隐藏光芒
+                        if (glow1) glow1.classList.remove('show');
+                        if (glow2) glow2.classList.remove('show');
+                    }, 3000);
+                });
+            }
+            
+            // 为复制的白色方块添加点击事件
+            const whiteSquareCopy = document.querySelector('.white-square-copy');
+            if (whiteSquareCopy) {
+                whiteSquareCopy.addEventListener('click', function() {
+                    console.log('White square copy clicked, revealing all Emma Alley copy images'); // 调试信息
+                    
+                    // 获取所有复制的Emma Alley系列图片
+                    const emmaAlleyCopyImages = document.querySelectorAll('.emma-alley-series-image-copy-1, .emma-alley-series-image-copy-2, .emma-alley-series-image-copy-3, .emma-alley-series-image-copy-4');
+                    
+                    // 获取复制的光芒元素
+                    const glowCopy1 = document.querySelector('.emma-alley-glow-copy-1');
+                    const glowCopy2 = document.querySelector('.emma-alley-glow-copy-2');
+                    
+                    // 立即渐变显现所有复制的图片
+                    emmaAlleyCopyImages.forEach((img, index) => {
+                        img.style.filter = 'brightness(1)';
+                        console.log('Revealed Emma Alley copy image', index + 1); // 调试信息
+                    });
+                    
+                    // 显示复制的01和02的光芒
+                    if (glowCopy1) glowCopy1.classList.add('show');
+                    if (glowCopy2) glowCopy2.classList.add('show');
+                    
+                    // 3秒后渐变还原为黑底并隐藏光芒
+                    setTimeout(() => {
+                        emmaAlleyCopyImages.forEach((img, index) => {
+                            img.style.filter = 'brightness(0)';
+                            console.log('Restored Emma Alley copy image', index + 1, 'to black'); // 调试信息
+                        });
+                        
+                        // 隐藏复制的光芒
+                        if (glowCopy1) glowCopy1.classList.remove('show');
+                        if (glowCopy2) glowCopy2.classList.remove('show');
+                    }, 3000);
+                });
+            }
+            
+            // 为第三组白色方块添加点击事件
+            const whiteSquareCopy2 = document.querySelector('.white-square-copy2');
+            if (whiteSquareCopy2) {
+                whiteSquareCopy2.addEventListener('click', function() {
+                    console.log('White square copy2 clicked, revealing all Emma Alley copy2 images'); // 调试信息
+                    
+                    // 获取所有第三组Emma Alley系列图片
+                    const emmaAlleyCopy2Images = document.querySelectorAll('.emma-alley-series-image-copy2-1, .emma-alley-series-image-copy2-2, .emma-alley-series-image-copy2-3, .emma-alley-series-image-copy2-4');
+                    
+                    // 获取第三组的光芒元素
+                    const glowCopy2_1 = document.querySelector('.emma-alley-glow-copy2-1');
+                    const glowCopy2_2 = document.querySelector('.emma-alley-glow-copy2-2');
+                    
+                    // 立即渐变显现所有第三组图片
+                    emmaAlleyCopy2Images.forEach((img, index) => {
+                        img.style.filter = 'brightness(1)';
+                        console.log('Revealed Emma Alley copy2 image', index + 1); // 调试信息
+                    });
+                    
+                    // 显示第三组01和02的光芒
+                    if (glowCopy2_1) glowCopy2_1.classList.add('show');
+                    if (glowCopy2_2) glowCopy2_2.classList.add('show');
+                    
+                    // 3秒后渐变还原为黑底并隐藏光芒
+                    setTimeout(() => {
+                        emmaAlleyCopy2Images.forEach((img, index) => {
+                            img.style.filter = 'brightness(0)';
+                            console.log('Restored Emma Alley copy2 image', index + 1, 'to black'); // 调试信息
+                        });
+                        
+                        // 隐藏第三组光芒
+                        if (glowCopy2_1) glowCopy2_1.classList.remove('show');
+                        if (glowCopy2_2) glowCopy2_2.classList.remove('show');
+                    }, 3000);
+                });
+            }
+            
+            // 为第三组Emma Alley系列图片添加hover事件
+            const emmaAlleyCopy2Images = document.querySelectorAll('.emma-alley-series-image-copy2-1, .emma-alley-series-image-copy2-2, .emma-alley-series-image-copy2-3, .emma-alley-series-image-copy2-4');
+            console.log('Found', emmaAlleyCopy2Images.length, 'Emma Alley copy2 images'); // 调试信息
+            
+            emmaAlleyCopy2Images.forEach((img, index) => {
+                console.log('Setting up hover event for Emma Alley copy2 image', index + 1); // 调试信息
+                
+                img.addEventListener('mouseenter', function() {
+                    console.log('Mouse enter on Emma Alley copy2 image', index + 1); // 调试信息
+                    
+                    // 立即显现原图
+                    img.style.filter = 'brightness(1)';
+                    
+                    // 3秒后自动还原为黑底
+                    setTimeout(() => {
+                        img.style.filter = 'brightness(0)';
+                        console.log('Restored Emma Alley copy2 image', index + 1, 'to black'); // 调试信息
+                    }, 3000);
+                });
+            });
+            
+            // 为第四组苦BB系列图片添加hover事件
+            const kubbSeriesImages = document.querySelectorAll('.kubb-series-image-1, .kubb-series-image-2, .kubb-series-image-3, .kubb-series-image-4, .kubb-series-image-5, .kubb-series-image-6, .kubb-series-image-7, .kubb-series-image-8');
+            console.log('Found', kubbSeriesImages.length, 'Kubb series images'); // 调试信息
+            
+            // 定义错位位置（当前CSS中的位置）
+            const offsetPositions = [
+                { top: '6540px' }, // 01
+                { top: '6620px' }, // 02
+                { top: '6535px' }, // 03
+                { top: '6625px' }, // 04
+                { top: '6555px' }, // 05
+                { top: '6605px' }, // 06
+                { top: '6540px' }, // 07
+                { top: '6620px' }  // 08
+            ];
+            
+            // 归位位置（统一高度）
+            const alignedPosition = { top: '6580px' };
+            
+            // 存储定时器
+            const kubbTimeouts = [null, null, null, null, null, null, null, null];
+            
+            kubbSeriesImages.forEach((img, index) => {
+                console.log('Setting up hover event for Kubb series image', index + 1); // 调试信息
+                
+                img.addEventListener('mouseenter', function() {
+                    console.log('Mouse enter on Kubb series image', index + 1); // 调试信息
+                    
+                    // 清除之前的定时器
+                    if (kubbTimeouts[index]) {
+                        clearTimeout(kubbTimeouts[index]);
+                    }
+                    
+                    // 立即显现原图并滑动归位
+                    img.style.filter = 'brightness(1)';
+                    img.classList.add('aligned');
+                    
+                    // 3秒后回到错位位置并变黑
+                    kubbTimeouts[index] = setTimeout(() => {
+                        img.classList.remove('aligned');
+                        img.style.filter = 'brightness(0)';
+                        console.log('Kubb series image', index + 1, 'returned to offset position and turned black'); // 调试信息
+                    }, 3000);
+                });
+            });
+            
+            // 为第五组宇宙Jin系列图片添加hover事件
+            const cosmicJinSeriesImages = document.querySelectorAll('.cosmic-jin-series-image-1, .cosmic-jin-series-image-2, .cosmic-jin-series-image-3, .cosmic-jin-series-image-4, .cosmic-jin-series-image-6, .cosmic-jin-series-image-7');
+            console.log('Found', cosmicJinSeriesImages.length, 'Cosmic Jin series images'); // 调试信息
+            
+            // 存储宇宙Jin定时器
+            const cosmicJinTimeouts = [null, null, null, null];
+            
+            cosmicJinSeriesImages.forEach((img, index) => {
+                console.log('Setting up hover event for Cosmic Jin series image', index + 1); // 调试信息
+                
+                img.addEventListener('mouseenter', function() {
+                    console.log('Mouse enter on Cosmic Jin series image', index + 1); // 调试信息
+                    
+                    // 清除之前的定时器
+                    if (cosmicJinTimeouts[index]) {
+                        clearTimeout(cosmicJinTimeouts[index]);
+                    }
+                    
+                    // 立即显现原图
+                    img.style.filter = 'brightness(1)';
+                    
+                    // 3秒后变黑
+                    cosmicJinTimeouts[index] = setTimeout(() => {
+                        img.style.filter = 'brightness(0)';
+                        console.log('Cosmic Jin series image', index + 1, 'turned black'); // 调试信息
+                    }, 3000);
+                });
+            });
+            
+            // 为宇宙Jin按钮添加点击事件
+            const cosmicJinButton = document.querySelector('.cosmic-jin-button');
+            if (cosmicJinButton) {
+                cosmicJinButton.addEventListener('click', function() {
+                    console.log('Cosmic Jin button clicked'); // 调试信息
+                    
+                    // 清除所有现有的定时器
+                    cosmicJinTimeouts.forEach(timeout => {
+                        if (timeout) clearTimeout(timeout);
+                    });
+                    cosmicJinTimeouts.length = 0;
+                    
+                    // 让所有宇宙Jin系列图片一起显现
+                    cosmicJinSeriesImages.forEach((img, index) => {
+                        img.style.filter = 'brightness(1)';
+                        cosmicJinTimeouts[index] = setTimeout(() => {
+                            img.style.filter = 'brightness(0)';
+                        }, 3000);
+                    });
+                    
+                    // 显示01和02的光芒效果
+                    const glow1 = document.querySelector('.cosmic-jin-glow-1');
+                    const glow2 = document.querySelector('.cosmic-jin-glow-2');
+                    console.log('Glow elements found:', glow1, glow2); // 调试信息
+                    if (glow1) {
+                        glow1.classList.add('show');
+                        console.log('Added show class to glow1');
+                    }
+                    if (glow2) {
+                        glow2.classList.add('show');
+                        console.log('Added show class to glow2');
+                    }
+                    
+                    // 3秒后隐藏光芒
+                    setTimeout(() => {
+                        if (glow1) glow1.classList.remove('show');
+                        if (glow2) glow2.classList.remove('show');
+                        console.log('Removed show class from glows');
+                    }, 3000);
+                });
+            }
+            
+            // 页面加载时测试光芒效果
+            setTimeout(() => {
+                const glow1 = document.querySelector('.cosmic-jin-glow-1');
+                const glow2 = document.querySelector('.cosmic-jin-glow-2');
+                if (glow1) {
+                    glow1.classList.add('show');
+                    console.log('Test: Added show class to glow1');
+                }
+                if (glow2) {
+                    glow2.classList.add('show');
+                    console.log('Test: Added show class to glow2');
+                }
+                setTimeout(() => {
+                    if (glow1) glow1.classList.remove('show');
+                    if (glow2) glow2.classList.remove('show');
+                    console.log('Test: Removed show class from glows');
+                }, 2000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 
+</html> 
