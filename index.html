@@ -381,7 +381,7 @@
             width: 70vw;
             min-width: 320px;
             max-width: 70vw;
-            background: #0041ff;
+            background: transparent;
             flex-shrink: 0;
             border: 12px solid #88ff00;
             overflow-y: auto;
@@ -401,9 +401,9 @@
             right: 0px;
             bottom: 0px;
             min-height: 100vh;
-            max-height: 12000px;
+            max-height: 11720px;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 999999;
             overflow: visible;
         }
         
@@ -1124,11 +1124,12 @@
             gap: 0.8vh;
             z-index: 15;
             align-items: stretch;
+            background: transparent;
         }
         
         .additional-divider {
             height: 0.2vh !important;
-            background: black !important;
+            background: #0041ff !important;
             width: 100% !important;
             min-width: 100% !important;
             max-width: 100% !important;
@@ -1150,6 +1151,7 @@
             flex-direction: column;
             gap: 8px;
             z-index: 15;
+            background: transparent;
         }
         
         .music-block {
@@ -1159,7 +1161,7 @@
             width: 50px;
             height: 50px;
             background: #fac800;
-            border: 2px solid #000;
+            border: 2px solid #0041ff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1183,6 +1185,7 @@
             flex-direction: column;
             gap: 8px;
             z-index: 15;
+            background: transparent;
         }
         
         .additional-dividers-4 {
@@ -1194,6 +1197,7 @@
             flex-direction: column;
             gap: 8px;
             z-index: 15;
+            background: transparent;
         }
         
         .album-covers-container {
@@ -1230,7 +1234,7 @@
         
         .additional-divider-2 {
             height: 2px !important;
-            background: black !important;
+            background: #0041ff !important;
             width: 100%;
             transition: background-color 0.1s ease;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path d="M16,4 L16,32 L4,32 L4,36 L16,36 L16,48 L20,48 L20,36 L32,36 L32,32 L20,32 L20,4 Z" fill="white" stroke="black" stroke-width="1"/></svg>') 32 32;
@@ -1238,7 +1242,7 @@
         
         .additional-divider-3 {
             height: 2px !important;
-            background: black !important;
+            background: #0041ff !important;
             width: 100%;
             transition: background-color 0.1s ease;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path d="M16,4 L16,32 L4,32 L4,36 L16,36 L16,48 L20,48 L20,36 L32,36 L32,32 L20,32 L20,4 Z" fill="white" stroke="black" stroke-width="1"/></svg>') 32 32;
@@ -1246,7 +1250,7 @@
         
         .additional-divider-4 {
             height: 2px !important;
-            background: black !important;
+            background: #0041ff !important;
             width: 100%;
             transition: background-color 0.1s ease;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path d="M16,4 L16,32 L4,32 L4,36 L16,36 L16,48 L20,48 L20,36 L32,36 L32,32 L20,32 L20,4 Z" fill="white" stroke="black" stroke-width="1"/></svg>') 32 32;
@@ -1257,7 +1261,7 @@
             bottom: -10199px;
             left: 12px;
             padding: 8px 20px;
-            background: black;
+            background: #0041ff;
             border-radius: 0px;
             text-align: left;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -1280,7 +1284,7 @@
             bottom: -10349px;
             left: 120px;
             padding: 8px 20px;
-            background: black;
+            background: #0041ff;
             border-radius: 0px;
             text-align: left;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -1320,7 +1324,7 @@
                 transform: translateX(-50%);
                 width: 1170px;
                 height: 800px;
-                z-index: 10000;
+                z-index: 9999999;
             }
             
             .gray-background-7 {
@@ -1330,7 +1334,7 @@
                 transform: translateX(-50%);
                 width: 550px;
                 height: 730px;
-                z-index: 4;
+                z-index: 9999998;
                 background-color: #cfcfcf;
             }
             
@@ -1341,20 +1345,38 @@
                 transform: translateX(-50%);
                 width: 850px;
                 height: 1000px;
-                z-index: 3;
-                background-color: #000000;
+                z-index: 9999997;
+                background-color: #0041ff;
             }
+        
+        /* 建筑师作品下方蓝色方框 */
+        .architect-bottom-box {
+            position: absolute;
+            bottom: -11820px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background-color: #0041ff;
+            z-index: 9999995;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 18px;
+            font-weight: bold;
+        }
         
         /* 页面底部额外空间 */
         .bottom-spacer {
             position: absolute;
-            bottom: -9000px;
+            bottom: -11720px;
             left: 0;
             right: 0;
             height: 0px;
-            background-color: #0041ff;
-            opacity: 0;
-            z-index: 100;
+            background-color: transparent;
+            opacity: 1;
+            z-index: 9999996;
         }
         
         .preview-image-7 {
@@ -1373,7 +1395,7 @@
             bottom: -1355.2px;
             left: 12px;
             padding: 24px 40px;
-            background: black;
+            background: #0041ff;
             border-radius: 0px;
             text-align: left;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -1399,7 +1421,7 @@
             bottom: -6586.2px;
             left: 12px;
             padding: 8px 20px;
-            background: black;
+            background: #0041ff;
             border-radius: 0px;
             text-align: left;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -1421,7 +1443,7 @@
             bottom: -1520px;
             left: 120px;
             padding: 8px 20px;
-            background: black;
+            background: #0041ff;
             border-radius: 0px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -1446,7 +1468,7 @@
             bottom: -2460px;
             left: 120px;
             padding: 8px 20px;
-            background: black;
+            background: #0041ff;
             border-radius: 0px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -1457,7 +1479,7 @@
             bottom: -3390px;
             left: 120px;
             padding: 8px 20px;
-            background: black;
+            background: #0041ff;
             border-radius: 0px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -1468,7 +1490,7 @@
             bottom: -6781px;
             left: 120px;
             padding: 8px 20px;
-            background: black;
+            background: #0041ff;
             border-radius: 0px;
             text-align: left;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -1479,7 +1501,7 @@
             bottom: -8081px;
             left: 120px;
             padding: 8px 20px;
-            background: black;
+            background: #0041ff;
             border-radius: 0px;
             text-align: left;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -1490,7 +1512,7 @@
             bottom: -8779px;
             left: 120px;
             padding: 8px 20px;
-            background: black;
+            background: #0041ff;
             border-radius: 0px;
             text-align: left;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -1681,7 +1703,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 32px solid black;
+            border: 32px solid #0041ff;
             border-radius: 40% / 50%;
             box-sizing: border-box;
             box-shadow: 8px 8px 0 0 #a88900;
@@ -1767,7 +1789,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 32px solid black;
+            border: 32px solid #0041ff;
             border-radius: 40% / 50%;
             box-sizing: border-box;
             box-shadow: 8px 8px 0 0 #a88900;
@@ -1800,7 +1822,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 96px solid black;
+            border: 96px solid #0041ff;
             border-radius: 0px;
             box-sizing: border-box;
         }
@@ -1832,7 +1854,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 10% solid black;
+            border: 10% solid #0041ff;
             border-radius: 0px;
             box-sizing: border-box;
         }
@@ -1843,7 +1865,7 @@
             left: 11.025%;
             right: 11.025%;
             bottom: 12.705%;
-            border: 108px solid black;
+            border: 108px solid #0041ff;
             border-radius: 0px;
             box-sizing: border-box;
         }
@@ -1875,7 +1897,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 10% solid black;
+            border: 10% solid #0041ff;
             border-radius: 0px;
             box-sizing: border-box;
         }
@@ -1886,7 +1908,7 @@
             left: 11.025%;
             right: 11.025%;
             bottom: 12.705%;
-            border: 48px solid black;
+            border: 48px solid #0041ff;
             border-radius: 0px;
             box-sizing: border-box;
         }
@@ -1918,7 +1940,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 10% solid black;
+            border: 10% solid #0041ff;
             border-radius: 0px;
             box-sizing: border-box;
         }
@@ -1929,7 +1951,7 @@
             left: 11.025%;
             right: 11.025%;
             bottom: 12.705%;
-            border: 48px solid black;
+            border: 48px solid #0041ff;
             border-radius: 0px;
             box-sizing: border-box;
         }
@@ -2403,30 +2425,30 @@
             
             <!-- 额外的26根分割线 -->
             <div class="additional-dividers">
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
-                <div class="additional-divider" style="height: 2px !important; background: black !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
             </div>
             
 
@@ -2708,6 +2730,9 @@ Painting</div>
         <div class="preview-image-container-7">
             <img src="建筑师 Archltect @0,33x.png" alt="建筑师 Archltect" class="preview-image-7">
         </div>
+        
+        <!-- 建筑师作品下方蓝色方框 -->
+        <div class="architect-bottom-box">Ongoing Optimization & Updates</div>
         
         <!-- 页面底部额外空间 -->
         <div class="bottom-spacer"></div>
@@ -3186,16 +3211,16 @@ Painting</div>
                         clearInterval(fadeInterval);
                     }
                     
-                    // 渐变变回黑色
+                    // 渐变变回蓝色
                     let opacity = 1;
                     fadeInterval = setInterval(() => {
                         opacity -= 0.1;
                         if (opacity <= 0) {
                             opacity = 0;
                             clearInterval(fadeInterval);
-                            this.style.setProperty('background-color', 'black', 'important');
+                            this.style.setProperty('background-color', '#0041ff', 'important');
                         } else {
-                            const color = `rgba(0, 0, 0, ${opacity})`;
+                            const color = `rgba(0, 65, 255, ${opacity})`;
                             this.style.setProperty('background-color', color, 'important');
                         }
                     }, 20);
@@ -3273,8 +3298,8 @@ Painting</div>
                 
                 // 设置容器高度为右侧面板的实际内容高度
                 const updateContainerHeight = () => {
-                    // 使用固定高度，让波点动画折中一点点
-                    const fixedHeight = 9000;
+                    // 使用新的固定高度，对应蓝色方框底部位置
+                    const fixedHeight = 11720; // 蓝色方框底部位置
                     this.container.style.height = fixedHeight + 'px';
                     this.containerWidth = this.container.clientWidth;
                     this.containerHeight = fixedHeight;
