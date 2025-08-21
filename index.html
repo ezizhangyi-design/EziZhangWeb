@@ -288,36 +288,7 @@
             max-width: 30vw;
             height: 100vh;
             flex-shrink: 0;
-            background: 
-                linear-gradient(to top, 
-                    rgba(0, 0, 0, 0.9) 0%,
-                    rgba(0, 0, 0, 0.9) 7.14%,
-                    rgba(20, 20, 20, 0.85) 7.14%,
-                    rgba(20, 20, 20, 0.85) 14.28%,
-                    rgba(40, 40, 40, 0.8) 14.28%,
-                    rgba(40, 40, 40, 0.8) 21.43%,
-                    rgba(60, 60, 60, 0.75) 21.43%,
-                    rgba(60, 60, 60, 0.75) 28.57%,
-                    rgba(80, 80, 80, 0.7) 28.57%,
-                    rgba(80, 80, 80, 0.7) 35.71%,
-                    rgba(100, 100, 100, 0.65) 35.71%,
-                    rgba(100, 100, 100, 0.65) 42.86%,
-                    rgba(120, 120, 120, 0.6) 42.86%,
-                    rgba(120, 120, 120, 0.6) 50%,
-                    rgba(140, 140, 140, 0.55) 50%,
-                    rgba(140, 140, 140, 0.55) 57.14%,
-                    rgba(160, 160, 160, 0.5) 57.14%,
-                    rgba(160, 160, 160, 0.5) 64.29%,
-                    rgba(180, 180, 180, 0.45) 64.29%,
-                    rgba(180, 180, 180, 0.45) 71.43%,
-                    rgba(200, 200, 200, 0.4) 71.43%,
-                    rgba(200, 200, 200, 0.4) 78.57%,
-                    rgba(220, 220, 220, 0.35) 78.57%,
-                    rgba(220, 220, 220, 0.35) 85.71%,
-                    rgba(240, 240, 240, 0.3) 85.71%,
-                    rgba(240, 240, 240, 0.3) 92.86%,
-                    rgba(255, 255, 255, 0.9) 92.86%,
-                    rgba(255, 255, 255, 0.9) 100%);
+            background: transparent;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -330,16 +301,18 @@
             color: #ff0000;
             background: #fff;
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 24px;
+            font-weight: 900;
             text-align: left;
-            padding: 8px 0 4px 32px;
+            padding: 12px 0 8px 32px;
             box-sizing: border-box;
             letter-spacing: 1px;
             margin-bottom: 0;
             -webkit-font-smoothing: none;
             -moz-osx-font-smoothing: none;
             text-rendering: optimizeSpeed;
+            position: relative;
+            z-index: 10; /* 确保在栅格渐变之上 */
         }
         .portrait-dynamic {
             display: flex;
@@ -355,6 +328,59 @@
             padding-top: 0;
             margin-top: -40px;
         }
+        
+        /* 栅格渐变背景 - 从标题到底边 */
+        .portrait-dynamic::before {
+            content: '';
+            position: absolute;
+            top: 60px; /* 从标题位置开始 */
+            left: 0px; /* 左右不缩进 */
+            right: 0px;
+            bottom: 0px; /* 到页面底边 */
+            background: 
+                linear-gradient(to top, 
+                    #000000 0%,
+                    #000000 5%,
+                    #001041 5%,
+                    #001041 10%,
+                    #002083 10%,
+                    #002083 15%,
+                    #0030c5 15%,
+                    #0030c5 20%,
+                    #0040ff 20%,
+                    #0040ff 25%,
+                    #0050ff 25%,
+                    #0050ff 30%,
+                    #0060ff 30%,
+                    #0060ff 35%,
+                    #0070ff 35%,
+                    #0070ff 40%,
+                    #0080ff 40%,
+                    #0080ff 45%,
+                    #0090ff 45%,
+                    #0090ff 50%,
+                    #00a0ff 50%,
+                    #00a0ff 55%,
+                    #00b0ff 55%,
+                    #00b0ff 60%,
+                    #00c0ff 60%,
+                    #00c0ff 65%,
+                    #00d0ff 65%,
+                    #00d0ff 70%,
+                    #00e0ff 70%,
+                    #00e0ff 75%,
+                    #00f0ff 75%,
+                    #00f0ff 80%,
+                    #0080ff 80%,
+                    #0080ff 85%,
+                    #0040ff 85%,
+                    #0040ff 90%,
+                    #0020ff 90%,
+                    #0020ff 95%,
+                    #000000 95%,
+                    #000000 100%);
+            z-index: 0; /* 确保在自画像下方 */
+        }
         .self-portrait {
             width: 100% !important;
             max-width: 500px !important;
@@ -363,7 +389,7 @@
             border-radius: 1.5vw !important;
             box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.3) !important;
             position: relative !important;
-            z-index: 1 !important;
+            z-index: 5 !important;
             object-fit: contain !important;
             margin-top: 0 !important;
             margin-bottom: 0 !important;
@@ -390,7 +416,6 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            min-height: 100vh;
         }
         
         /* 动态波点背景 */
@@ -400,11 +425,11 @@
             left: 0px;
             right: 0px;
             bottom: 0px;
-            min-height: 100vh;
-            max-height: 11720px;
+            height: 12000px !important;
+            max-height: 12000px !important;
             pointer-events: none;
             z-index: 999999;
-            overflow: visible;
+            overflow: hidden !important;
         }
         
         /* 黑客帝国ASCII动画 - 在水管屏保内 */
@@ -1352,7 +1377,7 @@
         /* 建筑师作品下方蓝色方框 */
         .architect-bottom-box {
             position: absolute;
-            bottom: -11820px;
+            bottom: -12000px;
             left: 0;
             right: 0;
             height: 100px;
@@ -1370,7 +1395,7 @@
         /* 页面底部额外空间 */
         .bottom-spacer {
             position: absolute;
-            bottom: -11720px;
+            bottom: -12000px;
             left: 0;
             right: 0;
             height: 0px;
@@ -3279,18 +3304,38 @@ Painting</div>
                 this.init();
             }
             
-            // 根据设备性能优化波点数量
+            // 根据设备性能优化波点数量 - Mac优化版
             getOptimalDotCount() {
                 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                const isLowEnd = navigator.hardwareConcurrency <= 2;
+                const isMac = /Mac/.test(navigator.platform);
+                const cpuCores = navigator.hardwareConcurrency || 4;
                 
-                if (isMobile || isLowEnd) {
-                    return 10; // 低性能设备 (原5 + 5)
-                } else if (navigator.hardwareConcurrency <= 4) {
-                    return 15; // 中等性能设备 (原10 + 5)
+                // 固定设置为30个波点
+                return 30;
+                
+                // 以下是原来自动检测的配置（已注释）
+                /*
+                // Mac设备性能优化配置
+                if (isMac) {
+                    if (cpuCores >= 8) {
+                        return 35; // 高性能Mac (M1/M2/M3 Pro/Max)
+                    } else if (cpuCores >= 6) {
+                        return 28; // 中高性能Mac (M1/M2/M3)
+                    } else if (cpuCores >= 4) {
+                        return 22; // 标准Mac (Intel i5/i7)
+                    } else {
+                        return 18; // 低端Mac
+                    }
+                } else if (isMobile) {
+                    return 8; // 移动设备
+                } else if (cpuCores <= 2) {
+                    return 12; // 低性能设备
+                } else if (cpuCores <= 4) {
+                    return 18; // 中等性能设备
                 } else {
-                    return 20; // 高性能设备 (原15 + 5)
+                    return 25; // 高性能设备
                 }
+                */
             }
             
             init() {
@@ -3298,9 +3343,10 @@ Painting</div>
                 
                 // 设置容器高度为右侧面板的实际内容高度
                 const updateContainerHeight = () => {
-                    // 使用新的固定高度，对应蓝色方框底部位置
-                    const fixedHeight = 11720; // 蓝色方框底部位置
+                    // 使用新的固定高度，对应滚轮终点位置
+                    const fixedHeight = 12000; // 滚轮终点位置：-12000px
                     this.container.style.height = fixedHeight + 'px';
+                    this.container.style.maxHeight = fixedHeight + 'px';
                     this.containerWidth = this.container.clientWidth;
                     this.containerHeight = fixedHeight;
                 };
@@ -3348,10 +3394,10 @@ Painting</div>
                 const dotData = {
                     element: dot,
                     size: size,
-                    x: Math.random() * this.containerWidth - size/2,
-                    y: Math.random() * this.containerHeight - size/2,
-                    vx: (Math.random() - 0.5) * 6, // 速度 -3 到 3
-                    vy: (Math.random() - 0.5) * 6,
+                    x: Math.random() * (this.containerWidth - size - 150), // 考虑右侧缩进
+                    y: Math.random() * (this.containerHeight - size),
+                    vx: (Math.random() - 0.5) * (this.dotCount > 25 ? 3 : 4), // 根据波点数量调整速度
+                    vy: (Math.random() - 0.5) * (this.dotCount > 25 ? 3 : 4),
                     colorClass: colorClass
                 };
                 
@@ -3423,14 +3469,25 @@ Painting</div>
                     dot.x += dot.vx;
                     dot.y += dot.vy;
                     
-                    // 边界反弹
-                    if (dot.x <= -dot.size/2 || dot.x >= this.containerWidth - dot.size/2) {
+                    // 边界反弹 - 右侧额外缩进
+                    const rightMargin = 150; // 右侧额外缩进150px
+                    if (dot.x <= 0 || dot.x >= this.containerWidth - dot.size - rightMargin) {
                         dot.vx *= -1;
-                        dot.x = Math.max(-dot.size/2, Math.min(this.containerWidth - dot.size/2, dot.x));
+                        dot.x = Math.max(0, Math.min(this.containerWidth - dot.size - rightMargin, dot.x));
                     }
-                    if (dot.y <= -dot.size/2 || dot.y >= this.containerHeight - dot.size/2) {
+                    if (dot.y <= 0 || dot.y >= this.containerHeight - dot.size) {
                         dot.vy *= -1;
-                        dot.y = Math.max(-dot.size/2, Math.min(this.containerHeight - dot.size/2, dot.y));
+                        dot.y = Math.max(0, Math.min(this.containerHeight - dot.size, dot.y));
+                    }
+                    
+                    // 额外的安全检查 - 强制限制波点位置
+                    dot.x = Math.max(0, Math.min(this.containerWidth - dot.size - rightMargin, dot.x));
+                    dot.y = Math.max(0, Math.min(this.containerHeight - dot.size, dot.y));
+                    
+                    // 平衡运动方向 - 防止偏向右侧
+                    if (dot.x > (this.containerWidth - dot.size - rightMargin) * 0.8) {
+                        // 如果波点接近右边界，增加向左的速度
+                        dot.vx = Math.min(dot.vx, -1);
                     }
                     
                     // 随机扰动
@@ -3451,9 +3508,10 @@ Painting</div>
                     dot.element.style.transform = `translate(${dot.x}px, ${dot.y}px)`;
                 });
                 
-                // 降低碰撞检测频率以提升性能
+                // 智能碰撞检测频率 - 根据波点数量动态调整
                 if (!this.frameCount) this.frameCount = 0;
-                if (this.frameCount % 3 === 0) { // 每3帧检查一次碰撞
+                const collisionInterval = this.dotCount > 25 ? 5 : (this.dotCount > 15 ? 4 : 3);
+                if (this.frameCount % collisionInterval === 0) {
                     this.checkCollisions();
                 }
                 this.frameCount++;
