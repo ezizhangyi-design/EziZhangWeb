@@ -41,6 +41,154 @@
             position: relative;
         }
         
+        /* ===== 性能优化和稳定性增强 ===== */
+        /* 防止重排重绘 */
+        .preview-image-container-3,
+        .preview-image-container-4,
+        .outer-black-frame-3,
+        .outer-black-frame-4,
+        .inner-gray-frame-3,
+        .inner-gray-frame-4,
+        .preview-image-3,
+        .preview-image-4 {
+            will-change: transform;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        /* 防止图片闪烁 */
+        .preview-image-3,
+        .preview-image-4 {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+        
+        /* 确保容器稳定性 */
+        .preview-image-container-3,
+        .preview-image-container-4 {
+            contain: layout style paint;
+            isolation: isolate;
+        }
+        
+        /* 防止意外修改的保护 */
+        .preview-image-container-3 *,
+        .preview-image-container-4 * {
+            pointer-events: auto;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        /* 确保响应式稳定性 */
+        @media (max-width: 768px) {
+            .preview-image-container-3,
+            .preview-image-container-4 {
+                min-height: 200px;
+                max-height: 80vh;
+            }
+            
+            .preview-image-3,
+            .preview-image-4 {
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+        
+        /* 高DPI屏幕优化 */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .preview-image-3,
+            .preview-image-4 {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+        }
+        
+        /* 防止动画冲突 */
+        .preview-image-container-3,
+        .preview-image-container-4 {
+            animation: none !important;
+            transition: none !important;
+        }
+        
+        /* 确保层级稳定性 */
+        .preview-image-container-3,
+        .preview-image-container-4 {
+            z-index: 10000 !important;
+            position: absolute !important;
+        }
+        
+        /* 防止溢出 */
+        .preview-image-container-3,
+        .preview-image-container-4 {
+            overflow: hidden;
+            clip-path: inset(0);
+        }
+        
+        /* 确保计算稳定性 */
+        .outer-black-frame-3,
+        .outer-black-frame-4,
+        .inner-gray-frame-3,
+        .inner-gray-frame-4 {
+            box-sizing: border-box !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        /* 防止字体闪烁 */
+        .work-title,
+        .subtitle,
+        .subtitle-3,
+        .subtitle-4 {
+            font-display: swap;
+            font-synthesis: none;
+        }
+        
+        /* 确保触摸设备兼容性 */
+        @media (hover: none) and (pointer: coarse) {
+            .preview-image-container-3,
+            .preview-image-container-4 {
+                touch-action: manipulation;
+            }
+        }
+        
+        /* 防止内存泄漏 */
+        .preview-image-3,
+        .preview-image-4 {
+            contain: layout style paint;
+        }
+        
+        /* 确保打印兼容性 */
+        @media print {
+            .preview-image-container-3,
+            .preview-image-container-4 {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* 防止焦点问题 */
+        .preview-image-container-3:focus,
+        .preview-image-container-4:focus {
+            outline: none;
+        }
+        
+        /* 确保无障碍访问 */
+        .preview-image-3,
+        .preview-image-4 {
+            alt: "";
+            role: "img";
+            aria-label: "Artwork preview";
+        }
+        
+        /* 防止CSS冲突 - 使用更安全的方式 */
+        .preview-image-container-3,
+        .preview-image-container-4 {
+            /* 确保基础属性不被覆盖 */
+            display: block !important;
+            position: absolute !important;
+            box-sizing: border-box !important;
+        }
+        
         /* 锁定关键布局元素 */
         .container, .left-panel, .right-panel {
             position: relative !important;
@@ -2116,9 +2264,11 @@
         
         .outer-black-frame-4 {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 10% solid #0041ff;
+            top: 15%;
+            left: 5%;
+            right: 5%;
+            bottom: 15%;
+            background: #0041ff;
             border-radius: 0px;
             box-sizing: border-box;
         }
@@ -2136,24 +2286,24 @@
         
         .inner-gray-frame-4 {
             position: absolute;
-            top: calc(12.705% + 108px);
-            left: calc(11.025% + 108px);
-            right: calc(11.025% + 108px);
-            bottom: calc(12.705% + 108px);
-            border: 16px solid #cfcfcf;
+            top: calc(12.705% + 118px);
+            left: calc(11.025% + 28px);
+            right: calc(11.025% + 28px);
+            bottom: calc(12.705% + 118px);
+            background: #cfcfcf;
             border-radius: 0px;
             box-sizing: border-box;
         }
         
         .preview-image-4 {
             position: absolute;
-            top: calc(12.705% + 80px);
-            left: calc(11.025% + 80px);
-            right: calc(11.025% + 80px);
-            bottom: calc(12.705% + 80px);
-            width: calc(77.95% - 160px);
-            height: calc(74.59% - 160px);
-            object-fit: cover;
+            top: calc(12.705% + 40px);
+            left: calc(11.025% + 40px);
+            right: calc(11.025% + 40px);
+            bottom: calc(12.705% + 40px);
+            width: calc(77.95% - 80px);
+            height: calc(74.59% - 80px);
+            object-fit: contain;
             border-radius: 0px;
         }
         
@@ -2823,7 +2973,6 @@ Video Work</h2>
         <!-- 第四个预览图 -->
         <div class="preview-image-container-4">
             <div class="outer-black-frame-4"></div>
-            <div class="inner-black-frame-4"></div>
             <div class="inner-gray-frame-4"></div>
             <img src="多栖思维 白木 木刻 2025 100x90cm_.jpg" alt="The Signifer Relic Series Preview" class="preview-image-4">
         </div>
