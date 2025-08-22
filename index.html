@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="visual-protection" content="enabled">
     <meta name="layout-stability" content="protected">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Ezi.Zhang - Homepage</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
@@ -237,6 +240,234 @@
             .protected-layout .right-panel { width: 50vw !important; }
         }
         
+        /* 分割线组响应式设计 */
+        @media (max-width: 1200px) and (min-width: 901px) {
+            .additional-dividers,
+            .additional-dividers-2,
+            .additional-dividers-3,
+            .additional-dividers-4 {
+                right: 1vw;
+                left: 1vw;
+                gap: 0.6vh;
+            }
+            
+            .additional-divider {
+                height: 0.15vh !important;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .additional-dividers,
+            .additional-dividers-2,
+            .additional-dividers-3,
+            .additional-dividers-4 {
+                right: 0.8vw;
+                left: 0.8vw;
+                gap: 0.5vh;
+            }
+            
+            .additional-divider {
+                height: 0.12vh !important;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .additional-dividers,
+            .additional-dividers-2,
+            .additional-dividers-3,
+            .additional-dividers-4 {
+                right: 0.6vw;
+                left: 0.6vw;
+                gap: 0.4vh;
+            }
+            
+            .additional-divider {
+                height: 0.1vh !important;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .additional-dividers,
+            .additional-dividers-2,
+            .additional-dividers-3,
+            .additional-dividers-4 {
+                right: 0.4vw;
+                left: 0.4vw;
+                gap: 0.3vh;
+            }
+            
+            .additional-divider {
+                height: 0.08vh !important;
+            }
+        }
+        
+        /* 作品预览容器响应式设计 */
+        @media (max-width: 1200px) and (min-width: 901px) {
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 85%;
+                max-width: 85%;
+            }
+            
+            .preview-image-container img,
+            .preview-image-container-2 img,
+            .preview-image-container-3 img,
+            .preview-image-container-4 img,
+            .preview-image-container-5 img,
+            .preview-image-container-6 img,
+            .preview-image-container-7 img {
+                width: 100%;
+                height: auto;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 90%;
+                max-width: 90%;
+            }
+            
+            .preview-image-container img,
+            .preview-image-container-2 img,
+            .preview-image-container-3 img,
+            .preview-image-container-4 img,
+            .preview-image-container-5 img,
+            .preview-image-container-6 img,
+            .preview-image-container-7 img {
+                width: 100%;
+                height: auto;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 95%;
+                max-width: 95%;
+            }
+            
+            .preview-image-container img,
+            .preview-image-container-2 img,
+            .preview-image-container-3 img,
+            .preview-image-container-4 img,
+            .preview-image-container-5 img,
+            .preview-image-container-6 img,
+            .preview-image-container-7 img {
+                width: 100%;
+                height: auto;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 98%;
+                max-width: 98%;
+            }
+            
+            .preview-image-container img,
+            .preview-image-container-2 img,
+            .preview-image-container-3 img,
+            .preview-image-container-4 img,
+            .preview-image-container-5 img,
+            .preview-image-container-6 img,
+            .preview-image-container-7 img {
+                width: 100%;
+                height: auto;
+                max-width: 100%;
+            }
+        }
+        
+        /* 作品标题容器响应式设计 */
+        @media (max-width: 1200px) and (min-width: 901px) {
+            .work-title-container,
+            .work-title-container-2 {
+                font-size: 2.2vw;
+                padding: 1.5vh 2.5vw;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .work-title-container,
+            .work-title-container-2 {
+                font-size: 2.8vw;
+                padding: 1.2vh 2vw;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .work-title-container,
+            .work-title-container-2 {
+                font-size: 3.5vw;
+                padding: 1vh 1.5vw;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .work-title-container,
+            .work-title-container-2 {
+                font-size: 4vw;
+                padding: 0.8vh 1.2vw;
+            }
+        }
+        
+        /* 建筑师底部盒子响应式设计 */
+        @media (max-width: 1200px) and (min-width: 901px) {
+            .architect-bottom-box {
+                font-size: 16px;
+                padding: 0 2vw;
+                height: 90px;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .architect-bottom-box {
+                font-size: 15px;
+                padding: 0 1.5vw;
+                height: 85px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .architect-bottom-box {
+                font-size: 14px;
+                padding: 0 1vw;
+                height: 80px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .architect-bottom-box {
+                font-size: 13px;
+                padding: 0 0.8vw;
+                height: 75px;
+            }
+        }
+        
         /* 屏保切换按钮样式 */
         #test-pipes:hover {
             background: #ff6666 !important;
@@ -329,62 +560,48 @@
             margin-top: -40px;
         }
         
-        /* 栅格渐变背景 - 从标题到底边 */
+        /* 栅格渐变背景 - 向上平移 */
         .portrait-dynamic::before {
             content: '';
             position: absolute;
-            top: 60px; /* 从标题位置开始 */
+            top: -50px; /* 向上平移50px */
             left: 0px; /* 左右不缩进 */
             right: 0px;
-            bottom: 0px; /* 到页面底边 */
+            bottom: 0px; /* 保持到底部 */
             background: 
-                linear-gradient(to top, 
+                linear-gradient(to bottom, 
                     #000000 0%,
-                    #000000 5%,
-                    #001041 5%,
-                    #001041 10%,
-                    #002083 10%,
-                    #002083 15%,
-                    #0030c5 15%,
-                    #0030c5 20%,
-                    #0040ff 20%,
-                    #0040ff 25%,
-                    #0050ff 25%,
-                    #0050ff 30%,
-                    #0060ff 30%,
-                    #0060ff 35%,
-                    #0070ff 35%,
-                    #0070ff 40%,
-                    #0080ff 40%,
-                    #0080ff 45%,
-                    #0090ff 45%,
-                    #0090ff 50%,
-                    #00a0ff 50%,
-                    #00a0ff 55%,
-                    #00b0ff 55%,
-                    #00b0ff 60%,
-                    #00c0ff 60%,
-                    #00c0ff 65%,
-                    #00d0ff 65%,
-                    #00d0ff 70%,
-                    #00e0ff 70%,
-                    #00e0ff 75%,
-                    #00f0ff 75%,
-                    #00f0ff 80%,
-                    #0080ff 80%,
-                    #0080ff 85%,
-                    #0040ff 85%,
-                    #0040ff 90%,
-                    #0020ff 90%,
-                    #0020ff 95%,
-                    #000000 95%,
+                    #000000 15%,
+                    #001041 15%,
+                    #001041 22%,
+                    #002083 22%,
+                    #002083 29%,
+                    #0030c5 29%,
+                    #0030c5 36%,
+                    #0040ff 36%,
+                    #0040ff 43%,
+                    #0050ff 43%,
+                    #0050ff 50%,
+                    #0060ff 50%,
+                    #0060ff 57%,
+                    #0050ff 57%,
+                    #0050ff 64%,
+                    #0040ff 64%,
+                    #0040ff 71%,
+                    #0030c5 71%,
+                    #0030c5 78%,
+                    #002083 78%,
+                    #002083 85%,
+                    #001041 85%,
+                    #001041 92%,
+                    #000000 92%,
                     #000000 100%);
             z-index: 0; /* 确保在自画像下方 */
         }
         .self-portrait {
-            width: 100% !important;
-            max-width: 500px !important;
-            min-width: 400px !important;
+            width: 90% !important;
+            max-width: 450px !important;
+            min-width: 360px !important;
             height: auto !important;
             border-radius: 1.5vw !important;
             box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.3) !important;
@@ -414,7 +631,7 @@
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             position: relative;
         }
         
@@ -468,8 +685,8 @@
             transform: translateZ(0);
         }
         
-        .dot.green {
-            background: rgba(9, 173, 4, 0.7);
+        .dot.bright-green {
+            background: rgba(0, 255, 102, 0.7) !important;
         }
         
         .dot.red {
@@ -710,7 +927,32 @@
             background: #09ad04;
             border-radius: 50%;
             z-index: 2;
-            transition: all 0.1s ease;
+            transition: all 0.2s ease;
+        }
+        
+        .yellow-finger-hint:hover .pupil {
+            background: #00ff00 !important;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.8) !important;
+            transform: scale(1.2) !important;
+        }
+        
+        .yellow-finger-hint:hover {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path d="M12,3 L12,24 L3,24 L3,27 L12,27 L12,36 L15,36 L15,27 L24,27 L24,24 L15,24 L15,3 Z" fill="red" stroke="black" stroke-width="0.6"/></svg>') 24 24 !important;
+        }
+        
+        /* 所有绿色眼睛的瞳孔悬停效果 */
+        .green-eye-hint:hover .pupil-green,
+        .green-eye-hint-2:hover .pupil-green,
+        .green-eye-hint-3:hover .pupil-green,
+        .green-eye-hint-4:hover .pupil-green,
+        .green-eye-hint-5:hover .pupil-green,
+        .green-eye-hint-6:hover .pupil-green,
+        .green-eye-hint-7:hover .pupil-green,
+        .green-eye-hint-8:hover .pupil-green {
+            background: #00ff00 !important;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.8) !important;
+            transform: scale(1.2) !important;
+            transition: all 0.2s ease !important;
         }
         @keyframes fingerBounce {
             0%, 100% { transform: scale(1) translateY(0); }
@@ -728,7 +970,7 @@
         @media (max-width: 1200px) and (min-width: 901px) {
             /* 艺术家位置信息响应式 - 大屏幕 */
             .artist-location {
-                margin: 2.5vh 2.5vw 1.5vh 2.5vw;
+                margin: 5vh 2.5vw 2.5vh 2.5vw;
                 padding: 2vh 3vw;
                 border-radius: 1.8vw;
             }
@@ -802,7 +1044,7 @@
             }
             
             .subtitle-container-3 {
-                bottom: -339vh;
+                bottom: -345vh;
                 left: 12vw;
                 padding: 0.8vh 2vw;
             }
@@ -867,7 +1109,7 @@
             
             /* 艺术家位置信息响应式 - 中等屏幕 */
             .artist-location {
-                margin: 2vh 2vw 1vh 2vw;
+                margin: 4vh 2vw 2vh 2vw;
                 padding: 1.8vh 2.5vw;
                 border-radius: 1.5vw;
             }
@@ -993,7 +1235,7 @@
             }
         }
         .artist-description {
-            margin: 40px 20px 20px 20px;
+            margin: 40px 20px 20px 40px;
             padding: 25px;
             background: rgba(255,255,255,0.05);
             border-radius: 12px;
@@ -1002,8 +1244,8 @@
         }
         
         .artist-location {
-            margin: 20px 20px 10px -865px;
-            padding: 15px 25px;
+            margin: 40px 20px 20px 40px;
+            padding: 25px;
             background: rgba(255,255,255,0.05);
             border-radius: 12px;
             border-left: 4px solid #fac800;
@@ -1023,15 +1265,14 @@
         .artist-location p span {
             background: #950000;
             padding: 2px 6px;
-            display: inline-block;
-            margin-right: 8px;
+            display: inline;
         }
         .artist-description p {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
             font-size: 16px;
             line-height: 2.5;
             color: rgba(255,255,255,0.9);
-            text-align: justify;
+            text-align: left;
             margin: 0;
             font-weight: bold;
         }
@@ -1427,7 +1668,7 @@
         }
         .work-title {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 112px;
+            font-size: 140px;
             color: white;
             margin: 0;
             font-weight: bold;
@@ -1435,7 +1676,7 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: pre-line;
             letter-spacing: -2px;
-            line-height: 0.4;
+            line-height: 0.8;
             -webkit-font-smoothing: none;
             -moz-osx-font-smoothing: none;
             text-rendering: optimizeSpeed;
@@ -1445,7 +1686,7 @@
             position: absolute;
             bottom: -6586.2px;
             left: 12px;
-            padding: 8px 20px;
+            padding: 24px 40px;
             background: #0041ff;
             border-radius: 0px;
             text-align: left;
@@ -1454,13 +1695,18 @@
         
         .work-title-2 {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 112px;
+            font-size: 140px;
             color: white;
             margin: 0;
             font-weight: bold;
             font-style: italic;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: pre-line;
+            letter-spacing: -2px;
+            line-height: 0.8;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
         }
         
         .subtitle-container {
@@ -1501,7 +1747,7 @@
         
         .subtitle-container-3 {
             position: absolute;
-            bottom: -3390px;
+            bottom: -3450px;
             left: 120px;
             padding: 8px 20px;
             background: #0041ff;
@@ -1643,7 +1889,7 @@
         .green-eye-hint-3 {
             position: absolute;
             left: 40px;
-            bottom: -3390px;
+            bottom: -3450px;
             width: 80px;
             height: 52px;
             z-index: 10;
@@ -1688,17 +1934,7 @@
             cursor: pointer;
         }
         
-        .green-eye-hint-7 {
-            position: absolute;
-            left: 40px;
-            bottom: -7700px;
-            width: 80px;
-            height: 52px;
-            z-index: 10;
-            pointer-events: auto;
-            user-select: none;
-            cursor: pointer;
-        }
+
         
 
         .green-eye-hint {
@@ -1775,8 +2011,8 @@
             bottom: -4670px;
             left: 50%;
             transform: translateX(-50%);
-            width: 780px;
-            height: 1170px;
+            width: 700px;
+            height: 1200px;
             z-index: 10000;
         }
         
@@ -1785,7 +2021,7 @@
             bottom: -8031px;
             left: 50%;
             transform: translateX(-50%);
-            width: 1208px;
+            width: 1400px;
             height: 1367px;
             z-index: 10000;
         }
@@ -1845,33 +2081,36 @@
         
         .outer-black-frame-3 {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 96px solid #0041ff;
+            top: 120px;
+            left: 50%;
+            bottom: 80px;
+            transform: translateX(-50%);
+            width: calc(100% - 160px);
+            background: #0041ff;
             border-radius: 0px;
             box-sizing: border-box;
         }
         
         .inner-gray-frame-3 {
             position: absolute;
-            top: 96px;
-            left: 96px;
-            right: 96px;
-            bottom: 96px;
-            border: 16px solid #cfcfcf;
+            top: 206px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 408px);
+            height: calc(100% - 372px);
+            background: #cfcfcf;
             border-radius: 0px;
             box-sizing: border-box;
         }
         
         .preview-image-3 {
             position: absolute;
-            top: 102px;
-            left: 102px;
-            right: 102px;
-            bottom: 102px;
-            width: calc(100% - 204px);
-            height: calc(100% - 204px);
-            object-fit: cover;
+            top: 136px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 428px);
+            height: calc(100% - 232px);
+            object-fit: contain;
             border-radius: 0px;
         }
         
@@ -1908,13 +2147,13 @@
         
         .preview-image-4 {
             position: absolute;
-            top: calc(12.705% + 114px);
-            left: calc(11.025% + 114px);
-            right: calc(11.025% + 114px);
-            bottom: calc(12.705% + 114px);
-            width: calc(77.95% - 228px);
-            height: calc(74.59% - 228px);
-            object-fit: contain;
+            top: calc(12.705% + 80px);
+            left: calc(11.025% + 80px);
+            right: calc(11.025% + 80px);
+            bottom: calc(12.705% + 80px);
+            width: calc(77.95% - 160px);
+            height: calc(74.59% - 160px);
+            object-fit: cover;
             border-radius: 0px;
         }
         
@@ -2060,7 +2299,7 @@
             
             /* 艺术家位置信息响应式 */
             .artist-location {
-                margin: 2vh 2vw 1vh 2vw;
+                margin: 4vh 2vw 2vh 2vw;
                 padding: 1.5vh 2.5vw;
                 border-radius: 1.2vw;
             }
@@ -2203,7 +2442,7 @@
         @media (max-width: 400px) {
             /* 艺术家位置信息响应式 - 小屏幕 */
             .artist-location {
-                margin: 1.5vh 1.5vw 0.8vh 1.5vw;
+                margin: 3vh 1.5vw 1.5vh 1.5vw;
                 padding: 1.2vh 2vw;
                 border-radius: 1vw;
             }
@@ -2354,18 +2593,35 @@
         }
 
         /* 手型光标样式 */
-        .yellow-finger-hint:hover,
+        .yellow-finger-hint:hover {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path d="M12,3 L12,24 L3,24 L3,27 L12,27 L12,36 L15,36 L15,27 L24,27 L24,24 L15,24 L15,3 Z" fill="red" stroke="black" stroke-width="0.6"/></svg>') 24 24 !important;
+        }
+        
+        /* 绿色眼睛像素风格十字符号光标样式 */
         .green-eye-hint:hover,
         .green-eye-hint-2:hover,
         .green-eye-hint-3:hover,
         .green-eye-hint-4:hover,
-        
         .green-eye-hint-5:hover,
         .green-eye-hint-6:hover,
         .green-eye-hint-7:hover,
         .green-eye-hint-8:hover {
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path d="M16,4 L16,32 L4,32 L4,36 L16,36 L16,48 L20,48 L20,36 L32,36 L32,32 L20,32 L20,4 Z" fill="white" stroke="black" stroke-width="1"/></svg>') 16 16, pointer;
+            cursor: crosshair !important;
         }
+        
+        /* 强制设置所有绿色眼睛的悬停光标 */
+        .green-eye-hint,
+        .green-eye-hint-2,
+        .green-eye-hint-3,
+        .green-eye-hint-4,
+        .green-eye-hint-5,
+        .green-eye-hint-6,
+        .green-eye-hint-8,
+        .yellow-finger-hint {
+            cursor: none !important;
+        }
+        
+
         
 
     </style>
@@ -2483,7 +2739,6 @@
             <!-- Visual & Video Work 标题 -->
             <div class="work-title-container">
                 <h2 class="work-title">Visual
-
 Video Work</h2>
             </div>
             
@@ -2638,8 +2893,8 @@ Video Work</h2>
         <!-- 第四个大标题 -->
         <div class="work-title-container-2">
             <h2 class="work-title-2">Rubbing
-            Woodcut
-                        Stone Carving</h2>
+Woodcut
+Stone Carving</h2>
         </div>
         
         <!-- 第四个小标题 -->
@@ -2687,6 +2942,8 @@ Video Work</h2>
                 <div class="pupil-green"></div>
             </div>
         </div>
+        
+
         
         <!-- 第六个预览图三层裱框 -->
         <div class="preview-image-container-6">
@@ -3379,6 +3636,9 @@ Painting</div>
                     this.createDot(i);
                 }
                 
+                // 为绿色圆点添加鼠标事件
+                this.addGreenDotEvents();
+                
                 // 开始动画循环
                 this.animate();
             }
@@ -3394,7 +3654,7 @@ Painting</div>
                 const dotData = {
                     element: dot,
                     size: size,
-                    x: Math.random() * (this.containerWidth - size - 150), // 考虑右侧缩进
+                    x: Math.random() * (this.containerWidth - size - 150) + 50, // 考虑右侧缩进，但确保均匀分布
                     y: Math.random() * (this.containerHeight - size),
                     vx: (Math.random() - 0.5) * (this.dotCount > 25 ? 3 : 4), // 根据波点数量调整速度
                     vy: (Math.random() - 0.5) * (this.dotCount > 25 ? 3 : 4),
@@ -3484,10 +3744,13 @@ Painting</div>
                     dot.x = Math.max(0, Math.min(this.containerWidth - dot.size - rightMargin, dot.x));
                     dot.y = Math.max(0, Math.min(this.containerHeight - dot.size, dot.y));
                     
-                    // 平衡运动方向 - 防止偏向右侧
+                    // 平衡运动方向 - 防止偏向右侧或左侧
                     if (dot.x > (this.containerWidth - dot.size - rightMargin) * 0.8) {
                         // 如果波点接近右边界，增加向左的速度
                         dot.vx = Math.min(dot.vx, -1);
+                    } else if (dot.x < (this.containerWidth - dot.size - rightMargin) * 0.2) {
+                        // 如果波点接近左边界，增加向右的速度
+                        dot.vx = Math.max(dot.vx, 1);
                     }
                     
                     // 随机扰动
@@ -3504,8 +3767,15 @@ Painting</div>
                         dot.vy = (dot.vy / speed) * maxSpeed;
                     }
                     
-                    // 使用transform优化性能
-                    dot.element.style.transform = `translate(${dot.x}px, ${dot.y}px)`;
+                    // 使用transform优化性能，保持CSS的scale效果
+                    const currentTransform = window.getComputedStyle(dot.element).transform;
+                    const hasScale = currentTransform.includes('scale');
+                    if (hasScale) {
+                        // 如果已经有scale效果，保持它
+                        dot.element.style.transform = `translate(${dot.x}px, ${dot.y}px) scale(1.2)`;
+                    } else {
+                        dot.element.style.transform = `translate(${dot.x}px, ${dot.y}px)`;
+                    }
                 });
                 
                 // 智能碰撞检测频率 - 根据波点数量动态调整
@@ -3518,6 +3788,16 @@ Painting</div>
                 
                 // 继续动画
                 this.animationFrameId = requestAnimationFrame(() => this.animate());
+            }
+            
+            addGreenDotEvents() {
+                // 为所有绿色圆点添加鼠标事件
+                this.dots.forEach(dot => {
+                    if (dot.colorClass === 'bright-green') {
+                        // 确保CSS悬停效果能够正常工作
+                        dot.element.style.pointerEvents = 'auto';
+                    }
+                });
             }
         }
         
@@ -3560,8 +3840,8 @@ Painting</div>
                 
                 // 保护文字内容
                 this.protectElement('.left-title', ['font-family', 'font-size', 'color', 'background']);
-                this.protectElement('.artist-location', ['font-family', 'font-size', 'margin', 'padding']);
-                this.protectElement('.artist-description', ['font-family', 'font-size', 'margin', 'padding']);
+                this.protectElement('.artist-location', ['font-family', 'font-size']);
+                this.protectElement('.artist-description', ['font-family', 'font-size']);
                 
                 // 保护动画元素
                 this.protectElement('.arc-animated', ['position', 'pointer-events', 'z-index']);
@@ -4215,6 +4495,26 @@ Painting</div>
             }
         }
         
+        // 初始化视觉保护系统
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                window.visualProtector = new VisualContentProtector();
+                console.log('✅ 视觉内容保护系统已启动');
+            } catch (error) {
+                console.warn('⚠️ 视觉内容保护系统初始化失败:', error);
+            }
+        });
+        
+        // 初始化波点系统
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                window.dotSystem = new DotSystem();
+                console.log('✅ 波点系统已启动');
+            } catch (error) {
+                console.warn('⚠️ 波点系统初始化失败:', error);
+            }
+        });
+        
         // 初始化管道屏保
         document.addEventListener('DOMContentLoaded', () => {
             try {
@@ -4268,6 +4568,12 @@ Painting</div>
             }
         });
 
+        // 缓存控制 - 确保页面总是加载最新版本
+        if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+            // 如果是从后退/前进按钮访问，强制刷新
+            window.location.reload(true);
+        }
+        
         // 专门为The Signifer Relic Series眼睛添加事件监听器
         document.addEventListener('DOMContentLoaded', () => {
             const signiferEye = document.querySelector('.green-eye-hint-4');
@@ -4282,10 +4588,585 @@ Painting</div>
             } else {
                 console.error('❌ 找不到 The Signifer Relic Series 眼睛元素');
             }
+            
+            // 确保所有绿色眼睛的悬停效果正常工作
+            const greenEyes = document.querySelectorAll('.green-eye-hint, .green-eye-hint-2, .green-eye-hint-3, .green-eye-hint-4, .green-eye-hint-5, .green-eye-hint-6, .green-eye-hint-8');
+            // 创建全局红色十字元素
+            const redCross = document.createElement('div');
+            redCross.style.cssText = `
+                position: fixed;
+                width: 320px;
+                height: 320px;
+                pointer-events: none;
+                z-index: 999999;
+                opacity: 0;
+                transition: opacity 0.1s ease;
+                transform: translate(-50%, -50%);
+                image-rendering: pixelated;
+                -webkit-image-rendering: pixelated;
+            `;
+            
+            // 创建十字的垂直部分
+            const verticalLine = document.createElement('div');
+            verticalLine.style.cssText = `
+                position: absolute;
+                left: 208px;
+                top: -32px;
+                width: 4px;
+                height: 320px;
+                background: red;
+                image-rendering: pixelated;
+                -webkit-image-rendering: pixelated;
+            `;
+            
+            // 创建十字的水平部分
+            const horizontalLine = document.createElement('div');
+            horizontalLine.style.cssText = `
+                position: absolute;
+                left: 0;
+                top: 126px;
+                width: 320px;
+                height: 4px;
+                background: red;
+                image-rendering: pixelated;
+                -webkit-image-rendering: pixelated;
+            `;
+            
+            redCross.appendChild(verticalLine);
+            redCross.appendChild(horizontalLine);
+            document.body.appendChild(redCross);
+            
+            greenEyes.forEach(eye => {
+                const pupil = eye.querySelector('.pupil-green');
+                if (pupil) {
+                    // 强制设置初始光标
+                    eye.style.setProperty('cursor', 'none', 'important');
+                    
+                    eye.addEventListener('mouseenter', () => {
+                        pupil.style.background = '#00ff00';
+                        pupil.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.8)';
+                        pupil.style.transform = 'scale(1.2)';
+                        redCross.style.opacity = '1';
+                        console.log('🎯 鼠标进入绿色眼睛，显示红色十字');
+                    });
+                    
+                    eye.addEventListener('mousemove', (e) => {
+                        // 以错位交叉点为中心定位十字
+                        const crossOffsetX = 208 - 160; // 竖条向右偏移的距离
+                        const crossOffsetY = 126 - 160; // 横条向上偏移的距离
+                        redCross.style.left = (e.clientX - crossOffsetX) + 'px';
+                        redCross.style.top = (e.clientY - crossOffsetY) + 'px';
+                    });
+                    
+                    eye.addEventListener('mouseleave', () => {
+                        pupil.style.background = '#09ad04';
+                        pupil.style.boxShadow = 'none';
+                        pupil.style.transform = 'scale(1)';
+                        redCross.style.opacity = '0';
+                        console.log('🎯 鼠标离开绿色眼睛，隐藏红色十字');
+                    });
+                }
+            });
+            
+            // 为黄色手指提示添加十字交互
+            const yellowFingerHint = document.querySelector('.yellow-finger-hint');
+            if (yellowFingerHint) {
+                const yellowPupil = yellowFingerHint.querySelector('.pupil');
+                if (yellowPupil) {
+                    // 强制设置初始光标
+                    yellowFingerHint.style.setProperty('cursor', 'none', 'important');
+                    
+                    yellowFingerHint.addEventListener('mouseenter', () => {
+                        yellowPupil.style.background = '#00ff00';
+                        yellowPupil.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.8)';
+                        yellowPupil.style.transform = 'scale(1.2)';
+                        redCross.style.opacity = '1';
+                        console.log('🎯 鼠标进入黄色手指提示，显示红色十字');
+                    });
+                    
+                    yellowFingerHint.addEventListener('mousemove', (e) => {
+                        // 以错位交叉点为中心定位十字
+                        const crossOffsetX = 208 - 160; // 竖条向右偏移的距离
+                        const crossOffsetY = 126 - 160; // 横条向上偏移的距离
+                        redCross.style.left = (e.clientX - crossOffsetX) + 'px';
+                        redCross.style.top = (e.clientY - crossOffsetY) + 'px';
+                    });
+                    
+                    yellowFingerHint.addEventListener('mouseleave', () => {
+                        yellowPupil.style.background = '#00ff00';
+                        yellowPupil.style.boxShadow = 'none';
+                        yellowPupil.style.transform = 'scale(1)';
+                        redCross.style.opacity = '0';
+                        console.log('🎯 鼠标离开黄色手指提示，隐藏红色十字');
+                    });
+                }
+            }
+            console.log('✅ 所有绿色眼睛悬停效果已启用');
+            console.log('🎯 绿色眼睛数量:', greenEyes.length);
+            greenEyes.forEach((eye, index) => {
+                console.log(`👁️ 绿色眼睛 ${index + 1}:`, eye.className);
+            });
         });
 
         // 滚动控制已移除，允许滚动到bottom-spacer区域
 
     </script>
+    
+    <style>
+        /* 额外的响应式设计规则 */
+        
+        /* 高清分辨率优化 (1920x1080, 2560x1440, 3840x2160) */
+        @media (min-width: 1920px) {
+            /* 1920x1080 及以上分辨率优化 */
+            .container {
+                max-width: 1920px;
+                margin: 0 auto;
+            }
+            
+            .left-panel {
+                width: 30vw !important;
+                max-width: 576px;
+            }
+            
+            .right-panel {
+                width: 70vw !important;
+                max-width: 1344px;
+            }
+            
+            /* 文字大小优化 */
+            .work-title, .work-title-2 {
+                font-size: 90px !important;
+                line-height: 0.8 !important;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                font-size: 36px !important;
+            }
+            
+            /* 艺术家信息优化 */
+            .artist-location p {
+                font-size: 18px !important;
+                line-height: 1.8 !important;
+            }
+            
+            .artist-description p {
+                font-size: 18px !important;
+                line-height: 2.5 !important;
+            }
+            
+            /* 图片容器优化 */
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 80% !important;
+                max-width: 1000px !important;
+            }
+            
+            .preview-image-container-4 {
+                width: 85% !important;
+                max-width: 1200px !important;
+            }
+            
+            .preview-image-container-3 {
+                width: 75% !important;
+                max-width: 900px !important;
+                height: 1200px !important;
+            }
+            
+            /* 自画像优化 */
+            .self-portrait {
+                max-width: 320px !important;
+                min-width: 280px !important;
+            }
+            
+            .real-portrait {
+                max-width: 320px !important;
+                min-width: 280px !important;
+            }
+            
+            /* 分割线优化 */
+            .additional-dividers,
+            .additional-dividers-2,
+            .additional-dividers-3,
+            .additional-dividers-4 {
+                right: 2vw;
+                left: 2vw;
+                gap: 1vh;
+            }
+            
+            .additional-divider {
+                height: 0.2vh !important;
+            }
+        }
+        
+        /* 2K分辨率优化 (2560x1440) */
+        @media (min-width: 2560px) {
+            .work-title, .work-title-2 {
+                font-size: 120px !important;
+                line-height: 0.75 !important;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                font-size: 48px !important;
+            }
+            
+            .artist-location p {
+                font-size: 24px !important;
+            }
+            
+            .artist-description p {
+                font-size: 24px !important;
+            }
+            
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 75% !important;
+                max-width: 1200px !important;
+            }
+            
+            .preview-image-container-4 {
+                width: 80% !important;
+                max-width: 1400px !important;
+            }
+            
+            .preview-image-container-3 {
+                width: 70% !important;
+                max-width: 1080px !important;
+                height: 1200px !important;
+            }
+            
+            .self-portrait {
+                max-width: 400px !important;
+                min-width: 360px !important;
+            }
+            
+            .real-portrait {
+                max-width: 400px !important;
+                min-width: 360px !important;
+            }
+        }
+        
+        /* 4K分辨率优化 (3840x2160) */
+        @media (min-width: 3840px) {
+            .work-title, .work-title-2 {
+                font-size: 180px !important;
+                line-height: 0.7 !important;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                font-size: 72px !important;
+            }
+            
+            .artist-location p {
+                font-size: 36px !important;
+            }
+            
+            .artist-description p {
+                font-size: 36px !important;
+            }
+            
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 70% !important;
+                max-width: 1600px !important;
+            }
+            
+            .preview-image-container-4 {
+                width: 75% !important;
+                max-width: 1800px !important;
+            }
+            
+            .preview-image-container-3 {
+                width: 65% !important;
+                max-width: 1440px !important;
+                height: 1200px !important;
+            }
+            
+            .self-portrait {
+                max-width: 600px !important;
+                min-width: 540px !important;
+            }
+            
+            .real-portrait {
+                max-width: 600px !important;
+                min-width: 540px !important;
+            }
+        }
+        
+        /* 超宽屏优化 (21:9, 32:9) */
+        @media (min-width: 2560px) and (min-aspect-ratio: 21/9) {
+            .container {
+                max-width: 2560px;
+            }
+            
+            .left-panel {
+                width: 25vw !important;
+            }
+            
+            .right-panel {
+                width: 75vw !important;
+            }
+            
+            .work-title, .work-title-2 {
+                font-size: 105px !important;
+                line-height: 0.9 !important;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                font-size: 42px !important;
+            }
+        }
+        
+        /* 常见显示器分辨率优化 */
+        
+        /* 1366x768 (笔记本) */
+        @media (min-width: 1366px) and (max-width: 1919px) {
+            .work-title, .work-title-2 {
+                font-size: 80px !important;
+                line-height: 0.85 !important;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                font-size: 32px !important;
+            }
+            
+            .artist-location p {
+                font-size: 16px !important;
+            }
+            
+            .artist-description p {
+                font-size: 16px !important;
+            }
+            
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 85% !important;
+                max-width: 900px !important;
+            }
+            
+            .preview-image-container-4 {
+                width: 90% !important;
+                max-width: 1100px !important;
+            }
+            
+            .preview-image-container-3 {
+                width: 80% !important;
+                max-width: 800px !important;
+                height: 1200px !important;
+            }
+        }
+        
+        /* 1440x900 (MacBook) */
+        @media (min-width: 1440px) and (max-width: 1919px) {
+            .work-title, .work-title-2 {
+                font-size: 85px !important;
+                line-height: 0.82 !important;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                font-size: 34px !important;
+            }
+            
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 82% !important;
+                max-width: 950px !important;
+            }
+            
+            .preview-image-container-4 {
+                width: 87% !important;
+                max-width: 1150px !important;
+            }
+            
+            .preview-image-container-3 {
+                width: 77% !important;
+                max-width: 850px !important;
+                height: 1200px !important;
+            }
+        }
+        
+        /* 1600x900 (高清笔记本) */
+        @media (min-width: 1600px) and (max-width: 1919px) {
+            .work-title, .work-title-2 {
+                font-size: 88px !important;
+                line-height: 0.81 !important;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                font-size: 35px !important;
+            }
+            
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 81% !important;
+                max-width: 980px !important;
+            }
+            
+            .preview-image-container-4 {
+                width: 86% !important;
+                max-width: 1180px !important;
+            }
+            
+            .preview-image-container-3 {
+                width: 76% !important;
+                max-width: 880px !important;
+                height: 1200px !important;
+            }
+        }
+        
+        /* 高DPI显示器优化 */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .work-title, .work-title-2 {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+            
+            .artist-location p,
+            .artist-description p {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+        }
+        
+        /* 游戏显示器优化 (高刷新率) */
+        @media (min-width: 1920px) and (min-height: 1080px) {
+            .animated-dots {
+                will-change: transform;
+                transform: translateZ(0);
+            }
+            
+            .dot {
+                will-change: transform;
+                transform: translateZ(0);
+            }
+            
+            .pipes-screensaver {
+                will-change: transform;
+                transform: translateZ(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            /* 移动设备优化 */
+            .container {
+                flex-direction: column;
+            }
+            
+            .left-panel, .right-panel {
+                width: 100vw !important;
+                height: auto !important;
+            }
+            
+            .left-panel {
+                order: 2;
+                min-height: 50vh;
+            }
+            
+            .right-panel {
+                order: 1;
+                min-height: 50vh;
+            }
+            
+            /* 优化文字大小 */
+            .work-title, .work-title-2 {
+                font-size: 10vw !important;
+                line-height: 1.0 !important;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                font-size: 4vw !important;
+            }
+            
+            /* 优化图片容器 */
+            .preview-image-container,
+            .preview-image-container-2,
+            .preview-image-container-5,
+            .preview-image-container-6,
+            .preview-image-container-7 {
+                width: 90% !important;
+                max-width: 90% !important;
+            }
+            
+            .preview-image-container-4 {
+                width: 95% !important;
+                max-width: 95% !important;
+            }
+            
+            .preview-image-container-3 {
+                width: 85% !important;
+                max-width: 85% !important;
+                height: 1200px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* 小屏幕设备优化 */
+            .work-title, .work-title-2 {
+                font-size: 12vw !important;
+                line-height: 0.9 !important;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                font-size: 5vw !important;
+            }
+            
+            /* 优化间距 */
+            .work-title-container,
+            .work-title-container-2 {
+                margin: 2vh 1vw 1vh 1vw !important;
+                padding: 1vh 2vw !important;
+            }
+            
+            .subtitle-container,
+            .subtitle-container-2,
+            .subtitle-container-3,
+            .subtitle-container-4,
+            .subtitle-container-5,
+            .subtitle-container-6 {
+                margin: 1vh 1vw !important;
+                padding: 0.5vh 1vw !important;
+            }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            /* 横屏模式优化 */
+            .left-panel, .right-panel {
+                height: 100vh !important;
+            }
+            
+            .work-title, .work-title-2 {
+                font-size: 8vw !important;
+                line-height: 1.1 !important;
+            }
+            
+            .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+                font-size: 3vw !important;
+            }
+        }
+    </style>
+</body>
+</html>
 </body>
 </html>
