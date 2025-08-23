@@ -20,6 +20,222 @@
             -moz-osx-font-smoothing: none;
             text-rendering: optimizeSpeed;
         }
+        
+        /* 俄罗斯方块堆叠效果 - 增加高度 */
+        .tetris-container {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 45vh; /* 从30vh增加到45vh */
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .tetris-side {
+            position: absolute;
+            bottom: 0;
+            width: 18.75vw; /* 360px / 1920px * 100 */
+            height: 100%;
+        }
+        
+        .tetris-side.left {
+            left: 0;
+        }
+        
+        .tetris-side.right {
+            right: 0;
+        }
+        
+        .tetris-grid {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(20, 1fr); /* 从15行增加到20行 */
+            gap: 0.0521vw; /* 1px */
+        }
+        
+        .tetris-block {
+            background: rgba(255, 255, 255, 0.1);
+            border: 0.0521vw solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        .tetris-block.filled {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* 俄罗斯方块颜色 */
+        .tetris-block.color-1 {
+            background: rgba(255, 0, 0, 0.8);
+            border-color: rgba(255, 0, 0, 1);
+        }
+        
+        .tetris-block.color-2 {
+            background: rgba(255, 255, 0, 0.8);
+            border-color: rgba(255, 255, 0, 1);
+        }
+        
+        .tetris-block.color-3 {
+            background: rgba(0, 100, 255, 0.8);
+            border-color: rgba(0, 100, 255, 1);
+        }
+        
+        .tetris-block.color-4 {
+            background: rgba(0, 255, 0, 0.8);
+            border-color: rgba(0, 255, 0, 1);
+        }
+        
+        .tetris-block.color-5 {
+            background: rgba(255, 165, 0, 0.8);
+            border-color: rgba(255, 165, 0, 1);
+        }
+        
+        /* 方块填充动画 */
+        .tetris-block.filling {
+            animation: blockFill 0.8s ease-out forwards;
+        }
+        
+        .tetris-block.dropping {
+            animation: blockDrop 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .tetris-block.removing {
+            animation: blockRemove 0.6s ease-in forwards;
+        }
+        
+        .tetris-block.exploding {
+            animation: blockExplode 0.8s ease-out forwards;
+        }
+        
+
+        
+        /* 增强重力掉落动画 */
+        @keyframes blockDrop {
+            0% {
+                opacity: 0;
+                transform: translateY(-300px) scale(0.5);
+            }
+            20% {
+                opacity: 0.4;
+                transform: translateY(-150px) scale(0.7);
+            }
+            60% {
+                opacity: 0.8;
+                transform: translateY(30px) scale(1.3);
+            }
+            80% {
+                transform: translateY(-15px) scale(1.1);
+            }
+            90% {
+                transform: translateY(5px) scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* 简化填充动画 - 无旋转 */
+        @keyframes blockFill {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+                filter: brightness(2);
+            }
+            30% {
+                opacity: 0.7;
+                transform: scale(1.2);
+                filter: brightness(1.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                filter: brightness(1);
+            }
+        }
+        
+        /* 简化移除动画 - 无旋转 */
+        @keyframes blockRemove {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.6);
+                filter: brightness(1.5);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0);
+                filter: brightness(2) blur(2px);
+            }
+        }
+        
+        /* 简化爆炸动画 - 无旋转 */
+        @keyframes blockExplode {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            40% {
+                opacity: 1;
+                transform: scale(1.8);
+                filter: brightness(3);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(3);
+                filter: brightness(5) blur(5px);
+            }
+        }
+        
+
+        
+        /* 震动效果 */
+        .tetris-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-2px) rotate(-1deg); }
+            20% { transform: translateX(2px) rotate(1deg); }
+            30% { transform: translateX(-2px) rotate(-1deg); }
+            40% { transform: translateX(2px) rotate(1deg); }
+            50% { transform: translateX(-1px) rotate(-0.5deg); }
+            60% { transform: translateX(1px) rotate(0.5deg); }
+            70% { transform: translateX(-1px) rotate(-0.5deg); }
+            80% { transform: translateX(1px) rotate(0.5deg); }
+            90% { transform: translateX(-0.5px); }
+        }
+        
+        /* 简化时光倒流动画 - 无旋转 */
+        @keyframes blockReverse {
+            0% {
+                transform: scale(1);
+                filter: brightness(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                filter: brightness(1.3);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                filter: brightness(1);
+                opacity: 1;
+            }
+        }
         .container {
             max-width: 62.5vw; /* 1200px / 1920px * 100 */
             margin: 0 auto;
@@ -296,7 +512,9 @@
             margin-top: 0.7813vh; /* 15px */
         }
         
-        .indicator {
+        .indicator,
+        .indicator-perf,
+        .indicator-group {
             width: 0.625vw; /* 12px */
             height: 0.625vw; /* 12px */
             border-radius: 50%;
@@ -305,44 +523,64 @@
         }
         
         /* Color cycling: Red, Yellow, Blue, Green */
-        .indicator:nth-child(4n+1) {
+        .indicator:nth-child(4n+1),
+        .indicator-perf:nth-child(4n+1),
+        .indicator-group:nth-child(4n+1) {
             background: rgba(255, 0, 0, 0.7);
         }
         
-        .indicator:nth-child(4n+2) {
+        .indicator:nth-child(4n+2),
+        .indicator-perf:nth-child(4n+2),
+        .indicator-group:nth-child(4n+2) {
             background: rgba(255, 255, 0, 0.7);
         }
         
-        .indicator:nth-child(4n+3) {
+        .indicator:nth-child(4n+3),
+        .indicator-perf:nth-child(4n+3),
+        .indicator-group:nth-child(4n+3) {
             background: rgba(0, 100, 255, 0.7);
         }
         
-        .indicator:nth-child(4n+4) {
+        .indicator:nth-child(4n+4),
+        .indicator-perf:nth-child(4n+4),
+        .indicator-group:nth-child(4n+4) {
             background: rgba(0, 255, 0, 0.7);
         }
         
-        .indicator.active {
+        .indicator.active,
+        .indicator-perf.active,
+        .indicator-group.active {
             transform: scale(1.3);
             box-shadow: 0 0 0.5208vw currentColor; /* 0 0 10px */
         }
         
-        .indicator.active:nth-child(4n+1) {
+        .indicator.active:nth-child(4n+1),
+        .indicator-perf.active:nth-child(4n+1),
+        .indicator-group.active:nth-child(4n+1) {
             background: #ff0000;
         }
         
-        .indicator.active:nth-child(4n+2) {
+        .indicator.active:nth-child(4n+2),
+        .indicator-perf.active:nth-child(4n+2),
+        .indicator-group.active:nth-child(4n+2) {
             background: #ffff00;
         }
         
-        .indicator.active:nth-child(4n+3) {
+        .indicator.active:nth-child(4n+3),
+        .indicator-perf.active:nth-child(4n+3),
+        .indicator-group.active:nth-child(4n+3) {
             background: #0064ff;
         }
         
-        .indicator.active:nth-child(4n+4) {
+        .indicator.active:nth-child(4n+4),
+        .indicator-perf.active:nth-child(4n+4),
+        .indicator-group.active:nth-child(4n+4) {
             background: #00ff00;
         }
         
-        .indicator:hover {
+        .indicator:hover,
+        .indicator-perf:hover,
+        .indicator-group:hover {
             transform: scale(1.1);
             filter: brightness(1.2);
         }
@@ -381,7 +619,9 @@
             .slide-counter {
                 font-size: 3vw;
             }
-            .indicator {
+            .indicator,
+            .indicator-perf,
+            .indicator-group {
                 width: 2vw;
                 height: 2vw;
             }
@@ -418,35 +658,35 @@
             }
             
             .language-toggle {
-                top: 0.5vh;
+                 top: 0.5vh;
                 right: 1vw;
-                padding: 0.8vh 1.5vw;
-                font-size: 3vw;
-            }
+                 padding: 0.8vh 1.5vw;
+                 font-size: 3vw;
+             }
             
             /* 所有幻灯片播放器统一优化 */
-            .slideshow-wrapper {
-                height: 60vh;
-            }
+             .slideshow-wrapper {
+                 height: 60vh;
+             }
             
             .prev-btn, .next-btn,
             .prev-btn-perf, .next-btn-perf,
             .prev-btn-group, .next-btn-group {
-                padding: 0.8vh 1.5vw;
-                font-size: 3vw;
-            }
+                 padding: 0.8vh 1.5vw;
+                 font-size: 3vw;
+             }
             
-            .slide-counter {
-                font-size: 3.5vw;
-            }
+             .slide-counter {
+                 font-size: 3.5vw;
+             }
             
             .indicator,
             .indicator-perf,
             .indicator-group {
-                width: 2.5vw;
-                height: 2.5vw;
-            }
-
+                 width: 2.5vw;
+                 height: 2.5vw;
+             }
+             
         
         /* Performance Exhibition Slideshow Styles */
         .performance-slideshow-container {
@@ -457,57 +697,7 @@
             border: 0.1042vw solid rgba(250,200,0,0.3); /* 2px */
         }
         
-        /* Performance Indicators with different color cycling */
-        .indicator-perf {
-            width: 0.625vw; /* 12px */
-            height: 0.625vw; /* 12px */
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        /* Color cycling for performance indicators: Red, Yellow, Blue, Green */
-        .indicator-perf:nth-child(4n+1) {
-            background: rgba(255, 0, 0, 0.7);
-        }
-        
-        .indicator-perf:nth-child(4n+2) {
-            background: rgba(255, 255, 0, 0.7);
-        }
-        
-        .indicator-perf:nth-child(4n+3) {
-            background: rgba(0, 100, 255, 0.7);
-        }
-        
-        .indicator-perf:nth-child(4n+4) {
-            background: rgba(0, 255, 0, 0.7);
-        }
-        
-        .indicator-perf.active {
-            transform: scale(1.3);
-            box-shadow: 0 0 0.5208vw currentColor; /* 0 0 10px */
-        }
-        
-        .indicator-perf.active:nth-child(4n+1) {
-            background: #ff0000;
-        }
-        
-        .indicator-perf.active:nth-child(4n+2) {
-            background: #ffff00;
-        }
-        
-        .indicator-perf.active:nth-child(4n+3) {
-            background: #0064ff;
-        }
-        
-        .indicator-perf.active:nth-child(4n+4) {
-            background: #00ff00;
-        }
-        
-        .indicator-perf:hover {
-            transform: scale(1.1);
-            filter: brightness(1.2);
-        }
+
         
 
         
@@ -520,107 +710,42 @@
             border: 0.1042vw solid rgba(250,200,0,0.3); /* 2px */
         }
         
-        /* Group Indicators with red yellow blue green cycling */
-        .indicator-group {
-            width: 0.625vw; /* 12px */
-            height: 0.625vw; /* 12px */
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+
         
-        /* Color cycling for group indicators: Red, Yellow, Blue, Green */
-        .indicator-group:nth-child(4n+1) {
-            background: rgba(255, 0, 0, 0.7);
-        }
-        
-        .indicator-group:nth-child(4n+2) {
-            background: rgba(255, 255, 0, 0.7);
-        }
-        
-        .indicator-group:nth-child(4n+3) {
-            background: rgba(0, 100, 255, 0.7);
-        }
-        
-        .indicator-group:nth-child(4n+4) {
-            background: rgba(0, 255, 0, 0.7);
-        }
-        
-        .indicator-group.active {
-            transform: scale(1.3);
-            box-shadow: 0 0 0.5208vw currentColor; /* 0 0 10px */
-        }
-        
-        .indicator-group.active:nth-child(4n+1) {
-            background: #ff0000;
-        }
-        
-        .indicator-group.active:nth-child(4n+2) {
-            background: #ffff00;
-        }
-        
-        .indicator-group.active:nth-child(4n+3) {
-            background: #0064ff;
-        }
-        
-        .indicator-group.active:nth-child(4n+4) {
-            background: #00ff00;
-        }
-        
-        .indicator-group:hover {
-            transform: scale(1.1);
-            filter: brightness(1.2);
-        }
-        
-        .prev-btn-group, .next-btn-group {
-            background: rgba(250,200,0,0.1);
-            border: 0.1042vw solid #fac800; /* 2px */
-            color: #fac800;
-            padding: 0.625vh 1.0417vw; /* 12px 20px */
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 0.625vw; /* 12px / 1920px * 100 */
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 0.2083vw; /* 4px */
-        }
-        
-        .prev-btn-group:hover, .next-btn-group:hover {
-            background: rgba(250,200,0,0.2);
-            transform: scale(1.05);
-        }
+
         /* ===== 响应式设计优化 ===== */
         
         /* 大屏幕优化 (1920px+) */
         @media (min-width: 1920px) {
-            .container {
+             .container {
                 max-width: 70vw;
                 padding: 3vh 2vw;
-            }
+             }
             
-            .title {
+             .title {
                 font-size: 2.2vw;
-            }
+             }
             
-            .subtitle {
+             .subtitle {
                 font-size: 1.3vw;
-            }
+             }
             
-            .exhibition-title {
+             .exhibition-title {
                 font-size: 1.6vw;
-            }
+             }
             
-            .exhibition-date, .exhibition-description {
+             .exhibition-date, .exhibition-description {
                 font-size: 0.8vw;
             }
             
-            .slideshow-wrapper {
+             .slideshow-wrapper {
                 height: 65vh;
             }
             
             .prev-btn, .next-btn,
             .prev-btn-perf, .next-btn-perf,
             .prev-btn-group, .next-btn-group {
-                padding: 0.8vh 1.5vw;
+                 padding: 0.8vh 1.5vw;
                 font-size: 0.5vw;
             }
             
@@ -630,7 +755,7 @@
             
             .indicator,
             .indicator-perf,
-            .indicator-group {
+             .indicator-group {
                 width: 0.5vw;
                 height: 0.5vw;
             }
@@ -859,8 +984,18 @@
     </style>
 </head>
 <body>
-            <a href="../index.html" class="back-btn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
-            <button class="language-toggle" id="languageToggle">中文</button>
+        <!-- 俄罗斯方块堆叠效果 -->
+        <div class="tetris-container">
+            <div class="tetris-side left">
+                <div class="tetris-grid" id="tetrisLeft"></div>
+            </div>
+            <div class="tetris-side right">
+                <div class="tetris-grid" id="tetrisRight"></div>
+            </div>
+        </div>
+        
+        <a href="../index.html" class="back-btn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
+        <button class="language-toggle" id="languageToggle">中文</button>
     
     <div class="container">
         <div class="header">
@@ -1335,7 +1470,7 @@
         // Initialize slideshow
         function initSlideshow() {
             if (totalSlidesSpan) {
-                totalSlidesSpan.textContent = totalSlides;
+            totalSlidesSpan.textContent = totalSlides;
             }
             updateSlideshow();
         }
@@ -1359,7 +1494,7 @@
             
             // Update counter
             if (currentSlideSpan) {
-                currentSlideSpan.textContent = currentSlide + 1;
+            currentSlideSpan.textContent = currentSlide + 1;
             }
         }
         
@@ -1420,7 +1555,7 @@
             if (totalSlidesPerfSpan) {
                 totalSlidesPerfSpan.textContent = totalSlidesPerf;
             }
-            updateSlideshowPerf();
+                updateSlideshowPerf();
         }
         
         // Update performance slideshow display
@@ -1491,7 +1626,7 @@
             if (totalSlidesGroupSpan) {
                 totalSlidesGroupSpan.textContent = totalSlidesGroup;
             }
-            updateSlideshowGroup();
+                updateSlideshowGroup();
         }
         
         // Update group slideshow display
@@ -1796,6 +1931,511 @@
             }
         }
         
+        // ===== 俄罗斯方块堆叠效果 =====
+        class TetrisGame {
+            constructor(gridId) {
+                this.grid = document.getElementById(gridId);
+                this.gridData = [];
+                this.history = [];
+                this.maxHistory = 50;
+                this.isInitialized = false;
+                this.init();
+            }
+            
+            init() {
+                // 创建10x20的网格
+                for (let row = 0; row < 20; row++) {
+                    this.gridData[row] = [];
+                    for (let col = 0; col < 10; col++) {
+                        this.gridData[row][col] = 0;
+                        const block = document.createElement('div');
+                        block.className = 'tetris-block';
+                        block.dataset.row = row;
+                        block.dataset.col = col;
+                        this.grid.appendChild(block);
+                    }
+                }
+                
+                // 创建初始的随机堆叠
+                this.createInitialStack();
+                this.isInitialized = true;
+            }
+            
+            createInitialStack() {
+                // 在底部创建一些随机的方块堆叠，但密度更低，给俄罗斯方块形状留出空间
+                for (let row = 19; row >= 15; row--) { // 从19行开始，给更多空间
+                    for (let col = 0; col < 10; col++) {
+                        if (Math.random() < 0.4) { // 降低密度
+                            const color = Math.floor(Math.random() * 5) + 1;
+                            this.gridData[row][col] = color;
+                            this.updateBlock(row, col, color);
+                        }
+                    }
+                }
+                this.saveState();
+                console.log('初始方块堆叠创建完成');
+            }
+            
+            updateBlock(row, col, color, animationType = 'filling') {
+                const block = this.grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                if (block) {
+                    // 先清除现有动画
+                    block.className = 'tetris-block';
+                    
+                    // 添加新的颜色和动画
+                    setTimeout(() => {
+                        block.className = `tetris-block color-${color} filled ${animationType}`;
+                        
+                        // 添加周围方块的震动效果
+                        this.addShakeEffect(row, col);
+                        
+                        // 动画完成后移除动画类
+                        const animationDuration = animationType === 'dropping' ? 1500 : 600;
+                        setTimeout(() => {
+                            block.classList.remove(animationType);
+                        }, animationDuration);
+                    }, 50);
+                }
+            }
+            
+            clearBlock(row, col, animationType = 'removing') {
+                const block = this.grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                if (block) {
+                    // 添加移除动画
+                    block.classList.add(animationType);
+                    
+                    // 添加周围方块的震动效果
+                    this.addShakeEffect(row, col);
+                    
+                    // 动画完成后清除方块
+                    setTimeout(() => {
+                        block.className = 'tetris-block';
+                    }, animationType === 'exploding' ? 800 : 600);
+                }
+            }
+            
+            addShakeEffect(row, col) {
+                // 给周围的方块添加震动效果
+                const directions = [
+                    [-1, -1], [-1, 0], [-1, 1],
+                    [0, -1],           [0, 1],
+                    [1, -1],  [1, 0],  [1, 1]
+                ];
+                
+                directions.forEach(([dr, dc]) => {
+                    const newRow = row + dr;
+                    const newCol = col + dc;
+                    
+                    if (newRow >= 0 && newRow < 15 && newCol >= 0 && newCol < 10) {
+                        const neighborBlock = this.grid.querySelector(`[data-row="${newRow}"][data-col="${newCol}"]`);
+                        if (neighborBlock && this.gridData[newRow][newCol] > 0) {
+                            neighborBlock.classList.add('tetris-shake');
+                            setTimeout(() => {
+                                neighborBlock.classList.remove('tetris-shake');
+                            }, 500);
+                        }
+                    }
+                });
+            }
+            
+            // 定义俄罗斯方块形状
+            getTetrisShapes() {
+                return {
+                    // I型 (直线)
+                    I: [
+                        [0, 0], [0, 1], [0, 2], [0, 3]
+                    ],
+                    // O型 (方形)
+                    O: [
+                        [0, 0], [0, 1],
+                        [1, 0], [1, 1]
+                    ],
+                    // T型
+                    T: [
+                        [0, 1],
+                        [1, 0], [1, 1], [1, 2]
+                    ],
+                    // L型
+                    L: [
+                        [0, 0],
+                        [1, 0], [1, 1], [1, 2]
+                    ],
+                    // J型
+                    J: [
+                        [0, 2],
+                        [1, 0], [1, 1], [1, 2]
+                    ],
+                    // S型
+                    S: [
+                        [0, 1], [0, 2],
+                        [1, 0], [1, 1]
+                    ],
+                    // Z型
+                    Z: [
+                        [0, 0], [0, 1],
+                        [1, 1], [1, 2]
+                    ]
+                };
+            }
+            
+            // 检查形状是否可以放置
+            canPlaceShape(shape, startRow, startCol) {
+                for (let [offsetRow, offsetCol] of shape) {
+                    const row = startRow + offsetRow;
+                    const col = startCol + offsetCol;
+                    
+                    // 检查边界
+                    if (row < 0 || row >= 20 || col < 0 || col >= 10) {
+                        return false;
+                    }
+                    
+                    // 检查是否已被占用
+                    if (this.gridData[row][col] > 0) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            
+            // 检查形状是否有支撑
+            hasSupport(shape, startRow, startCol) {
+                for (let [offsetRow, offsetCol] of shape) {
+                    const row = startRow + offsetRow;
+                    const col = startCol + offsetCol;
+                    
+                    // 如果在底部，或者下方有方块，则有支撑
+                    if (row === 19 || this.gridData[row + 1][col] > 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
+            // 放置俄罗斯方块形状
+            placeShape(shape, startRow, startCol, color, animationType) {
+                const changes = [];
+                const delays = [0, 100, 200, 300]; // 方块依次出现的延迟
+                
+                shape.forEach(([offsetRow, offsetCol], index) => {
+                    const row = startRow + offsetRow;
+                    const col = startCol + offsetCol;
+                    
+                    this.gridData[row][col] = color;
+                    
+                    // 添加延迟，让方块依次出现
+                    setTimeout(() => {
+                        this.updateBlock(row, col, color, animationType);
+                    }, delays[index % delays.length]);
+                    
+                    changes.push({row, col, color});
+                });
+                
+                return changes;
+            }
+            
+            addRandomBlocks(count = 2) {
+                const changes = [];
+                const shapes = this.getTetrisShapes();
+                const shapeNames = Object.keys(shapes);
+                
+                for (let i = 0; i < count; i++) {
+                    // 随机选择形状
+                    const shapeName = shapeNames[Math.floor(Math.random() * shapeNames.length)];
+                    const shape = shapes[shapeName];
+                    const color = Math.floor(Math.random() * 5) + 1;
+                    
+                    console.log(`尝试放置 ${shapeName} 形状，颜色 ${color}`);
+                    
+                    // 尝试找到可以放置形状的位置
+                    const maxAttempts = 100; // 增加尝试次数
+                    let placed = false;
+                    
+                    // 优先从底部开始搜索
+                    for (let startRow = 17; startRow >= 0 && !placed; startRow--) { // 从17行开始搜索
+                        for (let startCol = 0; startCol <= 7 && !placed; startCol++) {
+                            // 检查是否可以放置
+                            if (this.canPlaceShape(shape, startRow, startCol) && 
+                                this.hasSupport(shape, startRow, startCol)) {
+                                
+                                console.log(`成功放置 ${shapeName} 在位置 (${startRow}, ${startCol})`);
+                                
+                                // 经典俄罗斯方块动画
+                                const animations = ['dropping', 'filling'];
+                                const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+                                
+                                const shapeChanges = this.placeShape(shape, startRow, startCol, color, randomAnimation);
+                                changes.push(...shapeChanges);
+                                placed = true;
+                            }
+                        }
+                    }
+                    
+                    // 如果还没放置成功，尝试更宽松的条件（不要求支撑）
+                    if (!placed) {
+                        console.log(`${shapeName} 需要支撑无法放置，尝试无支撑模式`);
+                        for (let startRow = 17; startRow >= 0 && !placed; startRow--) { // 从17行开始搜索
+                            for (let startCol = 0; startCol <= 7 && !placed; startCol++) {
+                                if (this.canPlaceShape(shape, startRow, startCol)) {
+                                    console.log(`无支撑模式成功放置 ${shapeName} 在位置 (${startRow}, ${startCol})`);
+                                    
+                                    // 经典俄罗斯方块动画
+                                    const animations = ['dropping', 'filling'];
+                                    const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+                                    
+                                    const shapeChanges = this.placeShape(shape, startRow, startCol, color, randomAnimation);
+                                    changes.push(...shapeChanges);
+                                    placed = true;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 如果形状无法放置，回退到单个方块
+                    if (!placed) {
+                        console.log(`${shapeName} 形状无法放置，回退到单方块`);
+                        const availablePositions = [];
+                        for (let row = 0; row < 20; row++) {
+                            for (let col = 0; col < 10; col++) {
+                                if (this.gridData[row][col] === 0) {
+                                    if (row === 19 || this.gridData[row + 1][col] > 0) {
+                                        availablePositions.push({row, col});
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if (availablePositions.length > 0) {
+                            const pos = availablePositions[Math.floor(Math.random() * availablePositions.length)];
+                            this.gridData[pos.row][pos.col] = color;
+                            
+                            // 经典俄罗斯方块动画
+                            const animations = ['dropping', 'filling'];
+                            const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+                            
+                            this.updateBlock(pos.row, pos.col, color, randomAnimation);
+                            changes.push({row: pos.row, col: pos.col, color: color});
+                            console.log(`放置单方块在位置 (${pos.row}, ${pos.col})`);
+                        }
+                    }
+                }
+                
+                if (changes.length > 0) {
+                    this.saveState();
+                }
+                
+                return changes;
+            }
+            
+            removeRandomBlocks(count = 2) {
+                const changes = [];
+                const filledPositions = [];
+                
+                // 收集所有已填充的位置
+                for (let row = 0; row < 15; row++) {
+                    for (let col = 0; col < 10; col++) {
+                        if (this.gridData[row][col] > 0) {
+                            filledPositions.push({row, col, color: this.gridData[row][col]});
+                        }
+                    }
+                }
+                
+                // 随机移除方块
+                for (let i = 0; i < Math.min(count, filledPositions.length); i++) {
+                    const index = Math.floor(Math.random() * filledPositions.length);
+                    const pos = filledPositions.splice(index, 1)[0];
+                    this.gridData[pos.row][pos.col] = 0;
+                    
+                    // 随机选择移除动画类型
+                    const removeAnimations = ['removing', 'exploding'];
+                    const randomRemoveAnimation = removeAnimations[Math.floor(Math.random() * removeAnimations.length)];
+                    
+                    this.clearBlock(pos.row, pos.col, randomRemoveAnimation);
+                    changes.push({row: pos.row, col: pos.col, color: 0});
+                }
+                
+                if (changes.length > 0) {
+                    this.saveState();
+                }
+                
+                return changes;
+            }
+            
+            saveState() {
+                const state = JSON.parse(JSON.stringify(this.gridData));
+                this.history.push(state);
+                if (this.history.length > this.maxHistory) {
+                    this.history.shift();
+                }
+            }
+            
+            undo() {
+                // 增强时光倒流 - 一次回退多步
+                const stepsToUndo = Math.min(4, this.history.length - 1); // 最多回退4步
+                
+                for (let i = 0; i < stepsToUndo; i++) {
+                    if (this.history.length > 1) {
+                        this.history.pop(); // 移除当前状态
+                    }
+                }
+                
+                if (this.history.length > 0) {
+                    const previousState = this.history[this.history.length - 1];
+                    this.gridData = JSON.parse(JSON.stringify(previousState));
+                    this.updateDisplay();
+                    console.log(`时光倒流：回退了 ${stepsToUndo} 步`);
+                }
+            }
+            
+
+            
+            updateDisplay() {
+                for (let row = 0; row < 20; row++) {
+                    for (let col = 0; col < 10; col++) {
+                        const color = this.gridData[row][col];
+                        const block = this.grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                        
+                        if (color > 0) {
+                            // 直接设置方块状态，不使用动画
+                            if (block) {
+                                block.className = `tetris-block color-${color} filled`;
+                            }
+                        } else {
+                            // 直接清除方块，不使用动画
+                            if (block) {
+                                block.className = 'tetris-block';
+                            }
+                        }
+                    }
+                }
+            }
+            
+
+            // 检查并消除连续同色方块 - 按区域分部分慢慢消失
+            checkAndClearConnectedBlocks() {
+                const connectedGroups = this.findConnectedGroups();
+                const eligibleGroups = connectedGroups.filter(group => group.blocks.length >= 4);
+                let totalCleared = 0;
+                
+                if (eligibleGroups.length === 0) {
+                    console.log('没有发现可消除的连续同色方块群组（需要至少4个）');
+                    return;
+                }
+                
+                console.log(`发现 ${eligibleGroups.length} 个可消除的连续同色方块群组`);
+                
+                // 逐个区域进行消除，每个区域分部分慢慢消失
+                eligibleGroups.forEach((group, groupIndex) => {
+                    setTimeout(() => {
+                        console.log(`开始消除第 ${groupIndex + 1} 个群组：${group.blocks.length}个 颜色${group.color}`);
+                        
+                        // 将群组分成多个部分，每部分慢慢消失
+                        const parts = this.splitGroupIntoParts(group.blocks);
+                        
+                        parts.forEach((part, partIndex) => {
+                            setTimeout(() => {
+                                console.log(`消除第 ${groupIndex + 1} 个群组的第 ${partIndex + 1} 部分：${part.length}个方块`);
+                                
+                                // 为该部分的每个方块添加消失动画，错开时间
+                                part.forEach((block, blockIndex) => {
+                                    setTimeout(() => {
+                                        this.gridData[block.row][block.col] = 0;
+                                        this.clearBlock(block.row, block.col, 'exploding');
+                                    }, blockIndex * 300); // 每个方块间隔300ms消失，更慢
+                                });
+                                
+                                totalCleared += part.length;
+                                
+                                // 如果是最后一个群组的最后一个部分，保存状态
+                                if (groupIndex === eligibleGroups.length - 1 && partIndex === parts.length - 1) {
+                                    setTimeout(() => {
+                                        console.log(`所有群组消除完成，总共消除了 ${totalCleared} 个连续同色方块`);
+                                        this.saveState();
+                                    }, part.length * 300 + 1000); // 等待该部分所有方块消失完成
+                                }
+                                
+                            }, partIndex * 800); // 每个部分间隔800ms开始消除
+                        });
+                        
+                    }, groupIndex * 2000); // 每个群组间隔2秒开始消除
+                });
+            }
+            
+            // 将群组分成多个部分
+            splitGroupIntoParts(blocks) {
+                const parts = [];
+                const partSize = Math.max(2, Math.floor(blocks.length / 3)); // 每部分至少2个方块，最多3部分
+                
+                for (let i = 0; i < blocks.length; i += partSize) {
+                    parts.push(blocks.slice(i, i + partSize));
+                }
+                
+                return parts;
+            }
+            
+            // 寻找连续同色方块群组
+            findConnectedGroups() {
+                const visited = [];
+                const groups = [];
+                
+                // 初始化访问数组
+                for (let row = 0; row < 20; row++) {
+                    visited[row] = [];
+                    for (let col = 0; col < 10; col++) {
+                        visited[row][col] = false;
+                    }
+                }
+                
+                // 遍历每个方块
+                for (let row = 0; row < 20; row++) {
+                    for (let col = 0; col < 10; col++) {
+                        if (this.gridData[row][col] > 0 && !visited[row][col]) {
+                            const group = this.floodFill(row, col, this.gridData[row][col], visited);
+                            if (group.length > 0) {
+                                groups.push({
+                                    color: this.gridData[row][col],
+                                    blocks: group
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                return groups;
+            }
+            
+            // 洪水填充算法找连续同色方块
+            floodFill(startRow, startCol, targetColor, visited) {
+                const stack = [{row: startRow, col: startCol}];
+                const connectedBlocks = [];
+                
+                while (stack.length > 0) {
+                    const {row, col} = stack.pop();
+                    
+                    // 检查边界和访问状态
+                    if (row < 0 || row >= 20 || col < 0 || col >= 10 || 
+                        visited[row][col] || this.gridData[row][col] !== targetColor) {
+                        continue;
+                    }
+                    
+                    // 标记为已访问
+                    visited[row][col] = true;
+                    connectedBlocks.push({row, col});
+                    
+                    // 添加四个方向的邻居
+                    stack.push({row: row - 1, col}); // 上
+                    stack.push({row: row + 1, col}); // 下
+                    stack.push({row, col: col - 1}); // 左
+                    stack.push({row, col: col + 1}); // 右
+                }
+                
+                return connectedBlocks;
+            }
+        }
+        
+        let tetrisLeft, tetrisRight;
+        let scrollTimeout;
+        let scrollDirection = 0;
+        
         // 绑定语言切换事件
         document.addEventListener('DOMContentLoaded', () => {
             const languageToggle = document.getElementById('languageToggle');
@@ -1809,6 +2449,10 @@
             initSlideshowPerf();
             initSlideshowGroup();
             
+            // 初始化俄罗斯方块游戏
+            tetrisLeft = new TetrisGame('tetrisLeft');
+            tetrisRight = new TetrisGame('tetrisRight');
+            
             // 启用懒加载
             lazyLoadImages();
             
@@ -1821,7 +2465,70 @@
                     wrapper.style.opacity = '1';
                 }, 100);
             });
+            
+            // 绑定滚轮事件
+            window.addEventListener('wheel', handleWheel);
+            
+            // 添加测试按钮（开发调试用）
+            const testButton = document.createElement('button');
+            testButton.textContent = '测试俄罗斯方块形状';
+            testButton.style.position = 'fixed';
+            testButton.style.top = '100px';
+            testButton.style.left = '20px';
+            testButton.style.zIndex = '10002';
+            testButton.style.padding = '10px';
+            testButton.style.background = '#fac800';
+            testButton.style.border = 'none';
+            testButton.style.color = '#0041ff';
+            testButton.style.cursor = 'pointer';
+            testButton.addEventListener('click', () => {
+                console.log('手动测试俄罗斯方块形状');
+                tetrisLeft.addRandomBlocks(1);
+                tetrisRight.addRandomBlocks(1);
+            });
+            document.body.appendChild(testButton);
         });
+        
+        function handleWheel(e) {
+            e.preventDefault();
+            
+            const delta = e.deltaY;
+            const newDirection = delta > 0 ? 1 : -1;
+            
+            // 如果方向改变，立即重置
+            if (scrollDirection !== 0 && scrollDirection !== newDirection) {
+                scrollDirection = 0;
+                clearTimeout(scrollTimeout);
+            }
+            
+            scrollDirection = newDirection;
+            
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (scrollDirection === 1) {
+                    // 向下滚动 - 添加俄罗斯方块形状
+                    console.log('向下滚动：添加俄罗斯方块形状');
+                    tetrisLeft.addRandomBlocks(6); // 增加到6个形状
+                    tetrisRight.addRandomBlocks(6); // 增加到6个形状
+                    
+                } else if (scrollDirection === -1) {
+                    // 向上滚动 - 时光倒流 + 连续同色方块消除
+                    console.log('向上滚动：时光倒流 + 连续同色方块消除');
+                    
+                    // 先进行时光倒流
+                    tetrisLeft.undo();
+                    tetrisRight.undo();
+                    
+                    // 然后检查并消除连续同色方块
+                    setTimeout(() => {
+                        tetrisLeft.checkAndClearConnectedBlocks();
+                        tetrisRight.checkAndClearConnectedBlocks();
+                    }, 500); // 等待时光倒流完成后再检查
+                }
+                scrollDirection = 0;
+            }, 50); // 增加延迟，让交互更稳定
+        }
     </script>
 </body>
+</html> 
 </html> 
