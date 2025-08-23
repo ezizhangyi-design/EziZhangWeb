@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ezi.Zhang - Exhibition Experience</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;7RASTERIZE
-    SHINING00&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
     <style>
         html, body {
@@ -17,6 +16,9 @@
             color: white;
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
             overflow-x: hidden;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
         }
         .container {
             max-width: 62.5vw; /* 1200px / 1920px * 100 */
@@ -48,7 +50,7 @@
             border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
             color: #fac800;
             padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-family: inherit;
             font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
             cursor: pointer;
             transition: all 0.3s ease;
@@ -59,6 +61,77 @@
             background: #fac800;
             color: #0041ff;
             transform: scale(1.05);
+        }
+        
+        /* 语言切换按钮样式 */
+        .language-toggle {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            right: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px */
+            font-family: inherit;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 0.2083vw; /* 4px */
+            z-index: 10001;
+        }
+        
+        .language-toggle:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+        
+        .language-toggle:focus {
+            outline: 2px solid #fac800;
+            outline-offset: 2px;
+        }
+        
+        /* 语言内容样式 */
+        .lang-content {
+            display: none;
+        }
+        
+        .lang-content.active {
+            display: block;
+        }
+        
+        /* 统一字体设置 */
+        * {
+            font-family: inherit;
+        }
+        
+        /* 中文字体优化 */
+        .lang-content[data-lang="zh"] {
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: 0.02em;
+        }
+        
+        /* 英文字体优化 */
+        .lang-content[data-lang="en"] {
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: 0.01em;
+        }
+        
+        /* 确保所有文本元素使用统一字体和粗细 */
+        .title, .subtitle, .exhibition-title, .exhibition-date, 
+        .exhibition-description, .exhibition-location, .exhibition-item,
+        .back-btn, .language-toggle, .prev-btn, .next-btn,
+        .slide-counter, .indicator, .placeholder h2, .placeholder p {
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-weight: 400;
+            font-style: normal;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
         }
         .exhibition-section {
             margin-bottom: 2.6042vh; /* 50px */
@@ -89,7 +162,7 @@
         .exhibition-location {
             font-size: 0.5729vw; /* 11px / 1920px * 100 */
             color: rgba(255,255,255,0.7);
-            font-style: italic;
+            font-style: normal;
         }
         .placeholder {
             text-align: center;
@@ -119,7 +192,7 @@
             font-size: 0.9375vw; /* 18px / 1920px * 100 */
             color: #fac800;
             margin-bottom: 0.4167vh; /* 8px */
-            font-weight: bold;
+            font-weight: 400;
             text-shadow: 0.1042vw 0.1042vw 0.2083vw rgba(0,0,0,0.5); /* 2px 2px 4px */
         }
         .exhibition-item .exhibition-description {
@@ -127,8 +200,8 @@
             line-height: 1.6;
             color: rgba(255,255,255,0.9);
             margin-bottom: 0;
-            font-weight: 200;
-            font-style: italic;
+            font-weight: 400;
+            font-style: normal;
         }
         .exhibition-item .exhibition-description::before {
             content: "●";
@@ -189,7 +262,9 @@
             padding: 0 0.5208vw; /* 0 10px */
         }
         
-        .prev-btn, .next-btn {
+        .prev-btn, .next-btn,
+        .prev-btn-perf, .next-btn-perf,
+        .prev-btn-group, .next-btn-group {
             background: rgba(250,200,0,0.1);
             border: 0.1042vw solid #fac800; /* 2px */
             color: #fac800;
@@ -201,7 +276,9 @@
             border-radius: 0.2083vw; /* 4px */
         }
         
-        .prev-btn:hover, .next-btn:hover {
+        .prev-btn:hover, .next-btn:hover,
+        .prev-btn-perf:hover, .next-btn-perf:hover,
+        .prev-btn-group:hover, .next-btn-group:hover {
             background: rgba(250,200,0,0.2);
             transform: scale(1.05);
         }
@@ -310,202 +387,66 @@
             }
         }
 
+        /* 手机端优化 (480px以下) */
         @media (max-width: 480px) {
             .container {
                 max-width: 98vw;
                 padding: 1vh 1vw;
             }
+            
             .title {
                 font-size: 5vw;
             }
+            
             .subtitle {
                 font-size: 3vw;
             }
+            
             .exhibition-title {
                 font-size: 4vw;
             }
+            
             .exhibition-date, .exhibition-description {
                 font-size: 3vw;
             }
+            
             .back-btn {
                 top: 0.5vh;
                 left: 1vw;
                 padding: 0.8vh 1.5vw;
                 font-size: 3vw;
             }
-                         .slideshow-wrapper {
-                 height: 60vh;
-             }
-            .prev-btn, .next-btn {
+            
+            .language-toggle {
+                top: 0.5vh;
+                right: 1vw;
                 padding: 0.8vh 1.5vw;
                 font-size: 3vw;
             }
+            
+            /* 所有幻灯片播放器统一优化 */
+            .slideshow-wrapper {
+                height: 60vh;
+            }
+            
+            .prev-btn, .next-btn,
+            .prev-btn-perf, .next-btn-perf,
+            .prev-btn-group, .next-btn-group {
+                padding: 0.8vh 1.5vw;
+                font-size: 3vw;
+            }
+            
             .slide-counter {
                 font-size: 3.5vw;
             }
-                         .indicator {
-                 width: 2.5vw;
-                 height: 2.5vw;
-             }
-             
-             /* Performance播放器响应式适配 */
-             .performance-slideshow-container .slideshow-wrapper {
-                 height: 65vh;
-             }
-             .prev-btn-perf, .next-btn-perf {
-                 padding: 1vh 2vw;
-                 font-size: 2.5vw;
-             }
-             .performance-slideshow-container .slide-counter {
-                 font-size: 3vw;
-             }
-             .indicator-perf {
-                 width: 2vw;
-                 height: 2vw;
-             }
-         }
+            
+            .indicator,
+            .indicator-perf,
+            .indicator-group {
+                width: 2.5vw;
+                height: 2.5vw;
+            }
 
-         @media (max-width: 480px) {
-             .container {
-                 max-width: 98vw;
-                 padding: 1vh 1vw;
-             }
-             .title {
-                 font-size: 5vw;
-             }
-             .subtitle {
-                 font-size: 3vw;
-             }
-             .exhibition-title {
-                 font-size: 4vw;
-             }
-             .exhibition-date, .exhibition-description {
-                 font-size: 3vw;
-             }
-             .back-btn {
-                 top: 0.5vh;
-                 left: 1vw;
-                 padding: 0.8vh 1.5vw;
-                 font-size: 3vw;
-             }
-             .slideshow-wrapper {
-                 height: 60vh;
-             }
-             .prev-btn, .next-btn {
-                 padding: 0.8vh 1.5vw;
-                 font-size: 3vw;
-             }
-             .slide-counter {
-                 font-size: 3.5vw;
-             }
-             .indicator {
-                 width: 2.5vw;
-                 height: 2.5vw;
-             }
-             
-             /* Performance播放器响应式适配 */
-             .performance-slideshow-container .slideshow-wrapper {
-                 height: 60vh;
-             }
-             .prev-btn-perf, .next-btn-perf {
-                 padding: 0.8vh 1.5vw;
-                 font-size: 3vw;
-             }
-             .performance-slideshow-container .slide-counter {
-                 font-size: 3.5vw;
-             }
-             .indicator-perf {
-                 width: 2.5vw;
-                 height: 2.5vw;
-             }
-             
-             /* Group播放器响应式适配 */
-             .group-slideshow-container .slideshow-wrapper {
-                 height: 65vh;
-             }
-             .prev-btn-group, .next-btn-group {
-                 padding: 1vh 2vw;
-                 font-size: 2.5vw;
-             }
-             .group-slideshow-container .slide-counter {
-                 font-size: 3vw;
-             }
-             .indicator-group {
-                 width: 2vw;
-                 height: 2vw;
-             }
-         }
-
-         @media (max-width: 480px) {
-             .container {
-                 max-width: 98vw;
-                 padding: 1vh 1vw;
-             }
-             .title {
-                 font-size: 5vw;
-             }
-             .subtitle {
-                 font-size: 3vw;
-             }
-             .exhibition-title {
-                 font-size: 4vw;
-             }
-             .exhibition-date, .exhibition-description {
-                 font-size: 3vw;
-             }
-             .back-btn {
-                 top: 0.5vh;
-                 left: 1vw;
-                 padding: 0.8vh 1.5vw;
-                 font-size: 3vw;
-             }
-             .slideshow-wrapper {
-                 height: 60vh;
-             }
-             .prev-btn, .next-btn {
-                 padding: 0.8vh 1.5vw;
-                 font-size: 3vw;
-             }
-             .slide-counter {
-                 font-size: 3.5vw;
-             }
-             .indicator {
-                 width: 2.5vw;
-                 height: 2.5vw;
-             }
-             
-             /* Performance播放器响应式适配 */
-             .performance-slideshow-container .slideshow-wrapper {
-                 height: 60vh;
-             }
-             .prev-btn-perf, .next-btn-perf {
-                 padding: 0.8vh 1.5vw;
-                 font-size: 3vw;
-             }
-             .performance-slideshow-container .slide-counter {
-                 font-size: 3.5vw;
-             }
-             .indicator-perf {
-                 width: 2.5vw;
-                 height: 2.5vw;
-             }
-             
-             /* Group播放器响应式适配 */
-             .group-slideshow-container .slideshow-wrapper {
-                 height: 60vh;
-             }
-             .prev-btn-group, .next-btn-group {
-                 padding: 0.8vh 1.5vw;
-                 font-size: 3vw;
-             }
-             .group-slideshow-container .slide-counter {
-                 font-size: 3.5vw;
-             }
-             .indicator-group {
-                 width: 2.5vw;
-                 height: 2.5vw;
-             }
-         }
         
         /* Performance Exhibition Slideshow Styles */
         .performance-slideshow-container {
@@ -514,61 +455,6 @@
             border-radius: 0.5208vw; /* 10px */
             padding: 1.0417vh; /* 20px */
             border: 0.1042vw solid rgba(250,200,0,0.3); /* 2px */
-        }
-        
-        .performance-slideshow-container .slideshow-wrapper {
-            position: relative;
-            width: 100%;
-            height: 60vh; /* 与SOLO播放器保持一致的高度 */
-            overflow: hidden;
-            border-radius: 0.4167vw; /* 8px */
-            background: #000;
-        }
-        
-        .performance-slideshow-container .slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
-            transform: translateX(100%);
-        }
-        
-        .performance-slideshow-container .slide.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        .performance-slideshow-container .slide.prev {
-            transform: translateX(-100%);
-        }
-        
-        .performance-slideshow-container .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #000;
-        }
-        
-        .performance-slideshow-container .slideshow-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.0417vh; /* 20px */
-            padding: 0 0.5208vw; /* 0 10px */
-        }
-        
-        .performance-slideshow-container .slide-counter {
-            font-size: 0.8333vw; /* 16px / 1920px * 100 */
-            color: #fac800;
-            font-weight: bold;
-        }
-        
-        .performance-slideshow-container .slideshow-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 0.4167vw; /* 8px */
-            margin-top: 0.7813vh; /* 15px */
         }
         
         /* Performance Indicators with different color cycling */
@@ -623,22 +509,7 @@
             filter: brightness(1.2);
         }
         
-        .prev-btn-perf, .next-btn-perf {
-            background: rgba(250,200,0,0.1);
-            border: 0.1042vw solid #fac800; /* 2px */
-            color: #fac800;
-            padding: 0.625vh 1.0417vw; /* 12px 20px */
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 0.625vw; /* 12px / 1920px * 100 */
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 0.2083vw; /* 4px */
-        }
-        
-        .prev-btn-perf:hover, .next-btn-perf:hover {
-            background: rgba(250,200,0,0.2);
-            transform: scale(1.05);
-        }
+
         
         /* Group Exhibition Slideshow Styles */
         .group-slideshow-container {
@@ -647,61 +518,6 @@
             border-radius: 0.5208vw; /* 10px */
             padding: 1.0417vh; /* 20px */
             border: 0.1042vw solid rgba(250,200,0,0.3); /* 2px */
-        }
-        
-        .group-slideshow-container .slideshow-wrapper {
-            position: relative;
-            width: 100%;
-            height: 60vh; /* 与其他播放器保持一致的高度 */
-            overflow: hidden;
-            border-radius: 0.4167vw; /* 8px */
-            background: #000;
-        }
-        
-        .group-slideshow-container .slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
-            transform: translateX(100%);
-        }
-        
-        .group-slideshow-container .slide.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        .group-slideshow-container .slide.prev {
-            transform: translateX(-100%);
-        }
-        
-        .group-slideshow-container .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #000;
-        }
-        
-        .group-slideshow-container .slideshow-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.0417vh; /* 20px */
-            padding: 0 0.5208vw; /* 0 10px */
-        }
-        
-        .group-slideshow-container .slide-counter {
-            font-size: 0.8333vw; /* 16px / 1920px * 100 */
-            color: #fac800;
-            font-weight: bold;
-        }
-        
-        .group-slideshow-container .slideshow-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 0.4167vw; /* 8px */
-            margin-top: 0.7813vh; /* 15px */
         }
         
         /* Group Indicators with red yellow blue green cycling */
@@ -772,35 +588,310 @@
             background: rgba(250,200,0,0.2);
             transform: scale(1.05);
         }
+        /* ===== 响应式设计优化 ===== */
+        
+        /* 大屏幕优化 (1920px+) */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 70vw;
+                padding: 3vh 2vw;
+            }
+            
+            .title {
+                font-size: 2.2vw;
+            }
+            
+            .subtitle {
+                font-size: 1.3vw;
+            }
+            
+            .exhibition-title {
+                font-size: 1.6vw;
+            }
+            
+            .exhibition-date, .exhibition-description {
+                font-size: 0.8vw;
+            }
+            
+            .slideshow-wrapper {
+                height: 65vh;
+            }
+            
+            .prev-btn, .next-btn,
+            .prev-btn-perf, .next-btn-perf,
+            .prev-btn-group, .next-btn-group {
+                padding: 0.8vh 1.5vw;
+                font-size: 0.5vw;
+            }
+            
+            .slide-counter {
+                font-size: 0.7vw;
+            }
+            
+            .indicator,
+            .indicator-perf,
+            .indicator-group {
+                width: 0.5vw;
+                height: 0.5vw;
+            }
+        }
+        
+        /* 2K分辨率优化 (2560px+) */
+        @media (min-width: 2560px) {
+            .container {
+                max-width: 65vw;
+                padding: 4vh 3vw;
+            }
+            
+            .title {
+                font-size: 1.8vw;
+            }
+            
+            .subtitle {
+                font-size: 1.1vw;
+            }
+            
+            .exhibition-title {
+                font-size: 1.4vw;
+            }
+            
+            .exhibition-date, .exhibition-description {
+                font-size: 0.7vw;
+            }
+            
+            .slideshow-wrapper {
+                height: 70vh;
+            }
+        }
+        
+        /* 4K分辨率优化 (3840px+) */
+        @media (min-width: 3840px) {
+            .container {
+                max-width: 60vw;
+                padding: 5vh 4vw;
+            }
+            
+            .title {
+                font-size: 1.5vw;
+            }
+            
+            .subtitle {
+                font-size: 0.9vw;
+            }
+            
+            .exhibition-title {
+                font-size: 1.2vw;
+            }
+            
+            .exhibition-date, .exhibition-description {
+                font-size: 0.6vw;
+            }
+            
+            .slideshow-wrapper {
+                height: 75vh;
+            }
+        }
+        
+        /* 横屏模式优化 */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .container {
+                padding: 1vh 2vw;
+            }
+            
+            .header {
+                margin-bottom: 1.5vh;
+                padding-bottom: 0.8vh;
+            }
+            
+            .title {
+                font-size: 3vw;
+                margin-bottom: 0.5vh;
+            }
+            
+            .subtitle {
+                font-size: 1.8vw;
+                margin-bottom: 0.3vh;
+            }
+            
+            .exhibition-section {
+                margin-bottom: 1.5vh;
+                padding: 1vh;
+            }
+            
+            .exhibition-title {
+                font-size: 2.5vw;
+                margin-bottom: 0.5vh;
+            }
+            
+            .slideshow-wrapper {
+                height: 50vh;
+            }
+            
+            .slideshow-controls {
+                margin-top: 0.5vh;
+            }
+        }
+        
+        /* 高DPI屏幕优化 */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .slide img {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+            
+            .back-btn,
+            .prev-btn, .next-btn,
+            .prev-btn-perf, .next-btn-perf,
+            .prev-btn-group, .next-btn-group {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+        }
+        
+        /* 触摸设备优化 */
+        @media (hover: none) and (pointer: coarse) {
+            .back-btn,
+            .prev-btn, .next-btn,
+            .prev-btn-perf, .next-btn-perf,
+            .prev-btn-group, .next-btn-group {
+                min-height: 44px;
+                min-width: 44px;
+                touch-action: manipulation;
+            }
+            
+            .indicator,
+            .indicator-perf,
+            .indicator-group {
+                min-width: 24px;
+                min-height: 24px;
+                touch-action: manipulation;
+            }
+            
+            .slideshow-wrapper {
+                touch-action: pan-y pinch-zoom;
+            }
+        }
+        
+        /* 性能优化 */
+        .slide {
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+        
+        .slide img {
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        
+        /* 无障碍访问优化 */
+        .back-btn,
+        .prev-btn, .next-btn,
+        .prev-btn-perf, .next-btn-perf,
+        .prev-btn-group, .next-btn-group {
+            outline: none;
+        }
+        
+        .back-btn:focus,
+        .prev-btn:focus, .next-btn:focus,
+        .prev-btn-perf:focus, .next-btn-perf:focus,
+        .prev-btn-group:focus, .next-btn-group:focus {
+            outline: 2px solid #fac800;
+            outline-offset: 2px;
+        }
+        
+        .indicator:focus,
+        .indicator-perf:focus,
+        .indicator-group:focus {
+            outline: 2px solid currentColor;
+            outline-offset: 2px;
+        }
+        
+        /* 打印优化 */
+        @media print {
+            .back-btn,
+            .slideshow-controls,
+            .slideshow-indicators {
+                display: none !important;
+            }
+            
+            .slide {
+                opacity: 1 !important;
+                transform: none !important;
+                position: relative !important;
+                page-break-inside: avoid;
+            }
+            
+            .slideshow-wrapper {
+                height: auto !important;
+                overflow: visible !important;
+            }
+        }
+        
+        /* 减少动画优化 */
+        @media (prefers-reduced-motion: reduce) {
+            .slide {
+                transition: none !important;
+            }
+            
+            .back-btn,
+            .prev-btn, .next-btn,
+            .prev-btn-perf, .next-btn-perf,
+            .prev-btn-group, .next-btn-group,
+            .indicator,
+            .indicator-perf,
+            .indicator-group {
+                transition: none !important;
+            }
+        }
+        
+        /* 深色模式支持 */
+        @media (prefers-color-scheme: dark) {
+            .exhibition-section {
+                background: rgba(255,255,255,0.08);
+            }
+            
+            .exhibition-item {
+                background: rgba(255,255,255,0.05);
+            }
+        }
     </style>
 </head>
 <body>
             <a href="../index.html" class="back-btn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
+            <button class="language-toggle" id="languageToggle">中文</button>
     
     <div class="container">
         <div class="header">
             <h1 class="title">EZI.ZHANG</h1>
-            <p class="subtitle">EXHIBITION EXPERIENCE</p>
+            <p class="subtitle lang-content active" data-lang="en">EXHIBITION EXPERIENCE</p>
+            <p class="subtitle lang-content" data-lang="zh">展览经历</p>
         </div>
         
         <!-- Solo Exhibitions -->
         <div class="exhibition-section">
-            <h2 class="exhibition-title">SOLO EXHIBITIONS</h2>
+            <h2 class="exhibition-title lang-content active" data-lang="en">SOLO EXHIBITIONS</h2>
+            <h2 class="exhibition-title lang-content" data-lang="zh">个人展览</h2>
             <div class="exhibition-item">
                 <p class="exhibition-date">2025</p>
-                <p class="exhibition-description"><strong>if it happens in a flash Rasterize - L·F·T·R</strong>, E.SCAPE Art Space, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>if it happens in a flash Rasterize - L·F·T·R</strong>, E.SCAPE Art Space, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>如果在一瞬间，光栅化 - 光·裂·变·解</strong>, E.SCAPE艺术空间, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>Journey</strong>, Klein Art Space, M50, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Journey</strong>, Klein Art Space, M50, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>征途</strong>, Klein Art Space, M50, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2023</p>
-                <p class="exhibition-description"><strong>Rasterize — The Quadrilogy</strong>, Yellspace, Sichuan</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Rasterize — The Quadrilogy</strong>, Yellspace, Sichuan</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>光栅化/Rasterize—— 四部曲</strong>, 要空间Yellspace, 四川</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2022</p>
-                <p class="exhibition-description"><strong>High-Frequency Synesthesia</strong>, Kongsan Art Museum, Hangzhou</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>High-Frequency Synesthesia</strong>, Kongsan Art Museum, Hangzhou</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>高频联觉</strong>, 空山美术馆, 杭州</p>
             </div>
             
             <!-- 空行分隔 -->
@@ -911,34 +1002,42 @@
 
         <!-- Performances -->
         <div class="exhibition-section">
-            <h2 class="exhibition-title">PERFORMANCES</h2>
+            <h2 class="exhibition-title lang-content active" data-lang="en">PERFORMANCES</h2>
+            <h2 class="exhibition-title lang-content" data-lang="zh">视听表演</h2>
             <div class="exhibition-item">
                 <p class="exhibition-date">2025</p>
-                <p class="exhibition-description"><strong>Synth Colors</strong>, Moin, Rockbund Ensemble, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Synth Colors</strong>, Moin, Rockbund Ensemble, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>ROCKBUND ENSEMBLE 重奏外滩波频绘梦</strong>, 墨音, 外滩洛克源, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2025</p>
-                <p class="exhibition-description"><strong>if it happens in a flash Rasterize - L·F·T·R</strong>, E.SCAPE Art Space, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>if it happens in a flash Rasterize - L·F·T·R</strong>, E.SCAPE Art Space, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>如果在一瞬间发生 光栅化 - L·F·T·R</strong>, E.SCAPE艺术空间, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>"7th Anniversary"</strong>, Mago Sheng at ALL, All Club, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>"7th Anniversary"</strong>, Mago Sheng at ALL, All Club, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>「7周年」马戈生在ALL</strong>, All Club, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>Oll.Korrect = All Correct</strong>, SYSTEM, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Oll.Korrect = All Correct</strong>, SYSTEM, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>Oll.Korrect = All correct</strong>, SYSTEM, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>Illusion Resonance</strong>, THEBOXX, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Illusion Resonance</strong>, THEBOXX, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>幻觉共振</strong>, THEBOXX, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2023</p>
-                <p class="exhibition-description"><strong>Circular Gaze</strong>, Yujian Guanchi Space, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Circular Gaze</strong>, Yujian Guanchi Space, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>环形凝视</strong>, 愚见观池空间, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2023</p>
-                <p class="exhibition-description"><strong>Loneliness — Audio-Visual Performance</strong>, Shanghai Broadcasting Art Center</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Loneliness — Audio-Visual Performance</strong>, Shanghai Broadcasting Art Center</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>孤独—视听演艺会</strong>, 上海广播艺术中心</p>
             </div>
             
             <!-- 空行分隔 -->
@@ -1077,62 +1176,77 @@
 
         <!-- Group Exhibitions/Projects -->
         <div class="exhibition-section">
-            <h2 class="exhibition-title">GROUP EXHIBITIONS / PROJECTS</h2>
+            <h2 class="exhibition-title lang-content active" data-lang="en">GROUP EXHIBITIONS / PROJECTS</h2>
+            <h2 class="exhibition-title lang-content" data-lang="zh">群展 / 项目</h2>
             <div class="exhibition-item">
                 <p class="exhibition-date">2025</p>
-                <p class="exhibition-description"><strong>THERTER NOON WILDNESS STREAM WASHE RUINS THERTER</strong>, Power Station of Art, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>THERTER NOON WILDNESS STREAM WASHE RUINS THERTER</strong>, Power Station of Art, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>新文化制作人，正午、荒原、息流、瓦舍、废墟、剧场</strong>, 上海当代艺术博物馆, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>Sense n Vision</strong>, Art Basel Hong Kong, Hong Kong Convention and Exhibition Centre, Hong Kong</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Sense n Vision</strong>, Art Basel Hong Kong, Hong Kong Convention and Exhibition Centre, Hong Kong</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>艺文香港「异度维声 Sense n Vision」</strong>, 香港会议展览中心, 香港</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>Shanghai Never Sleeps: ART021 Immersive Party</strong>, K11, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Shanghai Never Sleeps: ART021 Immersive Party</strong>, K11, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>上海从未入睡：ART021 沉浸式派对</strong>, 上海K11, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>UFO Terminal: Unknown Terminal</strong>, West Bund Oil Tank Art Park No.1 Tank, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>UFO Terminal: Unknown Terminal</strong>, West Bund Oil Tank Art Park No.1 Tank, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>UFO Terminal 未知终端</strong>, 上海西岸油罐艺术公园1号罐, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>Phantom Realm</strong>, Sculpture Park Art Center, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Phantom Realm</strong>, Sculpture Park Art Center, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>幻境</strong>, 雕塑公园艺术中心, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>Ultra Substance (HK)</strong>, Mihn Club, Hong Kong</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Ultra Substance (HK)</strong>, Mihn Club, Hong Kong</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>超物质ULTRA SUBSTANCE（HK）</strong>, Mihn Club, 香港</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>Wukang Sun Yard</strong>, E.SCAPE Art Space, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Wukang Sun Yard</strong>, E.SCAPE Art Space, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>武康晒场</strong>, E.SCAPE艺术空间, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2024</p>
-                <p class="exhibition-description"><strong>Happy Faces — Chinese Experimental & Tech Art</strong>, Nantong Art Museum, Nantong</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Happy Faces — Chinese Experimental & Tech Art</strong>, Nantong Art Museum, Nantong</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>幸福的表情——中国实验与科技艺术</strong>, 南通美术馆, 南通</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2023</p>
-                <p class="exhibition-description"><strong>Virtual · Roaming</strong>, K11 Select Art Mall, Tianjin</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Virtual · Roaming</strong>, K11 Select Art Mall, Tianjin</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>虚拟 · 漫游 K11 Select 艺术购物中心</strong>, 天津</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2023</p>
-                <p class="exhibition-description"><strong>Design Shanghai x London</strong>, organized by Shanghai Design Week, London</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Design Shanghai x London</strong>, organized by Shanghai Design Week, London</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>设计沪航计划</strong>, 由上海设计周主办, 伦敦</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2022</p>
-                <p class="exhibition-description"><strong>BXQ Experimental Video Week</strong>, Aotu Space, Beijing</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>BXQ Experimental Video Week</strong>, Aotu Space, Beijing</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>BXQ实验影像周</strong>, 凹凸空间, 北京</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2022</p>
-                <p class="exhibition-description"><strong>Player Art Festival</strong>, Oil Tank Art Center, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Player Art Festival</strong>, Oil Tank Art Center, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>玩家艺术节</strong>, 油罐艺术中心, 上海</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2022</p>
-                <p class="exhibition-description"><strong>Bird & Flower Collection</strong>, Hangzhou</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Bird & Flower Collection</strong>, Hangzhou</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>花鸟集</strong>, 杭州</p>
             </div>
             <div class="exhibition-item">
                 <p class="exhibition-date">2022</p>
-                <p class="exhibition-description"><strong>Beyond Time, Knowledge of the Past: Oil Tank Art Center Sleepless Night</strong>, curated by Martin Goya, Oil Tank Art Center, Shanghai</p>
+                <p class="exhibition-description lang-content active" data-lang="en"><strong>Beyond Time, Knowledge of the Past: Oil Tank Art Center Sleepless Night</strong>, curated by Martin Goya, Oil Tank Art Center, Shanghai</p>
+                <p class="exhibition-description lang-content" data-lang="zh"><strong>藏往知来 油罐艺术不眠夜 马丁·戈雅生意策划</strong>, 油罐艺术中心, 上海</p>
             </div>
             
             <!-- 空行分隔 -->
@@ -1220,7 +1334,9 @@
         
         // Initialize slideshow
         function initSlideshow() {
-            totalSlidesSpan.textContent = totalSlides;
+            if (totalSlidesSpan) {
+                totalSlidesSpan.textContent = totalSlides;
+            }
             updateSlideshow();
         }
         
@@ -1242,7 +1358,9 @@
             });
             
             // Update counter
-            currentSlideSpan.textContent = currentSlide + 1;
+            if (currentSlideSpan) {
+                currentSlideSpan.textContent = currentSlide + 1;
+            }
         }
         
         // Go to next slide
@@ -1301,8 +1419,8 @@
         function initSlideshowPerf() {
             if (totalSlidesPerfSpan) {
                 totalSlidesPerfSpan.textContent = totalSlidesPerf;
-                updateSlideshowPerf();
             }
+            updateSlideshowPerf();
         }
         
         // Update performance slideshow display
@@ -1372,8 +1490,8 @@
         function initSlideshowGroup() {
             if (totalSlidesGroupSpan) {
                 totalSlidesGroupSpan.textContent = totalSlidesGroup;
-                updateSlideshowGroup();
             }
+            updateSlideshowGroup();
         }
         
         // Update group slideshow display
@@ -1428,6 +1546,282 @@
         
         // Initialize group slideshow when page loads
         document.addEventListener('DOMContentLoaded', initSlideshowGroup);
+        
+        // ===== 触摸手势支持 =====
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
+        
+        // Solo slideshow touch support
+        const soloWrapper = document.querySelector('.solo-slideshow-container .slideshow-wrapper');
+        if (soloWrapper) {
+            soloWrapper.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            });
+            
+            soloWrapper.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                handleSwipe();
+            });
+        }
+        
+        // Performance slideshow touch support
+        const perfWrapper = document.querySelector('.performance-slideshow-container .slideshow-wrapper');
+        if (perfWrapper) {
+            perfWrapper.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            });
+            
+            perfWrapper.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                handleSwipePerf();
+            });
+        }
+        
+        // Group slideshow touch support
+        const groupWrapper = document.querySelector('.group-slideshow-container .slideshow-wrapper');
+        if (groupWrapper) {
+            groupWrapper.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            });
+            
+            groupWrapper.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                handleSwipeGroup();
+            });
+        }
+        
+        function handleSwipe() {
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+            
+            // 确保是水平滑动而不是垂直滑动
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                if (diffX > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+        
+        function handleSwipePerf() {
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+            
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                if (diffX > 0) {
+                    nextSlidePerf();
+                } else {
+                    prevSlidePerf();
+                }
+            }
+        }
+        
+        function handleSwipeGroup() {
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+            
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                if (diffX > 0) {
+                    nextSlideGroup();
+                } else {
+                    prevSlideGroup();
+                }
+            }
+        }
+        
+        // ===== 性能优化 =====
+        // 图片懒加载
+        function lazyLoadImages() {
+            const images = document.querySelectorAll('.slide img');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                            observer.unobserve(img);
+                        }
+                    }
+                });
+            });
+            
+            images.forEach(img => {
+                if (img.dataset.src) {
+                    imageObserver.observe(img);
+                }
+            });
+        }
+        
+        // 预加载下一张图片
+        function preloadNextImage(slideshowType) {
+            let currentIndex, totalSlides, nextIndex;
+            
+            switch(slideshowType) {
+                case 'solo':
+                    currentIndex = currentSlide;
+                    totalSlides = slides.length;
+                    break;
+                case 'perf':
+                    currentIndex = currentSlidePerf;
+                    totalSlides = slidesPerf.length;
+                    break;
+                case 'group':
+                    currentIndex = currentSlideGroup;
+                    totalSlides = slidesGroup.length;
+                    break;
+            }
+            
+            nextIndex = (currentIndex + 1) % totalSlides;
+            const nextSlide = document.querySelector(`.${slideshowType}-slideshow-container .slide:nth-child(${nextIndex + 1}) img`);
+            
+            if (nextSlide && nextSlide.dataset.src) {
+                const preloadImg = new Image();
+                preloadImg.src = nextSlide.dataset.src;
+            }
+        }
+        
+        // ===== 键盘快捷键增强 =====
+        document.addEventListener('keydown', (e) => {
+            // 检查是否在幻灯片播放器区域内
+            const activeElement = document.activeElement;
+            const isInSlideshow = activeElement.closest('.slideshow-wrapper');
+            
+            if (isInSlideshow) {
+                switch(e.key) {
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        if (activeElement.closest('.solo-slideshow-container')) {
+                            nextSlide();
+                        } else if (activeElement.closest('.performance-slideshow-container')) {
+                            nextSlidePerf();
+                        } else if (activeElement.closest('.group-slideshow-container')) {
+                            nextSlideGroup();
+                        }
+                        break;
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        if (activeElement.closest('.solo-slideshow-container')) {
+                            prevSlide();
+                        } else if (activeElement.closest('.performance-slideshow-container')) {
+                            prevSlidePerf();
+                        } else if (activeElement.closest('.group-slideshow-container')) {
+                            prevSlideGroup();
+                        }
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        if (activeElement.closest('.solo-slideshow-container')) {
+                            goToSlide(0);
+                        } else if (activeElement.closest('.performance-slideshow-container')) {
+                            goToSlidePerf(0);
+                        } else if (activeElement.closest('.group-slideshow-container')) {
+                            goToSlideGroup(0);
+                        }
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        if (activeElement.closest('.solo-slideshow-container')) {
+                            goToSlide(totalSlides - 1);
+                        } else if (activeElement.closest('.performance-slideshow-container')) {
+                            goToSlidePerf(totalSlidesPerf - 1);
+                        } else if (activeElement.closest('.group-slideshow-container')) {
+                            goToSlideGroup(totalSlidesGroup - 1);
+                        }
+                        break;
+                }
+            }
+        });
+        
+        // ===== 语言切换功能 =====
+        let currentLanguage = 'en'; // 默认英文
+        
+        function switchLanguage() {
+            const languageToggle = document.getElementById('languageToggle');
+            const langContents = document.querySelectorAll('.lang-content');
+            
+            // 切换语言
+            currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
+            
+            // 更新按钮文本
+            languageToggle.textContent = currentLanguage === 'en' ? '中文' : 'English';
+            
+            // 切换所有语言内容
+            langContents.forEach(content => {
+                if (content.dataset.lang === currentLanguage) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            // 保存语言偏好到本地存储
+            localStorage.setItem('exhibitionLanguage', currentLanguage);
+            
+            // 添加切换动画效果
+            languageToggle.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                languageToggle.style.transform = 'scale(1)';
+            }, 200);
+        }
+        
+        // 初始化语言设置
+        function initLanguage() {
+            const savedLanguage = localStorage.getItem('exhibitionLanguage');
+            if (savedLanguage) {
+                currentLanguage = savedLanguage;
+                const languageToggle = document.getElementById('languageToggle');
+                const langContents = document.querySelectorAll('.lang-content');
+                
+                // 设置按钮文本
+                languageToggle.textContent = currentLanguage === 'en' ? '中文' : 'English';
+                
+                // 设置内容显示
+                langContents.forEach(content => {
+                    if (content.dataset.lang === currentLanguage) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        // 绑定语言切换事件
+        document.addEventListener('DOMContentLoaded', () => {
+            const languageToggle = document.getElementById('languageToggle');
+            languageToggle.addEventListener('click', switchLanguage);
+            
+            // 初始化语言设置
+            initLanguage();
+            
+            // 初始化所有幻灯片播放器
+            initSlideshow();
+            initSlideshowPerf();
+            initSlideshowGroup();
+            
+            // 启用懒加载
+            lazyLoadImages();
+            
+            // 添加加载状态指示
+            const slideshows = document.querySelectorAll('.slideshow-wrapper');
+            slideshows.forEach(wrapper => {
+                wrapper.style.opacity = '0';
+                setTimeout(() => {
+                    wrapper.style.transition = 'opacity 0.5s ease';
+                    wrapper.style.opacity = '1';
+                }, 100);
+            });
+        });
     </script>
 </body>
 </html> 
