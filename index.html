@@ -17,7 +17,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            font-family: 'VCR OSD Mono', 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', monospace;
             image-rendering: pixelated;
             -webkit-font-smoothing: none;
             -moz-osx-font-smoothing: none;
@@ -93,6 +93,65 @@
                 max-height: 100%;
             }
         }
+        
+        /* 语言切换按钮样式 */
+        .language-toggle {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            right: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px */
+            font-family: inherit;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 1000;
+            border-radius: 0.2604vw; /* 5px */
+        }
+        
+        .language-toggle:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+        
+        /* 语言内容样式 */
+        .lang-content {
+            display: none;
+        }
+        
+        .lang-content.active {
+            display: block;
+        }
+        
+        /* 确保中文字符正确显示 */
+        .lang-content[data-lang="zh"] {
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'SimHei', 'Microsoft YaHei', monospace;
+            font-display: swap;
+        }
+        
+        /* 确保英文字符正确显示 */
+        .lang-content[data-lang="en"] {
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', monospace;
+            font-display: swap;
+        }
+        
+        /* 强制语言切换样式优先级 */
+        .artist-description .lang-content,
+        .artist-location .lang-content {
+            display: none !important;
+        }
+        
+        .artist-description .lang-content.active,
+        .artist-location .lang-content.active {
+            display: block !important;
+        }
+        
+        /* 移除绝对定位，让语言内容正常切换 */
         
         /* 高DPI屏幕优化 */
         @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
@@ -552,34 +611,90 @@
         
         /* 作品标题容器响应式设计 */
         @media (max-width: 1200px) and (min-width: 901px) {
-            .work-title-container,
+            .work-title-container {
+                font-size: 2.2vw;
+                padding: 0vh 1vw;
+                height: 240px !important;
+            }
             .work-title-container-2 {
                 font-size: 2.2vw;
-                padding: 1.5vh 2.5vw;
+                padding: 0vh 5vw 0vh 1vw;
+                height: 400px !important;
+            }
+            .work-title-container-3 {
+                font-size: 2.2vw;
+                padding: 0vh 1vw;
+                height: 240px !important;
+            }
+            .mixed-media-title {
+                padding: 0vh 5vw 0vh 1vw !important;
+                height: 400px !important;
             }
         }
         
         @media (max-width: 900px) {
-            .work-title-container,
+            .work-title-container {
+                font-size: 2.8vw;
+                padding: 0vh 1vw;
+                height: 240px !important;
+            }
             .work-title-container-2 {
                 font-size: 2.8vw;
-                padding: 1.2vh 2vw;
+                padding: 0vh 5vw 0vh 1vw;
+                height: 400px !important;
+            }
+            .work-title-container-3 {
+                font-size: 2.8vw;
+                padding: 0vh 1vw;
+                height: 240px !important;
+            }
+            .mixed-media-title {
+                padding: 0vh 5vw 0vh 1vw !important;
+                height: 400px !important;
             }
         }
         
         @media (max-width: 600px) {
-            .work-title-container,
+            .work-title-container {
+                font-size: 3.5vw;
+                padding: 0vh 1vw;
+                height: 240px !important;
+            }
             .work-title-container-2 {
                 font-size: 3.5vw;
-                padding: 1vh 1.5vw;
+                padding: 0vh 5vw 0vh 1vw;
+                height: 400px !important;
+            }
+            .work-title-container-3 {
+                font-size: 3.5vw;
+                padding: 0vh 1vw;
+                height: 240px !important;
+            }
+            .mixed-media-title {
+                padding: 0vh 5vw 0vh 1vw !important;
+                height: 400px !important;
             }
         }
         
         @media (max-width: 400px) {
-            .work-title-container,
+            .work-title-container {
+                font-size: 4vw;
+                padding: 0vh 1vw;
+                height: 240px !important;
+            }
             .work-title-container-2 {
                 font-size: 4vw;
-                padding: 0.8vh 1.2vw;
+                padding: 0vh 5vw 0vh 1vw;
+                height: 400px !important;
+            }
+            .work-title-container-3 {
+                font-size: 4vw;
+                padding: 0vh 1vw;
+                height: 240px !important;
+            }
+            .mixed-media-title {
+                padding: 0vh 5vw 0vh 1vw !important;
+                height: 400px !important;
             }
         }
         
@@ -1188,13 +1303,13 @@
             .subtitle-container-2 {
                 bottom: -246vh;
                 left: 12vw;
-                padding: 0.8vh 2vw;
+                padding: 0.2vh 0.8vw;
             }
             
             .subtitle-container-3 {
                 bottom: -345vh;
                 left: 12vw;
-                padding: 0.8vh 2vw;
+                padding: 0.2vh 0.8vw;
             }
             
 
@@ -1327,13 +1442,13 @@
             .subtitle-container-2 {
                 bottom: -235vh;
                 left: 15vw;
-                padding: 0.6vh 1.8vw;
+                padding: 0.2vh 0.8vw;
             }
             
             .subtitle-container-3 {
                 bottom: -325vh;
                 left: 15vw;
-                padding: 0.6vh 1.8vw;
+                padding: 0.2vh 0.8vw;
             }
             
 
@@ -1417,7 +1532,7 @@
         }
         .artist-description p {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 16px;
+            font-size: 18px;
             line-height: 2.5;
             color: rgba(255,255,255,0.9);
             text-align: left;
@@ -1674,30 +1789,25 @@
             position: absolute;
             bottom: -10199px;
             left: 12px;
-            padding: 8px 20px;
+            padding: 0px 50px 0px 8px !important;
             background: #0041ff;
             border-radius: 0px;
             text-align: left;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             z-index: 8;
+            height: 400px !important;
+            overflow: hidden;
         }
         
-        .mixed-media-text {
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 112px;
-            color: white;
-            margin: 0;
-            font-weight: bold;
-            font-style: italic;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            white-space: pre-line;
-        }
+
+        
+
         
         .mixed-media-subtitle {
             position: absolute;
             bottom: -10349px;
             left: 120px;
-            padding: 8px 20px;
+            padding: 1px 4px !important;
             background: #0041ff;
             border-radius: 0px;
             text-align: left;
@@ -1707,16 +1817,22 @@
         
         .mixed-media-subtitle-text {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 60px;
+            font-size: 35px !important;
             color: white;
             margin: 0;
-            font-weight: 300;
+            font-weight: 600;
             font-style: italic;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
-            padding: 4px 12px;
+            padding: 2px 8px 2px 20px;
             border-radius: 0px;
+            line-height: 1.4;
+            letter-spacing: 4px;
+        }
+        
+        .mixed-media-subtitle-text [data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif;
         }
         
         .green-eye-hint-8 {
@@ -1808,60 +1924,124 @@
             position: absolute;
             bottom: -1355.2px;
             left: 12px;
-            padding: 24px 40px;
+            padding: 0px 8px !important;
             background: #0041ff;
             border-radius: 0px;
             text-align: left;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            height: 240px !important;
+            overflow: hidden;
         }
         .work-title {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 140px;
+            font-size: 100px;
             color: white;
-            margin: 0;
+            margin: 0 !important;
+            padding: 0 !important;
             font-weight: bold;
             font-style: italic;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: pre-line;
             letter-spacing: -2px;
-            line-height: 0.8;
+            line-height: 1.2;
             -webkit-font-smoothing: none;
             -moz-osx-font-smoothing: none;
             text-rendering: optimizeSpeed;
+            vertical-align: middle;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+        
+        .work-title [data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif;
         }
         
         .work-title-container-2 {
             position: absolute;
             bottom: -6586.2px;
             left: 12px;
-            padding: 24px 40px;
+            padding: 0px 50px 0px 8px !important;
             background: #0041ff;
             border-radius: 0px;
             text-align: left;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            height: 400px !important;
+            overflow: hidden;
         }
         
         .work-title-2 {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 140px;
+            font-size: 100px;
             color: white;
-            margin: 0;
+            margin: 0 !important;
+            padding: 0 !important;
             font-weight: bold;
-            font-style: italic;
+            font-style: normal;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: pre-line;
             letter-spacing: -2px;
-            line-height: 0.8;
+            line-height: 1.2;
             -webkit-font-smoothing: none;
             -moz-osx-font-smoothing: none;
             text-rendering: optimizeSpeed;
+            vertical-align: middle;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            justify-content: flex-start;
+            padding-left: 0px !important;
+        }
+        
+        .work-title-2 [data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif;
+        }
+        
+        .work-title-container-3 {
+            position: absolute;
+            bottom: -10199px;
+            left: 12px;
+            padding: 0px 8px !important;
+            background: #0041ff;
+            border-radius: 0px;
+            text-align: left;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            height: 240px !important;
+            overflow: hidden;
+        }
+        
+        .work-title-3 {
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 100px;
+            color: white;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-weight: bold;
+            font-style: normal;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            white-space: pre-line;
+            letter-spacing: -2px;
+            line-height: 1.2;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
+            text-rendering: optimizeSpeed;
+            vertical-align: middle;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            justify-content: flex-start;
+            padding-left: 0px !important;
+        }
+        
+        .work-title-3 [data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif;
         }
         
         .subtitle-container {
             position: absolute;
             bottom: -1520px;
             left: 120px;
-            padding: 8px 20px;
+            padding: 1px 4px !important;
             background: #0041ff;
             border-radius: 0px;
             text-align: center;
@@ -1870,23 +2050,25 @@
         
         .subtitle {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 60px;
+            font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 300;
+            font-weight: 600;
             font-style: italic;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
-            padding: 4px 12px;
+            padding: 2px 8px 2px 20px;
             border-radius: 0px;
+            line-height: 1.4;
+            letter-spacing: 4px;
         }
         
         .subtitle-container-2 {
             position: absolute;
             bottom: -2460px;
             left: 120px;
-            padding: 8px 20px;
+            padding: 1px 4px !important;
             background: #0041ff;
             border-radius: 0px;
             text-align: center;
@@ -1897,7 +2079,7 @@
             position: absolute;
             bottom: -3450px;
             left: 120px;
-            padding: 8px 20px;
+            padding: 1px 4px !important;
             background: #0041ff;
             border-radius: 0px;
             text-align: center;
@@ -1908,7 +2090,7 @@
             position: absolute;
             bottom: -6781px;
             left: 120px;
-            padding: 8px 20px;
+            padding: 1px 4px !important;
             background: #0041ff;
             border-radius: 0px;
             text-align: left;
@@ -1919,7 +2101,7 @@
             position: absolute;
             bottom: -8081px;
             left: 120px;
-            padding: 8px 20px;
+            padding: 1px 4px !important;
             background: #0041ff;
             border-radius: 0px;
             text-align: left;
@@ -1930,7 +2112,7 @@
             position: absolute;
             bottom: -8779px;
             left: 120px;
-            padding: 8px 20px;
+            padding: 1px 4px !important;
             background: #0041ff;
             border-radius: 0px;
             text-align: left;
@@ -1939,15 +2121,18 @@
         
         .subtitle-5 {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 60px;
+            font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 300;
+            font-weight: 600;
             font-style: italic;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            white-space: nowrap;
             background: #666666;
-            padding: 4px 12px;
+            padding: 2px 8px 2px 20px;
             border-radius: 0px;
+            line-height: 1.4;
+            letter-spacing: 4px;
         }
         
         .subtitle-5 .letter-r {
@@ -1968,58 +2153,86 @@
         
         .subtitle-2 {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 60px;
+            font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 300;
-            font-style: italic;
+            font-weight: 600;
+            font-style: normal;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
-            padding: 4px 12px;
+            padding: 2px 8px 2px 20px;
             border-radius: 0px;
+            line-height: 1.4;
+            letter-spacing: 4px;
         }
         
         .subtitle-3 {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 60px;
+            font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 300;
+            font-weight: 600;
             font-style: italic;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
-            padding: 4px 12px;
+            padding: 2px 8px 2px 20px;
             border-radius: 0px;
+            line-height: 1.4;
+            letter-spacing: 4px;
         }
         
         .subtitle-4 {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 60px;
+            font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 300;
+            font-weight: 600;
             font-style: italic;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
-            padding: 4px 12px;
+            padding: 2px 8px 2px 20px;
             border-radius: 0px;
+            line-height: 1.4;
+            letter-spacing: 4px;
         }
         
         .subtitle-6 {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
-            font-size: 60px;
+            font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 300;
+            font-weight: 600;
             font-style: italic;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
-            padding: 4px 12px;
+            padding: 2px 8px 2px 20px;
             border-radius: 0px;
+            line-height: 1.4;
+            letter-spacing: 4px;
+        }
+        
+        /* 为所有小标题的中文内容添加宋体字体 */
+        .subtitle [data-lang="zh"],
+        .subtitle-2 [data-lang="zh"],
+        .subtitle-3 [data-lang="zh"],
+        .subtitle-4 [data-lang="zh"],
+        .subtitle-5 [data-lang="zh"],
+        .subtitle-6 [data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif;
+        }
+        
+        /* 为艺术家介绍的中文内容添加宋体字体 */
+        .artist-description [data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif;
+        }
+        
+        /* 为艺术家位置信息的中文内容添加宋体字体 */
+        .artist-location [data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif;
         }
         
         .green-eye-hint-2 {
@@ -2485,13 +2698,13 @@
             .subtitle-container-2 {
                 bottom: -220vh;
                 left: 18vw;
-                padding: 0.5vh 1.5vw;
+                padding: 0.2vh 0.8vw;
             }
             
             .subtitle-container-3 {
                 bottom: -305vh;
                 left: 18vw;
-                padding: 0.5vh 1.5vw;
+                padding: 0.2vh 0.8vw;
             }
             
 
@@ -2628,13 +2841,13 @@
             .subtitle-container-2 {
                 bottom: -205vh;
                 left: 20vw;
-                padding: 0.4vh 1.2vw;
+                padding: 0.2vh 0.8vw;
             }
             
             .subtitle-container-3 {
                 bottom: -285vh;
                 left: 20vw;
-                padding: 0.4vh 1.2vw;
+                padding: 0.2vh 0.8vw;
             }
             
 
@@ -2777,6 +2990,8 @@
     </style>
 </head>
 <body>
+    <!-- 语言切换按钮 -->
+    <button id="languageToggle" class="language-toggle">中文</button>
     <div class="container protected-layout">
         <div class="left-panel">
             <div class="left-title">▼ Graphic Self-Portrait</div>
@@ -2818,7 +3033,7 @@
                             <path d="M 70 82 A 25 25 0 0 1 95 70" stroke="#fac800" stroke-width="5" fill="none" />
                             <text font-family="VCR OSD Mono, Press Start 2P, VT323, monospace" font-size="6" fill="#ffffff" font-weight="bold" dy="5" style="z-index: 10;">
                                 <textPath href="#arc-path" startOffset="50%" text-anchor="middle">
-                                    EXPERIENCE
+                                    经历
                                 </textPath>
                             </text>
                         </svg>
@@ -2834,12 +3049,21 @@
             
                           <!-- 艺术家位置信息 -->
               <div class="artist-location">
-                  <p><span>Ezi.Zhang</span><br><span>Based in Shanghai</span></p>
+                  <p>
+                      <span class="lang-content active" data-lang="en">Ezi.Zhang</span>
+                      <span class="lang-content" data-lang="zh">抑子</span>
+                      <br>
+                      <span class="lang-content active" data-lang="en">Based in Shanghai</span>
+                      <span class="lang-content" data-lang="zh">现居上海</span>
+                  </p>
             </div>
             
             <!-- 艺术家介绍 -->
             <div class="artist-description">
-                <p><span>Ezi.Zhang is a versatile artist whose primary creative mediums include mixed-media painting, printmaking, 3D, generative art, and sound. In the process of absorbing various types of information, Ezi collects elements that trigger their synesthesia as pigments, and then engages in re-creation within the realm of soul memory. This is the process of Ezi's self and its visualization.</span></p>
+                <p>
+                    <span class="lang-content active" data-lang="en">Ezi.Zhang is a versatile artist whose primary creative mediums include mixed-media painting, printmaking, 3D, generative art, and sound. In the process of absorbing various types of information, Ezi collects elements that trigger their synesthesia as pigments, and then engages in re-creation within the realm of soul memory. This is the process of Ezi's self and its visualization.</span>
+                    <span class="lang-content" data-lang="zh">抑子是以综合材料绘画、版画、3D、生成艺术、声音为主要创作媒介的多元化艺术家。在摄取各种信息的过程中，采集触发自己联觉的元素来作为颜料然后进行灵魂记忆里的再创作，这是抑子自我与图像化的过程。</span>
+                </p>
             </div>
             
             <!-- 数字签名 -->
@@ -2888,20 +3112,28 @@
             
             <!-- Visual & Video Work 标题 -->
             <div class="work-title-container">
-                <h2 class="work-title">Visual
-Video Work</h2>
+                <h2 class="work-title">
+                    <span class="lang-content active" data-lang="en">Visual<br>Video Work</span>
+                    <span class="lang-content" data-lang="zh">视觉<br>影像作品</span>
+                </h2>
             </div>
             
             <!-- Rasterize Series 小标题 -->
             <div class="subtitle-container">
-                <h3 class="subtitle">Rasterize Series</h3>
+                <h3 class="subtitle">
+                    <span class="lang-content active" data-lang="en">Rasterize Series</span>
+                    <span class="lang-content" data-lang="zh">光栅化系列</span>
+                </h3>
             </div>
             
             
             
             <!-- Anti-Human Series 小标题 -->
             <div class="subtitle-container-2">
-                <h3 class="subtitle-2">Anti-Human Series</h3>
+                <h3 class="subtitle-2">
+                    <span class="lang-content active" data-lang="en">Anti-Human Series</span>
+                    <span class="lang-content" data-lang="zh">反人类系列</span>
+                </h3>
             </div>
             
             
@@ -2995,7 +3227,10 @@ Video Work</h2>
         
         <!-- 第三个小标题 -->
         <div class="subtitle-container-3">
-            <h3 class="subtitle-3">Digital Painting</h3>
+            <h3 class="subtitle-3">
+                <span class="lang-content active" data-lang="en">Digital Painting</span>
+                <span class="lang-content" data-lang="zh">数字绘画</span>
+            </h3>
         </div>
         
 
@@ -3041,14 +3276,18 @@ Video Work</h2>
         
         <!-- 第四个大标题 -->
         <div class="work-title-container-2">
-            <h2 class="work-title-2">Rubbing
-Woodcut
-Stone Carving</h2>
+            <h2 class="work-title-2">
+                <span class="lang-content active" data-lang="en">Rubbing<br>Woodcut<br>Stone Carving</span>
+                <span class="lang-content" data-lang="zh">拓印<br>木刻<br>石刻</span>
+            </h2>
         </div>
         
         <!-- 第四个小标题 -->
         <div class="subtitle-container-4">
-            <h3 class="subtitle-4">The Signifer Relic Series</h3>
+            <h3 class="subtitle-4">
+                <span class="lang-content active" data-lang="en">The Signifer Relic Series</span>
+                <span class="lang-content" data-lang="zh">提示符系列</span>
+            </h3>
         </div>
         
         <!-- 第五个眼睛 -->
@@ -3061,13 +3300,21 @@ Stone Carving</h2>
         <!-- 第五个小标题 -->
         <div class="subtitle-container-5">
             <h3 class="subtitle-5">
-                <span class="letter-r">R</span>.<span class="letter-g">G</span>.<span class="letter-b">B</span>. <span class="word-star">Star</span> History Series
+                                <span class="lang-content active" data-lang="en">
+                    <span class="letter-r">R</span>.<span class="letter-g">G</span>.<span class="letter-b">B</span>. <span class="word-star">Star</span> History Series
+                </span>
+                <span class="lang-content" data-lang="zh">
+                    <span class="letter-r">R</span>.<span class="letter-g">G</span>.<span class="letter-b">B</span>. <span class="word-star">星</span>史系列
+                </span>
             </h3>
         </div>
         
         <!-- 第六个小标题 -->
         <div class="subtitle-container-6">
-            <h3 class="subtitle-6">Tangential</h3>
+            <h3 class="subtitle-6">
+                <span class="lang-content active" data-lang="en">Tangential</span>
+                <span class="lang-content" data-lang="zh">题外话</span>
+            </h3>
         </div>
         
         <!-- 第五个预览图三层裱框 -->
@@ -3133,15 +3380,20 @@ Stone Carving</h2>
             <div class="additional-divider-3"></div>
         </div>
         
-        <!-- Mixed Media Painting 标题 -->
-        <div class="mixed-media-title">
-            <div class="mixed-media-text">Mixed Media
-Painting</div>
+        <!-- 第三个大标题 -->
+        <div class="work-title-container-3">
+            <h2 class="work-title-3">
+                <span class="lang-content active" data-lang="en">Mixed Media</span>
+                <span class="lang-content" data-lang="zh">综合材料</span>
+            </h2>
         </div>
         
-        <!-- 综合材料布面 小标题 -->
+        <!-- 综合材料绘画 小标题 -->
         <div class="mixed-media-subtitle">
-            <div class="mixed-media-subtitle-text">Mixed Media on Canvas</div>
+            <div class="mixed-media-subtitle-text">
+                <span class="lang-content active" data-lang="en">Mixed Media on Canvas</span>
+                <span class="lang-content" data-lang="zh">综合材料绘画</span>
+            </div>
         </div>
         
         <!-- 第八个眼睛 -->
@@ -4883,9 +5135,12 @@ Painting</div>
             }
             
             /* 文字大小优化 */
-            .work-title, .work-title-2 {
-                font-size: 90px !important;
-                line-height: 0.8 !important;
+            .work-title, .work-title-2, .work-title-3 {
+                font-size: 70px !important;
+                line-height: 1.2 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                letter-spacing: -2px !important;
             }
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
@@ -4899,7 +5154,7 @@ Painting</div>
             }
             
             .artist-description p {
-                font-size: 18px !important;
+                font-size: 20px !important;
                 line-height: 2.5 !important;
             }
             
@@ -4952,9 +5207,12 @@ Painting</div>
         
         /* 2K分辨率优化 (2560x1440) */
         @media (min-width: 2560px) {
-            .work-title, .work-title-2 {
-                font-size: 120px !important;
-                line-height: 0.75 !important;
+            .work-title, .work-title-2, .work-title-3 {
+                font-size: 90px !important;
+                line-height: 1.2 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                letter-spacing: -2px !important;
             }
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
@@ -4966,7 +5224,7 @@ Painting</div>
             }
             
             .artist-description p {
-                font-size: 24px !important;
+                font-size: 26px !important;
             }
             
             .preview-image-container,
@@ -5002,9 +5260,12 @@ Painting</div>
         
         /* 4K分辨率优化 (3840x2160) */
         @media (min-width: 3840px) {
-            .work-title, .work-title-2 {
-                font-size: 180px !important;
-                line-height: 0.7 !important;
+            .work-title, .work-title-2, .work-title-3 {
+                font-size: 130px !important;
+                line-height: 1.2 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                letter-spacing: -2px !important;
             }
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
@@ -5016,7 +5277,7 @@ Painting</div>
             }
             
             .artist-description p {
-                font-size: 36px !important;
+                font-size: 38px !important;
             }
             
             .preview-image-container,
@@ -5066,7 +5327,7 @@ Painting</div>
             
             .work-title, .work-title-2 {
                 font-size: 105px !important;
-                line-height: 0.9 !important;
+                line-height: 1.2 !important;
             }
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
@@ -5080,7 +5341,7 @@ Painting</div>
         @media (min-width: 1366px) and (max-width: 1919px) {
             .work-title, .work-title-2 {
                 font-size: 80px !important;
-                line-height: 0.85 !important;
+                line-height: 1.2 !important;
             }
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
@@ -5092,7 +5353,7 @@ Painting</div>
             }
             
             .artist-description p {
-                font-size: 16px !important;
+                font-size: 18px !important;
             }
             
             .preview-image-container,
@@ -5120,7 +5381,7 @@ Painting</div>
         @media (min-width: 1440px) and (max-width: 1919px) {
             .work-title, .work-title-2 {
                 font-size: 85px !important;
-                line-height: 0.82 !important;
+                line-height: 1.2 !important;
             }
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
@@ -5152,7 +5413,7 @@ Painting</div>
         @media (min-width: 1600px) and (max-width: 1919px) {
             .work-title, .work-title-2 {
                 font-size: 88px !important;
-                line-height: 0.81 !important;
+                line-height: 1.2 !important;
             }
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
@@ -5241,7 +5502,7 @@ Painting</div>
             /* 优化文字大小 */
             .work-title, .work-title-2 {
                 font-size: 10vw !important;
-                line-height: 1.0 !important;
+                line-height: 1.2 !important;
             }
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
@@ -5274,7 +5535,7 @@ Painting</div>
             /* 小屏幕设备优化 */
             .work-title, .work-title-2 {
                 font-size: 12vw !important;
-                line-height: 0.9 !important;
+                line-height: 1.2 !important;
             }
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
@@ -5285,7 +5546,8 @@ Painting</div>
             .work-title-container,
             .work-title-container-2 {
                 margin: 2vh 1vw 1vh 1vw !important;
-                padding: 1vh 2vw !important;
+                padding: 0vh 1vw !important;
+                height: fit-content !important;
             }
             
             .subtitle-container,
@@ -5295,7 +5557,7 @@ Painting</div>
             .subtitle-container-5,
             .subtitle-container-6 {
                 margin: 1vh 1vw !important;
-                padding: 0.5vh 1vw !important;
+                padding: 0.2vh 0.8vw !important;
             }
         }
 
@@ -5305,9 +5567,9 @@ Painting</div>
                 height: 100vh !important;
             }
             
-            .work-title, .work-title-2 {
-                font-size: 8vw !important;
-                line-height: 1.1 !important;
+            .work-title, .work-title-2, .work-title-3 {
+                font-size: 6vw !important;
+                line-height: 1.2 !important;
             }
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
@@ -5315,6 +5577,88 @@ Painting</div>
             }
         }
     </style>
+    
+    <script>
+        // ===== 字体加载检查 =====
+        function checkFontLoading() {
+            // 检查字体是否加载完成
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(() => {
+                    console.log('所有字体加载完成');
+                    // 强制重新渲染页面
+                    document.body.style.fontFamily = 'VCR OSD Mono, Press Start 2P, VT323, Courier New, monospace';
+                });
+            }
+        }
+        
+        // ===== 语言切换功能 =====
+        let currentLanguage = 'en'; // 默认英文
+        
+        function switchLanguage() {
+            const languageToggle = document.getElementById('languageToggle');
+            const langContents = document.querySelectorAll('.lang-content');
+            
+            // 切换语言
+            currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
+            
+            // 更新按钮文本
+            languageToggle.textContent = currentLanguage === 'en' ? '中文' : 'English';
+            
+            // 切换所有语言内容
+            langContents.forEach(content => {
+                if (content.dataset.lang === currentLanguage) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            // 保存语言偏好到本地存储
+            localStorage.setItem('indexLanguage', currentLanguage);
+            
+            // 添加切换动画效果
+            languageToggle.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                languageToggle.style.transform = 'scale(1)';
+            }, 200);
+        }
+        
+        // 初始化语言设置
+        function initLanguage() {
+            const savedLanguage = localStorage.getItem('indexLanguage');
+            if (savedLanguage) {
+                currentLanguage = savedLanguage;
+                const languageToggle = document.getElementById('languageToggle');
+                const langContents = document.querySelectorAll('.lang-content');
+                
+                // 设置按钮文本
+                languageToggle.textContent = currentLanguage === 'en' ? '中文' : 'English';
+                
+                // 设置内容显示
+                langContents.forEach(content => {
+                    if (content.dataset.lang === currentLanguage) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        // 绑定语言切换事件
+        document.addEventListener('DOMContentLoaded', () => {
+            const languageToggle = document.getElementById('languageToggle');
+            languageToggle.addEventListener('click', switchLanguage);
+            
+            // 初始化语言设置
+            initLanguage();
+            
+            // 检查字体加载
+            checkFontLoading();
+            
+
+        });
+    </script>
 </body>
 </html>
 </body>

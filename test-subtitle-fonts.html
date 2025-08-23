@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subtitle Font Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=VCR+OSD+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'VCR OSD Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .test-subtitle {
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 45px !important;
+            color: white;
+            margin: 0;
+            font-weight: 600;
+            font-style: italic;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            background: #666666;
+            padding: 2px 8px;
+            border-radius: 0px;
+            line-height: 1.4;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        
+        .test-subtitle-mixed {
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 35px !important;
+            color: white;
+            margin: 0;
+            font-weight: 600;
+            font-style: italic;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            background: #666666;
+            padding: 2px 8px;
+            border-radius: 0px;
+            line-height: 1.4;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        
+        .label {
+            color: #00ff00;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: #00ff00; margin-bottom: 30px;">字体大小测试页面 - 所有小标题应该看起来完全相同</h1>
+    
+    <div class="label">Digital Painting (.subtitle)</div>
+    <div class="test-subtitle">Digital Painting</div>
+    
+    <div class="label">视听表演 (.subtitle-2)</div>
+    <div class="test-subtitle">视听表演</div>
+    
+    <div class="label">视听表演 (.subtitle-3)</div>
+    <div class="test-subtitle">视听表演</div>
+    
+    <div class="label">提示符系列 (.subtitle-4)</div>
+    <div class="test-subtitle">The Signifer Relic Series</div>
+    
+    <div class="label">题外话 (.subtitle-5)</div>
+    <div class="test-subtitle">题外话</div>
+    
+    <div class="label">群展项目 (.subtitle-6)</div>
+    <div class="test-subtitle">群展项目</div>
+    
+    <div class="label">综合材料绘画 (.mixed-media-subtitle-text) - 35px</div>
+    <div class="test-subtitle-mixed">Mixed Media on Canvas</div>
+    
+    <div style="margin-top: 30px; color: #ffff00;">
+        <p>所有小标题现在具有相同的：</p>
+        <ul>
+            <li>字体大小：45px（综合材料绘画：35px）</li>
+            <li>字体族：VCR OSD Mono</li>
+            <li>字体粗细：600</li>
+            <li>字体样式：italic</li>
+            <li>背景色：#666666</li>
+            <li>文字阴影</li>
+            <li><strong>字间距：2px（新增）</strong></li>
+        </ul>
+    </div>
+</body>
+</html>
