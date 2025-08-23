@@ -147,20 +147,40 @@
             line-height: 1.8;
             color: rgba(255,255,255,0.9);
             margin: 30px 0 30px 0;
-            max-width: 680px;
+            max-width: 280px;
             font-weight: 100;
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            letter-spacing: 0.5px; 
+            letter-spacing: 0.5px;
+        }
+
+        /* 专门为第一组 Shining 作品的文字段落设置向下平移 */
+        .video-info .description-text {
+            margin-top: 50px !important;
+        }
+
+        /* 为其他作品的文字段落保持正常间距 */
+        .second-description-text,
+        .third-description-text,
+        .fourth-description-text,
+        .fifth-description-text,
+        .sixth-description-text,
+        .seventh-description-text {
+            margin-top: 30px !important;
         }
 
         .video-info .synopsis-text {
             font-size: 13px;
-            line-height: 1;
+            line-height: 1.8;
             color: rgba(255,255,255,0.9);
-            margin: 8px 0 4px 0;
-            max-width: 680px;
+            margin: 50px 0 30px 0;
+            max-width: 280px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: 0.5px;
         }
 
         .still-frame-image-container {
@@ -444,7 +464,7 @@
 
         .second-still-frame-image-container {
             position: absolute;
-            top: 4640px;
+            top: 5140px;
             right: 460px;
             width: 450px;
             height: 253px;
@@ -480,7 +500,7 @@
 
         .second-still-frame-image-container-2 {
             position: absolute;
-            top: 4640px;
+            top: 5140px;
             right: 0px;
             width: 450px;
             height: 253px;
@@ -516,7 +536,7 @@
 
         .second-still-frame-image-container-3 {
             position: absolute;
-            top: 4905px;
+            top: 5405px;
             right: 310px;
             width: 600px;
             height: 337px;
@@ -552,77 +572,7 @@
 
 
 
-        .second-still-frame-image-container-7 {
-            position: absolute;
-            top: 2960px;
-            right: 460px;
-            width: 450px;
-            height: 253px;
-            border-radius: 35px;
-            overflow: hidden;
-            z-index: 10;
-        }
 
-        .second-still-frame-image-container-7 .frame {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 8px solid black;
-            border-radius: 35px;
-            box-sizing: border-box;
-            z-index: 10;
-        }
-
-        .second-still-frame-image-container-7 img {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            right: 8px;
-            bottom: 8px;
-            width: calc(100% - 16px);
-            height: calc(100% - 16px);
-            object-fit: cover;
-            border-radius: 27px;
-            z-index: 5;
-        }
-
-        .second-still-frame-image-container-8 {
-            position: absolute;
-            top: 2960px;
-            right: 0px;
-            width: 450px;
-            height: 253px;
-            border-radius: 35px;
-            overflow: hidden;
-            z-index: 10;
-        }
-
-        .second-still-frame-image-container-8 .frame {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 8px solid black;
-            border-radius: 35px;
-            box-sizing: border-box;
-            z-index: 10;
-        }
-
-        .second-still-frame-image-container-8 img {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            right: 8px;
-            bottom: 8px;
-            width: calc(100% - 16px);
-            height: calc(100% - 16px);
-            object-fit: cover;
-            border-radius: 27px;
-            z-index: 5;
-        }
 
         .second-story-image-container {
             position: relative;
@@ -1114,7 +1064,7 @@
 
         .second-still-frame-title {
             position: absolute;
-            top: 4310px;
+            top: 4780px;
             right: 670px;
             font-size: 32px;
             color: #09ad04;
@@ -3414,7 +3364,7 @@
 
         .still-frame-title {
             position: absolute;
-            top: 545px;
+            top: 395px;
             right: 670px;
             font-size: 32px;
             color: #09ad04;
@@ -3438,7 +3388,7 @@
         .video-artwork-title {
             font-size: 36px;
             color: #09ad04;
-            margin: 180px 0 15px 0;
+            margin: 900px 0 45px 0;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
@@ -3457,7 +3407,7 @@
         .synopsis-title {
             font-size: 36px;
             color: #09ad04;
-            margin: 50px 0 15px 0;
+            margin: 650px 0 45px 0;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
@@ -3532,6 +3482,450 @@
             border-radius: 0px;
             z-index: 3;
         }
+
+        /* ===== 响应式设计 ===== */
+        
+        /* 4K分辨率优化 (3840x2160) */
+        @media (min-width: 3840px) {
+            .video-info .title {
+                font-size: 8vw;
+                margin-bottom: 4vw;
+            }
+            
+            .video-info .title .shining {
+                font-size: 6vw;
+            }
+            
+            .video-info .info-line {
+                font-size: 1.5vw;
+                margin: 1vw 0;
+            }
+            
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                font-size: 2.5vw;
+                margin: 12vw 0 1.5vw 0;
+            }
+            
+            .video-info .description-text,
+            .video-info .synopsis-text {
+                font-size: 1.1vw;
+                margin: 2vw 0;
+                max-width: 25vw;
+            }
+            
+            .video-info {
+                margin-top: 3vw;
+                padding: 0 2vw;
+            }
+            
+            .back-btn {
+                font-size: 0.7vw;
+                padding: 0.8vh 1.2vw;
+            }
+        }
+        
+        /* 2K分辨率优化 (2560x1440) */
+        @media (min-width: 2560px) and (max-width: 3839px) {
+            .video-info .title {
+                font-size: 7vw;
+                margin-bottom: 3.5vw;
+            }
+            
+            .video-info .title .shining {
+                font-size: 5.5vw;
+            }
+            
+            .video-info .info-line {
+                font-size: 1.3vw;
+                margin: 0.8vw 0;
+            }
+            
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                font-size: 2.2vw;
+                margin: 11.8vw 0 1.3vw 0;
+            }
+            
+            .video-info .description-text,
+            .video-info .synopsis-text {
+                font-size: 1vw;
+                margin: 1.8vw 0;
+                max-width: 30vw;
+            }
+            
+            .video-info {
+                margin-top: 2.5vw;
+                padding: 0 1.8vw;
+            }
+            
+            .back-btn {
+                font-size: 0.8vw;
+                padding: 0.7vh 1.1vw;
+            }
+        }
+        
+        /* 1920x1080分辨率优化 */
+        @media (min-width: 1920px) and (max-width: 2559px) {
+            .video-info .title {
+                font-size: 5vw;
+                margin-bottom: 3vw;
+            }
+            
+            .video-info .title .shining {
+                font-size: 3.8vw;
+            }
+            
+            .video-info .info-line {
+                font-size: 0.9vw;
+                margin: 0.7vw 0;
+            }
+            
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                font-size: 1.7vw;
+                margin: 11.5vw 0 1vw 0;
+            }
+            
+            .video-info .description-text,
+            .video-info .synopsis-text {
+                font-size: 0.7vw;
+                margin: 1.5vw 0;
+                max-width: 35vw;
+            }
+            
+            .video-info {
+                margin-top: 2vw;
+                padding: 0 1.5vw;
+            }
+            
+            .back-btn {
+                font-size: 0.9vw;
+                padding: 0.6vh 1vw;
+            }
+        }
+        
+        /* 1440x900分辨率优化 */
+        @media (min-width: 1440px) and (max-width: 1919px) {
+            .video-info .title {
+                font-size: 6.5vw;
+                margin-bottom: 3.5vw;
+            }
+            
+            .video-info .title .shining {
+                font-size: 5vw;
+            }
+            
+            .video-info .info-line {
+                font-size: 1.2vw;
+                margin: 0.8vw 0;
+            }
+            
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                font-size: 2.1vw;
+                margin: 11.7vw 0 1.2vw 0;
+            }
+            
+            .video-info .description-text,
+            .video-info .synopsis-text {
+                font-size: 0.9vw;
+                margin: 1.7vw 0;
+                max-width: 40vw;
+            }
+            
+            .video-info {
+                margin-top: 2.5vw;
+                padding: 0 1.8vw;
+            }
+            
+            .back-btn {
+                font-size: 1vw;
+                padding: 0.7vh 1.2vw;
+            }
+        }
+        
+        /* 1366x768分辨率优化 */
+        @media (min-width: 1366px) and (max-width: 1439px) {
+            .video-info .title {
+                font-size: 7vw;
+                margin-bottom: 4vw;
+            }
+            
+            .video-info .title .shining {
+                font-size: 5.5vw;
+            }
+            
+            .video-info .info-line {
+                font-size: 1.4vw;
+                margin: 0.9vw 0;
+            }
+            
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                font-size: 2.3vw;
+                margin: 11.9vw 0 1.4vw 0;
+            }
+            
+            .video-info .description-text,
+            .video-info .synopsis-text {
+                font-size: 1vw;
+                margin: 1.9vw 0;
+                max-width: 45vw;
+            }
+            
+            .video-info {
+                margin-top: 3vw;
+                padding: 0 2vw;
+            }
+            
+            .back-btn {
+                font-size: 1.1vw;
+                padding: 0.8vh 1.3vw;
+            }
+        }
+        
+        /* 平板端优化 (768px - 1365px) */
+        @media (min-width: 768px) and (max-width: 1365px) {
+            .video-info .title {
+                font-size: 8vw;
+                margin-bottom: 4.5vw;
+            }
+            
+            .video-info .title .shining {
+                font-size: 6.5vw;
+            }
+            
+            .video-info .info-line {
+                font-size: 1.6vw;
+                margin: 1vw 0;
+            }
+            
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                font-size: 2.8vw;
+                margin: 12.1vw 0 1.6vw 0;
+            }
+            
+            .video-info .description-text,
+            .video-info .synopsis-text {
+                font-size: 1.3vw;
+                margin: 2.2vw 0;
+                max-width: 50vw;
+            }
+            
+            .video-info {
+                margin-top: 3.5vw;
+                padding: 0 2.5vw;
+            }
+            
+            .back-btn {
+                font-size: 1.3vw;
+                padding: 1vh 1.5vw;
+            }
+        }
+        
+        /* 移动端优化 (480px - 767px) */
+        @media (min-width: 480px) and (max-width: 767px) {
+            .video-info .title {
+                font-size: 10vw;
+                margin-bottom: 5vw;
+            }
+            
+            .video-info .title .shining {
+                font-size: 8vw;
+            }
+            
+            .video-info .info-line {
+                font-size: 2vw;
+                margin: 1.2vw 0;
+            }
+            
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                font-size: 3.5vw;
+                margin: 12.5vw 0 2vw 0;
+            }
+            
+            .video-info .description-text,
+            .video-info .synopsis-text {
+                font-size: 1.8vw;
+                margin: 2.8vw 0;
+                max-width: 55vw;
+            }
+            
+            .video-info {
+                margin-top: 4vw;
+                padding: 0 3vw;
+            }
+            
+            .back-btn {
+                font-size: 1.6vw;
+                padding: 1.2vh 1.8vw;
+            }
+        }
+        
+        /* 小屏移动端优化 (320px - 479px) */
+        @media (min-width: 320px) and (max-width: 479px) {
+            .video-info .title {
+                font-size: 12vw;
+                margin-bottom: 6vw;
+            }
+            
+            .video-info .title .shining {
+                font-size: 10vw;
+            }
+            
+            .video-info .info-line {
+                font-size: 2.5vw;
+                margin: 1.5vw 0;
+            }
+            
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                font-size: 4.5vw;
+                margin: 13vw 0 2.5vw 0;
+            }
+            
+            .video-info .description-text,
+            .video-info .synopsis-text {
+                font-size: 2.2vw;
+                margin: 3.5vw 0;
+                max-width: 60vw;
+            }
+            
+            .video-info {
+                margin-top: 5vw;
+                padding: 0 4vw;
+            }
+            
+            .back-btn {
+                font-size: 2vw;
+                padding: 1.5vh 2vw;
+            }
+        }
+        
+        /* 超小屏优化 (小于320px) */
+        @media (max-width: 319px) {
+            .video-info .title {
+                font-size: 14vw;
+                margin-bottom: 7vw;
+            }
+            
+            .video-info .title .shining {
+                font-size: 12vw;
+            }
+            
+            .video-info .info-line {
+                font-size: 3vw;
+                margin: 1.8vw 0;
+            }
+            
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                font-size: 5.5vw;
+                margin: 13.5vw 0 3vw 0;
+            }
+            
+            .video-info .description-text,
+            .video-info .synopsis-text {
+                font-size: 2.8vw;
+                margin: 4vw 0;
+                max-width: 65vw;
+            }
+            
+            .video-info {
+                margin-top: 6vw;
+                padding: 0 5vw;
+            }
+            
+            .back-btn {
+                font-size: 2.5vw;
+                padding: 1.8vh 2.5vw;
+            }
+        }
+        
+        /* 横屏模式优化 */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .video-info .title {
+                font-size: 4vw;
+                margin-bottom: 2vw;
+            }
+            
+            .video-info .title .shining {
+                font-size: 3vw;
+            }
+            
+            .video-info .info-line {
+                font-size: 0.8vw;
+                margin: 0.5vw 0;
+            }
+            
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                font-size: 1.5vw;
+                margin: 11.3vw 0 0.8vw 0;
+            }
+            
+            .video-info .description-text,
+            .video-info .synopsis-text {
+                font-size: 0.6vw;
+                margin: 1vw 0;
+                max-width: 25vw;
+            }
+            
+            .video-info {
+                margin-top: 1.5vw;
+                padding: 0 1vw;
+            }
+        }
+        
+        /* 高DPI显示器优化 */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .video-info .title,
+            .video-info .description-title,
+            .video-info .video-artwork-title,
+            .video-info .still-frame-title,
+            .video-info .synopsis-title {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+        }
+        
+        /* 触摸设备优化 */
+        @media (hover: none) and (pointer: coarse) {
+            .back-btn {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+        
+        /* 减少动画偏好 */
+        @media (prefers-reduced-motion: reduce) {
+            .back-btn {
+                transition: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -3569,6 +3963,17 @@
         </div>
 
         <h2 class="still-frame-title">STILL FRAMES</h2>
+        
+        <div class="still-frame-image-container-2">
+            <div class="frame"></div>
+            <img src="../Rasterize Shining 02.png" alt="Still Frame 2">
+        </div>
+
+        <div class="still-frame-image-container-3">
+            <div class="frame"></div>
+            <img src="../Rasterize Shining 03.png" alt="Still Frame 3">
+        </div>
+        
         <p class="description-text">
             As the author of this work, I aim to explore the relationship between the digital world and perception, presenting this exploration through a cross-media approach. Rasterize - Shining is not just an imagination of future technology, but also a profound reflection on the individual's journey of losing and rediscovering self-awareness in a world governed by data and virtual environments. Each sound effect, each image, and every intertwining of color in this work is an exploration and recreation of the "digital myth."
         </p>
@@ -3587,15 +3992,7 @@
             These images and sounds weave together to form a completely new world, breaking the boundaries between the physical and virtual, almost like a redefinition of the past world. Through this intertwining of data and emotions, E gradually transforms from an observer to a part of this world, becoming the eternal link between the virtual realm and human emotions.
         </p>
 
-        <div class="still-frame-image-container-2">
-            <div class="frame"></div>
-            <img src="../Rasterize Shining 02.png" alt="Still Frame 2">
-        </div>
 
-        <div class="still-frame-image-container-3">
-            <div class="frame"></div>
-            <img src="../Rasterize Shining 03.png" alt="Still Frame 3">
-        </div>
 
         <div class="still-frame-image-container-4">
             <div class="frame"></div>
@@ -3772,15 +4169,7 @@
                 <img src="../Rasterize The Consciousness of the Data Sovereign 04.jpg" alt="Still Frame 4">
             </div>
 
-            <div class="second-still-frame-image-container-7">
-                <div class="frame"></div>
-                <img src="../Rasterize The Consciousness of the Data Sovereign 01.jpg" alt="Still Frame 9">
-            </div>
 
-            <div class="second-still-frame-image-container-8">
-                <div class="frame"></div>
-                <img src="../Rasterize The Consciousness of the Data Sovereign 02.jpg" alt="Still Frame 10">
-            </div>
         </div>
 
         <div class="green-box"></div>
