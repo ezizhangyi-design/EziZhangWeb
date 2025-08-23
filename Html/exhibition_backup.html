@@ -62,7 +62,6 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            z-index: 10;
         }
         .back-btn:hover {
             background: #fac800;
@@ -99,81 +98,6 @@
             outline: 2px solid #fac800;
             outline-offset: 2px;
         }
-        
-
-        
-        /* 细胞自动机动画 - 云形态 */
-        .automata-container {
-            position: fixed;
-            top: 0;
-            width: 18.75vw; /* 360px / 1920px * 100 */
-            height: 100vh;
-            background: transparent;
-            pointer-events: none;
-            z-index: 2;
-        }
-        
-        .automata-container.left {
-            left: 0;
-        }
-        
-        .automata-container.right {
-            right: 0;
-        }
-        
-        /* 太阳样式 - 动态位置 */
-        .sun {
-            position: fixed;
-            width: 12vw;
-            height: 12vw;
-            background: radial-gradient(circle, #ff4444 0%, #ff0000 70%, #cc0000 100%);
-            border-radius: 50%;
-            box-shadow: none;
-            z-index: 1;
-            pointer-events: none;
-            transition: all 1s ease-in-out;
-        }
-        
-        .automata-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: grid;
-            grid-template-columns: repeat(30, 1fr);
-            grid-template-rows: repeat(45, 1fr);
-            gap: 0;
-        }
-        
-        .automata-cell {
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            border-radius: 0;
-            transition: none;
-            opacity: 0;
-            border: none;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .automata-cell.alive {
-            background: rgb(255, 255, 255);
-            box-shadow: none;
-            opacity: 1;
-            transform: scale(1);
-        }
-        
-        .automata-cell.birth {
-            animation: none;
-        }
-        
-        .automata-cell.death {
-            animation: none;
-        }
-        
-        /* 移除渐变动画，使用直接变化 */
         
         /* 语言内容样式 */
         .lang-content {
@@ -851,19 +775,6 @@
 </head>
 <body>
 
-        
-
-        
-        <!-- 细胞自动机动画 - 云形态 -->
-        <div class="automata-container left">
-            <div class="automata-grid" id="automataLeft"></div>
-        </div>
-        <div class="automata-container right">
-            <div class="automata-grid" id="automataRight"></div>
-        </div>
-        
-        <!-- 太阳 -->
-        <div class="sun"></div>
         
         <a href="../index.html" class="back-btn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
         <button class="language-toggle" id="languageToggle">中文</button>
@@ -1748,464 +1659,6 @@
             }
         });
         
-
-        
-        // ===== 太阳位置系统 =====
-        function initSunPosition() {
-            updateSunPosition();
-            // 每分钟更新一次太阳位置
-            setInterval(updateSunPosition, 60000);
-        }
-        
-        function updateSunPosition() {
-            const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const totalMinutes = hours * 60 + minutes;
-            
-            // 太阳轨迹：6:00-18:00 (360分钟到1080分钟)
-            // 地平线：左下角为起点，右上角为终点
-            let sunVisible = true;
-            let left, bottom;
-            
-            if (totalMinutes >= 360 && totalMinutes <= 1080) {
-                // 白天：太阳可见 (6:00 AM - 6:00 PM)
-                const dayProgress = (totalMinutes - 360) / 720; // 0到1的进度
-                
-                // 太阳轨迹：抛物线路径
-                // X轴：从左下角(5vw)到右上角(85vw)
-                left = 5 + (80 * dayProgress);
-                
-                // Y轴：抛物线，中午最高
-                const heightFactor = Math.sin(dayProgress * Math.PI); // 0到1再到0的抛物线
-                bottom = 5 + (70 * heightFactor); // 最高70vh，最低5vh
-                
-            } else {
-                // 夜晚：太阳在地平线下不可见
-                sunVisible = false;
-                left = 50; // 隐藏位置
-                bottom = -20; // 地平线下
-            }
-            
-            const sun = document.querySelector('.sun');
-            if (sun) {
-                if (sunVisible) {
-                    sun.style.left = left + 'vw';
-                    sun.style.bottom = bottom + 'vh';
-                    sun.style.top = 'auto';
-                    sun.style.right = 'auto';
-                    sun.style.opacity = '1';
-                    
-                    // 根据时间调整太阳颜色
-                    const sunColor = getSunColor(totalMinutes);
-                    sun.style.background = sunColor;
-                } else {
-                    sun.style.opacity = '0';
-                }
-            }
-        }
-        
-        function getSunColor(totalMinutes) {
-            // 根据时间调整太阳颜色
-            if (totalMinutes >= 360 && totalMinutes <= 480) {
-                // 早晨：橙红色 (6:00-8:00)
-                return 'radial-gradient(circle, #ffaa44 0%, #ff6600 70%, #cc4400 100%)';
-            } else if (totalMinutes >= 480 && totalMinutes <= 960) {
-                // 白天：黄色 (8:00-16:00)
-                return 'radial-gradient(circle, #ffff44 0%, #ffcc00 70%, #ff9900 100%)';
-            } else if (totalMinutes >= 960 && totalMinutes <= 1080) {
-                // 傍晚：红色 (16:00-18:00)
-                return 'radial-gradient(circle, #ff4444 0%, #ff0000 70%, #cc0000 100%)';
-            } else {
-                // 夜晚：深红色
-                return 'radial-gradient(circle, #440000 0%, #220000 70%, #110000 100%)';
-            }
-        }
-        
-        // ===== 细胞自动机动画 - 云形态 =====
-        class CloudAutomata {
-            constructor(gridId) {
-                console.log(`初始化细胞自动机: ${gridId}`);
-                this.gridId = gridId;
-                this.grid = document.getElementById(gridId);
-                this.rows = 45;
-                this.cols = 30;
-                this.gridData = [];
-                this.nextGrid = [];
-                this.isRunning = false;
-                this.animationId = null;
-                
-                if (!this.grid) {
-                    console.error(`无法找到元素: ${gridId}`);
-                    return;
-                }
-                
-                console.log(`找到网格元素: ${gridId}`, this.grid);
-                this.init();
-            }
-            
-            init() {
-                // 初始化网格数据
-                for (let row = 0; row < this.rows; row++) {
-                    this.gridData[row] = [];
-                    this.nextGrid[row] = [];
-                    for (let col = 0; col < this.cols; col++) {
-                        this.gridData[row][col] = 0;
-                        this.nextGrid[row][col] = 0;
-                    }
-                }
-                
-                // 创建DOM元素
-                this.grid.innerHTML = '';
-                for (let row = 0; row < this.rows; row++) {
-                    for (let col = 0; col < this.cols; col++) {
-                        const cell = document.createElement('div');
-                        cell.className = 'automata-cell';
-                        cell.dataset.row = row;
-                        cell.dataset.col = col;
-                        this.grid.appendChild(cell);
-                    }
-                }
-                
-                // 创建初始云形态
-                this.createInitialClouds();
-                this.updateDisplay();
-                this.start();
-            }
-            
-            // 创建初始云形态
-            createInitialClouds() {
-                // 创建分散的独立云块，避免连接
-                const clouds = [
-                    { centerRow: 10, centerCol: 8, radius: 3, density: 0.5 },
-                    { centerRow: 22, centerCol: 18, radius: 3, density: 0.5 },
-                    { centerRow: 35, centerCol: 6, radius: 2, density: 0.5 },
-                    { centerRow: 15, centerCol: 25, radius: 3, density: 0.5 },
-                    { centerRow: 28, centerCol: 12, radius: 2, density: 0.5 },
-                    { centerRow: 40, centerCol: 20, radius: 2, density: 0.5 },
-                    { centerRow: 6, centerCol: 15, radius: 2, density: 0.5 },
-                    { centerRow: 18, centerCol: 4, radius: 2, density: 0.5 }
-                ];
-                
-                clouds.forEach(cloud => {
-                    this.createCloud(cloud.centerRow, cloud.centerCol, cloud.radius, cloud.density);
-                });
-                
-                // 创建独立的云块，不连接
-                this.createConnectingClouds();
-            }
-            
-            // 创建单个云团
-            createCloud(centerRow, centerCol, radius, density = 0.4) {
-                // 创建稀疏的方形云块，防止过度密集
-                for (let row = centerRow - radius; row <= centerRow + radius; row++) {
-                    for (let col = centerCol - radius; col <= centerCol + radius; col++) {
-                        if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
-                            // 创建稀疏的方形云块
-                            if (Math.random() < density) {
-                                this.gridData[row][col] = 1;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // 创建独立的云块，不连接
-            createConnectingClouds() {
-                // 创建独立的云块，保持分离
-                const independentClouds = [
-                    { row: 6, col: 8, radius: 1, density: 0.4 },
-                    { row: 15, col: 12, radius: 2, density: 0.4 },
-                    { row: 24, col: 6, radius: 1, density: 0.4 },
-                    { row: 33, col: 16, radius: 2, density: 0.4 },
-                    { row: 12, col: 22, radius: 1, density: 0.4 },
-                    { row: 21, col: 4, radius: 1, density: 0.4 },
-                    { row: 30, col: 14, radius: 2, density: 0.4 },
-                    { row: 39, col: 8, radius: 1, density: 0.4 }
-                ];
-                
-                independentClouds.forEach(cloud => {
-                    this.createCloud(cloud.row, cloud.col, cloud.radius, cloud.density);
-                });
-            }
-            
-            // 计算邻居数量
-            countNeighbors(row, col) {
-                let count = 0;
-                for (let i = -1; i <= 1; i++) {
-                    for (let j = -1; j <= 1; j++) {
-                        if (i === 0 && j === 0) continue;
-                        
-                        const newRow = row + i;
-                        const newCol = col + j;
-                        
-                        if (newRow >= 0 && newRow < this.rows && newCol >= 0 && newCol < this.cols) {
-                            count += this.gridData[newRow][newCol];
-                        }
-                    }
-                }
-                return count;
-            }
-            
-            // 识别连通区域（云块）
-            findCloudRegions() {
-                const visited = Array(this.rows).fill().map(() => Array(this.cols).fill(false));
-                const regions = [];
-                
-                for (let row = 0; row < this.rows; row++) {
-                    for (let col = 0; col < this.cols; col++) {
-                        if (this.gridData[row][col] === 1 && !visited[row][col]) {
-                            const region = [];
-                            this.floodFill(row, col, visited, region);
-                            if (region.length > 0) {
-                                regions.push(region);
-                            }
-                        }
-                    }
-                }
-                return regions;
-            }
-            
-            // 洪水填充算法，找到连通的云块
-            floodFill(row, col, visited, region) {
-                if (row < 0 || row >= this.rows || col < 0 || col >= this.cols || 
-                    visited[row][col] || this.gridData[row][col] === 0) {
-                    return;
-                }
-                
-                visited[row][col] = true;
-                region.push({row, col});
-                
-                // 检查8个方向的邻居
-                for (let dr = -1; dr <= 1; dr++) {
-                    for (let dc = -1; dc <= 1; dc++) {
-                        if (dr !== 0 || dc !== 0) {
-                            this.floodFill(row + dr, col + dc, visited, region);
-                        }
-                    }
-                }
-            }
-            
-            // 收缩区域
-            shrinkRegion(region) {
-                // 保留区域的核心部分，移除边缘
-                const keepRatio = 0.6 + Math.random() * 0.3; // 保留60-90%
-                const keepCount = Math.floor(region.length * keepRatio);
-                
-                if (keepCount === 0) return []; // 完全消失
-                
-                // 优先保留中心位置的细胞
-                const centerRow = region.reduce((sum, cell) => sum + cell.row, 0) / region.length;
-                const centerCol = region.reduce((sum, cell) => sum + cell.col, 0) / region.length;
-                
-                region.sort((a, b) => {
-                    const distA = Math.sqrt((a.row - centerRow) ** 2 + (a.col - centerCol) ** 2);
-                    const distB = Math.sqrt((b.row - centerRow) ** 2 + (b.col - centerCol) ** 2);
-                    return distA - distB;
-                });
-                
-                // 返回保留的细胞
-                return region.slice(0, keepCount);
-            }
-            
-            // 生长区域
-            growRegion(region) {
-                const newCells = [...region]; // 保留原有区域
-                
-                // 在边缘添加新细胞
-                const edgeCells = new Set();
-                region.forEach(cell => {
-                    for (let dr = -1; dr <= 1; dr++) {
-                        for (let dc = -1; dc <= 1; dc++) {
-                            if (dr === 0 && dc === 0) continue;
-                            const newRow = cell.row + dr;
-                            const newCol = cell.col + dc;
-                            if (newRow >= 0 && newRow < this.rows && 
-                                newCol >= 0 && newCol < this.cols &&
-                                this.gridData[newRow][newCol] === 0) {
-                                edgeCells.add(`${newRow},${newCol}`);
-                            }
-                        }
-                    }
-                });
-                
-                // 随机添加一些边缘细胞
-                const growthRate = 0.2 + Math.random() * 0.3; // 20-50%的边缘细胞会被添加
-                edgeCells.forEach(cellKey => {
-                    if (Math.random() < growthRate) {
-                        const [row, col] = cellKey.split(',').map(Number);
-                        newCells.push({row, col});
-                    }
-                });
-                
-                return newCells;
-            }
-            
-            // 计算下一代 - 以区域为单位
-            nextGeneration() {
-                // 找到所有云块区域
-                const cloudRegions = this.findCloudRegions();
-                
-                // 清空下一代网格
-                this.nextGrid = Array(this.rows).fill().map(() => Array(this.cols).fill(0));
-                
-                // 处理每个云块区域
-                cloudRegions.forEach(region => {
-                    const regionSize = region.length;
-                    let growChance = 0.0;
-                    let shrinkChance = 0.0;
-                    let maintainChance = 0.0;
-                    
-                    // 根据区域大小决定生长或收缩概率
-                    if (regionSize <= 2) {
-                        // 极小云块：高概率生长，低概率消散
-                        growChance = 0.7;
-                        shrinkChance = 0.1;
-                        maintainChance = 0.2;
-                    } else if (regionSize <= 5) {
-                        // 小云块：较高概率生长，适中概率消散
-                        growChance = 0.5;
-                        shrinkChance = 0.2;
-                        maintainChance = 0.3;
-                    } else if (regionSize <= 10) {
-                        // 中等云块：适中概率生长或收缩
-                        growChance = 0.3;
-                        shrinkChance = 0.3;
-                        maintainChance = 0.4;
-                    } else if (regionSize <= 20) {
-                        // 大云块：低概率生长，高概率收缩
-                        growChance = 0.1;
-                        shrinkChance = 0.6;
-                        maintainChance = 0.3;
-                    } else {
-                        // 超大云块：很低概率生长，很高概率收缩
-                        growChance = 0.05;
-                        shrinkChance = 0.8;
-                        maintainChance = 0.15;
-                    }
-                    
-                    const action = Math.random();
-                    let newRegion = [];
-                    
-                    if (action < shrinkChance) {
-                        // 整个区域收缩
-                        newRegion = this.shrinkRegion(region);
-                    } else if (action < shrinkChance + growChance) {
-                        // 整个区域生长
-                        newRegion = this.growRegion(region);
-                    } else {
-                        // 保持当前状态
-                        newRegion = [...region];
-                    }
-                    
-                    // 将新区域写入下一代网格
-                    newRegion.forEach(cell => {
-                        if (cell.row >= 0 && cell.row < this.rows && 
-                            cell.col >= 0 && cell.col < this.cols) {
-                            this.nextGrid[cell.row][cell.col] = 1;
-                        }
-                    });
-                });
-                
-                // 更新网格数据
-                for (let row = 0; row < this.rows; row++) {
-                    for (let col = 0; col < this.cols; col++) {
-                        this.gridData[row][col] = this.nextGrid[row][col];
-                    }
-                }
-            }
-            
-            // 更新显示 - 直接变化，无动画
-            updateDisplay() {
-                for (let row = 0; row < this.rows; row++) {
-                    for (let col = 0; col < this.cols; col++) {
-                        const cell = this.grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-                        if (cell) {
-                            const isAlive = this.gridData[row][col] === 1;
-                            
-                            // 直接设置状态，无动画过渡
-                            if (isAlive) {
-                                cell.classList.add('alive');
-                                cell.classList.remove('birth', 'death');
-                            } else {
-                                cell.classList.remove('alive', 'birth', 'death');
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // 动画循环
-            animate() {
-                if (!this.isRunning) {
-                    console.log(`${this.gridId} 停止运行`);
-                    return;
-                }
-                
-                console.log(`${this.gridId} 执行动画循环`);
-                this.nextGeneration();
-                this.updateDisplay();
-                
-                // 极少生成新云块，让变化更慢
-                if (Math.random() < 0.001) {
-                    // 随机选择左侧或右侧区域
-                    const side = Math.random() < 0.5 ? 'left' : 'right';
-                    let row, col;
-                    
-                    if (side === 'left') {
-                        row = Math.floor(Math.random() * this.rows);
-                        col = Math.floor(Math.random() * (this.cols / 2)); // 左半部分
-                    } else {
-                        row = Math.floor(Math.random() * this.rows);
-                        col = Math.floor(this.cols / 2) + Math.floor(Math.random() * (this.cols / 2)); // 右半部分
-                    }
-                    
-                    // 检查周围是否有其他云块，确保独立
-                    let canPlace = true;
-                    const checkRadius = 3;
-                    for (let checkRow = row - checkRadius; checkRow <= row + checkRadius; checkRow++) {
-                        for (let checkCol = col - checkRadius; checkCol <= col + checkRadius; checkCol++) {
-                            if (checkRow >= 0 && checkRow < this.rows && checkCol >= 0 && checkCol < this.cols) {
-                                if (this.gridData[checkRow][checkCol] === 1) {
-                                    canPlace = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (!canPlace) break;
-                    }
-                    
-                    // 只在空旷区域生成小型独立云块
-                    if (canPlace) {
-                        const radius = 1; // 固定小半径
-                        this.createCloud(row, col, radius, 0.3);
-                    }
-                }
-                
-                this.animationId = setTimeout(() => {
-                    this.animate();
-                }, 1000); // 每1秒更新一次，稍微快一点的变化速度
-            }
-            
-            start() {
-                console.log(`启动细胞自动机: ${this.gridId}`);
-                if (!this.isRunning) {
-                    this.isRunning = true;
-                    console.log(`${this.gridId} 开始动画循环`);
-                    this.animate();
-                } else {
-                    console.log(`${this.gridId} 已在运行中`);
-                }
-            }
-            
-            stop() {
-                this.isRunning = false;
-                if (this.animationId) {
-                    clearTimeout(this.animationId);
-                }
-            }
-        } // CloudAutomata类结束
-        
         // ===== 语言切换功能 =====
         let currentLanguage = 'en'; // 默认英文
         
@@ -2258,8 +1711,417 @@
                     }
                 });
             }
-        }
 
+            
+            init() {
+                // 创建10x20的网格
+                for (let row = 0; row < 20; row++) {
+                    this.gridData[row] = [];
+                    for (let col = 0; col < 10; col++) {
+                        this.gridData[row][col] = 0;
+                        const block = document.createElement('div');
+                        block.className = 'tetris-block';
+                        block.dataset.row = row;
+                        block.dataset.col = col;
+                        this.grid.appendChild(block);
+                    }
+                }
+                
+                // 创建初始的随机堆叠
+                this.createInitialStack();
+                this.isInitialized = true;
+            }
+            
+            createInitialStack() {
+                // 在底部创建一些随机的方块堆叠，但密度更低，给俄罗斯方块形状留出空间
+                for (let row = 19; row >= 15; row--) { // 从19行开始，给更多空间
+                    for (let col = 0; col < 10; col++) {
+                        if (Math.random() < 0.4) { // 降低密度
+                            const color = Math.floor(Math.random() * 5) + 1;
+                            this.gridData[row][col] = color;
+                            this.updateBlock(row, col, color);
+                        }
+                    }
+                }
+                this.saveState();
+                console.log('初始方块堆叠创建完成');
+            }
+            
+            updateBlock(row, col, color) {
+                const block = this.grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                if (block) {
+                    block.className = `tetris-block color-${color}`;
+                    block.style.backgroundColor = this.getColor(color);
+                }
+            }
+            
+            clearBlock(row, col) {
+                const block = this.grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                if (block) {
+                    block.className = 'tetris-block';
+                    block.style.backgroundColor = 'transparent';
+                }
+            }
+            
+            // 定义俄罗斯方块形状
+            getTetrisShapes() {
+                return {
+                    // I型 (直线)
+                    I: [
+                        [0, 0], [0, 1], [0, 2], [0, 3]
+                    ],
+                    // O型 (方形)
+                    O: [
+                        [0, 0], [0, 1],
+                        [1, 0], [1, 1]
+                    ],
+                    // T型
+                    T: [
+                        [0, 1],
+                        [1, 0], [1, 1], [1, 2]
+                    ],
+                    // L型
+                    L: [
+                        [0, 0],
+                        [1, 0], [1, 1], [1, 2]
+                    ],
+                    // J型
+                    J: [
+                        [0, 2],
+                        [1, 0], [1, 1], [1, 2]
+                    ],
+                    // S型
+                    S: [
+                        [0, 1], [0, 2],
+                        [1, 0], [1, 1]
+                    ],
+                    // Z型
+                    Z: [
+                        [0, 0], [0, 1],
+                        [1, 1], [1, 2]
+                    ]
+                };
+            }
+            
+            // 检查形状是否可以放置
+            canPlaceShape(shape, startRow, startCol) {
+                for (let [offsetRow, offsetCol] of shape) {
+                    const row = startRow + offsetRow;
+                    const col = startCol + offsetCol;
+                    
+                    // 检查边界
+                    if (row < 0 || row >= 20 || col < 0 || col >= 10) {
+                        return false;
+                    }
+                    
+                    // 检查是否已被占用
+                    if (this.gridData[row][col] > 0) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            
+            // 检查形状是否有支撑
+            hasSupport(shape, startRow, startCol) {
+                for (let [offsetRow, offsetCol] of shape) {
+                    const row = startRow + offsetRow;
+                    const col = startCol + offsetCol;
+                    
+                    // 如果在底部，或者下方有方块，则有支撑
+                    if (row === 19 || this.gridData[row + 1][col] > 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
+            // 放置俄罗斯方块形状
+            placeShape(shape, startRow, startCol, color, animationType) {
+                const changes = [];
+                const delays = [0, 100, 200, 300]; // 方块依次出现的延迟
+                
+                shape.forEach(([offsetRow, offsetCol], index) => {
+                    const row = startRow + offsetRow;
+                    const col = startCol + offsetCol;
+                    
+                    this.gridData[row][col] = color;
+                    
+                    // 添加延迟，让方块依次出现
+                    setTimeout(() => {
+                        this.updateBlock(row, col, color);
+                    }, delays[index % delays.length]);
+                    
+                    changes.push({row, col, color});
+                });
+                
+                return changes;
+            }
+            
+            addRandomBlocks(count = 2) {
+                const changes = [];
+                const shapes = this.getTetrisShapes();
+                const shapeNames = Object.keys(shapes);
+                
+                for (let i = 0; i < count; i++) {
+                    // 随机选择形状
+                    const shapeName = shapeNames[Math.floor(Math.random() * shapeNames.length)];
+                    const shape = shapes[shapeName];
+                    const color = Math.floor(Math.random() * 5) + 1;
+                    
+                    console.log(`尝试放置 ${shapeName} 形状，颜色 ${color}`);
+                    
+                    // 尝试找到可以放置形状的位置
+                    const maxAttempts = 100; // 增加尝试次数
+                    let placed = false;
+                    
+                    // 优先从底部开始搜索
+                    for (let startRow = 17; startRow >= 0 && !placed; startRow--) { // 从17行开始搜索
+                        for (let startCol = 0; startCol <= 7 && !placed; startCol++) {
+                            // 检查是否可以放置
+                            if (this.canPlaceShape(shape, startRow, startCol) && 
+                                this.hasSupport(shape, startRow, startCol)) {
+                                
+                                console.log(`成功放置 ${shapeName} 在位置 (${startRow}, ${startCol})`);
+                                
+                                // 经典俄罗斯方块动画
+                                const animations = ['dropping', 'filling'];
+                                const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+                                
+                                const shapeChanges = this.placeShape(shape, startRow, startCol, color, randomAnimation);
+                                changes.push(...shapeChanges);
+                                placed = true;
+                            }
+                        }
+                    }
+                    
+                    // 如果还没放置成功，尝试更宽松的条件（不要求支撑）
+                    if (!placed) {
+                        console.log(`${shapeName} 需要支撑无法放置，尝试无支撑模式`);
+                        for (let startRow = 17; startRow >= 0 && !placed; startRow--) { // 从17行开始搜索
+                            for (let startCol = 0; startCol <= 7 && !placed; startCol++) {
+                                if (this.canPlaceShape(shape, startRow, startCol)) {
+                                    console.log(`无支撑模式成功放置 ${shapeName} 在位置 (${startRow}, ${startCol})`);
+                                    
+                                    // 经典俄罗斯方块动画
+                                    const animations = ['dropping', 'filling'];
+                                    const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+                                    
+                                    const shapeChanges = this.placeShape(shape, startRow, startCol, color, randomAnimation);
+                                    changes.push(...shapeChanges);
+                                    placed = true;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 如果形状无法放置，回退到单个方块
+                    if (!placed) {
+                        console.log(`${shapeName} 形状无法放置，回退到单方块`);
+                        const availablePositions = [];
+                        for (let row = 0; row < 20; row++) {
+                            for (let col = 0; col < 10; col++) {
+                                if (this.gridData[row][col] === 0) {
+                                    if (row === 19 || this.gridData[row + 1][col] > 0) {
+                                        availablePositions.push({row, col});
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if (availablePositions.length > 0) {
+                            const pos = availablePositions[Math.floor(Math.random() * availablePositions.length)];
+                            this.gridData[pos.row][pos.col] = color;
+                            
+                            // 经典俄罗斯方块动画
+                            const animations = ['dropping', 'filling'];
+                            const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+                            
+                            this.updateBlock(pos.row, pos.col, color);
+                            changes.push({row: pos.row, col: pos.col, color: color});
+                            console.log(`放置单方块在位置 (${pos.row}, ${pos.col})`);
+                        }
+                    }
+                }
+                
+                if (changes.length > 0) {
+                    this.saveState();
+                }
+                
+                return changes;
+            }
+            
+            removeRandomBlocks(count = 2) {
+                const changes = [];
+                const filledPositions = [];
+                
+                // 收集所有已填充的位置
+                for (let row = 0; row < 15; row++) {
+                    for (let col = 0; col < 10; col++) {
+                        if (this.gridData[row][col] > 0) {
+                            filledPositions.push({row, col, color: this.gridData[row][col]});
+                        }
+                    }
+                }
+                
+                // 随机移除方块
+                for (let i = 0; i < Math.min(count, filledPositions.length); i++) {
+                    const index = Math.floor(Math.random() * filledPositions.length);
+                    const pos = filledPositions.splice(index, 1)[0];
+                    this.gridData[pos.row][pos.col] = 0;
+                    
+                    // 随机选择移除动画类型
+                    const removeAnimations = ['removing', 'exploding'];
+                    const randomRemoveAnimation = removeAnimations[Math.floor(Math.random() * removeAnimations.length)];
+                    
+                    this.clearBlock(pos.row, pos.col, randomRemoveAnimation);
+                    changes.push({row: pos.row, col: pos.col, color: 0});
+                }
+                
+                if (changes.length > 0) {
+                    this.saveState();
+                }
+                
+                return changes;
+            }
+            
+            saveState() {
+                const state = JSON.parse(JSON.stringify(this.gridData));
+                this.history.push(state);
+                if (this.history.length > this.maxHistory) {
+                    this.history.shift();
+                }
+            }
+            
+            undo() {
+                // 增强时光倒流 - 一次回退多步
+                const stepsToUndo = Math.min(4, this.history.length - 1); // 最多回退4步
+                
+                for (let i = 0; i < stepsToUndo; i++) {
+                    if (this.history.length > 1) {
+                        this.history.pop(); // 移除当前状态
+                    }
+                }
+                
+                if (this.history.length > 0) {
+                    const previousState = this.history[this.history.length - 1];
+                    this.gridData = JSON.parse(JSON.stringify(previousState));
+                    this.updateDisplay();
+                    console.log(`时光倒流：回退了 ${stepsToUndo} 步`);
+                }
+            }
+            
+
+            
+            updateDisplay() {
+                for (let row = 0; row < 20; row++) {
+                    for (let col = 0; col < 10; col++) {
+                        const color = this.gridData[row][col];
+                        const block = this.grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                        
+                        if (color > 0) {
+                            // 直接设置方块状态，不使用动画
+                            if (block) {
+                                block.className = `tetris-block color-${color} filled`;
+                            }
+                        } else {
+                            // 直接清除方块，不使用动画
+                            if (block) {
+                                block.className = 'tetris-block';
+                            }
+                        }
+                    }
+                }
+            }
+            
+
+            // 检查并消除连续同色方块 - 传统简单消除
+            checkAndClearConnectedBlocks() {
+                const connectedGroups = this.findConnectedGroups();
+                const eligibleGroups = connectedGroups.filter(group => group.blocks.length >= 4);
+                
+                if (eligibleGroups.length === 0) {
+                    console.log('没有发现可消除的连续同色方块群组（需要至少4个）');
+                    return;
+                }
+                
+                console.log(`发现 ${eligibleGroups.length} 个可消除的连续同色方块群组`);
+                
+                // 传统消除：所有方块同时消失
+                eligibleGroups.forEach(group => {
+                    group.blocks.forEach(block => {
+                        this.gridData[block.row][block.col] = 0;
+                                                                this.clearBlock(block.row, block.col);
+                    });
+                });
+                
+                console.log(`消除完成，总共消除了 ${eligibleGroups.reduce((sum, group) => sum + group.blocks.length, 0)} 个连续同色方块`);
+                this.saveState();
+            }
+            
+            // 寻找连续同色方块群组
+            findConnectedGroups() {
+                const visited = [];
+                const groups = [];
+                
+                // 初始化访问数组
+                for (let row = 0; row < 20; row++) {
+                    visited[row] = [];
+                    for (let col = 0; col < 10; col++) {
+                        visited[row][col] = false;
+                    }
+
+                }
+                
+                // 遍历每个方块
+                for (let row = 0; row < 20; row++) {
+                    for (let col = 0; col < 10; col++) {
+                        if (this.gridData[row][col] > 0 && !visited[row][col]) {
+                            const group = this.floodFill(row, col, this.gridData[row][col], visited);
+                            if (group.length > 0) {
+                                groups.push({
+                                    color: this.gridData[row][col],
+                                    blocks: group
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                return groups;
+            }
+            
+            // 洪水填充算法找连续同色方块
+            floodFill(startRow, startCol, targetColor, visited) {
+                const stack = [{row: startRow, col: startCol}];
+                const connectedBlocks = [];
+                
+                while (stack.length > 0) {
+                    const {row, col} = stack.pop();
+                    
+                    // 检查边界和访问状态
+                    if (row < 0 || row >= 20 || col < 0 || col >= 10 || 
+                        visited[row][col] || this.gridData[row][col] !== targetColor) {
+                        continue;
+                    }
+                    
+                    // 标记为已访问
+                    visited[row][col] = true;
+                    connectedBlocks.push({row, col});
+                    
+                    // 添加四个方向的邻居
+                    stack.push({row: row - 1, col}); // 上
+                    stack.push({row: row + 1, col}); // 下
+                    stack.push({row, col: col - 1}); // 左
+                    stack.push({row, col: col + 1}); // 右
+                }
+                
+                return connectedBlocks;
+            }
+        }
+        
+
+        
         // 绑定语言切换事件
         document.addEventListener('DOMContentLoaded', () => {
             const languageToggle = document.getElementById('languageToggle');
@@ -2272,38 +2134,6 @@
             initSlideshow();
             initSlideshowPerf();
             initSlideshowGroup();
-            
-            // 初始化细胞自动机动画
-            console.log('正在初始化左侧细胞自动机...');
-            const automataLeft = new CloudAutomata('automataLeft');
-            console.log('左侧细胞自动机初始化完成');
-            
-            console.log('正在初始化右侧细胞自动机...');
-            const automataRight = new CloudAutomata('automataRight');
-            console.log('右侧细胞自动机初始化完成');
-            
-            // 初始化太阳位置系统
-            initSunPosition();
-            
-            // 确保两边都正常启动
-            setTimeout(() => {
-                console.log('检查左侧运行状态:', automataLeft.isRunning);
-                console.log('检查右侧运行状态:', automataRight.isRunning);
-                
-                // 强制重启左侧如果没有运行
-                if (!automataLeft.isRunning) {
-                    console.log('重新启动左侧细胞自动机');
-                    automataLeft.start();
-                }
-                
-                // 强制重启右侧如果没有运行
-                if (!automataRight.isRunning) {
-                    console.log('重新启动右侧细胞自动机');
-                    automataRight.start();
-                }
-            }, 1000);
-            
-
             
 
             
@@ -2325,6 +2155,7 @@
 
         });
         
+
     </script>
 </body>
-</html> 
+</html> </html> 
