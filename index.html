@@ -151,6 +151,15 @@
             display: block !important;
         }
         
+        /* SVG text元素语言切换样式 */
+        text.lang-content {
+            display: none !important;
+        }
+        
+        text.lang-content.active {
+            display: block !important;
+        }
+        
         /* 移除绝对定位，让语言内容正常切换 */
         
         /* 高DPI屏幕优化 */
@@ -1257,7 +1266,7 @@
             
             .artist-description p {
                 font-size: 2vw;
-                line-height: 2.4;
+                line-height: 2.0;
             }
             
             .artist-description p span {
@@ -1396,7 +1405,7 @@
             
             .artist-description p {
                 font-size: 2.5vw;
-                line-height: 2.3;
+                line-height: 1.9;
             }
             
             .artist-description p span {
@@ -1533,7 +1542,7 @@
         .artist-description p {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
             font-size: 18px;
-            line-height: 2.5;
+            line-height: 2.1;
             color: rgba(255,255,255,0.9);
             text-align: left;
             margin: 0;
@@ -2686,7 +2695,7 @@
             
             .artist-description p {
                 font-size: 3.2vw;
-                line-height: 2.2;
+                line-height: 1.8;
             }
             
             .artist-description p span {
@@ -2829,7 +2838,7 @@
             
             .artist-description p {
                 font-size: 3.8vw;
-                line-height: 2;
+                line-height: 1.6;
             }
             
             .artist-description p span {
@@ -3031,7 +3040,12 @@
                             <path d="M 60 95 A 45 45 0 0 1 115 60" stroke="#fac800" stroke-width="7" fill="none" />
                             <path d="M 65 88 A 35 35 0 0 1 105 65" stroke="#fac800" stroke-width="7" fill="none" />
                             <path d="M 70 82 A 25 25 0 0 1 95 70" stroke="#fac800" stroke-width="5" fill="none" />
-                            <text font-family="VCR OSD Mono, Press Start 2P, VT323, monospace" font-size="6" fill="#ffffff" font-weight="bold" dy="5" style="z-index: 10;">
+                            <text class="lang-content active" data-lang="en" font-family="VCR OSD Mono, Press Start 2P, VT323, monospace" font-size="6" fill="#ffffff" font-weight="bold" dy="5" style="z-index: 10;">
+                                <textPath href="#arc-path" startOffset="50%" text-anchor="middle">
+                                    Experience
+                                </textPath>
+                            </text>
+                            <text class="lang-content" data-lang="zh" font-family="VCR OSD Mono, Press Start 2P, VT323, monospace" font-size="6" fill="#ffffff" font-weight="bold" dy="5" style="z-index: 10;">
                                 <textPath href="#arc-path" startOffset="50%" text-anchor="middle">
                                     经历
                                 </textPath>
@@ -5155,7 +5169,7 @@
             
             .artist-description p {
                 font-size: 20px !important;
-                line-height: 2.5 !important;
+                line-height: 2.1 !important;
             }
             
             /* 图片容器优化 */
@@ -5225,6 +5239,7 @@
             
             .artist-description p {
                 font-size: 26px !important;
+                line-height: 2.1 !important;
             }
             
             .preview-image-container,
@@ -5278,6 +5293,7 @@
             
             .artist-description p {
                 font-size: 38px !important;
+                line-height: 2.1 !important;
             }
             
             .preview-image-container,
@@ -5354,6 +5370,7 @@
             
             .artist-description p {
                 font-size: 18px !important;
+                line-height: 2.1 !important;
             }
             
             .preview-image-container,
@@ -5509,6 +5526,10 @@
                 font-size: 4vw !important;
             }
             
+            .artist-description p {
+                line-height: 1.8 !important;
+            }
+            
             /* 优化图片容器 */
             .preview-image-container,
             .preview-image-container-2,
@@ -5540,6 +5561,10 @@
             
             .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
                 font-size: 5vw !important;
+            }
+            
+            .artist-description p {
+                line-height: 1.6 !important;
             }
             
             /* 优化间距 */

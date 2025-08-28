@@ -53,6 +53,143 @@
             transform: scale(1.05);
         }
 
+        /* 语言切换按钮样式 */
+        .language-toggle {
+            position: fixed;
+            top: 1.5625vh;
+            right: 1.5625vw;
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800;
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-size: 0.8333vw;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .language-toggle:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+
+        /* 语言内容样式 */
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        /* 确保小标题在英文模式下不显示中文 */
+        .video-artwork-title .lang-content[data-lang="zh"],
+        .synopsis-title .lang-content[data-lang="zh"],
+        .still-frame-title .lang-content[data-lang="zh"],
+        .second-still-frame-title .lang-content[data-lang="zh"],
+        .second-video-artwork-title .lang-content[data-lang="zh"],
+        .second-synopsis-title .lang-content[data-lang="zh"],
+        .third-video-artwork-title .lang-content[data-lang="zh"],
+        .third-synopsis-title .lang-content[data-lang="zh"],
+        .fourth-video-artwork-title .lang-content[data-lang="zh"],
+        .fourth-synopsis-title .lang-content[data-lang="zh"],
+        .fifth-video-artwork-title .lang-content[data-lang="zh"],
+        .fifth-synopsis-title .lang-content[data-lang="zh"],
+        .sixth-video-artwork-title .lang-content[data-lang="zh"],
+        .sixth-synopsis-title .lang-content[data-lang="zh"],
+        .seventh-video-artwork-title .lang-content[data-lang="zh"],
+        .seventh-synopsis-title .lang-content[data-lang="zh"] {
+            display: none !important;
+        }
+
+        .video-artwork-title .lang-content[data-lang="zh"].active,
+        .synopsis-title .lang-content[data-lang="zh"].active,
+        .still-frame-title .lang-content[data-lang="zh"].active,
+        .second-still-frame-title .lang-content[data-lang="zh"].active,
+        .second-video-artwork-title .lang-content[data-lang="zh"].active,
+        .second-synopsis-title .lang-content[data-lang="zh"].active,
+        .third-video-artwork-title .lang-content[data-lang="zh"].active,
+        .third-synopsis-title .lang-content[data-lang="zh"].active,
+        .fourth-video-artwork-title .lang-content[data-lang="zh"].active,
+        .fourth-synopsis-title .lang-content[data-lang="zh"].active,
+        .fifth-video-artwork-title .lang-content[data-lang="zh"].active,
+        .fifth-synopsis-title .lang-content[data-lang="zh"].active,
+        .sixth-video-artwork-title .lang-content[data-lang="zh"].active,
+        .sixth-synopsis-title .lang-content[data-lang="zh"].active,
+        .seventh-video-artwork-title .lang-content[data-lang="zh"].active,
+        .seventh-synopsis-title .lang-content[data-lang="zh"].active {
+            display: inline-block !important;
+        }
+
+        /* 中文字体设置 */
+        .lang-content[data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif !important;
+            font-weight: bold !important;
+        }
+
+        /* 中文标题字体设置 */
+        .still-frame-title,
+        .second-still-frame-title,
+        .third-still-frame-title,
+        .fourth-still-frame-title,
+        .fifth-still-frame-title,
+        .sixth-still-frame-title,
+        .seventh-still-frame-title {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif !important;
+            font-weight: bold !important;
+        }
+
+        /* 主标题中文字体设置 */
+        .title .lang-content[data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif !important;
+            font-weight: bold !important;
+            font-size: 92px !important;
+            line-height: 1.1 !important;
+        }
+
+        /* 描述文本的中文字体设置 */
+        .description-text .lang-content[data-lang="zh"],
+        .second-description-text .lang-content[data-lang="zh"],
+        .third-description-text .lang-content[data-lang="zh"],
+        .fourth-description-text .lang-content[data-lang="zh"],
+        .fifth-description-text .lang-content[data-lang="zh"],
+        .sixth-description-text .lang-content[data-lang="zh"],
+        .seventh-description-text .lang-content[data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif !important;
+            font-weight: bold !important;
+        }
+
+        /* 作品信息的中文字体设置 */
+        .info-line .lang-content[data-lang="zh"] {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif !important;
+            font-weight: bold !important;
+            font-size: 22px !important;
+        }
+
+        /* 确保小标题的三角标识位置正确 */
+        .video-artwork-title .lang-content[data-lang="zh"].active,
+        .synopsis-title .lang-content[data-lang="zh"].active,
+        .still-frame-title .lang-content[data-lang="zh"].active,
+        .second-video-artwork-title .lang-content[data-lang="zh"].active,
+        .second-synopsis-title .lang-content[data-lang="zh"].active,
+        .third-video-artwork-title .lang-content[data-lang="zh"].active,
+        .third-synopsis-title .lang-content[data-lang="zh"].active,
+        .fourth-video-artwork-title .lang-content[data-lang="zh"].active,
+        .fourth-synopsis-title .lang-content[data-lang="zh"].active,
+        .fifth-video-artwork-title .lang-content[data-lang="zh"].active,
+        .fifth-synopsis-title .lang-content[data-lang="zh"].active,
+        .sixth-video-artwork-title .lang-content[data-lang="zh"].active,
+        .sixth-synopsis-title .lang-content[data-lang="zh"].active,
+        .seventh-video-artwork-title .lang-content[data-lang="zh"].active,
+        .seventh-synopsis-title .lang-content[data-lang="zh"].active {
+            font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif !important;
+            font-weight: bold !important;
+            display: inline-block !important;
+            vertical-align: baseline;
+        }
+
         .video-container {
             width: 100vw;
             margin: 80px 0 0 0;
@@ -126,11 +263,17 @@
             font-size: 72px;
         }
 
+        /* 中文标题中"闪灵"部分的字体大小 */
+        .title .lang-content[data-lang="zh"] .shining {
+            font-size: 70px !important;
+        }
+
         .video-info .info-line {
             font-size: 18px;
             color: rgba(255,255,255,0.8);
             margin: 15px 0;
             line-height: 1.6;
+            font-weight: 400;
         }
 
         .video-info .description-title {
@@ -427,7 +570,9 @@
             border-top: 10.39px solid transparent;
             border-bottom: 10.39px solid transparent;
             margin-right: 8px;
-            vertical-align: middle;
+            vertical-align: baseline;
+            position: relative;
+            top: -2px;
         }
 
         .second-artwork-info .second-synopsis-title {
@@ -446,7 +591,9 @@
             border-top: 10.39px solid transparent;
             border-bottom: 10.39px solid transparent;
             margin-right: 8px;
-            vertical-align: middle;
+            vertical-align: baseline;
+            position: relative;
+            top: -2px;
         }
 
         .second-artwork-info .second-description-text {
@@ -775,7 +922,9 @@
             border-top: 10.39px solid transparent;
             border-bottom: 10.39px solid transparent;
             margin-right: 8px;
-            vertical-align: middle;
+            vertical-align: baseline;
+            position: relative;
+            top: -2px;
         }
 
         .third-artwork-info .third-synopsis-title {
@@ -794,7 +943,9 @@
             border-top: 10.39px solid transparent;
             border-bottom: 10.39px solid transparent;
             margin-right: 8px;
-            vertical-align: middle;
+            vertical-align: baseline;
+            position: relative;
+            top: -2px;
         }
 
         .third-artwork-info .third-description-text {
@@ -1075,7 +1226,7 @@
 
         .second-still-frame-title::before {
             content: "";
-            display: inline-block;
+            display: none !important;
             width: 0;
             height: 0;
             border-left: 12px solid #ff0000;
@@ -1087,7 +1238,7 @@
 
         .second-artwork-info .second-still-frame-title::before {
             content: "";
-            display: inline-block;
+            display: none !important;
             width: 0;
             height: 0;
             border-left: 12px solid #ff0000;
@@ -1592,7 +1743,7 @@
         /* Left Foot Still Frame Images */
         .sixth-still-frame-image-container-02 {
             position: absolute;
-            top: 9450px;
+            top: 9500px;
             left: 790px;
             width: 460px;
             height: 259px;
@@ -1624,7 +1775,7 @@
         
         .sixth-still-frame-image-container-03 {
             position: absolute;
-            top: 9670px;
+            top: 9720px;
             right: 40px;
             width: 460px;
             height: 259px;
@@ -1657,7 +1808,7 @@
         /* Left Foot Still Frame Images 04, 05, 06 */
         .sixth-still-frame-image-container-04 {
             position: absolute;
-            top: 9750px;
+            top: 9800px;
             right: 520px;
             width: 250px;
             height: 141px;
@@ -1689,7 +1840,7 @@
         
         .sixth-still-frame-image-container-05 {
             position: absolute;
-            top: 9920px;
+            top: 9970px;
             right: 520px;
             width: 300px;
             height: 169px;
@@ -1721,7 +1872,7 @@
         
         .sixth-still-frame-image-container-06 {
             position: absolute;
-            top: 10115px;
+            top: 10165px;
             right: 520px;
             width: 350px;
             height: 197px;
@@ -1754,7 +1905,7 @@
         /* Left Foot Still Frame Image 07 */
         .sixth-still-frame-image-container-07 {
             position: absolute;
-            top: 10015px;
+            top: 10065px;
             left: calc(50% + 585px);
             transform: translateX(-50%);
             width: 246px;
@@ -1846,7 +1997,7 @@
         /* Left Foot Still Frame Image 09 */
         .sixth-still-frame-image-container-09 {
             position: absolute;
-            top: 10340px;
+            top: 10390px;
             right: 30px;
             width: 850px;
             height: 478px;
@@ -1876,7 +2027,7 @@
         /* Left Foot Still Frame Image 10 - Cropped with White Container */
         .sixth-still-frame-image-container-10 {
             position: absolute;
-            top: 10770px;
+            top: 10820px;
             left: calc(50% - 460px);
             transform: translateX(-50%);
             width: 612px;
@@ -1919,7 +2070,7 @@
         /* Gradient Square Sequence */
         .gradient-square-01 {
             position: absolute;
-            top: 9680px;
+            top: 9730px;
             right: 325px;
             width: 80px;
             height: 80px;
@@ -1930,7 +2081,7 @@
         
         .gradient-square-02 {
             position: absolute;
-            top: 9660px;
+            top: 9710px;
             right: 345px;
             width: 65px;
             height: 65px;
@@ -1941,7 +2092,7 @@
         
         .gradient-square-03 {
             position: absolute;
-            top: 9640px;
+            top: 9690px;
             right: 365px;
             width: 55px;
             height: 55px;
@@ -1952,7 +2103,7 @@
         
         .gradient-square-04 {
             position: absolute;
-            top: 9620px;
+            top: 9670px;
             right: 385px;
             width: 45px;
             height: 45px;
@@ -1963,7 +2114,7 @@
         
         .gradient-square-05 {
             position: absolute;
-            top: 9600px;
+            top: 9650px;
             right: 405px;
             width: 35px;
             height: 35px;
@@ -1974,7 +2125,7 @@
         
         .gradient-square-06 {
             position: absolute;
-            top: 9580px;
+            top: 9630px;
             right: 425px;
             width: 45px;
             height: 45px;
@@ -1985,7 +2136,7 @@
         
         .gradient-square-07 {
             position: absolute;
-            top: 9560px;
+            top: 9610px;
             right: 445px;
             width: 55px;
             height: 55px;
@@ -1996,7 +2147,7 @@
         
         .gradient-square-08 {
             position: absolute;
-            top: 9540px;
+            top: 9590px;
             right: 465px;
             width: 65px;
             height: 65px;
@@ -3375,55 +3526,52 @@
 
         .still-frame-title::before {
             content: "";
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-left: 12px solid #ff0000;
-            border-top: 10.39px solid transparent;
-            border-bottom: 10.39px solid transparent;
-            margin-right: 8px;
-            vertical-align: middle;
+            display: none !important;
         }
 
         .video-artwork-title {
             font-size: 36px;
             color: #09ad04;
-            margin: 900px 0 45px 0;
+            margin: 850px 0 45px 0;
+            margin-left: 30px !important;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            white-space: nowrap;
         }
 
-        .video-artwork-title::before {
-            content: "";
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-left: 12px solid #ff0000;
-            border-top: 10.39px solid transparent;
-            border-bottom: 10.39px solid transparent;
-            margin-right: 8px;
-            vertical-align: middle;
+        .video-artwork-title .triangle-icon {
+            display: inline-block !important;
+            width: 0 !important;
+            height: 0 !important;
+            border-left: 12px solid #ff0000 !important;
+            border-top: 10.39px solid transparent !important;
+            border-bottom: 10.39px solid transparent !important;
+            margin-right: 8px !important;
+            vertical-align: baseline !important;
+            position: relative !important;
+            top: 8px !important;
         }
+
+
 
         .synopsis-title {
             font-size: 36px;
             color: #09ad04;
-            margin: 650px 0 45px 0;
+            margin: 1200px 0 45px 0;
+            margin-left: 80px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
-        .synopsis-title::before {
-            content: "";
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-left: 12px solid #ff0000;
-            border-top: 10.39px solid transparent;
-            border-bottom: 10.39px solid transparent;
-            margin-right: 8px;
-            vertical-align: middle;
-            transform: none !important;
-            transition: none !important;
-            animation: none !important;
+        .synopsis-title .triangle-icon {
+            display: inline-block !important;
+            width: 0 !important;
+            height: 0 !important;
+            border-left: 12px solid #ff0000 !important;
+            border-top: 10.39px solid transparent !important;
+            border-bottom: 10.39px solid transparent !important;
+            margin-right: 8px !important;
+            vertical-align: baseline !important;
+            position: relative !important;
+            top: 8px !important;
         }
 
         /* Fourth story image (copied from third-story-image styles) */
@@ -3507,6 +3655,10 @@
             .video-info .synopsis-title {
                 font-size: 2.5vw;
                 margin: 12vw 0 1.5vw 0;
+            }
+            
+            .video-info .video-artwork-title {
+                margin-left: 2vw !important;
             }
             
             .video-info .description-text,
@@ -3931,7 +4083,8 @@
 <body>
     <div class="rasterize-stripes"></div>
     
-            <a href="../index.html" class="back-btn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
+    <a href="../index.html" class="back-btn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
+    <button id="languageToggle" class="language-toggle">中文</button>
     
     <div class="video-container">
         <div class="video-background">
@@ -3949,20 +4102,46 @@
     </div>
 
     <div class="video-info">
-        <h1 class="title">RASTERIZE<br><span class="shining">SHINING</span></h1>
+        <h1 class="title">
+            <span class="lang-content active" data-lang="en">RASTERIZE<br><span class="shining">SHINING</span></span>
+            <span class="lang-content" data-lang="zh" style="letter-spacing: 5px !important;">光栅化<br><span class="shining" style="letter-spacing: 5px !important;">闪灵</span></span>
+        </h1>
         
-        <p class="info-line">2025 | Digital Video | 16:9 | 1920x1080</p>
-        <p class="info-line">Duration: 13:55 | Color | Sound</p>
-        <p class="info-line">Medium: Digital Animation, Algorithmic Art</p>
+        <p class="info-line">
+            <span class="lang-content active" data-lang="en">2025 | Digital Video | 16:9 | 1920x1080</span>
+            <span class="lang-content" data-lang="zh" style="letter-spacing: 3px !important;">2025 | 数字影像 | 16:9 | 1920x1080</span>
+        </p>
+        <p class="info-line">
+            <span class="lang-content active" data-lang="en">Duration: 13:55 | Color | Sound</span>
+            <span class="lang-content" data-lang="zh" style="letter-spacing: 3px !important;">时长: 13:55 | 彩色 | 有声</span>
+        </p>
+        <p class="info-line">
+            <span class="lang-content active" data-lang="en">Medium: Digital Animation, Algorithmic Art</span>
+            <span class="lang-content" data-lang="zh" style="letter-spacing: 3px !important;">媒介: 数字动画, 算法艺术</span>
+        </p>
         
-        <h2 class="video-artwork-title">Video Artwork Description</h2>
+        <h2 class="video-artwork-title" style="position: relative;">
+            <span class="triangle-icon" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+            <span class="lang-content active" data-lang="en">Video Artwork Description</span>
+            <span class="lang-content" data-lang="zh">影像作品描述</span>
+        </h2>
 
         <div class="still-frame-image-container">
             <div class="frame"></div>
             <img src="../Rasterize Shining 01.jpg" alt="Still Frame 1">
         </div>
 
-        <h2 class="still-frame-title">STILL FRAMES</h2>
+        <h2 class="still-frame-title" style="position: absolute !important; top: 600px !important; right: 720px !important; font-size: 36px !important; color: #09ad04 !important; margin: 0 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important; z-index: 15 !important;">
+            <span class="triangle-icon" style="display: none !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+            <span class="lang-content active" data-lang="en" style="font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace !important; font-weight: normal !important; line-height: 1 !important; vertical-align: baseline !important; position: relative !important; left: 105px !important;">
+                <span class="triangle-icon-en" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+                STILL FRAMES
+            </span>
+            <span class="lang-content" data-lang="zh" style="font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif !important; font-weight: bold !important; line-height: 1 !important; vertical-align: baseline !important;">
+                <span class="triangle-icon-zh" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+                影像静帧
+            </span>
+        </h2>
         
         <div class="still-frame-image-container-2">
             <div class="frame"></div>
@@ -3974,22 +4153,49 @@
             <img src="../Rasterize Shining 03.png" alt="Still Frame 3">
         </div>
         
-        <p class="description-text">
-            As the author of this work, I aim to explore the relationship between the digital world and perception, presenting this exploration through a cross-media approach. Rasterize - Shining is not just an imagination of future technology, but also a profound reflection on the individual's journey of losing and rediscovering self-awareness in a world governed by data and virtual environments. Each sound effect, each image, and every intertwining of color in this work is an exploration and recreation of the "digital myth."
+        <p class="description-text lang-content active" data-lang="en">
+            I seek to explore the relationship between the digital world and perception, presenting this exploration through the medium of moving images.
         </p>
-        <p class="description-text">
-            In the creation process, I have combined traditional artistic mediums with digital technology, using generative art and sound design to craft a new audiovisual experience. Each design element is not only a visual presentation; they are carriers of belief and emotion, guiding the audience into a space that transcends the physical and the virtual. In this space, the audience is not merely an observer but is drawn into a virtual world filled with mystery and unknown forces, where their senses are engaged and directed.
+        <p class="description-text lang-content active" data-lang="en">
+            Rasterize – Shining is not only an imagination of the future but also a deeper inquiry into contemporary self-awareness: in a world governed by data and virtual environments, how does the individual rediscover the self amid loss and chaos? The interweaving of sound, imagery, and color within the work constructs a sensory experience — a recreation of a "digital myth."
         </p>
-        <p class="description-text">
-            This work is an exploration of how contemporary humans establish connections with the self, perception, reality, imagery, information, data, and belief in the digital age. By breaking the boundaries between reality and illusion, I hope to allow each viewer to experience the profound fusion of digital and emotion in this cross-media ritual, leading to deeper reflections and insights about our future world.
+        <p class="description-text lang-content active" data-lang="en">
+            In the creative process, I combined generative art with sound design, treating each design element as a vessel of emotion and belief. Together, they shape an immersive space suspended between reality and the virtual, where E is gradually drawn into forces that are both mysterious and unknown.
+        </p>
+        <p class="description-text lang-content active" data-lang="en">
+            This work explores how, in the digital age, humans forge new connections among emotion, perception, imagery, information, and belief, while seeking to reveal the deep interweaving of the digital and the emotional within the realm of perception.
         </p>
 
-        <h2 class="synopsis-title">Artwork Story Synopsis</h2>
-        <p class="description-text">
+        <p class="description-text lang-content" data-lang="zh">
+            我试图探索数字世界与知觉之间的关系，并通过影像的方式呈现这一探索。
+        </p>
+        <p class="description-text lang-content" data-lang="zh">
+            《光栅化-闪灵》不仅是对未来的想象，更是一种对当代人自我意识的追问：在数据与虚拟环境主导的世界中，个体如何在失落与混沌中重新找回自我。作品中的音效、画面与色彩交织在一起，共同构建出一种"数字神话"的感官体验。
+        </p>
+        <p class="description-text lang-content" data-lang="zh">
+            在创作过程中，我运用生成艺术与声音设计，将每一个设计元素视为情感与信念的载体。它们共同塑造出一个介于现实与虚拟之间的沉浸空间，E也在这个空间里逐渐被卷入神秘而未知的力量之中。
+        </p>
+        <p class="description-text lang-content" data-lang="zh">
+            这件作品探讨当下数字时代中，人如何在情感、知觉、图像、信息与信仰之间建立新的连接，并试图揭示数字与情感在感知层面上的深度交融。
+        </p>
+
+        <h2 class="synopsis-title" style="position: relative; margin-left: 30px !important;">
+            <span class="triangle-icon" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+            <span class="lang-content active" data-lang="en">Artwork Story Synopsis</span>
+            <span class="lang-content" data-lang="zh">故事概要</span>
+        </h2>
+        <p class="description-text lang-content active" data-lang="en">
             In a future world dominated by data and technology, E is a data designer exploring the hidden connections between digital information and emotions within an ever-changing virtual space. When he accidentally discovers 3,540 forgotten images, he inputs them into the system and decodes their potential links through audio frequencies. As the analysis deepens, E realizes that data is not just a cold symbol; it carries emotions and life within it.
         </p>
-        <p class="description-text">
+        <p class="description-text lang-content active" data-lang="en">
             These images and sounds weave together to form a completely new world, breaking the boundaries between the physical and virtual, almost like a redefinition of the past world. Through this intertwining of data and emotions, E gradually transforms from an observer to a part of this world, becoming the eternal link between the virtual realm and human emotions.
+        </p>
+
+        <p class="description-text lang-content" data-lang="zh">
+            在一个被数据与技术主导的未来世界中，E是一位数据设计师，在瞬息万变的虚拟空间中探索数字信息与情感之间的隐秘联系。当他意外发现3,540张被遗忘的图像时，他将它们输入系统，通过音频频率解码它们之间的潜在联系。随着分析的深入，E意识到数据不仅仅是冰冷的符号；它承载着情感与生命。
+        </p>
+        <p class="description-text lang-content" data-lang="zh">
+            这些图像与声音交织在一起，形成了一个全新的世界，打破了物理与虚拟之间的界限，几乎像是对过去世界的重新定义。通过数据与情感的相互交织，E逐渐从观察者转变为这个世界的一部分，成为虚拟领域与人类情感之间的永恒纽带。
         </p>
 
 
@@ -4130,7 +4336,7 @@
                     And that fallen sun— it still glows, it still burns, whispering in every flickering frame: "The world will be redrawn."
                 </p>
 
-                <h2 class="third-still-frame-title">STILL FRAMES</h2>
+                <h2 class="third-still-frame-title">影像静帧</h2>
                 
                 <div class="third-still-frame-image-container">
                     <div class="frame"></div>
@@ -4152,7 +4358,17 @@
                     <img src="../Rasterize Concrete Narrative 04.jpg" alt="Still Frame 4">
                 </div>
             </div>
-            <h2 class="second-still-frame-title">STILL FRAMES</h2>
+            <h2 class="second-still-frame-title" style="position: absolute !important; top: 4780px !important; right: 720px !important; font-size: 36px !important; color: #09ad04 !important; margin: 0 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important; z-index: 15 !important;">
+                <span class="triangle-icon" style="display: none !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+                <span class="lang-content active" data-lang="en" style="font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace !important; font-weight: normal !important; line-height: 1 !important; vertical-align: baseline !important; position: relative !important; left: 105px !important;">
+                    <span class="triangle-icon-en" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+                    STILL FRAMES
+                </span>
+                <span class="lang-content" data-lang="zh" style="font-family: 'SimSun', '宋体', 'NSimSun', '新宋体', serif !important; font-weight: bold !important; line-height: 1 !important; vertical-align: baseline !important;">
+                    <span class="triangle-icon-zh" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+                    影像静帧
+                </span>
+            </h2>
 
             <div class="second-still-frame-image-container">
                 <div class="frame"></div>
@@ -4271,7 +4487,7 @@
             E begins to realize that the real question is no longer "What is real?" but—what kind of reality is worth repeating...
         </p>
 
-        <h2 class="fourth-still-frame-title">STILL FRAMES</h2>
+                    <h2 class="fourth-still-frame-title">影像静帧</h2>
         
         <div class="fourth-still-frame-image-container">
             <div class="frame"></div>
@@ -4370,7 +4586,7 @@
                 Wandering through this drowned world—where water and code intertwine—E must navigate a rasterized reality built from flickering memories and shifting coordinates. His search for the meaning of the Apostle gradually becomes a deeper pursuit of the unknown origin of his own mind.
             </p>
 
-            <h2 class="fifth-still-frame-title">STILL FRAMES</h2>
+            <h2 class="fifth-still-frame-title">影像静帧</h2>
             
             <div class="fifth-still-frame-carousel">
                 <div class="fifth-carousel-container">
@@ -4493,7 +4709,7 @@
                 Gradually, E realized he had not entered a dream, but a dimensional fissure—a virtual abyss accessible only when consciousness becomes completely unanchored. He couldn't tell if this was the end of his awareness or a symptom of some global perceptual collapse—but he knew one thing for certain: he was no longer whole.
             </p>
             
-            <h2 class="sixth-still-frame-title">STILL FRAMES</h2>
+            <h2 class="sixth-still-frame-title">影像静帧</h2>
         </div>
         
         <!-- Left Foot Still Frames -->
@@ -4892,6 +5108,69 @@
         }
 
 
+
+        // ===== 语言切换功能 =====
+        let currentLanguage = 'en'; // 默认英文
+        
+        function switchLanguage() {
+            const languageToggle = document.getElementById('languageToggle');
+            const langContents = document.querySelectorAll('.lang-content');
+            
+            // 切换语言
+            currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
+            
+            // 更新按钮文本
+            languageToggle.textContent = currentLanguage === 'en' ? '中文' : 'English';
+            
+            // 切换所有语言内容
+            langContents.forEach(content => {
+                if (content.dataset.lang === currentLanguage) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            // 保存语言偏好到本地存储
+            localStorage.setItem('rasterizeLanguage', currentLanguage);
+            
+            // 添加切换动画效果
+            languageToggle.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                languageToggle.style.transform = 'scale(1)';
+            }, 200);
+        }
+        
+        // 初始化语言设置
+        function initLanguage() {
+            const savedLanguage = localStorage.getItem('rasterizeLanguage');
+            if (savedLanguage) {
+                currentLanguage = savedLanguage;
+                const languageToggle = document.getElementById('languageToggle');
+                const langContents = document.querySelectorAll('.lang-content');
+                
+                // 设置按钮文本
+                languageToggle.textContent = currentLanguage === 'en' ? '中文' : 'English';
+                
+                // 设置内容显示
+                langContents.forEach(content => {
+                    if (content.dataset.lang === currentLanguage) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        // 绑定语言切换事件
+        document.addEventListener('DOMContentLoaded', () => {
+            const languageToggle = document.getElementById('languageToggle');
+            languageToggle.addEventListener('click', switchLanguage);
+            
+            // 初始化语言设置
+            initLanguage();
+        });
 
         window.addEventListener('load', function() {
             createRasterizeEffect();
