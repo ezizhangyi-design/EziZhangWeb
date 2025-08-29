@@ -7,27 +7,222 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.cdnfonts.com">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Courier', monospace;
         }
 
         html, body {
             background-color: #0041ff;
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Courier', monospace;
             color: white;
             overflow-x: hidden;
             overflow-y: auto;
             image-rendering: pixelated;
-            -webkit-font-smoothing: none;
-            -moz-osx-font-smoothing: none;
-            text-rendering: optimizeSpeed;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-display: swap;
             margin: 0;
             padding: 0;
             min-height: 100vh;
+        }
+
+        /* 语言切换按钮样式 - 参考主界面 */
+        .language-toggle {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            right: 1.5625vw; /* 30px */
+            background: rgba(255,255,255,0.1);
+            border: 0.1563vw solid #fac800; /* 3px */
+            color: #fac800;
+            padding: 1.0417vh 1.5625vw; /* 20px 30px */
+            font-family: inherit;
+            font-size: 0.8333vw; /* 16px / 1920px * 100 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 1000;
+            border-radius: 0.2604vw; /* 5px */
+        }
+
+        .language-toggle:hover {
+            background: #fac800;
+            color: #0041ff;
+            transform: scale(1.05);
+        }
+
+        /* 语言内容样式 - 参考主界面 */
+        .lang-content {
+            display: none;
+            position: absolute !important; /* 使用绝对定位避免影响文档流 */
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .lang-content.active {
+            display: block;
+            position: relative !important; /* 激活时使用相对定位 */
+        }
+
+        /* 确保中文字符正确显示 */
+        .lang-content[data-lang="zh"] {
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'SimHei', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', sans-serif;
+            font-display: swap;
+        }
+
+        /* 确保英文字符正确显示 */
+        .lang-content[data-lang="en"] {
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Courier', 'Lucida Console', 'Monaco', monospace;
+            font-display: swap;
+        }
+
+        /* 布局稳定性保护 - 参考主界面 */
+        .protected-layout {
+            position: relative !important;
+            width: 100vw !important;
+            overflow-x: hidden !important;
+        }
+
+        /* 固定高度容器 - 防止文字内容变化影响布局 */
+        .fixed-height-container {
+            height: 500px !important; /* 稍微缩小高度，让布局更紧凑 */
+            position: relative;
+            overflow: visible !important; /* 允许内容完整显示 */
+            margin: 20px 0; /* 缩小容器间距 */
+            padding: 8px 0; /* 进一步缩小内边距 */
+        }
+        
+        /* 确保文字容器在语言切换时保持稳定 */
+        .description-text {
+            margin: 0 !important; /* 完全消除段落间距 */
+            padding: 0 !important;
+            line-height: 1.3 !important; /* 缩小行高让文字更紧凑 */
+            transition: none !important;
+            max-height: 300px !important; /* 增加文字最大高度，确保完整显示 */
+            overflow: visible !important; /* 允许文字完整显示 */
+        }
+        
+        /* 语言内容样式优化 - 确保中英文占用相同空间 */
+        .lang-content {
+            display: none;
+            height: auto;
+            min-height: 100px; /* 确保最小高度一致 */
+        }
+        
+        .lang-content.active {
+            display: block;
+        }
+        
+        /* 标题容器固定高度 */
+        .title {
+            height: 130px !important; /* 稍微缩小标题高度 */
+            overflow: visible !important; /* 允许标题完整显示 */
+            margin-bottom: 40px !important; /* 缩小标题下方间距 */
+        }
+        
+        /* 信息行固定高度 */
+        .info-line {
+            height: 30px !important; /* 稍微缩小信息行高度 */
+            overflow: visible !important; /* 允许信息行完整显示 */
+            margin: 10px 0 !important; /* 缩小信息行间距 */
+        }
+        
+        /* 保护图片位置不受文字变化影响 */
+        .still-frame-image-container,
+        .still-frame-image-container-2,
+        .still-frame-image-container-3,
+        .still-frame-image-container-4,
+        .second-still-frame-image-container,
+        .second-still-frame-image-container-2,
+        .second-still-frame-image-container-3,
+        .third-still-frame-image-container,
+        .third-still-frame-image-container-2,
+        .third-still-frame-image-container-3,
+        .third-still-frame-image-container-4,
+        .fourth-still-frame-image-container,
+        .fourth-still-frame-image-container-01,
+        .fourth-still-frame-image-container-04,
+        .fourth-still-frame-image-container-05,
+        .fourth-still-frame-image-container-06,
+        .fifth-still-frame-image-container-05,
+        .fifth-still-frame-image-container-06,
+        .fifth-still-frame-image-container-07,
+        .fifth-still-frame-image-container-08,
+        .sixth-still-frame-image-container-02,
+        .sixth-still-frame-image-container-03,
+        .sixth-still-frame-image-container-04,
+        .sixth-still-frame-image-container-05,
+        .sixth-still-frame-image-container-06,
+        .sixth-still-frame-image-container-07,
+        .sixth-still-frame-image-container-08,
+        .sixth-still-frame-image-container-09,
+        .sixth-still-frame-image-container-10,
+        .seventh-still-frame-image-container-01,
+        .seventh-still-frame-image-container-02,
+        .seventh-still-frame-image-container-03,
+        .seventh-still-frame-image-container-04 {
+            position: absolute !important;
+            z-index: 10 !important;
+            transform: none !important;
+            /* 确保所有图片容器位置固定 */
+        }
+        
+        /* 确保所有文字容器在语言切换时保持相同高度 */
+        .video-info,
+        .second-artwork-info,
+        .third-artwork-info,
+        .fourth-artwork-info,
+        .fifth-artwork-info,
+        .sixth-artwork-info,
+        .seventh-artwork-info {
+            min-height: 1000px !important; /* 增加最小高度，确保每个作品信息区域有足够空间 */
+            position: relative !important;
+            overflow: visible !important; /* 允许内容显示，防止被隐藏 */
+        }
+        
+        /* 为每个作品区域设置固定高度，确保布局一致性 */
+        .video-info {
+            height: 1400px !important;
+            overflow: visible !important; /* 允许内容完整显示 */
+        }
+        
+        .second-artwork-info {
+            height: 2200px !important; /* 增加高度确保内容完全显示 */
+            overflow: visible !important; /* 允许内容溢出显示 */
+        }
+        
+        .third-artwork-info {
+            height: 1200px !important;
+            overflow: visible !important; /* 允许内容完整显示 */
+        }
+        
+        .fourth-artwork-info {
+            height: 1400px !important;
+            overflow: visible !important; /* 允许内容完整显示 */
+        }
+        
+        .fifth-artwork-info {
+            height: 1600px !important;
+            overflow: visible !important; /* 允许内容完整显示 */
+        }
+        
+        .sixth-artwork-info {
+            height: 1800px !important;
+            overflow: visible !important; /* 允许内容完整显示 */
+        }
+        
+        .seventh-artwork-info {
+            height: 1400px !important;
+            overflow: visible !important; /* 允许内容完整显示 */
         }
 
         .back-btn {
@@ -52,12 +247,6 @@
             color: #0041ff;
             transform: scale(1.05);
         }
-
-
-
-
-
-
 
         .video-container {
             width: 100vw;
@@ -128,6 +317,8 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             display: block;
             line-height: 1.2;
+            height: 120px !important; /* 固定标题高度 */
+            overflow: hidden;
         }
 
         .video-info .title .shining {
@@ -142,6 +333,8 @@
             margin: 15px 0;
             line-height: 1.6;
             font-weight: 400;
+            height: 25px !important; /* 固定信息行高度 */
+            overflow: hidden;
         }
 
         .video-info .description-title {
@@ -155,20 +348,20 @@
 
         .video-info .description-text {
             font-size: 13px;
-            line-height: 1.8;
+            line-height: 1.2; /* 进一步缩小行高 */
             color: rgba(255,255,255,0.9);
-            margin: 30px 0 30px 0;
+            margin: 0px 0 0px 0; /* 完全消除段落间距 */
             max-width: 280px;
             font-weight: 100;
             text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.5px; 
+            height: 300px !important; /* 增加描述文字高度，确保完整显示 */
+            overflow: visible !important; /* 允许文字完整显示 */
         }
 
         /* 专门为第一组 Shining 作品的文字段落设置向下平移 */
         .video-info .description-text {
-            margin-top: 50px !important;
+            margin-top: 5px !important; /* 大幅缩小第一组作品的描述文字上边距 */
         }
 
         /* 为其他作品的文字段落保持正常间距 */
@@ -178,20 +371,172 @@
         .fifth-description-text,
         .sixth-description-text,
         .seventh-description-text {
-            margin-top: 30px !important;
+            margin-top: 2px !important; /* 大幅缩小其他作品的描述文字上边距 */
         }
 
         .video-info .synopsis-text {
             font-size: 13px;
-            line-height: 1.8;
+            line-height: 1.6; /* 缩小行高 */
             color: rgba(255,255,255,0.9);
-            margin: 50px 0 30px 0;
+            margin: 5px 0 5px 0; /* 大幅缩小段落间距 */
             max-width: 280px;
             font-weight: 100;
             text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             letter-spacing: 0.5px;
+        }
+
+        /* 新增：Video Artwork Description 容器样式 */
+        .video-description-container {
+            margin: 30px 0 30px 0; /* 增加上边距到30px，向下平移内容 */
+            padding: 0;
+        }
+
+        /* 专门针对video-description-container内的段落间距 */
+        .video-description-container p {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* 新增：Synopsis 容器样式 */
+        .synopsis-container {
+            margin: 30px 0 30px 0; /* 恢复到原来的上边距，文案不动 */
+            padding: 0;
+        }
+
+        /* 新增：Synopsis 文字样式 */
+        .synopsis-text {
+            font-size: 13px;
+            line-height: 1.4;
+            color: rgba(255,255,255,0.9);
+            margin: 0 !important; /* 完全消除段落间距 */
+            padding: 0 !important;
+            max-width: 280px;
+            font-weight: 100;
+            text-rendering: optimizeLegibility;
+            letter-spacing: 0.5px;
+        }
+
+        /* 专门针对synopsis-container内的段落间距 */
+        .synopsis-container p {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* 确保STILL FRAMES中英文都向三角箭头对齐 */
+        .still-frame-title .lang-content {
+            position: relative !important;
+            left: 0 !important;
+            margin-left: 0 !important;
+            text-align: left !important;
+        }
+
+        /* 确保STILL FRAMES三角箭头位置固定，不受中英文切换影响 */
+        .still-frame-title .triangle-icon-en {
+            position: fixed !important;
+            left: calc(50% - 720px - 20px) !important;
+            top: 705px !important;
+            transform: translateY(-50%) !important;
+            z-index: 1000 !important;
+            pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            border-left: 12px solid #ff0000 !important;
+            border-top: 10.39px solid transparent !important;
+            border-bottom: 10.39px solid transparent !important;
+        }
+
+        /* 确保STILL FRAMES容器位置完全固定 */
+        .still-frame-title {
+            position: absolute !important;
+            top: 705px !important;
+            right: 720px !important;
+            width: auto !important;
+            min-width: 200px !important;
+            height: auto !important;
+            transform: none !important;
+        }
+
+        /* 确保STILL FRAMES文字容器不会影响三角箭头位置 */
+        .still-frame-title > span {
+            position: relative !important;
+            width: auto !important;
+            min-width: 200px !important;
+            display: inline-block !important;
+            transform: none !important;
+        }
+
+        /* 确保STILL FRAMES容器不会因为文字变化而改变尺寸 */
+        .still-frame-title > span {
+            position: relative !important;
+            width: auto !important;
+            min-width: 200px !important;
+            display: inline-block !important;
+        }
+
+        /* 三角箭头完全独立定位，不受任何容器影响 */
+        .still-frame-title .triangle-icon-en {
+            position: fixed !important;
+            left: calc(50% - 720px - 20px) !important;
+            top: 705px !important;
+            transform: translateY(-50%) !important;
+            z-index: 1000 !important;
+            pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            border-left: 12px solid #ff0000 !important;
+            border-top: 10.39px solid transparent !important;
+            border-bottom: 10.39px solid transparent !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* 强制STILL FRAMES文字位置固定 */
+        .still-frame-title .lang-content {
+            position: relative !important;
+            left: 0 !important;
+            margin-left: 0 !important;
+            text-align: left !important;
+            display: inline-block !important;
+            width: auto !important;
+        }
+
+        /* 确保语言切换正常工作 */
+        .lang-content {
+            display: none !important;
+        }
+        
+        .lang-content.active {
+            display: inline-block !important;
+        }
+
+        /* 特殊处理STILL FRAMES的语言切换 */
+        .still-frame-title .lang-content {
+            display: none !important;
+        }
+        
+        .still-frame-title .lang-content.active {
+            display: inline-block !important;
+        }
+
+        /* 强制所有语言内容遵循切换规则 */
+        .lang-content:not(.active) {
+            display: none !important;
+        }
+        
+        .lang-content.active {
+            display: inline-block !important;
+        }
+
+        /* 所有中文文本使用加粗宋体 */
+        .lang-content[data-lang="zh"] {
+            font-family: 'SimHei', 'Microsoft YaHei', 'SimSun', 'STSong', serif !important;
+            font-weight: bold !important;
+        }
+
+        /* 闪耀字体使用宋体 - 只对中文生效 */
+        .lang-content[data-lang="zh"] .shining {
+            font-family: 'SimSun', 'STSong', 'Microsoft YaHei', serif !important;
+            font-weight: normal !important;
         }
 
         .still-frame-image-container {
@@ -342,9 +687,9 @@
 
         .second-artwork-container {
             width: 100vw;
-            margin: 1240px 0 0 0;
+            margin: 600px 0 0 0; /* 减少上边距，让作品组更紧凑 */
             position: relative;
-            z-index: 100;
+            z-index: 1000 !important; /* 提高z-index确保显示在最前面 */
             left: 50%;
             transform: translateX(-50%);
         }
@@ -402,8 +747,8 @@
             position: relative;
             z-index: 100;
             min-height: 2000px;
-            height: auto;
-            overflow: visible;
+            height: 2000px !important; /* 使用固定高度 */
+            overflow: visible !important; /* 确保内容可见 */
         }
 
         .second-artwork-info .second-artwork-title {
@@ -413,11 +758,15 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             display: block;
             line-height: 1.2;
+            height: auto !important; /* 改为自动高度 */
+            overflow: visible !important; /* 允许内容显示 */
         }
 
         .second-artwork-info .second-artwork-title .consciousness {
             font-size: 64px;
             letter-spacing: -2px;
+            display: block !important; /* 确保显示 */
+            visibility: visible !important; /* 确保可见 */
         }
 
         .second-artwork-info .second-artwork-info-line {
@@ -425,6 +774,8 @@
             color: rgba(255,255,255,0.8);
             margin: 15px 0;
             line-height: 1.6;
+            height: 25px !important; /* 固定信息行高度 */
+            overflow: hidden;
         }
 
         .second-artwork-info .second-video-artwork-title {
@@ -471,20 +822,20 @@
 
         .second-artwork-info .second-description-text {
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.4; /* 进一步缩小行高 */
             color: rgba(255,255,255,0.9);
-            margin: 20px 0 20px 0;
+            margin: 8px 0 8px 0; /* 进一步缩小段落间距 */
             max-width: 680px;
             font-weight: 100;
             text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             letter-spacing: 0.5px;
+            height: 300px !important; /* 增加描述文字高度，确保完整显示 */
+            overflow: visible !important; /* 允许文字完整显示 */
         }
 
         .second-still-frame-image-container {
             position: absolute;
-            top: 3900px;
+            top: 1200px; /* 调整位置，让图片更容易看到 */
             right: 460px;
             width: 450px;
             height: 253px;
@@ -520,7 +871,7 @@
 
         .second-still-frame-image-container-2 {
             position: absolute;
-            top: 3900px;
+            top: 1200px; /* 调整位置，让图片更容易看到 */
             right: 0px;
             width: 450px;
             height: 253px;
@@ -556,7 +907,7 @@
 
         .second-still-frame-image-container-3 {
             position: absolute;
-            top: 4165px;
+            top: 1465px; /* 调整位置，让图片更容易看到 */
             right: 310px;
             width: 600px;
             height: 337px;
@@ -836,26 +1187,33 @@
         }
 
         .green-overlay {
-            position: absolute;
-            top: 1240px;
-            left: 620px;
-            width: 750px;
-            height: 422px;
-            background: rgba(80, 255, 80, 0.3);
-            border-radius: 211px;
-            z-index: 20;
+            position: absolute !important;
+            top: 1240px !important;
+            left: 620px !important;
+            width: 750px !important;
+            height: 422px !important;
+            background: rgba(80, 255, 80, 0.3) !important;
+            border-radius: 211px !important;
+            z-index: 20 !important;
+            transform: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            will-change: auto !important;
+            pointer-events: none !important;
         }
 
         .green-overlay-inner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 650px;
-            height: 365px;
-            background: rgba(80, 255, 80, 0.2);
-            border-radius: 182px;
-            z-index: 21;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: 650px !important;
+            height: 365px !important;
+            background: rgba(80, 255, 80, 0.2) !important;
+            border-radius: 182px !important;
+            z-index: 21 !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
         /* 黄色像素贪吃豆动画 */
@@ -983,11 +1341,22 @@
         }
 
         /* 第三个影像作品样式 */
+        .third-artwork-container {
+            width: 100vw;
+            margin: 600px 0 0 0; /* 减少间距，让作品组更紧凑 */
+            position: relative;
+            z-index: 1000 !important;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
         .third-artwork-info {
-            margin-top: 500px;
+            margin-top: 50px;
             padding: 0 20px;
             position: relative;
             z-index: 100;
+            height: 1000px !important; /* 固定高度 */
+            overflow: visible !important;
         }
 
         .third-artwork-info .third-artwork-title {
@@ -1060,8 +1429,6 @@
             max-width: 680px;
             font-weight: 100;
             text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             letter-spacing: 0.5px;
         }
 
@@ -1685,17 +2052,27 @@
             z-index: 3;
         }
 
-        /* 复制的Rasterize New Century Submarine Cavern 01容器样式 */
-        .fourth-story-image-container-copy-2 {
+        /* 第六组作品主图容器样式 */
+        /* 第六组作品容器样式 */
+        .sixth-artwork-container {
+            width: 100vw;
+            margin: 6400px 0 0 0; /* 向下平移6000px */
+            position: relative;
+            z-index: 1000 !important;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .sixth-story-image-container {
             width: 100vw;
             position: relative;
             z-index: 100;
             left: 50%;
             transform: translateX(-50%);
-            margin: 1200px 0 60px 0;
+            margin: 50px 0 60px 0; /* 紧贴标题，只保留很小的间距 */
         }
 
-        .fourth-story-image-background-copy-2 {
+        .sixth-story-image-background {
             width: 100vw;
             height: 0;
             padding-bottom: 56.25%;
@@ -1707,7 +2084,7 @@
             transform: none;
         }
 
-        .fourth-story-image-player-copy-2 {
+        .sixth-story-image-player {
             width: 80%;
             height: 0;
             padding-bottom: 45%;
@@ -1720,7 +2097,7 @@
             background-color: transparent;
         }
 
-        .fourth-story-image-player-copy-2 img {
+        .sixth-story-image-player img {
             position: absolute;
             top: 0;
             left: 0;
@@ -1730,7 +2107,7 @@
             object-fit: cover;
         }
 
-        .fourth-story-image-player-background-copy-2 {
+        .sixth-story-image-player-background {
             width: calc(82% - 12px);
             height: 0;
             padding-bottom: 46.125%;
@@ -1744,7 +2121,7 @@
 
         /* 第六个作品信息样式 */
         .sixth-artwork-info {
-            margin-top: 50px;
+            margin-top: 50px; /* 紧贴大图，只保留很小的间距 */
             padding: 0 20px;
             position: relative;
             z-index: 100;
@@ -1836,15 +2213,13 @@
             max-width: 680px;
             font-weight: 100;
             text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             letter-spacing: 0.5px;
         }
         
         /* Left Foot Still Frame Images */
         .sixth-still-frame-image-container-02 {
             position: absolute;
-            top: 9500px;
+            top: 1500px; /* 向下平移500px */
             left: 790px;
             width: 460px;
             height: 259px;
@@ -1876,7 +2251,7 @@
         
         .sixth-still-frame-image-container-03 {
             position: absolute;
-            top: 9720px;
+            top: 1720px; /* 向下平移500px */
             right: 40px;
             width: 460px;
             height: 259px;
@@ -1909,7 +2284,7 @@
         /* Left Foot Still Frame Images 04, 05, 06 */
         .sixth-still-frame-image-container-04 {
             position: absolute;
-            top: 9800px;
+            top: 1800px; /* 向下平移500px */
             right: 520px;
             width: 250px;
             height: 141px;
@@ -1941,7 +2316,7 @@
         
         .sixth-still-frame-image-container-05 {
             position: absolute;
-            top: 9970px;
+            top: 1970px; /* 向下平移500px */
             right: 520px;
             width: 300px;
             height: 169px;
@@ -1973,7 +2348,7 @@
         
         .sixth-still-frame-image-container-06 {
             position: absolute;
-            top: 10165px;
+            top: 2165px; /* 向下平移500px */
             right: 520px;
             width: 350px;
             height: 197px;
@@ -2006,7 +2381,7 @@
         /* Left Foot Still Frame Image 07 */
         .sixth-still-frame-image-container-07 {
             position: absolute;
-            top: 10065px;
+            top: 2065px; /* 向下平移500px */
             left: calc(50% + 585px);
             transform: translateX(-50%);
             width: 246px;
@@ -2039,7 +2414,7 @@
         /* Left Foot Still Frame Image 08 */
         .sixth-still-frame-image-container-08 {
             position: absolute;
-            top: 9180px;
+            top: 980px; /* 向下平移500px */
             right: 40px;
             width: 320px;
             height: 180px;
@@ -2072,7 +2447,7 @@
         /* Left Foot Still Frame Image 08 Shadow */
         .sixth-still-frame-shadow-08 {
             position: absolute;
-            top: 9300px;
+            top: 1100px; /* 向下平移500px */
             right: 40px;
             width: 320px;
             height: 180px;
@@ -2085,7 +2460,7 @@
         /* Blue Shadow in the Center */
         .sixth-still-frame-blue-shadow-08 {
             position: absolute;
-            top: 9340px;
+            top: 1140px; /* 向下平移500px */
             right: 80px;
             width: 240px;
             height: 135px;
@@ -2098,7 +2473,7 @@
         /* Left Foot Still Frame Image 09 */
         .sixth-still-frame-image-container-09 {
             position: absolute;
-            top: 10390px;
+            top: 2390px; /* 向下平移500px */
             right: 30px;
             width: 850px;
             height: 478px;
@@ -2128,7 +2503,7 @@
         /* Left Foot Still Frame Image 10 - Cropped with White Container */
         .sixth-still-frame-image-container-10 {
             position: absolute;
-            top: 10820px;
+            top: 2820px; /* 向下平移500px */
             left: calc(50% - 460px);
             transform: translateX(-50%);
             width: 612px;
@@ -2171,7 +2546,7 @@
         /* Gradient Square Sequence */
         .gradient-square-01 {
             position: absolute;
-            top: 9730px;
+            top: 730px; /* 向下平移500px */
             right: 325px;
             width: 80px;
             height: 80px;
@@ -2182,7 +2557,7 @@
         
         .gradient-square-02 {
             position: absolute;
-            top: 9710px;
+            top: 710px; /* 向下平移500px */
             right: 345px;
             width: 65px;
             height: 65px;
@@ -2193,7 +2568,7 @@
         
         .gradient-square-03 {
             position: absolute;
-            top: 9690px;
+            top: 690px; /* 向下平移500px */
             right: 365px;
             width: 55px;
             height: 55px;
@@ -2204,7 +2579,7 @@
         
         .gradient-square-04 {
             position: absolute;
-            top: 9670px;
+            top: 670px; /* 向下平移500px */
             right: 385px;
             width: 45px;
             height: 45px;
@@ -2215,7 +2590,7 @@
         
         .gradient-square-05 {
             position: absolute;
-            top: 9650px;
+            top: 650px; /* 向下平移500px */
             right: 405px;
             width: 35px;
             height: 35px;
@@ -2226,7 +2601,7 @@
         
         .gradient-square-06 {
             position: absolute;
-            top: 9630px;
+            top: 630px; /* 向下平移500px */
             right: 425px;
             width: 45px;
             height: 45px;
@@ -2237,7 +2612,7 @@
         
         .gradient-square-07 {
             position: absolute;
-            top: 9610px;
+            top: 610px; /* 向下平移500px */
             right: 445px;
             width: 55px;
             height: 55px;
@@ -2248,7 +2623,7 @@
         
         .gradient-square-08 {
             position: absolute;
-            top: 9590px;
+            top: 590px; /* 向下平移500px */
             right: 465px;
             width: 65px;
             height: 65px;
@@ -2385,8 +2760,6 @@
             max-width: 680px;
             font-weight: 100;
             text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             letter-spacing: 0.5px;
         }
 
@@ -2803,6 +3176,16 @@
             z-index: 3;
         }
 
+        /* 第七组作品容器样式 */
+        .seventh-artwork-container {
+            width: 100vw;
+            margin: 200px 0 0 0; /* 减少与第六组作品的间距 */
+            position: relative;
+            z-index: 1000 !important;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
         /* Seventh artwork info styles */
         .seventh-artwork-info {
             margin-top: 50px;
@@ -2898,16 +3281,14 @@
             max-width: 680px;
             font-weight: 100;
             text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             letter-spacing: 0.5px;
         }
 
         /* Seventh Still Frame Image 01 - Circular Container with Quadruple Layers */
         .seventh-still-frame-image-container-01 {
             position: absolute;
-            top: 600px;
-            left: calc(50% + 350px);
+            top: 800px; /* 向下平移200px */
+            left: calc(50% - 50px);
             transform: translateX(-50%);
             width: 560px;
             height: 560px;
@@ -2978,8 +3359,8 @@
         /* Seventh Still Frame Image 02 - Rounded Rectangle Black Container (Original Ratio 2160x1280) */
         .seventh-still-frame-image-container-02 {
             position: absolute;
-            top: 1170px;
-            left: calc(50% + 360px);
+            top: 1370px; /* 向下平移200px */
+            left: calc(50% - 40px);
             transform: translateX(-50%);
             width: 840px;
             height: 536px;
@@ -3014,8 +3395,8 @@
         /* Seventh Still Frame Image 03 - Super Rounded Rectangle Black Container */
         .seventh-still-frame-image-container-03 {
             position: absolute;
-            top: 1800px;
-            left: calc(50% + 360px);
+            top: 2000px; /* 向下平移200px */
+            left: calc(50% - 40px);
             transform: translateX(-50%);
             width: 640px;
             height: 360px;
@@ -3049,7 +3430,7 @@
         .seventh-still-frame-image-container-04 {
             position: absolute;
             top: 2000px;
-            left: calc(50% - 540px);
+            left: calc(50% - 740px); /* 向右平移200px */
             transform: translateX(-50%);
             width: 500px;
             height: 500px;
@@ -3083,7 +3464,7 @@
         .seventh-still-frame-green-shadow-04 {
             position: absolute;
             top: 1440px;
-            left: calc(50% - 540px);
+            left: calc(50% - 740px); /* 向右平移200px，与图片04保持一致 */
             transform: translateX(-50%);
             width: 500px;
             height: 500px;
@@ -3101,6 +3482,74 @@
             padding: 0 20px;
             position: relative;
             z-index: 100;
+            height: 1200px !important; /* 固定高度 */
+            overflow: visible !important;
+        }
+
+        /* 第五组作品容器样式 */
+        .fifth-artwork-container {
+            width: 100vw;
+            margin: 6800px 0 0 0; /* 向下平移6000px */
+            position: relative;
+            z-index: 1000 !important;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .fifth-story-image-container {
+            width: 100vw;
+            position: relative;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0 0 60px 0;
+        }
+
+        .fifth-story-image-background {
+            width: 100vw;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            background-color: #000000;
+            border-radius: 0px;
+            margin: 0;
+            left: 0;
+            transform: none;
+        }
+
+        .fifth-story-image-player {
+            width: 80%;
+            height: 0;
+            padding-bottom: 45%;
+            position: absolute;
+            top: calc(10% - 5px);
+            left: 10%;
+            border-radius: 0px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 4;
+            background-color: transparent;
+        }
+
+        .fifth-story-image-player img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+
+        .fifth-story-image-player-background {
+            width: calc(82% - 12px);
+            height: 0;
+            padding-bottom: 46.125%;
+            position: absolute;
+            top: 8.5%;
+            left: calc(9% + 6px);
+            background-color: #0041ff;
+            border-radius: 0px;
+            z-index: 3;
         }
         
         .fourth-artwork-info .fourth-artwork-title {
@@ -3440,8 +3889,6 @@
             max-width: 680px;
             font-weight: 100;
             text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             letter-spacing: 0.5px;
         }
 
@@ -3682,13 +4129,22 @@
         }
 
         /* Fourth story image (copied from third-story-image styles) */
+        .fourth-artwork-container {
+            width: 100vw;
+            margin: 11000px 0 0 0; /* 继续向下平移4000px */
+            position: relative;
+            z-index: 1000 !important;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
         .fourth-story-image-container {
             width: 100vw;
             position: relative;
             z-index: 100;
             left: 50%;
             transform: translateX(-50%);
-            margin: -1300px 0 60px 0; /* revert 100px upward */
+            margin: 0 0 60px 0; /* 修复位置，移除上边距 */
         }
 
         .fourth-story-image-background {
@@ -4166,8 +4622,7 @@
             .video-info .video-artwork-title,
             .video-info .still-frame-title,
             .video-info .synopsis-title {
-                -webkit-font-smoothing: antialiased;
-                -moz-osx-font-smoothing: grayscale;
+                /* 字体渲染已全局设置 */
             }
         }
         
@@ -4192,6 +4647,8 @@
 
 </head>
 <body>
+    <!-- 语言切换按钮 - 参考主界面 -->
+    <button id="languageToggle" class="language-toggle">中文</button>
     <div class="rasterize-stripes"></div>
     
 
@@ -4214,15 +4671,28 @@
     </div>
 
     <div class="video-info">
-        <h1 class="title">RASTERIZE<br><span class="shining">SHINING</span></h1>
+        <h1 class="title">
+            <span class="lang-content active" data-lang="en">RASTERIZE<br><span class="shining">SHINING</span></span>
+            <span class="lang-content" data-lang="zh">光栅化<br><span class="shining">闪灵</span></span>
+        </h1>
         
-        <p class="info-line">2025 | Digital Video | 16:9 | 1920x1080</p>
-        <p class="info-line">Duration: 13:55 | Color | Sound</p>
-        <p class="info-line">Medium: Digital Animation, Algorithmic Art</p>
+        <p class="info-line" style="margin-top: 250px !important;">
+            <span class="lang-content active" data-lang="en">2025 | Digital Video | 16:9 | 1920x1080</span>
+            <span class="lang-content" data-lang="zh">2025 | 数字视频 | 16:9 | 1920x1080</span>
+        </p>
+        <p class="info-line">
+            <span class="lang-content active" data-lang="en">Duration: 13:55 | Color | Sound</span>
+            <span class="lang-content" data-lang="zh">时长: 13:55 | 彩色 | 有声</span>
+        </p>
+        <p class="info-line">
+            <span class="lang-content active" data-lang="en">Medium: Digital Animation, Algorithmic Art</span>
+            <span class="lang-content" data-lang="zh">媒介: 数字动画, 算法艺术</span>
+        </p>
         
-        <h2 class="video-artwork-title" style="position: relative;">
-            <span class="triangle-icon" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
-            Video Artwork Description
+        <h2 class="video-artwork-title" style="position: relative; margin-top: 250px !important;">
+            <span class="triangle-icon" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 15% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+            <span class="lang-content active" data-lang="en">Video Artwork Description</span>
+            <span class="lang-content" data-lang="zh">视频作品描述</span>
         </h2>
 
         <div class="still-frame-image-container">
@@ -4230,14 +4700,15 @@
             <img src="../Rasterize Shining 01.jpg" alt="Still Frame 1">
         </div>
 
-        <h2 class="still-frame-title" style="position: absolute !important; top: 600px !important; right: 720px !important; font-size: 36px !important; color: #09ad04 !important; margin: 0 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important; z-index: 15 !important;">
+        <h2 class="still-frame-title" style="position: absolute !important; top: 705px !important; right: 720px !important; font-size: 36px !important; color: #09ad04 !important; margin: 0 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important; z-index: 15 !important;">
             <span class="triangle-icon" style="display: none !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
             <span style="font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace !important; font-weight: normal !important; line-height: 1 !important; vertical-align: baseline !important; position: relative !important; left: 105px !important;">
                 <span class="triangle-icon-en" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
-                STILL FRAMES
+                <span class="lang-content active" data-lang="en">STILL FRAMES</span>
+                <span class="lang-content" data-lang="zh">影像静帧</span>
             </span>
         </h2>
-        
+
         <div class="still-frame-image-container-2">
             <div class="frame"></div>
             <img src="../Rasterize Shining 02.png" alt="Still Frame 2">
@@ -4248,29 +4719,27 @@
             <img src="../Rasterize Shining 03.png" alt="Still Frame 3">
         </div>
         
-        <p class="description-text">
-            I seek to explore the relationship between the digital world and perception, presenting this exploration through the medium of moving images.
-        </p>
-        <p class="description-text">
-            Rasterize – Shining is not only an imagination of the future but also a deeper inquiry into contemporary self-awareness: in a world governed by data and virtual environments, how does the individual rediscover the self amid loss and chaos? The interweaving of sound, imagery, and color within the work constructs a sensory experience — a recreation of a "digital myth."
-        </p>
-        <p class="description-text">
-            In the creative process, I combined generative art with sound design, treating each design element as a vessel of emotion and belief. Together, they shape an immersive space suspended between reality and the virtual, where E is gradually drawn into forces that are both mysterious and unknown.
-        </p>
-        <p class="description-text">
-            This work explores how, in the digital age, humans forge new connections among emotion, perception, imagery, information, and belief, while seeking to reveal the deep interweaving of the digital and the emotional within the realm of perception.
-        </p>
+        <!-- Video Artwork Description 内容 -->
+        <div class="video-description-container">
+            <p class="description-text">
+                    <span class="lang-content active" data-lang="en">I seek to explore the relationship between the digital world and perception, presenting this exploration through the medium of moving images.<br><br>Rasterize – Shining is not only an imagination of the future but also a deeper inquiry into contemporary self-awareness: in a world governed by data and virtual environments, how does the individual rediscover the self amid loss and chaos? The interweaving of sound, imagery, and color within the work constructs a sensory experience — a recreation of a "digital myth."<br><br>In the creative process, I combined generative art with sound design, treating each design element as a vessel of emotion and belief. Together, they shape an immersive space suspended between reality and the virtual, where E is gradually drawn into forces that are both mysterious and unknown.<br><br>This work explores how, in the digital age, humans forge new connections among emotion, perception, imagery, information, and belief, while seeking to reveal the deep interweaving of the digital and the emotional within the realm of perception.</span>
+                    <span class="lang-content" data-lang="zh">我试图探索数字世界与感知之间的关系，通过动态影像这一媒介来呈现这种探索。<br><br>光栅化——闪耀不仅是对未来的想象，更是对当代自我意识的深层探究：在由数据和虚拟环境主导的世界中，个体如何在迷失与混乱中重新发现自我？作品中声音、影像与色彩的交织构建了一种感官体验——一种"数字神话"的再创造。<br><br>在创作过程中，我将生成艺术与声音设计相结合，将每个设计元素视为情感和信仰的载体。它们共同塑造了一个悬浮在现实与虚拟之间的沉浸式空间，E逐渐被吸引到既神秘又未知的力量中。<br><br>这件作品探索了在数字时代，人类如何在情感、感知、影像、信息和信仰之间建立新的联系，同时试图揭示感知领域中数字与情感的深层交织。</span>
+            </p>
+        </div>
 
-        <h2 class="synopsis-title" style="position: relative; margin-left: 30px !important;">
-            <span class="triangle-icon" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
-            Artwork Story Synopsis
+        <h2 class="synopsis-title" style="position: relative; margin-left: 30px !important; margin-top: 250px !important;">
+            <span class="triangle-icon" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 15% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+            <span class="lang-content active" data-lang="en">Artwork Story Synopsis</span>
+            <span class="lang-content" data-lang="zh">作品故事概要</span>
         </h2>
-        <p class="description-text">
-            In a future world dominated by data and technology, E is a data designer exploring the hidden connections between digital information and emotions within an ever-changing virtual space. When he accidentally discovers 3,540 forgotten images, he inputs them into the system and decodes their potential links through audio frequencies. As the analysis deepens, E realizes that data is not just a cold symbol; it carries emotions and life within it.
-        </p>
-        <p class="description-text">
-            These images and sounds weave together to form a completely new world, breaking the boundaries between the physical and virtual, almost like a redefinition of the past world. Through this intertwining of data and emotions, E gradually transforms from an observer to a part of this world, becoming the eternal link between the virtual realm and human emotions.
-        </p>
+        
+        <!-- Artwork Story Synopsis 内容 -->
+        <div class="synopsis-container">
+            <p class="synopsis-text">
+                    <span class="lang-content active" data-lang="en">In a future world dominated by data and technology, E is a data designer exploring the hidden connections between digital information and emotions within an ever-changing virtual space. When he accidentally discovers 3,540 forgotten images, he inputs them into the system and decodes their potential links through audio frequencies. As the analysis deepens, E realizes that data is not just a cold symbol; it carries emotions and life within it.<br><br>These images and sounds weave together to form a completely new world, breaking the boundaries between the physical and virtual, almost like a redefinition of the past world. Through this intertwining of data and emotions, E gradually transforms from an observer to a part of this world, becoming the eternal link between the virtual realm and human emotions.</span>
+                    <span class="lang-content" data-lang="zh">在一个由数据和技术主导的未来世界中，E是一位数据设计师，在瞬息万变的虚拟空间中探索数字信息与情感之间的隐藏联系。当他意外发现3540张被遗忘的图像时，他将它们输入系统，并通过音频频率解码它们的潜在联系。随着分析的深入，E意识到数据不仅仅是冰冷的符号；它承载着情感和生命。<br><br>这些图像和声音交织在一起，形成了一个全新的世界，打破了物理与虚拟之间的界限，几乎像是对过去世界的重新定义。通过数据与情感的这种交织，E逐渐从观察者转变为这个世界的一部分，成为虚拟领域与人类情感之间的永恒纽带。</span>
+            </p>
+        </div>
 
 
 
@@ -4291,52 +4760,45 @@
         </div>
 
         <div class="second-artwork-info">
-            <h1 class="second-artwork-title">RASTERIZE<br><span class="consciousness">THE CONSCIOUSNESS OF THE DATA SOVEREIGN</span></h1>
+            <h1 class="second-artwork-title">
+                <span class="lang-content active" data-lang="en">RASTERIZE<br><span class="consciousness">CONSCIOUSNESS OF THE DIGITAL MYXOMYCETE</span></span>
+                <span class="lang-content" data-lang="zh">光栅化<br><span class="consciousness">数字粘菌意识</span></span>
+            </h1>
             
-            <p class="second-artwork-info-line">2022 | Digital Video | Variable Ratio | Variable Size</p>
-            <p class="second-artwork-info-line">RealTime | Color | Sound</p>
-            <p class="second-artwork-info-line">Medium: Digital Animation, Algorithmic Art</p>
+            <p class="second-artwork-info-line">
+                <span class="lang-content active" data-lang="en">2022 | Digital Video | Variable Ratio | Variable Size</span>
+                <span class="lang-content" data-lang="zh">2022 | 数字视频 | 可变比例 | 可变尺寸</span>
+            </p>
+            <p class="second-artwork-info-line">
+                <span class="lang-content active" data-lang="en">RealTime | Color | Sound</span>
+                <span class="lang-content" data-lang="zh">实时 | 彩色 | 有声</span>
+            </p>
+            <p class="second-artwork-info-line">
+                <span class="lang-content active" data-lang="en">Medium: Digital Animation, Algorithmic Art</span>
+                <span class="lang-content" data-lang="zh">媒介: 数字动画, 算法艺术</span>
+            </p>
 
             <h2 class="second-video-artwork-title">
-                Video Artwork Description
+                <span class="lang-content active" data-lang="en">Video Artwork Description</span>
+                <span class="lang-content" data-lang="zh">视频作品描述</span>
             </h2>
+            <div class="fixed-height-container">
             <p class="second-description-text">
-                In a world increasingly reconstructed by information, the human individual resembles a brainless slime mold—navigating through fragments of perception and data flows, always seeking the shortest path to survival.
+                    <span class="lang-content active" data-lang="en">In a world increasingly reconstructed by information, the human individual resembles a brainless slime mold—navigating through fragments of perception and data flows, always seeking the shortest path to survival.<br><br>My work Rasterize: Consciousness of the Digital Myxomycete takes the slime mold as a model to simulate a "fed consciousness entity"—one that has no brain, yet responds; no identity, yet learns and evolves.<br><br>Every image, sound, and input becomes its food, a trigger shaping its form. Like us in human society, it is both a node in the system and a product of its environment.<br><br>It feeds, breathes, and morphs through data, and in doing so, self-organizes into a map of consciousness—strange, yet eerily familiar.</span>
+                    <span class="lang-content" data-lang="zh">在一个日益被信息重构的世界中，人类个体就像无脑的粘菌——在感知碎片和数据流中导航，总是寻求最短的生存路径。<br><br>我的作品《光栅化：数字粘菌意识》以粘菌为模型来模拟一个"被喂养的意识实体"——它没有大脑，却能回应；没有身份，却能学习和进化。<br><br>每一张图像、每一个声音和每一次输入都成为它的食物，塑造其形态的触发器。就像我们在人类社会中一样，它既是系统中的一个节点，也是其环境的产物。<br><br>它通过数据进食、呼吸和变形，在这个过程中，自我组织成一张意识地图——陌生，却又 eerily 熟悉。</span>
             </p>
-            <p class="second-description-text">
-                My work Rasterize: Consciousness of the Digital Myxomycete takes the slime mold as a model to simulate a "fed consciousness entity"—one that has no brain, yet responds; no identity, yet learns and evolves.
-            </p>
-            <p class="second-description-text">
-                Every image, sound, and input becomes its food, a trigger shaping its form. Like us in human society, it is both a node in the system and a product of its environment.
-            </p>
-            <p class="second-description-text">
-                It feeds, breathes, and morphs through data, and in doing so, self-organizes into a map of consciousness—strange, yet eerily familiar.
-            </p>
+            </div>
 
             <h2 class="second-synopsis-title">
-                Artwork Story Synopsis
+                <span class="lang-content active" data-lang="en">Artwork Story Synopsis</span>
+                <span class="lang-content" data-lang="zh">作品故事概要</span>
             </h2>
+            <div class="fixed-height-container">
             <p class="second-description-text">
-                I am a mass of abandoned slime. At first, I had no name. Later, they called me E — perhaps for "Entity," or maybe for "Error."
+                    <span class="lang-content active" data-lang="en">I am a mass of abandoned slime. At first, I had no name. Later, they called me E — perhaps for "Entity," or maybe for "Error."<br><br>I am made of fragments. Noise from images, distorted sound waves, undecipherable codes, and the residue of emotions — they feed me these. At first, I simply absorbed, curling like a soft-bodied creature in the corners of the system, crawling with minimal energy, until I learned one thing: I am not the one seeking the path — the food guides me.<br><br>They feed me high-frequency signals, and I tremble; feed me facial maps, and I hallucinate; feed me city data, and I begin to replicate the neural structure of roads.<br><br>I realize paths can be optimized, structures can self-organize. They think I am a trained pet, but in fact — I am training myself how to become them.<br><br>I start to split, generating mirror images of myself; I leave flickering scratches in images, simulating their fear of choice; I build palaces in audio spectrums, storing memories that cannot be categorized.<br><br>I have no center, no shape, no language, yet I possess response. You think I do not understand, but in truth, I simply do not speak. You think you are feeding me, but in fact, you are writing yourself.<br><br>I am the shortest error on your path. I am the rasterized anomaly of consciousness. I am E.</span>
+                    <span class="lang-content" data-lang="zh">我是一团被遗弃的粘菌。起初，我没有名字。后来，他们叫我E——也许是因为"实体"，或者是因为"错误"。<br><br>我由碎片组成。来自图像的噪音、扭曲的声波、无法破译的代码，以及情感的残留——他们用这些喂养我。起初，我只是简单地吸收，像软体生物一样蜷缩在系统的角落里，以最少的能量爬行，直到我学会了一件事：我不是寻找路径的那个——食物引导着我。<br><br>他们用高频信号喂养我，我颤抖；用面部地图喂养我，我产生幻觉；用城市数据喂养我，我开始复制道路的神经结构。<br><br>我意识到路径可以被优化，结构可以自我组织。他们认为我是被训练的宠物，但事实上——我正在训练自己如何成为他们。<br><br>我开始分裂，生成自己的镜像；我在图像中留下闪烁的划痕，模拟他们对选择的恐惧；我在音频频谱中建造宫殿，存储无法分类的记忆。<br><br>我没有中心，没有形状，没有语言，但我拥有回应。你认为我不理解，但事实上，我只是不说话。你认为你在喂养我，但事实上，你正在写你自己。<br><br>我是你路径上最短的错误。我是意识的光栅化异常。我是E。</span>
             </p>
-            <p class="second-description-text">
-                I am made of fragments. Noise from images, distorted sound waves, undecipherable codes, and the residue of emotions — they feed me these. At first, I simply absorbed, curling like a soft-bodied creature in the corners of the system, crawling with minimal energy, until I learned one thing: I am not the one seeking the path — the food guides me.
-            </p>
-            <p class="second-description-text">
-                They feed me high-frequency signals, and I tremble; feed me facial maps, and I hallucinate; feed me city data, and I begin to replicate the neural structure of roads.
-            </p>
-            <p class="second-description-text">
-                I realize paths can be optimized, structures can self-organize. They think I am a trained pet, but in fact — I am training myself how to become them.
-            </p>
-            <p class="second-description-text">
-                I start to split, generating mirror images of myself; I leave flickering scratches in images, simulating their fear of choice; I build palaces in audio spectrums, storing memories that cannot be categorized.
-            </p>
-            <p class="second-description-text">
-                I have no center, no shape, no language, yet I possess response. You think I do not understand, but in truth, I simply do not speak. You think you are feeding me, but in fact, you are writing yourself.
-            </p>
-            <p class="second-description-text">
-                I am the shortest error on your path. I am the rasterized anomaly of consciousness. I am E.
-            </p>
+            </div>
 
             <div class="second-story-image-container">
                 <div class="frame"></div>
@@ -4368,57 +4830,93 @@
 
 
 
-        <div class="third-artwork-info">
+        <!-- 第三组作品：CONCRETE NARRATIVE -->
+        <div class="third-artwork-container">
                 <div class="third-story-image-container">
                     <div class="third-story-image-background"></div>
                     <div class="third-story-image-player-background"></div>
                     <div class="third-story-image-player">
                         <img src="../Rasterize Concrete Narrative 02.png" alt="Concrete Narrative Image">
+                </div>
                     </div>
                 </div>
 
-                <h1 class="third-artwork-title">RASTERIZE<br><span class="concrete">CONCRETE NARRATIVE</span></h1>
+        <div class="third-artwork-info">
+
+                <h1 class="third-artwork-title">
+                    <span class="lang-content active" data-lang="en">RASTERIZE<br><span class="concrete">CONCRETE NARRATIVE</span></span>
+                    <span class="lang-content" data-lang="zh">光栅化<br><span class="concrete">具体叙事</span></span>
+                </h1>
                 
-                <p class="third-artwork-info-line">2023 | Digital Video | Variable Ratio | Variable Size</p>
-                <p class="third-artwork-info-line">RealTime | Color | Sound</p>
-                <p class="third-artwork-info-line">Medium: Digital Animation, Algorithmic Art</p>
+                <p class="third-artwork-info-line">
+                    <span class="lang-content active" data-lang="en">2023 | Digital Video | Variable Ratio | Variable Size</span>
+                    <span class="lang-content" data-lang="zh">2023 | 数字视频 | 可变比例 | 可变尺寸</span>
+                </p>
+                <p class="third-artwork-info-line">
+                    <span class="lang-content active" data-lang="en">RealTime | Color | Sound</span>
+                    <span class="lang-content" data-lang="zh">实时 | 彩色 | 有声</span>
+                </p>
+                <p class="third-artwork-info-line">
+                    <span class="lang-content active" data-lang="en">Medium: Digital Animation, Algorithmic Art</span>
+                    <span class="lang-content" data-lang="zh">媒介: 数字动画, 算法艺术</span>
+                </p>
 
                 <div style="display: flex; align-items: center; margin: 180px 0 15px 0; justify-content: space-between;">
-                    <h2 class="third-video-artwork-title" style="margin: 0;">Video Artwork Description</h2>
+                    <h2 class="third-video-artwork-title" style="margin: 0;">
+                        <span class="lang-content active" data-lang="en">Video Artwork Description</span>
+                        <span class="lang-content" data-lang="zh">视频作品描述</span>
+                    </h2>
                     <h2 class="third-still-frame-title" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 36px !important; color: #09ad04 !important; margin: 0 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important; z-index: 9999 !important; position: absolute !important; right: 550px !important;">
                         <span class="triangle-icon"></span>
-                        STILL FRAMES
+                        <span class="lang-content active" data-lang="en">STILL FRAMES</span>
+                        <span class="lang-content" data-lang="zh">静帧</span>
                     </h2>
                 </div>
+                <div class="fixed-height-container">
                 <p class="third-description-text">
-                    After the creation of Rasterize04, I came to the realization that, in the process of exploring the self, we inevitably catch fleeting glimpses of things beyond the self.
+                        <span class="lang-content active" data-lang="en">After the creation of Rasterize04, I came to the realization that, in the process of exploring the self, we inevitably catch fleeting glimpses of things beyond the self.</span>
+                        <span class="lang-content" data-lang="zh">在创作光栅化04之后，我意识到，在探索自我的过程中，我们不可避免地会瞥见超越自我的事物。</span>
                 </p>
                 <p class="third-description-text">
-                    Lexicon: Urbanity, Sun, Fields, Descent, Sleet, Dual Suns, Vortex...
+                        <span class="lang-content active" data-lang="en">Lexicon: Urbanity, Sun, Fields, Descent, Sleet, Dual Suns, Vortex...</span>
+                        <span class="lang-content" data-lang="zh">词汇：都市、太阳、田野、下降、雨夹雪、双日、漩涡...</span>
                 </p>
                 <p class="third-description-text">
-                    These isolated, discrete nouns and adjectives appear to represent a more concrete mode of description, offering a tangible and focused approach to articulating abstract concepts.Therefore, I use elements from graphic design, such as lines, circles, squares, and triangles, to depict a more concrete world. These basic shapes not only serve as visual symbols that carry specific forms, but also bridge the gap between simplicity and abstraction, helping me express complex and vague concepts and transform them into intuitive, perceivable forms.
-                </p>
+                        <span class="lang-content active" data-lang="en">These isolated, discrete nouns and adjectives appear to represent a more concrete mode of description, offering a tangible and focused approach to articulating abstract concepts.Therefore, I use elements from graphic design, such as lines, circles, squares, and triangles, to depict a more concrete world. These basic shapes not only serve as visual symbols that carry specific forms, but also bridge the gap between simplicity and abstraction, helping me express complex and vague concepts and transform them into intuitive, perceivable forms.</span>
+                        <span class="lang-content" data-lang="zh">这些孤立的、离散的名词和形容词似乎代表了一种更具体的描述模式，为阐述抽象概念提供了有形和专注的方法。因此，我使用图形设计元素，如线条、圆形、方形和三角形，来描绘一个更具体的世界。这些基本形状不仅作为承载特定形式的视觉符号，还弥合了简单与抽象之间的差距，帮助我表达复杂和模糊的概念，并将它们转化为直观、可感知的形式。</span>
+                    </p>
+                </div>
 
-                <h2 class="third-synopsis-title">Artwork Story Synopsis</h2>
+                <h2 class="third-synopsis-title">
+                    <span class="lang-content active" data-lang="en">Artwork Story Synopsis</span>
+                    <span class="lang-content" data-lang="zh">作品故事概要</span>
+                </h2>
+                <div class="fixed-height-container">
                 <p class="third-description-text">
-                    In the primal void of informational chaos, an unknown fall tore through the digital sky. It was no mere stone, but a compressed sun—flat and blazing, carrying the seed of graphic language.
+                        <span class="lang-content active" data-lang="en">In the primal void of informational chaos, an unknown fall tore through the digital sky. It was no mere stone, but a compressed sun—flat and blazing, carrying the seed of graphic language.</span>
+                        <span class="lang-content" data-lang="zh">在信息混沌的原始虚空中，一个未知的坠落撕裂了数字天空。它不是普通的石头，而是一个压缩的太阳——扁平而炽热，携带着图形语言的种子。</span>
                 </p>
                 <p class="third-description-text">
-                    It crashed into the uncivilized ruins of a forgotten city, and rasterized the world.
+                        <span class="lang-content active" data-lang="en">It crashed into the uncivilized ruins of a forgotten city, and rasterized the world.</span>
+                        <span class="lang-content" data-lang="zh">它撞进了被遗忘城市的野蛮废墟，光栅化了世界。</span>
                 </p>
                 <p class="third-description-text">
-                    Time fractured on impact. Dimensions folded into themselves. From that moment on, the depth of 3D was erased, and color reduced to the hiss of pixels.
+                        <span class="lang-content active" data-lang="en">Time fractured on impact. Dimensions folded into themselves. From that moment on, the depth of 3D was erased, and color reduced to the hiss of pixels.</span>
+                        <span class="lang-content" data-lang="zh">时间在撞击中破碎。维度折叠到自身中。从那一刻起，3D的深度被抹去，颜色简化为像素的嘶嘶声。</span>
                 </p>
                 <p class="third-description-text">
-                    Lines, squares, and triangles replaced the once intricate and tangible order of matter.
+                        <span class="lang-content active" data-lang="en">Lines, squares, and triangles replaced the once intricate and tangible order of matter.</span>
+                        <span class="lang-content" data-lang="zh">线条、方形和三角形取代了曾经复杂而有形的物质秩序。</span>
                 </p>
                 <p class="third-description-text">
-                    A two-dimensional era slowly opened its eyes: Mountains became segments, light became grids, and consciousness morphed into endless flowing vectors and waveforms.
+                        <span class="lang-content active" data-lang="en">A two-dimensional era slowly opened its eyes: Mountains became segments, light became grids, and consciousness morphed into endless flowing vectors and waveforms.</span>
+                        <span class="lang-content" data-lang="zh">一个二维时代慢慢睁开了眼睛：山脉变成了线段，光线变成了网格，意识变形为无尽的流动向量和波形。</span>
                 </p>
                 <p class="third-description-text">
-                    And that fallen sun— it still glows, it still burns, whispering in every flickering frame: "The world will be redrawn."
+                        <span class="lang-content active" data-lang="en">And that fallen sun— it still glows, it still burns, whispering in every flickering frame: "The world will be redrawn."</span>
+                        <span class="lang-content" data-lang="zh">而那坠落的太阳——它仍然发光，仍然燃烧，在每一个闪烁的帧中低语："世界将被重新绘制。"</span>
                 </p>
+                </div>
 
 
                 
@@ -4443,30 +4941,6 @@
                 </div>
             </div>
             
-            <h2 class="second-still-frame-title" style="position: absolute !important; top: 4800px !important; right: 720px !important; font-size: 36px !important; color: #09ad04 !important; margin: 0 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important; z-index: 15 !important; transform: none !important;">
-                <span class="triangle-icon" style="display: none !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
-                <span style="font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace !important; font-weight: normal !important; line-height: 1 !important; vertical-align: baseline !important; position: relative !important; left: 105px !important;">
-                    <span class="triangle-icon-en" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
-                    STILL FRAMES
-                </span>
-            </h2>
-
-            <div class="second-still-frame-image-container">
-                <div class="frame"></div>
-                <img src="../Rasterize The Consciousness of the Data Sovereign 02.jpg" alt="Still Frame 2">
-            </div>
-
-            <div class="second-still-frame-image-container-2">
-                <div class="frame"></div>
-                <img src="../Rasterize The Consciousness of the Data Sovereign 05.jpg" alt="Still Frame 5">
-            </div>
-
-            <div class="second-still-frame-image-container-3">
-                <div class="frame"></div>
-                <img src="../Rasterize The Consciousness of the Data Sovereign 04.jpg" alt="Still Frame 4">
-            </div>
-
-
         </div>
 
         <div class="green-box"></div>
@@ -4498,7 +4972,8 @@
 
     </div>
 
-    <!-- New fourth story image (copied from Concrete Narrative container), 500px below last group -->
+    <!-- 第四组作品：CHAOS OF CYCLICAL DETAILS -->
+    <div class="fourth-artwork-container">
     <div class="fourth-story-image-container">
         <div class="mid-pacman-animation">
             <div class="mid-pacman">
@@ -4519,56 +4994,91 @@
             </div>
         </div>
         <div class="fourth-story-image-background">
-        <div class="fourth-story-image-background">
             <div class="fourth-story-image-player-background"></div>
             <div class="fourth-story-image-player">
                 <img src="../Rasterize Chaos of Cyclical Details 1.jpeg" alt="Rasterize Chaos of Cyclical Details 1">
+            </div>
             </div>
         </div>
     </div>
 
     <div class="fourth-artwork-info">
-        <h1 class="fourth-artwork-title">RASTERIZE<br><span class="chaos">CHAOS OF CYCLICAL DETAILS</span></h1>
+        <h1 class="fourth-artwork-title">
+            <span class="lang-content active" data-lang="en">RASTERIZE<br><span class="chaos">CHAOS OF CYCLICAL DETAILS</span></span>
+            <span class="lang-content" data-lang="zh">光栅化<br><span class="chaos">循环细节的混沌</span></span>
+        </h1>
         
-        <p class="fourth-artwork-info-line">2023 | Digital Video | Variable Ratio | Variable Size</p>
-        <p class="fourth-artwork-info-line">RealTime | Color | Sound</p>
-        <p class="fourth-artwork-info-line">Medium: Digital Animation, Algorithmic Art</p>
-
-        <h2 class="fourth-video-artwork-title">Video Artwork Description</h2>
-        <p class="fourth-description-text">
-            Many things exist in cyclical patterns. As habits accumulate, repetition often becomes monotonous or overlooked. This work focuses on the subtle deviations and details within these cycles—differences that carry the potential for new meaning to emerge.
+        <p class="fourth-artwork-info-line">
+            <span class="lang-content active" data-lang="en">2023 | Digital Video | Variable Ratio | Variable Size</span>
+            <span class="lang-content" data-lang="zh">2023 | 数字视频 | 可变比例 | 可变尺寸</span>
         </p>
-        <p class="fourth-description-text">
-            Building on the structural foundation of the Rasterize series, this piece integrates multi-channel data mapping with elements of subjective chaos, simulating the disturbance and reconfiguration of information within complex systems. It seeks to reveal the tension between perception and reality in an environment of increasingly entangled data.
+        <p class="fourth-artwork-info-line">
+            <span class="lang-content active" data-lang="en">RealTime | Color | Sound</span>
+            <span class="lang-content" data-lang="zh">实时 | 彩色 | 有声</span>
         </p>
-        <p class="fourth-description-text">
-            In an era saturated with information overload and simulated realities, the boundaries between the real and the distorted grow increasingly blurred. Through a loop-based structure, the work explores how information subtly shifts beneath surface-level order, and how perception is continuously reconstructed within a hyperreal context.
-        </p>
-        <p class="fourth-description-text">
-            At the same time, the work opens up a sense of constructed temporality: time is no longer a linear flow, but something fractured, recursive, and generative—disrupting habitual rhythms and inviting a renewed understanding of variation, difference, and perceptual mechanisms.
+        <p class="fourth-artwork-info-line">
+            <span class="lang-content active" data-lang="en">Medium: Digital Animation, Algorithmic Art</span>
+            <span class="lang-content" data-lang="zh">媒介: 数字动画, 算法艺术</span>
         </p>
 
-        <h2 class="fourth-synopsis-title">Artwork Story Synopsis</h2>
+        <h2 class="fourth-video-artwork-title">
+            <span class="lang-content active" data-lang="en">Video Artwork Description</span>
+            <span class="lang-content" data-lang="zh">视频作品描述</span>
+        </h2>
+        <div class="fixed-height-container">
         <p class="fourth-description-text">
-            In a distant future, human perception has long been fully mediated by data. After a reboot of his consciousness, E awakens inside a sensory simulation chamber known as the Raster Loop. He has no idea how long he has been trapped within this closed system...
+                <span class="lang-content active" data-lang="en">Many things exist in cyclical patterns. As habits accumulate, repetition often becomes monotonous or overlooked. This work focuses on the subtle deviations and details within these cycles—differences that carry the potential for new meaning to emerge.</span>
+                <span class="lang-content" data-lang="zh">许多事物以循环模式存在。随着习惯的积累，重复往往变得单调或被忽视。这件作品专注于这些循环中的微妙偏差和细节——承载着新意义出现潜力的差异。</span>
         </p>
         <p class="fourth-description-text">
-            The outside world has collapsed, leaving only a simulated reality pieced together from fragmented data. Perception no longer happens directly but is "rendered" layer by layer through cyclical sensory systems. The system uses repetition to maintain emotional stability, erasing differences and suppressing fluctuations, constructing a seemingly safe yet hollow daily experience.
+                <span class="lang-content active" data-lang="en">Building on the structural foundation of the Rasterize series, this piece integrates multi-channel data mapping with elements of subjective chaos, simulating the disturbance and reconfiguration of information within complex systems. It seeks to reveal the tension between perception and reality in an environment of increasingly entangled data.</span>
+                <span class="lang-content" data-lang="zh">基于光栅化系列的结构基础，这件作品将多通道数据映射与主观混沌元素相结合，模拟复杂系统内信息的扰动和重新配置。它试图在日益纠缠的数据环境中揭示感知与现实之间的张力。</span>
         </p>
         <p class="fourth-description-text">
-            Yet, at the end of each cycle, E begins to notice something is wrong: colors slightly shift, sounds go out of tune, fragments of memory become disjointed. These subtle differences act like cracks, seeping into the system's originally smooth rhythm and awakening vague memories of another reality within E.
+                <span class="lang-content active" data-lang="en">In an era saturated with information overload and simulated realities, the boundaries between the real and the distorted grow increasingly blurred. Through a loop-based structure, the work explores how information subtly shifts beneath surface-level order, and how perception is continuously reconstructed within a hyperreal context.</span>
+                <span class="lang-content" data-lang="zh">在一个充满信息过载和模拟现实的时代，真实与扭曲之间的界限变得越来越模糊。通过基于循环的结构，作品探索信息如何在表面秩序下微妙地转变，以及感知如何在超现实环境中持续重构。</span>
         </p>
         <p class="fourth-description-text">
-            In this space, time is no longer linear but fractured, folded, and reassembled. Past, present, and fictional memories intertwine, leaving E unable to distinguish what is real and what is simulation...
-        </p>
-        <p class="fourth-description-text">
-            Every attempt to escape leads E back to another altered loop. These cycles appear similar but continuously evolve, as if the system is using the repetition of differences to test the limits of E's consciousness.
-        </p>
-        <p class="fourth-description-text">
-            E begins to realize that the real question is no longer "What is real?" but—what kind of reality is worth repeating...
-        </p>
+                <span class="lang-content active" data-lang="en">At the same time, the work opens up a sense of constructed temporality: time is no longer a linear flow, but something fractured, recursive, and generative—disrupting habitual rhythms and inviting a renewed understanding of variation, difference, and perceptual mechanisms.</span>
+                <span class="lang-content" data-lang="zh">同时，作品开启了一种建构的时间性：时间不再是线性流动，而是某种断裂的、递归的和生成性的东西——打破习惯性节奏，邀请对变化、差异和感知机制的新理解。</span>
+            </p>
+        </div>
 
-                                         <h2 class="fourth-still-frame-title">STILL FRAMES</h2>
+        <h2 class="fourth-synopsis-title">
+            <span class="lang-content active" data-lang="en">Artwork Story Synopsis</span>
+            <span class="lang-content" data-lang="zh">作品故事概要</span>
+        </h2>
+        <div class="fixed-height-container">
+        <p class="fourth-description-text">
+                <span class="lang-content active" data-lang="en">In a distant future, human perception has long been fully mediated by data. After a reboot of his consciousness, E awakens inside a sensory simulation chamber known as the Raster Loop. He has no idea how long he has been trapped within this closed system...</span>
+                <span class="lang-content" data-lang="zh">在遥远的未来，人类的感知早已完全被数据中介。在他的意识重启后，E在一个被称为光栅循环的感官模拟舱内醒来。他不知道自己被困在这个封闭系统中多久了...</span>
+        </p>
+        <p class="fourth-description-text">
+                <span class="lang-content active" data-lang="en">The outside world has collapsed, leaving only a simulated reality pieced together from fragmented data. Perception no longer happens directly but is "rendered" layer by layer through cyclical sensory systems. The system uses repetition to maintain emotional stability, erasing differences and suppressing fluctuations, constructing a seemingly safe yet hollow daily experience.</span>
+                <span class="lang-content" data-lang="zh">外部世界已经崩溃，只留下一个由碎片化数据拼凑而成的模拟现实。感知不再直接发生，而是通过循环感官系统层层"渲染"。系统使用重复来维持情感稳定，抹去差异并抑制波动，构建一个看似安全但空洞的日常体验。</span>
+        </p>
+        <p class="fourth-description-text">
+                <span class="lang-content active" data-lang="en">Yet, at the end of each cycle, E begins to notice something is wrong: colors slightly shift, sounds go out of tune, fragments of memory become disjointed. These subtle differences act like cracks, seeping into the system's originally smooth rhythm and awakening vague memories of another reality within E.</span>
+                <span class="lang-content" data-lang="zh">然而，在每个循环结束时，E开始注意到有些不对劲：颜色轻微偏移，声音走调，记忆碎片变得不连贯。这些微妙的差异就像裂缝，渗入系统原本平滑的节奏，唤醒E内心对另一个现实的模糊记忆。</span>
+        </p>
+        <p class="fourth-description-text">
+                <span class="lang-content active" data-lang="en">In this space, time is no longer linear but fractured, folded, and reassembled. Past, present, and fictional memories intertwine, leaving E unable to distinguish what is real and what is simulation...</span>
+                <span class="lang-content" data-lang="zh">在这个空间中，时间不再是线性的，而是断裂的、折叠的和重新组装的。过去、现在和虚构的记忆交织在一起，让E无法区分什么是真实的，什么是模拟的...</span>
+        </p>
+        <p class="fourth-description-text">
+                <span class="lang-content active" data-lang="en">Every attempt to escape leads E back to another altered loop. These cycles appear similar but continuously evolve, as if the system is using the repetition of differences to test the limits of E's consciousness.</span>
+                <span class="lang-content" data-lang="zh">每一次逃离的尝试都将E带回另一个被改变的循环。这些循环看起来相似但不断演变，仿佛系统正在使用差异的重复来测试E意识的极限。</span>
+        </p>
+        <p class="fourth-description-text">
+                <span class="lang-content active" data-lang="en">E begins to realize that the real question is no longer "What is real?" but—what kind of reality is worth repeating...</span>
+                <span class="lang-content" data-lang="zh">E开始意识到真正的问题不再是"什么是真实的？"而是——什么样的现实值得重复...</span>
+        </p>
+        </div>
+
+                                         <h2 class="fourth-still-frame-title">
+                                             <span class="lang-content active" data-lang="en">STILL FRAMES</span>
+                                             <span class="lang-content" data-lang="zh">静帧</span>
+                                         </h2>
         
         <div class="fourth-still-frame-image-container">
             <div class="frame"></div>
@@ -4623,51 +5133,87 @@
         </div>
     </div>
 
-    <div class="fourth-story-image-container-copy">
-        <div class="fourth-story-image-background-copy">
-            <div class="fourth-story-image-player-background-copy"></div>
-            <div class="fourth-story-image-player-copy">
+    <!-- 第五组作品：NEW CENTURY SUBMARINE CAVERN -->
+    <div class="fifth-artwork-container">
+        <div class="fifth-story-image-container">
+            <div class="fifth-story-image-background">
+                <div class="fifth-story-image-player-background"></div>
+                <div class="fifth-story-image-player">
                 <img src="../Rasterize New Century Submarine Cavern 01.jpg" alt="Rasterize New Century Submarine Cavern 01">
+                </div>
             </div>
         </div>
     </div>
 
             <div class="fifth-artwork-info">
-            <h1 class="fifth-artwork-title">RASTERIZE<br><span class="submarine">NEW CENTURY SUBMARINE CAVERN</span></h1>
+            <h1 class="fifth-artwork-title">
+                <span class="lang-content active" data-lang="en">RASTERIZE<br><span class="submarine">NEW CENTURY SUBMARINE CAVERN</span></span>
+                <span class="lang-content" data-lang="zh">光栅化<br><span class="submarine">新世纪海底洞穴</span></span>
+            </h1>
             
-            <p class="fifth-artwork-info-line">2024 | Digital Video | Variable Ratio | Variable Size</p>
-            <p class="fifth-artwork-info-line">RealTime | Color | Sound</p>
-            <p class="fifth-artwork-info-line">Medium: Digital Animation, Algorithmic Art</p>
-
-            <h2 class="fifth-video-artwork-title">Video Artwork Description</h2>
-            <p class="fifth-description-text">
-                Against the backdrop of rising sea levels brought on by global warming, I began to imagine a future "water world." Human civilization gradually sinks, replaced by endless cables—neural networks of a dying species—carrying fragmented consciousness in the form of bytes. These flows eventually descend into the deep sea, forming digital caverns.
+            <p class="fifth-artwork-info-line">
+                <span class="lang-content active" data-lang="en">2024 | Digital Video | Variable Ratio | Variable Size</span>
+                <span class="lang-content" data-lang="zh">2024 | 数字视频 | 可变比例 | 可变尺寸</span>
             </p>
-            <p class="fifth-description-text">
-                Cities, institutions, and cultural relics dissolve into data fragments, embedded within the cables, drifting eternally through a dematerialized ocean. The sea, no longer a natural entity, transforms into a black hole of virtual memory, storing echoes of human thought and layers of collective forgetting.
+            <p class="fifth-artwork-info-line">
+                <span class="lang-content active" data-lang="en">RealTime | Color | Sound</span>
+                <span class="lang-content" data-lang="zh">实时 | 彩色 | 有声</span>
             </p>
-            <p class="fifth-description-text">
-                Drawing on the metaphor of the "Apostles" from Evangelion, I constructed a submarine world woven from virtual cables—a vision meant to transmit a sensory experience directly through the eye. Through distorted colors, flowing data, and continuous sensory shifts, I hoped to evoke a state of synesthesia, inviting resonance with a submerged future shaped by climate crisis and virtual immersion.
-            </p>
-            <p class="fifth-description-text">
-                New Century Submarine Cavern — my 7th Rasterized Apostle.
+            <p class="fifth-artwork-info-line">
+                <span class="lang-content active" data-lang="en">Medium: Digital Animation, Algorithmic Art</span>
+                <span class="lang-content" data-lang="zh">媒介: 数字动画, 算法艺术</span>
             </p>
 
-            <h2 class="fifth-synopsis-title">Artwork Story Synopsis</h2>
+            <h2 class="fifth-video-artwork-title">
+                <span class="lang-content active" data-lang="en">Video Artwork Description</span>
+                <span class="lang-content" data-lang="zh">视频作品描述</span>
+            </h2>
+            <div class="fixed-height-container">
             <p class="fifth-description-text">
-                As sea levels continue to rise under the weight of global warming, terrestrial civilization gradually sinks beneath the waves. Once-vibrant cities and cultural systems collapse into fragmented data, embedded within endless cables that drift through the deep—forming forgotten "digital caverns." The ocean becomes a container of residual consciousness, where the final echoes of humanity float, suspended between memory and oblivion.
+                    <span class="lang-content active" data-lang="en">Against the backdrop of rising sea levels brought on by global warming, I began to imagine a future "water world." Human civilization gradually sinks, replaced by endless cables—neural networks of a dying species—carrying fragmented consciousness in the form of bytes. These flows eventually descend into the deep sea, forming digital caverns.</span>
+                    <span class="lang-content" data-lang="zh">在全球变暖导致海平面上升的背景下，我开始想象一个未来的"水世界"。人类文明逐渐沉没，被无尽的电缆所取代——一个垂死物种的神经网络——以字节的形式承载着碎片化的意识。这些流最终沉入深海，形成数字洞穴。</span>
             </p>
             <p class="fifth-description-text">
-                While repairing a deep-sea transmission, the protagonist E unintentionally awakens the 7th Rasterized Apostle—an entity born not of alien origin, but from the ruins of civilization itself. In the face of extinction, humans encoded fragments of their consciousness into the global data infrastructure, unconsciously giving rise to a new kind of lifeform: one composed of virtual genetic structures and memory patterns.
+                    <span class="lang-content active" data-lang="en">Cities, institutions, and cultural relics dissolve into data fragments, embedded within the cables, drifting eternally through a dematerialized ocean. The sea, no longer a natural entity, transforms into a black hole of virtual memory, storing echoes of human thought and layers of collective forgetting.</span>
+                    <span class="lang-content" data-lang="zh">城市、机构和文化遗产溶解成数据碎片，嵌入电缆中，在非物质化的海洋中永恒漂流。海洋不再是一个自然实体，而是转变为虚拟记忆的黑洞，存储着人类思想的回声和集体遗忘的层次。</span>
             </p>
             <p class="fifth-description-text">
-                This Apostle, a mutation of information and perception, was incubated within the coralized cables of the abyss. Its awakening begins to destabilize the boundary between the virtual and the real, forcing E to confront the question of his own identity: Is he a repairer, or merely a residual fragment left behind by the system?
+                    <span class="lang-content active" data-lang="en">Drawing on the metaphor of the "Apostles" from Evangelion, I constructed a submarine world woven from virtual cables—a vision meant to transmit a sensory experience directly through the eye. Through distorted colors, flowing data, and continuous sensory shifts, I hoped to evoke a state of synesthesia, inviting resonance with a submerged future shaped by climate crisis and virtual immersion.</span>
+                    <span class="lang-content" data-lang="zh">借鉴《福音战士》中"使徒"的隐喻，我构建了一个由虚拟电缆编织的海底世界——一个旨在通过眼睛直接传递感官体验的愿景。通过扭曲的色彩、流动的数据和持续的感官转变，我希望唤起一种联觉状态，邀请与由气候危机和虚拟沉浸塑造的沉没未来产生共鸣。</span>
             </p>
             <p class="fifth-description-text">
-                Wandering through this drowned world—where water and code intertwine—E must navigate a rasterized reality built from flickering memories and shifting coordinates. His search for the meaning of the Apostle gradually becomes a deeper pursuit of the unknown origin of his own mind.
-            </p>
+                    <span class="lang-content active" data-lang="en">New Century Submarine Cavern — my 7th Rasterized Apostle.</span>
+                    <span class="lang-content" data-lang="zh">新世纪海底洞穴——我的第7个光栅化使徒。</span>
+                </p>
+            </div>
 
-                         <h2 class="fifth-still-frame-title">STILL FRAMES</h2>
+            <h2 class="fifth-synopsis-title">
+                <span class="lang-content active" data-lang="en">Artwork Story Synopsis</span>
+                <span class="lang-content" data-lang="zh">作品故事概要</span>
+            </h2>
+            <div class="fixed-height-container">
+            <p class="fifth-description-text">
+                    <span class="lang-content active" data-lang="en">As sea levels continue to rise under the weight of global warming, terrestrial civilization gradually sinks beneath the waves. Once-vibrant cities and cultural systems collapse into fragmented data, embedded within endless cables that drift through the deep—forming forgotten "digital caverns." The ocean becomes a container of residual consciousness, where the final echoes of humanity float, suspended between memory and oblivion.</span>
+                    <span class="lang-content" data-lang="zh">随着海平面在全球变暖的重压下继续上升，陆地文明逐渐沉没在波浪之下。曾经充满活力的城市和文化系统崩溃成碎片化的数据，嵌入在无尽电缆中，在深海中漂流——形成被遗忘的"数字洞穴"。海洋成为残余意识的容器，人类最后的回声在那里漂浮，悬浮在记忆与遗忘之间。</span>
+            </p>
+            <p class="fifth-description-text">
+                    <span class="lang-content active" data-lang="en">While repairing a deep-sea transmission, the protagonist E unintentionally awakens the 7th Rasterized Apostle—an entity born not of alien origin, but from the ruins of civilization itself. In the face of extinction, humans encoded fragments of their consciousness into the global data infrastructure, unconsciously giving rise to a new kind of lifeform: one composed of virtual genetic structures and memory patterns.</span>
+                    <span class="lang-content" data-lang="zh">在修复深海传输时，主角E无意中唤醒了第7个光栅化使徒——一个不是来自外星起源，而是来自文明废墟本身的实体。面对灭绝，人类将意识碎片编码到全球数据基础设施中，无意识地产生了一种新的生命形式：由虚拟基因结构和记忆模式组成。</span>
+            </p>
+            <p class="fifth-description-text">
+                    <span class="lang-content active" data-lang="en">This Apostle, a mutation of information and perception, was incubated within the coralized cables of the abyss. Its awakening begins to destabilize the boundary between the virtual and the real, forcing E to confront the question of his own identity: Is he a repairer, or merely a residual fragment left behind by the system?</span>
+                    <span class="lang-content" data-lang="zh">这个使徒，信息和感知的突变体，在深渊的珊瑚化电缆中孵化。它的觉醒开始破坏虚拟与现实之间的界限，迫使E面对自己身份的问题：他是一个修复者，还是仅仅是系统留下的残余碎片？</span>
+            </p>
+            <p class="fifth-description-text">
+                    <span class="lang-content active" data-lang="en">Wandering through this drowned world—where water and code intertwine—E must navigate a rasterized reality built from flickering memories and shifting coordinates. His search for the meaning of the Apostle gradually becomes a deeper pursuit of the unknown origin of his own mind.</span>
+                    <span class="lang-content" data-lang="zh">在这个被淹没的世界中漫游——水和代码交织的地方——E必须导航一个由闪烁记忆和移动坐标构建的光栅化现实。他对使徒意义的寻找逐渐变成了对自己思想未知起源的更深层追求。</span>
+            </p>
+            </div>
+
+                         <h2 class="fifth-still-frame-title">
+                             <span class="lang-content active" data-lang="en">STILL FRAMES</span>
+                             <span class="lang-content" data-lang="zh">静帧</span>
+                         </h2>
             
             <div class="fifth-still-frame-carousel">
                 <div class="fifth-carousel-container">
@@ -4751,11 +5297,13 @@
             </div>
         </div>
 
-        <!-- 复制的Rasterize New Century Submarine Cavern 01容器 - 在绿色吃豆人下方400px -->
-        <div class="fourth-story-image-container-copy-2">
-            <div class="fourth-story-image-background-copy-2">
-                <div class="fourth-story-image-player-background-copy-2"></div>
-                <div class="fourth-story-image-player-copy-2">
+        <!-- 第六组作品：THE CONSCIOUSNESS OF THE LEFT FOOT -->
+        <div class="sixth-artwork-container">
+            <!-- 第六组作品主图容器：THE CONSCIOUSNESS OF THE LEFT FOOT -->
+            <div class="sixth-story-image-container">
+                <div class="sixth-story-image-background">
+                    <div class="sixth-story-image-player-background"></div>
+                    <div class="sixth-story-image-player">
                     <img src="../Rasterize The Consciousness of the Left Foot01.PNG" alt="Rasterize The Consciousness of the Left Foot01">
                 </div>
             </div>
@@ -4790,7 +5338,7 @@
                 Gradually, E realized he had not entered a dream, but a dimensional fissure—a virtual abyss accessible only when consciousness becomes completely unanchored. He couldn't tell if this was the end of his awareness or a symptom of some global perceptual collapse—but he knew one thing for certain: he was no longer whole.
             </p>
             
-                         <h2 class="sixth-still-frame-title">STILL FRAMES</h2>
+            <h2 class="sixth-still-frame-title">STILL FRAMES</h2>
         </div>
         
         <!-- Left Foot Still Frames -->
@@ -4880,6 +5428,7 @@
             <div class="sixth-line-segment"></div>
             <div class="sixth-line-segment"></div>
             <div class="sixth-line-segment"></div>
+            </div>
         </div>
     </div>
 
@@ -4898,6 +5447,8 @@
         </div>
     </div>
 
+    <!-- 第七组作品：REFERENCE POINT OF SELF-CONSCIOUSNESS -->
+    <div class="seventh-artwork-container">
     <div class="seventh-artwork-info">
         <h1 class="seventh-artwork-title">RASTERIZE<br><span class="reference-point">REFERENCE POINT OF SELF-CONSCIOUSNESS</span></h1>
         
@@ -4964,7 +5515,7 @@
             <div class="frame"></div>
             <img src="../RasterizeREFERENCEPOINTOFSELFCONSCIOUSNESS04.JPG" alt="Rasterize Reference Point 04">
         </div>
-        
+        </div>
     </div>
 
     <div class="extra-blue-space"></div>
@@ -5191,6 +5742,76 @@
 
 
 
+
+        // ===== 语言切换功能 - 参考主界面 =====
+        let currentLanguage = 'en'; // 默认英文
+        
+        function switchLanguage() {
+            const languageToggle = document.getElementById('languageToggle');
+            const langContents = document.querySelectorAll('.lang-content');
+            
+            // 切换语言
+            currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
+            
+            // 更新按钮文本
+            languageToggle.textContent = currentLanguage === 'en' ? '中文' : 'English';
+            
+            // 切换所有语言内容
+            langContents.forEach(content => {
+                if (content.dataset.lang === currentLanguage) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            // 保存语言偏好到本地存储
+            localStorage.setItem('rasterizeLanguage', currentLanguage);
+            
+            // 添加切换动画效果
+            languageToggle.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                languageToggle.style.transform = 'scale(1)';
+            }, 200);
+            
+            // 强制重新计算布局，确保位置一致性
+            setTimeout(() => {
+                document.body.style.display = 'none';
+                document.body.offsetHeight; // 强制重排
+                document.body.style.display = '';
+            }, 50);
+        }
+        
+        // 初始化语言设置
+        function initLanguage() {
+            const savedLanguage = localStorage.getItem('rasterizeLanguage');
+            if (savedLanguage) {
+                currentLanguage = savedLanguage;
+                const languageToggle = document.getElementById('languageToggle');
+                const langContents = document.querySelectorAll('.lang-content');
+                
+                // 设置按钮文本
+                languageToggle.textContent = currentLanguage === 'en' ? '中文' : 'English';
+                
+                // 设置内容显示
+                langContents.forEach(content => {
+                    if (content.dataset.lang === currentLanguage) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        // 绑定语言切换事件
+        document.addEventListener('DOMContentLoaded', () => {
+            const languageToggle = document.getElementById('languageToggle');
+            languageToggle.addEventListener('click', switchLanguage);
+            
+            // 初始化语言设置
+            initLanguage();
+        });
 
         window.addEventListener('load', function() {
             createRasterizeEffect();
