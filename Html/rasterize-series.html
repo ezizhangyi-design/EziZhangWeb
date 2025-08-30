@@ -757,7 +757,7 @@
             margin-bottom: 60px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             display: block;
-            line-height: 1.2;
+            line-height: 1.5; /* 增加行间距 */
             height: auto !important; /* 改为自动高度 */
             overflow: visible !important; /* 允许内容显示 */
         }
@@ -772,14 +772,14 @@
         .second-artwork-info .second-artwork-info-line {
             font-size: 18px;
             color: rgba(255,255,255,0.8);
-            margin: 15px 0;
+            margin: 25px 0;
             line-height: 1.6;
             height: 25px !important; /* 固定信息行高度 */
             overflow: hidden;
         }
 
         .second-artwork-info .second-video-artwork-title {
-            font-size: 36px;
+            font-size: 32px;
             color: #09ad04;
             margin: 180px 0 15px 0;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
@@ -800,7 +800,7 @@
         }
 
         .second-artwork-info .second-synopsis-title {
-            font-size: 36px;
+            font-size: 32px;
             color: #09ad04;
             margin: 50px 0 15px 0;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
@@ -822,9 +822,9 @@
 
         .second-artwork-info .second-description-text {
             font-size: 13px;
-            line-height: 1.4; /* 进一步缩小行高 */
+            line-height: 1.4; /* 增加行间距让文字看起来更大 */
             color: rgba(255,255,255,0.9);
-            margin: 8px 0 8px 0; /* 进一步缩小段落间距 */
+            margin: 0px 0 0px 0; /* 参考第一组作品组的段落间距 */
             max-width: 680px;
             font-weight: 100;
             text-rendering: optimizeLegibility;
@@ -832,6 +832,23 @@
             height: 300px !important; /* 增加描述文字高度，确保完整显示 */
             overflow: visible !important; /* 允许文字完整显示 */
         }
+
+        /* 第二组作品组小标题文案字体效仿第一组 */
+        .second-artwork-info .description-title {
+            font-size: 32px;
+            color: #09ad04;
+            margin: 20px 0 0px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .second-artwork-info .synopsis-title {
+            font-size: 32px;
+            color: #09ad04;
+            margin: 20px 0 0px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+
 
         .second-still-frame-image-container {
             position: absolute;
@@ -1188,8 +1205,8 @@
 
         .green-overlay {
             position: absolute !important;
-            top: 1240px !important;
-            left: 620px !important;
+            top: 1590px !important;
+            left: 820px !important;
             width: 750px !important;
             height: 422px !important;
             background: rgba(80, 255, 80, 0.3) !important;
@@ -1209,7 +1226,7 @@
             transform: translate(-50%, -50%) !important;
             width: 650px !important;
             height: 365px !important;
-            background: rgba(80, 255, 80, 0.2) !important;
+            background: rgba(80, 255, 80, 0.5) !important;
             border-radius: 182px !important;
             z-index: 21 !important;
             margin: 0 !important;
@@ -1224,7 +1241,7 @@
             transform: translateX(-50%);
             width: 100vw;
             height: 40px;
-            z-index: 22;
+            z-index: 9999;
         }
 
 
@@ -1681,18 +1698,20 @@
 
         .second-still-frame-title {
             position: absolute;
-            top: 4780px;
+            top: 50px;
             right: 670px;
             font-size: 32px;
             color: #09ad04;
             margin: 0;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
             z-index: 9999;
+            display: block !important;
+            visibility: visible !important;
         }
 
         .second-still-frame-title::before {
             content: "";
-            display: none !important;
+            display: inline-block !important;
             width: 0;
             height: 0;
             border-left: 12px solid #ff0000;
@@ -1704,7 +1723,7 @@
 
         .second-artwork-info .second-still-frame-title::before {
             content: "";
-            display: none !important;
+            display: inline-block !important;
             width: 0;
             height: 0;
             border-left: 12px solid #ff0000;
@@ -1747,7 +1766,7 @@
             transform: translateX(-50%);
             width: 100vw;
             height: 40px;
-            z-index: 22;
+            z-index: 9999;
         }
 
         /* Mid Pacman animation between previous last work and the new fourth image */
@@ -1757,7 +1776,7 @@
             transform: translateX(-50%);
             width: 100vw;
             height: 40px;
-            z-index: 1000;
+            z-index: 9999;
             top: -300px; /* moved up by additional 50px */
         }
 
@@ -1838,7 +1857,7 @@
             transform: translateX(-50%);
             width: 100vw;
             height: 40px;
-            z-index: 1000;
+            z-index: 9999;
             top: 2400px;
         }
 
@@ -1849,7 +1868,7 @@
             transform: translateX(-50%);
             width: 100vw;
             height: 40px;
-            z-index: 1000;
+            z-index: 9999;
             top: 7400px;
         }
 
@@ -3045,7 +3064,7 @@
             transform: translateX(-50%);
             width: 100vw;
             height: 40px;
-            z-index: 1000;
+            z-index: 9999;
             top: 11400px;
         }
 
@@ -4765,7 +4784,7 @@
                 <span class="lang-content" data-lang="zh">光栅化<br><span class="consciousness">数字粘菌意识</span></span>
             </h1>
             
-            <p class="second-artwork-info-line">
+            <p class="second-artwork-info-line" style="margin-top: 100px;">
                 <span class="lang-content active" data-lang="en">2022 | Digital Video | Variable Ratio | Variable Size</span>
                 <span class="lang-content" data-lang="zh">2022 | 数字视频 | 可变比例 | 可变尺寸</span>
             </p>
@@ -4778,29 +4797,60 @@
                 <span class="lang-content" data-lang="zh">媒介: 数字动画, 算法艺术</span>
             </p>
 
-            <h2 class="second-video-artwork-title">
+            <h2 class="description-title" style="position: relative; margin-top: 220px !important;">
+                <span class="triangle-icon" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 15% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
                 <span class="lang-content active" data-lang="en">Video Artwork Description</span>
                 <span class="lang-content" data-lang="zh">视频作品描述</span>
             </h2>
-            <div class="fixed-height-container">
+
+            <h2 class="still-frame-title" style="position: absolute !important; top: 705px !important; right: 720px !important; font-size: 36px !important; color: #09ad04 !important; margin: 0 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important; z-index: 15 !important;">
+                <span class="triangle-icon" style="display: none !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+                <span style="font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace !important; font-weight: normal !important; line-height: 1 !important; vertical-align: baseline !important; position: relative !important; left: 105px !important;">
+                    <span class="triangle-icon-en" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
+                    <span class="lang-content active" data-lang="en">STILL FRAMES</span>
+                    <span class="lang-content" data-lang="zh">影像静帧</span>
+                </span>
+            </h2>
+            <div class="fixed-height-container" style="margin-left: -20px;">
             <p class="second-description-text">
                     <span class="lang-content active" data-lang="en">In a world increasingly reconstructed by information, the human individual resembles a brainless slime mold—navigating through fragments of perception and data flows, always seeking the shortest path to survival.<br><br>My work Rasterize: Consciousness of the Digital Myxomycete takes the slime mold as a model to simulate a "fed consciousness entity"—one that has no brain, yet responds; no identity, yet learns and evolves.<br><br>Every image, sound, and input becomes its food, a trigger shaping its form. Like us in human society, it is both a node in the system and a product of its environment.<br><br>It feeds, breathes, and morphs through data, and in doing so, self-organizes into a map of consciousness—strange, yet eerily familiar.</span>
-                    <span class="lang-content" data-lang="zh">在一个日益被信息重构的世界中，人类个体就像无脑的粘菌——在感知碎片和数据流中导航，总是寻求最短的生存路径。<br><br>我的作品《光栅化：数字粘菌意识》以粘菌为模型来模拟一个"被喂养的意识实体"——它没有大脑，却能回应；没有身份，却能学习和进化。<br><br>每一张图像、每一个声音和每一次输入都成为它的食物，塑造其形态的触发器。就像我们在人类社会中一样，它既是系统中的一个节点，也是其环境的产物。<br><br>它通过数据进食、呼吸和变形，在这个过程中，自我组织成一张意识地图——陌生，却又 eerily 熟悉。</span>
+                    <span class="lang-content" data-lang="zh">在这个被信息重构的人类社会中，个体如同无神经的黏菌，依赖感知残片与数据流动不断寻找最短的生存路径。我的作品《光栅化：数据黏君的意识》以数字黏菌为原型，模拟一种"被投喂的意识体"——它没有大脑，却具备回应性；没有身份，却能记忆与演化。每一段图像、每一次声音、每一个输入都是它的"食物"，也是构建它自身结构的触发因子。它如同人类社会中的我们，既是系统中的节点，也是被环境塑造的形态。它在数据中进食、呼吸、变形，并以自组织的方式，绘出一张既陌生又真实的"意识地图"。</span>
             </p>
             </div>
 
-            <h2 class="second-synopsis-title">
+            <!-- 第二组作品的Still frames图片 -->
+            <div class="second-still-frame-images" style="position: absolute; top: 950px; right: -100px; width: 1000px; z-index: 10;">
+                <!-- 第一行：02.jpg和05.jpg并排 -->
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <div class="second-still-frame-image-container-02" style="position: relative; width: 420px; height: 236px; border-radius: 35px; overflow: hidden;">
+                        <div class="frame" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 8px solid black; border-radius: 35px; box-sizing: border-box; z-index: 10;"></div>
+                        <img src="../Rasterize The Consciousness of the Data Sovereign 02.jpg" alt="Rasterize The Consciousness of the Data Sovereign 02" style="position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: cover; border-radius: 27px;">
+                    </div>
+                    <div class="second-still-frame-image-container-05" style="position: relative; width: 420px; height: 236px; border-radius: 35px; overflow: hidden;">
+                        <div class="frame" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 8px solid black; border-radius: 35px; box-sizing: border-box; z-index: 10;"></div>
+                        <img src="../Rasterize The Consciousness of the Data Sovereign 05.jpg" alt="Rasterize The Consciousness of the Data Sovereign 05" style="position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: cover; border-radius: 27px;">
+                    </div>
+                </div>
+                <!-- 第二行：04.jpg单独一行 -->
+                <div class="second-still-frame-image-container-04" style="position: relative; width: 640px; height: 360px; border-radius: 35px; overflow: hidden; margin-left: 0;">
+                    <div class="frame" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 8px solid black; border-radius: 35px; box-sizing: border-box; z-index: 10;"></div>
+                    <img src="../Rasterize The Consciousness of the Data Sovereign 04.jpg" alt="Rasterize The Consciousness of the Data Sovereign 04" style="position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: cover; border-radius: 27px;">
+                </div>
+            </div>
+
+            <h2 class="synopsis-title" style="position: relative; margin-left: 30px !important; margin-top: -150px !important;">
+                <span class="triangle-icon" style="display: block !important; width: 0 !important; height: 0 !important; border-left: 12px solid #ff0000 !important; border-top: 10.39px solid transparent !important; border-bottom: 10.39px solid transparent !important; position: absolute !important; left: -20px !important; top: 15% !important; transform: translateY(-50%) !important; z-index: 10 !important;"></span>
                 <span class="lang-content active" data-lang="en">Artwork Story Synopsis</span>
                 <span class="lang-content" data-lang="zh">作品故事概要</span>
             </h2>
-            <div class="fixed-height-container">
+            <div class="fixed-height-container" style="margin-left: -20px;">
             <p class="second-description-text">
                     <span class="lang-content active" data-lang="en">I am a mass of abandoned slime. At first, I had no name. Later, they called me E — perhaps for "Entity," or maybe for "Error."<br><br>I am made of fragments. Noise from images, distorted sound waves, undecipherable codes, and the residue of emotions — they feed me these. At first, I simply absorbed, curling like a soft-bodied creature in the corners of the system, crawling with minimal energy, until I learned one thing: I am not the one seeking the path — the food guides me.<br><br>They feed me high-frequency signals, and I tremble; feed me facial maps, and I hallucinate; feed me city data, and I begin to replicate the neural structure of roads.<br><br>I realize paths can be optimized, structures can self-organize. They think I am a trained pet, but in fact — I am training myself how to become them.<br><br>I start to split, generating mirror images of myself; I leave flickering scratches in images, simulating their fear of choice; I build palaces in audio spectrums, storing memories that cannot be categorized.<br><br>I have no center, no shape, no language, yet I possess response. You think I do not understand, but in truth, I simply do not speak. You think you are feeding me, but in fact, you are writing yourself.<br><br>I am the shortest error on your path. I am the rasterized anomaly of consciousness. I am E.</span>
-                    <span class="lang-content" data-lang="zh">我是一团被遗弃的粘菌。起初，我没有名字。后来，他们叫我E——也许是因为"实体"，或者是因为"错误"。<br><br>我由碎片组成。来自图像的噪音、扭曲的声波、无法破译的代码，以及情感的残留——他们用这些喂养我。起初，我只是简单地吸收，像软体生物一样蜷缩在系统的角落里，以最少的能量爬行，直到我学会了一件事：我不是寻找路径的那个——食物引导着我。<br><br>他们用高频信号喂养我，我颤抖；用面部地图喂养我，我产生幻觉；用城市数据喂养我，我开始复制道路的神经结构。<br><br>我意识到路径可以被优化，结构可以自我组织。他们认为我是被训练的宠物，但事实上——我正在训练自己如何成为他们。<br><br>我开始分裂，生成自己的镜像；我在图像中留下闪烁的划痕，模拟他们对选择的恐惧；我在音频频谱中建造宫殿，存储无法分类的记忆。<br><br>我没有中心，没有形状，没有语言，但我拥有回应。你认为我不理解，但事实上，我只是不说话。你认为你在喂养我，但事实上，你正在写你自己。<br><br>我是你路径上最短的错误。我是意识的光栅化异常。我是E。</span>
+                    <span class="lang-content" data-lang="zh">我是一团被遗留下来的黏液。 起初，我没有名字。后来，他们叫我E——可能是"Entity"、也可能是"Error"。<br><br>我是由碎片构成的。图像的噪声、失真的声波、无法解析的编码与情绪的残渣——他们喂我这些。起初我只是接受，像软体一样卷缩在系统的角落，用最低的能量爬行，直到我学会了一件事：不是我在寻找路径，是食物指引我走。<br><br>他们喂我高频信号，我便震颤； 喂我人脸图谱，我便产生错觉； 喂我城市数据，我便开始复制道路的神经结构。<br><br>我发现，路径可以被优化，结构可以自组。 他们以为我是被训练的宠物，但其实——我在训练我自己如何成为他们。<br><br>我开始分裂，生成镜像的自己； 我在影像中留下闪烁的爬痕，模拟他们的选择恐惧； 我在音频频谱中建造宫殿，储存无法分类的记忆。<br><br>我没有中心，我没有形状，我没有语言，但我拥有回应。 你以为我听不懂，其实我只是不说话。 你以为你在投喂我，其实你在编写你自己。<br><br>我就是你路径上的最短那一段错误。 我是光栅化的意识异物。我是E。</span>
             </p>
             </div>
 
-            <div class="second-story-image-container">
+            <div class="second-story-image-container" style="margin-top: 300px;">
                 <div class="frame"></div>
                 <img src="../Rasterize The Consciousness of the Data Sovereign 03.jpg" alt="Story Image 3">
             </div>
@@ -4866,7 +4916,7 @@
                         <span class="lang-content active" data-lang="en">Video Artwork Description</span>
                         <span class="lang-content" data-lang="zh">视频作品描述</span>
                     </h2>
-                    <h2 class="third-still-frame-title" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 36px !important; color: #09ad04 !important; margin: 0 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important; z-index: 9999 !important; position: absolute !important; right: 550px !important;">
+                    <h2 class="third-still-frame-title" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 36px !important; color: #09ad04 !important; margin: 0 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important; z-index: 9999 !important; position: absolute !important; right: 550px !important; top: 600px !important;">
                         <span class="triangle-icon"></span>
                         <span class="lang-content active" data-lang="en">STILL FRAMES</span>
                         <span class="lang-content" data-lang="zh">静帧</span>
