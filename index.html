@@ -94,6 +94,283 @@
             }
         }
         
+        /* 音效模式切换按钮组样式 */
+        .sound-mode-toggle {
+            position: fixed;
+            top: 1.5625vh; /* 30px */
+            right: 120px; /* 位于语言切换按钮左侧 */
+            display: flex;
+            gap: 15px;
+            z-index: 10000;
+        }
+        
+        /* 音量控制样式 - 竖直推子设计 */
+        .volume-control {
+            position: fixed;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        /* 音量控制标签 */
+        .volume-control::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #0041ff;
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+        
+        /* 波点音效标识 */
+        .dots-volume-control::before {
+            background: #ff4444;
+        }
+        
+        /* 分割线音效标识 */
+        .dividers-volume-control::before {
+            background: #44ff44;
+        }
+        
+        /* 管道音乐标识 */
+        .pipes-music-volume-control::before {
+            background: #0066ff;
+        }
+        
+        /* 音量滑块基础样式 - 使用更强的选择器 */
+        input[type="range"].volume-slider {
+            width: 4px !important;
+            height: 80px !important;
+            border-radius: 2px !important;
+            background: #0041ff !important;
+            outline: none !important;
+            cursor: pointer !important;
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            border: 1px solid #0041ff !important;
+            transition: all 0.2s ease !important;
+            writing-mode: bt-lr !important;
+            -webkit-appearance: slider-vertical !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        
+        /* Webkit浏览器滑块轨道 - 使用更强的选择器 */
+        input[type="range"].volume-slider::-webkit-slider-track {
+            background: #0041ff !important;
+            border-radius: 2px !important;
+            border: none !important;
+            width: 4px !important;
+            height: 80px !important;
+        }
+        
+        /* Webkit浏览器滑块 - 使用更强的选择器 */
+        input[type="range"].volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+            background: #ffffff !important;
+            cursor: pointer !important;
+            border: 2px solid #0041ff !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+            margin-top: -4px !important;
+        }
+        
+        /* Firefox浏览器滑块轨道 - 使用更强的选择器 */
+        input[type="range"].volume-slider::-moz-range-track {
+            background: #0041ff !important;
+            border-radius: 2px !important;
+            border: none !important;
+            height: 4px !important;
+            width: 4px !important;
+        }
+        
+        /* Firefox浏览器滑块 - 使用更强的选择器 */
+        input[type="range"].volume-slider::-moz-range-thumb {
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+            background: #ffffff !important;
+            cursor: pointer !important;
+            border: 2px solid #0041ff !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        /* 悬停和激活状态 - 使用更强的选择器 */
+        input[type="range"].volume-slider:hover {
+            background: rgba(0, 65, 255, 0.8) !important;
+            border-color: rgba(0, 65, 255, 1) !important;
+        }
+        
+        input[type="range"].volume-slider:active {
+            background: rgba(0, 65, 255, 1) !important;
+            border-color: #ffffff !important;
+        }
+        
+
+        
+        /* 波点音效音量控制位置 */
+        .dots-volume-control {
+            top: 20vh; /* 400px，页面右侧中部 */
+            right: 20px;
+        }
+        
+        /* 分割线音效音量控制位置 */
+        .dividers-volume-control {
+            top: 35vh; /* 700px，位于波点音量控制下方 */
+            right: 20px;
+        }
+        
+        /* 管道音乐音量控制位置 */
+        .pipes-music-volume-control {
+            top: 50vh; /* 1000px，位于分割线音量控制下方 */
+            right: 20px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .sound-mode-toggle {
+                top: 2vh;
+                right: 80px;
+                gap: 10px;
+            }
+            
+            .sound-mode-btn {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .square-shape {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .triangle-shape {
+                border-left: 9px solid transparent;
+                border-right: 9px solid transparent;
+                border-bottom: 16px solid #333;
+            }
+            
+            .circle-shape {
+                width: 18px;
+                height: 18px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .sound-mode-toggle {
+                top: 2.5vh;
+                right: 60px;
+                gap: 8px;
+            }
+            
+            .sound-mode-btn {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .square-shape {
+                width: 15px;
+                height: 15px;
+            }
+            
+            .triangle-shape {
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                border-bottom: 14px solid #333;
+            }
+            
+            .circle-shape {
+                width: 15px;
+                height: 15px;
+            }
+            
+            .current-sound-mode {
+                top: 8vh;
+                right: 60px;
+                font-size: 10px;
+                padding: 6px 12px;
+            }
+        }
+        
+        .sound-mode-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sound-mode-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .sound-mode-btn.active {
+            background: rgba(255, 255, 255, 1);
+            border-color: #0041ff;
+            box-shadow: 0 0 0 3px rgba(0, 65, 255, 0.3);
+        }
+        
+        /* 几何形状样式 */
+        .square-shape {
+            width: 20px;
+            height: 20px;
+            background: #333;
+            border-radius: 2px;
+        }
+        
+        .triangle-shape {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 18px solid #333;
+        }
+        
+        .circle-shape {
+            width: 20px;
+            height: 20px;
+            background: #333;
+            border-radius: 50%;
+        }
+        
+        /* 当前音效模式显示样式 */
+        .current-sound-mode {
+            position: fixed;
+            top: 6vh; /* 位于按钮组下方 */
+            right: 120px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-family: 'VCR OSD Mono', monospace;
+            z-index: 10000;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .current-sound-mode.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
         /* 语言切换按钮样式 */
         .language-toggle {
             position: fixed;
@@ -422,7 +699,7 @@
             width: 100% !important;
             height: 100% !important;
             pointer-events: none !important;
-            z-index: 1 !important;
+            z-index: 99999999 !important; /* 提高z-index，确保显示在所有元素之上 */
             overflow: visible !important;
         }
         
@@ -954,7 +1231,7 @@
             border-radius: 50%;
             will-change: transform;
             transform: translateZ(0); /* 启用硬件加速 */
-            transform: translateZ(0);
+            z-index: 99999999 !important; /* 确保波点显示在最上层 */
         }
         
         .dot.bright-green {
@@ -1663,6 +1940,39 @@
             z-index: 15;
             align-items: stretch;
             background: transparent;
+            cursor: pointer; /* 添加指针样式 */
+            transition: all 0.3s ease; /* 添加过渡效果 */
+        }
+        
+        /* 分割线交互效果 */
+        .additional-dividers:hover {
+            transform: scale(1.05); /* 悬停时更明显放大 */
+            filter: brightness(1.3) contrast(1.2); /* 悬停时更亮更锐利 */
+            box-shadow: 0 0 25px rgba(0, 150, 255, 0.8), 0 0 40px rgba(0, 150, 255, 0.4); /* 双层蓝色数字化光晕 */
+        }
+        
+        /* 分割线音效提示 */
+        .additional-dividers::before {
+            content: "🔊"; /* 音量图标，数字化科技感 */
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            filter: drop-shadow(0 0 5px rgba(0, 150, 255, 0.8)); /* 蓝色数字化光晕 */
+        }
+        
+        .additional-dividers:hover::before {
+            opacity: 1;
+            animation: digitalGlow 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes digitalGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(0, 150, 255, 0.8)); }
+            50% { filter: drop-shadow(0 0 15px rgba(0, 150, 255, 1)); }
         }
         
         .additional-divider {
@@ -1690,6 +2000,34 @@
             gap: 8px;
             z-index: 15;
             background: transparent;
+            cursor: pointer; /* 添加指针样式 */
+            transition: all 0.3s ease; /* 添加过渡效果 */
+        }
+        
+        /* 分割线交互效果 */
+        .additional-dividers-2:hover {
+            transform: scale(1.05); /* 悬停时更明显放大 */
+            filter: brightness(1.3) contrast(1.2); /* 悬停时更亮更锐利 */
+            box-shadow: 0 0 25px rgba(0, 150, 255, 0.8), 0 0 40px rgba(0, 150, 255, 0.4); /* 双层蓝色数字化光晕 */
+        }
+        
+        /* 分割线音效提示 */
+        .additional-dividers-2::before {
+            content: "🔊"; /* 音量图标，数字化科技感 */
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            filter: drop-shadow(0 0 5px rgba(0, 150, 255, 0.8)); /* 蓝色数字化光晕 */
+        }
+        
+        .additional-dividers-2:hover::before {
+            opacity: 1;
+            animation: digitalGlow 1.5s ease-in-out infinite;
         }
         
         .music-block {
@@ -1724,6 +2062,34 @@
             gap: 8px;
             z-index: 15;
             background: transparent;
+            cursor: pointer; /* 添加指针样式 */
+            transition: all 0.3s ease; /* 添加过渡效果 */
+        }
+        
+        /* 分割线交互效果 */
+        .additional-dividers-3:hover {
+            transform: scale(1.05); /* 悬停时更明显放大 */
+            filter: brightness(1.3) contrast(1.2); /* 悬停时更亮更锐利 */
+            box-shadow: 0 0 25px rgba(0, 150, 255, 0.8), 0 0 40px rgba(0, 150, 255, 0.4); /* 双层蓝色数字化光晕 */
+        }
+        
+        /* 分割线音效提示 */
+        .additional-dividers-3::before {
+            content: "🔊"; /* 音量图标，数字化科技感 */
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            filter: drop-shadow(0 0 5px rgba(0, 150, 255, 0.8)); /* 蓝色数字化光晕 */
+        }
+        
+        .additional-dividers-3:hover::before {
+            opacity: 1;
+            animation: digitalGlow 1.5s ease-in-out infinite;
         }
         
         .additional-dividers-4 {
@@ -1736,6 +2102,34 @@
             gap: 8px;
             z-index: 15;
             background: transparent;
+            cursor: pointer; /* 添加指针样式 */
+            transition: all 0.3s ease; /* 添加过渡效果 */
+        }
+        
+        /* 分割线交互效果 */
+        .additional-dividers-4:hover {
+            transform: scale(1.05); /* 悬停时更明显放大 */
+            filter: brightness(1.3) contrast(1.2); /* 悬停时更亮更锐利 */
+            box-shadow: 0 0 25px rgba(0, 150, 255, 0.8), 0 0 40px rgba(0, 150, 255, 0.4); /* 双层蓝色数字化光晕 */
+        }
+        
+        /* 分割线音效提示 */
+        .additional-dividers-4::before {
+            content: "🔊"; /* 音量图标，数字化科技感 */
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            filter: drop-shadow(0 0 5px rgba(0, 150, 255, 0.8)); /* 蓝色数字化光晕 */
+        }
+        
+        .additional-dividers-4:hover::before {
+            opacity: 1;
+            animation: digitalGlow 1.5s ease-in-out infinite;
         }
         
         .album-covers-container {
@@ -3001,6 +3395,37 @@
 <body>
     <!-- 语言切换按钮 -->
     <button id="languageToggle" class="language-toggle">中文</button>
+    
+    <!-- 音效模式切换按钮组 -->
+    <div class="sound-mode-toggle">
+        <button id="soundMode1" class="sound-mode-btn square-btn" data-mode="classic">
+            <div class="square-shape"></div>
+        </button>
+        <button id="soundMode2" class="sound-mode-btn triangle-btn" data-mode="melodic">
+            <div class="triangle-shape"></div>
+        </button>
+        <button id="soundMode3" class="sound-mode-btn circle-btn" data-mode="ambient">
+            <div class="circle-shape"></div>
+        </button>
+    </div>
+    
+    <!-- 当前音效模式显示 -->
+    <div id="currentSoundMode" class="current-sound-mode">经典音效模式</div>
+    
+    <!-- 波点音效音量调节器 -->
+    <div class="volume-control dots-volume-control">
+        <input type="range" id="dotsVolumeSlider" min="0" max="100" value="80" class="volume-slider" title="波点音效音量">
+    </div>
+    
+    <!-- 分割线音效音量调节器 -->
+    <div class="volume-control dividers-volume-control">
+        <input type="range" id="dividersVolumeSlider" min="0" max="100" value="80" class="volume-slider" title="分割线音效音量">
+    </div>
+    
+    <!-- 管道音乐音量调节器 -->
+    <div class="volume-control pipes-music-volume-control">
+        <input type="range" id="pipesMusicVolumeSlider" min="0" max="100" value="80" class="volume-slider" title="管道音乐音量">
+    </div>
     <div class="container protected-layout">
         <div class="left-panel">
             <div class="left-title">▼ Graphic Self-Portrait</div>
@@ -3014,7 +3439,10 @@
                     <!-- 管道元素将通过JavaScript动态生成 -->
                 </div>
                 <!-- 屏保切换按钮 -->
-                <button id="test-pipes" style="position: relative; margin-top: 120px; z-index: 20; background: #ff0000; color: white; border: 3px solid #ff0000; width: 60px; height: 60px; cursor: pointer; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-family: 'VCR OSD Mono', monospace; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></button>
+                <button id="test-pipes" style="position: relative; margin-top: 120px; z-index: 20; background: #ff0000; color: white; border: 3px solid #ff0000; width: 60px; height: 60px; cursor: pointer; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-family: 'VCR OSD Mono', monospace; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">PIPE</button>
+                
+                <!-- 音乐控制按钮 -->
+                <button id="music-control" style="position: relative; margin-top: 20px; z-index: 20; background: #00ff00; color: white; border: 3px solid #00ff00; width: 60px; height: 60px; cursor: pointer; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-family: 'VCR OSD Mono', monospace; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.3);" title="单击播放/停止音乐，双击测试音效">MUSIC</button>
             </div>
         </div>
         <div class="right-panel">
@@ -3094,6 +3522,7 @@
             
             <!-- 额外的26根分割线 -->
             <div class="additional-dividers">
+                <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
                 <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
                 <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
                 <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
@@ -3365,7 +3794,6 @@
         
         <!-- 额外的26根分割线 -->
         <div class="additional-dividers-3">
-            <div class="additional-divider-3"></div>
             <div class="additional-divider-3"></div>
             <div class="additional-divider-3"></div>
             <div class="additional-divider-3"></div>
@@ -3973,7 +4401,23 @@
                 this.dots = [];
                 this.colors = ['red', 'bright-green', 'light-blue', 'yellow'];
                 this.dotCount = this.getOptimalDotCount();
+                this.audioContext = null;
+                this.lastCollisionTime = 0;
+                this.frameCount = 0;
+                this.animationFrameId = null;
+                this.currentSoundMode = 'classic'; // 默认经典音效模式
+                this.dotsVolume = 0.8; // 波点音效音量，默认80%
+                
+                console.log('🔧 波点系统构造函数开始');
+                console.log('容器元素:', this.container);
+                console.log('右侧面板:', this.rightPanel);
+                console.log('波点数量:', this.dotCount);
+                console.log('当前音效模式:', this.currentSoundMode);
+                console.log('波点音效音量:', this.dotsVolume);
+                
                 this.init();
+                this.initAudio();
+                this.initSoundModeToggle();
             }
             
             // 根据设备性能优化波点数量 - Mac优化版
@@ -4010,8 +4454,143 @@
                 */
             }
             
+            // 初始化音频系统
+            initAudio() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // 添加用户交互激活音频
+                    const activateAudio = () => {
+                        if (this.audioContext && this.audioContext.state === 'suspended') {
+                            this.audioContext.resume().then(() => {
+                                console.log('✅ 音频系统已激活');
+                            });
+                        }
+                        // 移除事件监听器，只需要激活一次
+                        document.removeEventListener('click', activateAudio);
+                        document.removeEventListener('touchstart', activateAudio);
+                    };
+                    
+                    // 监听用户交互
+                    document.addEventListener('click', activateAudio);
+                    document.addEventListener('touchstart', activateAudio);
+                    
+                    console.log('✅ 音频系统初始化成功，等待用户交互激活');
+                } catch (error) {
+                    console.warn('⚠️ 音频系统初始化失败:', error);
+                }
+            }
+            
+            // 初始化音效模式切换
+            initSoundModeToggle() {
+                const soundModeBtns = document.querySelectorAll('.sound-mode-btn');
+                
+                soundModeBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const mode = btn.dataset.mode;
+                        this.switchSoundMode(mode);
+                        
+                        // 更新按钮状态
+                        soundModeBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        console.log(`🎵 切换到${this.getSoundModeName(mode)}音效模式`);
+                    });
+                });
+                
+                // 默认激活第一个按钮
+                document.getElementById('soundMode1').classList.add('active');
+                
+                // 初始化模式显示
+                this.updateSoundModeDisplay();
+            }
+            
+            // 切换音效模式
+            switchSoundMode(mode) {
+                this.currentSoundMode = mode;
+                console.log(`🎵 音效模式已切换为: ${this.getSoundModeName(mode)}`);
+                
+                // 更新模式名称显示
+                this.updateSoundModeDisplay();
+            }
+            
+            // 更新音效模式显示
+            updateSoundModeDisplay() {
+                const modeDisplay = document.getElementById('currentSoundMode');
+                if (modeDisplay) {
+                    const modeName = this.getSoundModeName(this.currentSoundMode);
+                    modeDisplay.textContent = `${modeName}音效模式`;
+                    
+                    // 显示动画效果
+                    modeDisplay.classList.remove('show');
+                    setTimeout(() => {
+                        modeDisplay.classList.add('show');
+                    }, 100);
+                    
+                    // 3秒后自动隐藏
+                    setTimeout(() => {
+                        modeDisplay.classList.remove('show');
+                    }, 3000);
+                }
+            }
+            
+            // 获取音效模式名称
+            getSoundModeName(mode) {
+                const modeNames = {
+                    'classic': '经典',
+                    'melodic': '旋律',
+                    'ambient': '氛围'
+                };
+                return modeNames[mode] || '未知';
+            }
+            
+            // 初始化音量控制
+            initVolumeControl() {
+                console.log('🔍 开始初始化波点音效音量控制...');
+                const dotsVolumeSlider = document.getElementById('dotsVolumeSlider');
+                console.log('🔍 查找音量滑块元素:', dotsVolumeSlider);
+                
+                if (dotsVolumeSlider) {
+                    // 设置初始值
+                    dotsVolumeSlider.value = this.dotsVolume * 100;
+                    this.updateDotsVolumeDisplay();
+                    
+                    // 添加音量变化监听器
+                    dotsVolumeSlider.addEventListener('input', (e) => {
+                        this.dotsVolume = e.target.value / 100;
+                        this.updateDotsVolumeDisplay();
+                        console.log(`🎵 波点音效音量已调整为: ${(this.dotsVolume * 100).toFixed(0)}%`);
+                    });
+                    
+                    // 添加change事件监听器作为备用
+                    dotsVolumeSlider.addEventListener('change', (e) => {
+                        this.dotsVolume = e.target.value / 100;
+                        this.updateDotsVolumeDisplay();
+                        console.log(`🎵 波点音效音量已调整为: ${(this.dotsVolume * 100).toFixed(0)}%`);
+                    });
+                    
+                    console.log('✅ 波点音效音量控制已初始化，滑块值:', dotsVolumeSlider.value);
+                } else {
+                    console.error('❌ 找不到波点音效音量滑块元素');
+                }
+            }
+            
+            // 更新波点音量显示
+            updateDotsVolumeDisplay() {
+                // 简洁推子设计，无需显示数值
+                console.log(`🎵 波点音效音量: ${(this.dotsVolume * 100).toFixed(0)}%`);
+            }
+            
             init() {
-                if (!this.container || !this.rightPanel) return;
+                if (!this.container || !this.rightPanel) {
+                    console.error('❌ 波点系统初始化失败：找不到容器或右侧面板');
+                    console.log('容器:', this.container);
+                    console.log('右侧面板:', this.rightPanel);
+                    return;
+                }
+                
+                console.log('✅ 波点系统开始初始化');
+                console.log('容器尺寸:', this.container.clientWidth, 'x', this.container.clientHeight);
                 
                 // 设置容器高度为右侧面板的实际内容高度
                 const updateContainerHeight = () => {
@@ -4019,8 +4598,14 @@
                     const fixedHeight = 12000; // 滚轮终点位置：-12000px
                     this.container.style.height = fixedHeight + 'px';
                     this.container.style.maxHeight = fixedHeight + 'px';
-                    this.containerWidth = this.container.clientWidth;
+                    this.containerWidth = window.innerWidth; // 使用窗口宽度
                     this.containerHeight = fixedHeight;
+                    
+                    console.log('📐 容器尺寸更新:', {
+                        width: this.containerWidth,
+                        height: this.containerHeight,
+                        containerElement: this.container
+                    });
                 };
                 
                 updateContainerHeight();
@@ -4030,32 +4615,40 @@
                     updateContainerHeight();
                 });
                 
-                        // 防抖函数
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-        
-        // 监听窗口大小变化（防抖优化）
-        window.addEventListener('resize', debounce(updateContainerHeight, 250));
+                // 防抖函数
+                function debounce(func, wait) {
+                    let timeout;
+                    return function executedFunction(...args) {
+                        const later = () => {
+                            clearTimeout(timeout);
+                            func(...args);
+                        };
+                        clearTimeout(timeout);
+                        timeout = setTimeout(later, wait);
+                    };
+                }
+                
+                // 监听窗口大小变化（防抖优化）
+                window.addEventListener('resize', debounce(updateContainerHeight, 250));
                 
                 // 创建波点
+                console.log(`🎯 开始创建 ${this.dotCount} 个波点`);
                 for (let i = 0; i < this.dotCount; i++) {
                     this.createDot(i);
                 }
+                console.log(`✅ 成功创建 ${this.dots.length} 个波点`);
                 
                 // 为绿色圆点添加鼠标事件
                 this.addGreenDotEvents();
                 
                 // 开始动画循环
+                console.log('✅ 开始波点动画循环');
                 this.animate();
+                
+                // 延迟初始化音量控制，确保DOM完全加载
+                setTimeout(() => {
+                    this.initVolumeControl();
+                }, 100);
             }
             
             createDot(index) {
@@ -4069,10 +4662,10 @@
                 const dotData = {
                     element: dot,
                     size: size,
-                    x: Math.random() * (this.containerWidth - size - 150) + 50, // 考虑右侧缩进，但确保均匀分布
-                    y: Math.random() * (this.containerHeight - size),
+                    x: Math.random() * (this.containerWidth - size) + size/2, // 确保波点完全在容器内
+                    y: Math.random() * (this.containerHeight - size) + size/2, // 确保波点完全在容器内
                     vx: (Math.random() - 0.5) * (this.dotCount > 25 ? 3 : 4), // 根据波点数量调整速度
-                    vy: (Math.random() - 0.5) * (this.dotCount > 25 ? 3 : 4),
+                    vy: (Math.random() - 0.5) * (this.dotCount > 25 ? 3 : 4), // 根据波点数量调整速度
                     colorClass: colorClass
                 };
                 
@@ -4083,72 +4676,114 @@
                 
                 this.container.appendChild(dot);
                 this.dots.push(dotData);
+                
+                // 调试信息
+                if (index < 3) { // 只显示前3个波点的信息
+                    console.log(`🎯 波点 ${index}: 颜色=${colorClass}, 大小=${size}, 位置=(${dotData.x}, ${dotData.y}), 速度=(${dotData.vx}, ${dotData.vy})`);
+                }
             }
             
             checkCollisions() {
-                // 优化碰撞检测：只检查相邻的波点
-                const maxCheckDistance = 200; // 最大检测距离
+                // 精确碰撞检测 - 使用更精确的圆形碰撞检测
+                let collisionCount = 0; // 调试：记录碰撞次数
                 
                 for (let i = 0; i < this.dots.length; i++) {
                     for (let j = i + 1; j < this.dots.length; j++) {
                         const dot1 = this.dots[i];
                         const dot2 = this.dots[j];
                         
-                        const dx = dot2.x - dot1.x;
-                        const dy = dot2.y - dot1.y;
-                        const distanceSquared = dx * dx + dy * dy;
+                        // 计算两个波点中心之间的精确距离
+                        const centerX1 = dot1.x + dot1.size / 2;
+                        const centerY1 = dot1.y + dot1.size / 2;
+                        const centerX2 = dot2.x + dot2.size / 2;
+                        const centerY2 = dot2.y + dot2.size / 2;
                         
-                        // 快速距离检查，避免不必要的计算
-                        if (distanceSquared > maxCheckDistance * maxCheckDistance) {
-                            continue;
-                        }
+                        const dx = centerX2 - centerX1;
+                        const dy = centerY2 - centerY1;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
                         
-                        const distance = Math.sqrt(distanceSquared);
-                        const minDistance = (dot1.size + dot2.size) / 2;
+                        // 精确的半径计算 - 波点的实际半径
+                        const radius1 = dot1.size / 2;
+                        const radius2 = dot2.size / 2;
+                        const minDistance = radius1 + radius2;
                         
-                        if (distance < minDistance) {
-                            // 碰撞反弹
+                        // 精确碰撞检测 - 当两个圆形刚好接触时
+                        if (distance <= minDistance && distance > 0) {
+                            collisionCount++; // 调试：记录碰撞次数
+                            
+                            // 防止重复碰撞检测
+                            if (!dot1.justCollided && !dot2.justCollided) {
+                                // 调试：输出碰撞信息
+                                console.log(`🎯 波点碰撞检测到！距离: ${distance.toFixed(2)}, 最小距离: ${minDistance.toFixed(2)}, 波点1: ${dot1.colorClass}, 波点2: ${dot2.colorClass}`);
+                                
+                                // 播放基于波点颜色的8位游戏风格碰撞音效
+                                this.playCollisionSound(dot1.colorClass, dot2.colorClass);
+                                
+                                // 标记刚刚碰撞过，防止连续碰撞音效
+                                dot1.justCollided = true;
+                                dot2.justCollided = true;
+                                
+                                // 0.1秒后重置碰撞标记
+                                setTimeout(() => {
+                                    dot1.justCollided = false;
+                                    dot2.justCollided = false;
+                                }, 100);
+                            }
+                            
+                            // 精确的物理碰撞反弹计算
                             const angle = Math.atan2(dy, dx);
                             const sin = Math.sin(angle);
                             const cos = Math.cos(angle);
                             
-                            // 交换速度分量
+                            // 将速度转换到碰撞坐标系
                             const vx1 = dot1.vx * cos + dot1.vy * sin;
                             const vy1 = dot1.vy * cos - dot1.vx * sin;
                             const vx2 = dot2.vx * cos + dot2.vy * sin;
                             const vy2 = dot2.vy * cos - dot2.vx * sin;
                             
+                            // 弹性碰撞 - 交换法向速度分量
                             dot1.vx = vx2 * cos - vy1 * sin;
                             dot1.vy = vy1 * cos + vx2 * sin;
                             dot2.vx = vx1 * cos - vy2 * sin;
                             dot2.vy = vy2 * cos + vx1 * sin;
                             
-                            // 分离重叠的波点
+                            // 精确分离重叠的波点
                             const overlap = minDistance - distance;
-                            const separateX = (overlap / 2) * cos;
-                            const separateY = (overlap / 2) * sin;
-                            
-                            dot1.x -= separateX;
-                            dot1.y -= separateY;
-                            dot2.x += separateX;
-                            dot2.y += separateY;
+                            if (overlap > 0) {
+                                const separateX = (overlap / 2) * (dx / distance);
+                                const separateY = (overlap / 2) * (dy / distance);
+                                
+                                dot1.x -= separateX;
+                                dot1.y -= separateY;
+                                dot2.x += separateX;
+                                dot2.y += separateY;
+                            }
                         }
                     }
+                }
+                
+                // 调试：如果检测到碰撞，输出总数
+                if (collisionCount > 0) {
+                    console.log(`🎵 本次检测到 ${collisionCount} 次波点碰撞`);
                 }
             }
             
             animate() {
+                // 调试：显示动画帧信息
+                if (!this.frameCount || this.frameCount % 60 === 0) {
+                    console.log(`🎬 动画帧 ${this.frameCount || 0}: 波点数量=${this.dots.length}`);
+                }
+                
                 // 更新每个波点
                 this.dots.forEach(dot => {
                     // 更新位置
                     dot.x += dot.vx;
                     dot.y += dot.vy;
                     
-                    // 边界反弹 - 右侧额外缩进
-                    const rightMargin = 150; // 右侧额外缩进150px
-                    if (dot.x <= 0 || dot.x >= this.containerWidth - dot.size - rightMargin) {
+                    // 边界反弹 - 移除右侧限制，让波点在全屏范围内移动
+                    if (dot.x <= 0 || dot.x >= this.containerWidth - dot.size) {
                         dot.vx *= -1;
-                        dot.x = Math.max(0, Math.min(this.containerWidth - dot.size - rightMargin, dot.x));
+                        dot.x = Math.max(0, Math.min(this.containerWidth - dot.size, dot.x));
                     }
                     if (dot.y <= 0 || dot.y >= this.containerHeight - dot.size) {
                         dot.vy *= -1;
@@ -4156,14 +4791,14 @@
                     }
                     
                     // 额外的安全检查 - 强制限制波点位置
-                    dot.x = Math.max(0, Math.min(this.containerWidth - dot.size - rightMargin, dot.x));
+                    dot.x = Math.max(0, Math.min(this.containerWidth - dot.size, dot.x));
                     dot.y = Math.max(0, Math.min(this.containerHeight - dot.size, dot.y));
                     
                     // 平衡运动方向 - 防止偏向右侧或左侧
-                    if (dot.x > (this.containerWidth - dot.size - rightMargin) * 0.8) {
+                    if (dot.x > (this.containerWidth - dot.size) * 0.8) {
                         // 如果波点接近右边界，增加向左的速度
                         dot.vx = Math.min(dot.vx, -1);
-                    } else if (dot.x < (this.containerWidth - dot.size - rightMargin) * 0.2) {
+                    } else if (dot.x < (this.containerWidth - dot.size) * 0.2) {
                         // 如果波点接近左边界，增加向右的速度
                         dot.vx = Math.max(dot.vx, 1);
                     }
@@ -4214,13 +4849,611 @@
                     }
                 });
             }
+            
+            // 创建柔和耐听的碰撞音效 - 基于波点颜色和音效模式
+            playCollisionSound(dot1Color, dot2Color) {
+                if (!this.audioContext) return;
+                
+                // 防止音频过于频繁播放
+                const currentTime = Date.now();
+                if (currentTime - this.lastCollisionTime < 80) return; // 增加间隔，让音效更舒适
+                this.lastCollisionTime = currentTime;
+                
+                try {
+                    // 根据当前音效模式选择音效，并应用音量控制
+                    switch (this.currentSoundMode) {
+                        case 'classic':
+                            this.playClassicSound(dot1Color, dot2Color);
+                            break;
+                        case 'melodic':
+                            this.playMelodicSound(dot1Color, dot2Color);
+                            break;
+                        case 'ambient':
+                            this.playAmbientSound(dot1Color, dot2Color);
+                            break;
+                        default:
+                            this.playClassicSound(dot1Color, dot2Color);
+                    }
+                } catch (error) {
+                    console.warn('音效播放失败:', error);
+                }
+            }
+            
+            // 经典音效模式 - 8位游戏风格
+            playClassicSound(dot1Color, dot2Color) {
+                const soundProfile = this.getSoundProfile(dot1Color, dot2Color);
+                
+                // 使用方波振荡器，模拟8位游戏音效
+                soundProfile.simpleNotes.forEach((note, index) => {
+                    const oscillator = this.audioContext.createOscillator();
+                    const noteGain = this.audioContext.createGain();
+                    
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(note, this.audioContext.currentTime);
+                    
+                    const noteVolume = soundProfile.volume * (1 - index * 0.1) * this.dotsVolume;
+                    const noteDuration = 0.15; // 经典8位音效持续时间
+                    
+                    noteGain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    noteGain.gain.linearRampToValueAtTime(noteVolume, this.audioContext.currentTime + 0.01);
+                    noteGain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + noteDuration);
+                    
+                    oscillator.connect(noteGain);
+                    noteGain.connect(this.audioContext.destination);
+                    
+                    oscillator.start(this.audioContext.currentTime + index * 0.02);
+                    oscillator.stop(this.audioContext.currentTime + noteDuration);
+                });
+            }
+            
+            // 旋律音效模式 - 和谐和弦
+            playMelodicSound(dot1Color, dot2Color) {
+                const soundProfile = this.getSoundProfile(dot1Color, dot2Color);
+                
+                // 创建和谐的三和弦
+                const chordNotes = this.createHarmoniousChord(soundProfile);
+                
+                chordNotes.forEach((note, index) => {
+                    const oscillator = this.audioContext.createOscillator();
+                    const noteGain = this.audioContext.createGain();
+                    const noteFilter = this.audioContext.createBiquadFilter();
+                    
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(note, this.audioContext.currentTime);
+                    
+                    noteFilter.type = 'lowpass';
+                    noteFilter.frequency.setValueAtTime(soundProfile.filterFreq, this.audioContext.currentTime);
+                    noteFilter.Q.setValueAtTime(soundProfile.filterQ, this.audioContext.currentTime);
+                    
+                    const noteVolume = soundProfile.volume * (1 - index * 0.15) * this.dotsVolume;
+                    const noteDuration = 0.3;
+                    
+                    noteGain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    noteGain.gain.linearRampToValueAtTime(noteVolume, this.audioContext.currentTime + 0.05);
+                    noteGain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + noteDuration);
+                    
+                    oscillator.connect(noteFilter);
+                    noteFilter.connect(noteGain);
+                    noteGain.connect(this.audioContext.destination);
+                    
+                    oscillator.start(this.audioContext.currentTime + index * 0.03);
+                    oscillator.stop(this.audioContext.currentTime + noteDuration);
+                });
+            }
+            
+            // 氛围音效模式 - 环境音效
+            playAmbientSound(dot1Color, dot2Color) {
+                const soundProfile = this.getSoundProfile(dot1Color, dot2Color);
+                
+                // 创建环境音效，包含混响和延迟
+                const reverbNode = this.audioContext.createConvolver();
+                const reverbGain = this.audioContext.createGain();
+                const delay1 = this.audioContext.createDelay(0.2);
+                const delay2 = this.audioContext.createDelay(0.4);
+                const delayGain1 = this.audioContext.createGain();
+                const delayGain2 = this.audioContext.createGain();
+                
+                delay1.delayTime.setValueAtTime(0.1, this.audioContext.currentTime);
+                delay2.delayTime.setValueAtTime(0.2, this.audioContext.currentTime);
+                delayGain1.gain.setValueAtTime(0.4, this.audioContext.currentTime);
+                delayGain2.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+                
+                soundProfile.simpleNotes.forEach((note, index) => {
+                    const oscillator = this.audioContext.createOscillator();
+                    const noteGain = this.audioContext.createGain();
+                    const noteFilter = this.audioContext.createBiquadFilter();
+                    
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(note, this.audioContext.currentTime);
+                    
+                    noteFilter.type = 'lowpass';
+                    noteFilter.frequency.setValueAtTime(soundProfile.filterFreq * 0.8, this.audioContext.currentTime);
+                    noteFilter.Q.setValueAtTime(soundProfile.filterQ * 0.7, this.audioContext.currentTime);
+                    
+                    const noteVolume = soundProfile.volume * 0.6 * (1 - index * 0.1) * this.dotsVolume;
+                    const noteDuration = 0.5;
+                    
+                    noteGain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    noteGain.gain.linearRampToValueAtTime(noteVolume, this.audioContext.currentTime + 0.1);
+                    noteGain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + noteDuration);
+                    
+                    oscillator.connect(noteFilter);
+                    noteFilter.connect(noteGain);
+                    noteGain.connect(this.audioContext.destination);
+                    
+                    // 添加混响效果
+                    noteGain.connect(delay1);
+                    noteGain.connect(delay2);
+                    delay1.connect(delayGain1);
+                    delay2.connect(delayGain2);
+                    delayGain1.connect(this.audioContext.destination);
+                    delayGain2.connect(this.audioContext.destination);
+                    
+                    oscillator.start(this.audioContext.currentTime + index * 0.05);
+                    oscillator.stop(this.audioContext.currentTime + noteDuration);
+                });
+            }
+            
+            // 根据波点颜色组合获取耐听的音效配置
+            getSoundProfile(color1, color2) {
+                // 定义更柔和的音阶 - 使用五声音阶，避免半音冲突
+                const pentatonicScale = {
+                    'red': {
+                        // 红色 = 宫音 (C五声音阶)
+                        notes: [261.63, 329.63], // C4, E4 (只使用两个音符，更简洁)
+                        baseFreq: 261.63,        // C4
+                        filterFreq: 400,         // 更低的滤波器，更温暖
+                        filterQ: 1.8,            // 降低Q值，减少尖锐感
+                        volume: 0.08,            // 降低音量
+                        duration: 0.25,          // 缩短持续时间
+                        reverb: 0.15             // 减少混响
+                    },
+                    'bright-green': {
+                        // 绿色 = 徵音 (G五声音阶)
+                        notes: [392.00, 493.88], // G4, B4
+                        baseFreq: 392.00,        // G4
+                        filterFreq: 600,
+                        filterQ: 2.0,
+                        volume: 0.07,
+                        duration: 0.22,
+                        reverb: 0.12
+                    },
+                    'light-blue': {
+                        // 蓝色 = 商音 (D五声音阶)
+                        notes: [293.66, 369.99], // D4, F#4
+                        baseFreq: 293.66,        // D4
+                        filterFreq: 500,
+                        filterQ: 1.9,
+                        volume: 0.06,
+                        duration: 0.20,
+                        reverb: 0.10
+                    },
+                    'yellow': {
+                        // 黄色 = 角音 (E五声音阶)
+                        notes: [329.63, 415.30], // E4, G#4
+                        baseFreq: 329.63,        // E4
+                        filterFreq: 550,
+                        filterQ: 2.1,
+                        volume: 0.07,
+                        duration: 0.23,
+                        reverb: 0.13
+                    }
+                };
+                
+                // 获取两种颜色的配置
+                const profile1 = pentatonicScale[color1] || pentatonicScale['red'];
+                const profile2 = pentatonicScale[color2] || pentatonicScale['red'];
+                
+                // 创建简单的双音组合，避免复杂和弦
+                const simpleNotes = this.createSimpleHarmony(profile1, profile2);
+                
+                // 计算混合音效特征
+                const baseFreq = (profile1.baseFreq + profile2.baseFreq) / 2;
+                const filterFreq = (profile1.filterFreq + profile2.filterFreq) / 2;
+                const filterQ = (profile1.filterQ + profile2.filterQ) / 2;
+                const volume = Math.min(profile1.volume + profile2.volume, 0.15); // 进一步降低音量
+                const duration = (profile1.duration + profile2.duration) / 2;
+                const reverb = (profile1.reverb + profile2.reverb) / 2;
+                
+                return {
+                    simpleNotes,       // 简化的音符组合
+                    baseFreq,          // 基础频率
+                    filterFreq,        // 滤波器频率
+                    filterQ,           // 滤波器Q值
+                    volume,            // 音量
+                    duration,          // 持续时间
+                    reverb             // 混响强度
+                };
+            }
+            
+            // 创建简化的和谐音组合
+            createSimpleHarmony(profile1, profile2) {
+                // 只选择最和谐的两个音符
+                const note1 = profile1.notes[0];
+                const note2 = profile2.notes[0];
+                
+                // 检查音程关系，如果太近就调整
+                const ratio = note2 / note1;
+                if (ratio < 1.1) {
+                    // 如果音符太近，使用八度关系
+                    return [note1, note1 * 2];
+                } else if (ratio > 2.5) {
+                    // 如果音符太远，使用五度关系
+                    return [note1, note1 * 1.5];
+                }
+                
+                return [note1, note2];
+            }
+            
+            // 创建和谐的和弦组合（用于旋律模式）
+            createHarmoniousChord(profile) {
+                const baseNote = profile.baseFreq;
+                // 创建大三和弦：根音、大三度、纯五度
+                const chordNotes = [
+                    baseNote,                    // 根音
+                    baseNote * 1.25,            // 大三度
+                    baseNote * 1.5              // 纯五度
+                ];
+                
+                return chordNotes;
+            }
         }
         
-        // 创建波点系统
-        try {
-            window.dotSystem = new DotSystem();
-        } catch (error) {
-            // 静默处理错误，避免影响页面其他功能
+        // 创建波点系统 - 等待DOM加载完成
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                console.log('🚀 DOM加载完成，开始创建波点系统');
+                window.dotSystem = new DotSystem();
+                console.log('✅ 波点系统创建成功');
+                
+                // 初始化分割线音效系统
+                window.dividerSoundSystem = new DividerSoundSystem();
+                console.log('✅ 分割线音效系统创建成功');
+            } catch (error) {
+                console.error('❌ 波点系统创建失败:', error);
+                // 静默处理错误，避免影响页面其他功能
+            }
+        });
+        
+        // ===== 分割线音效系统 =====
+        class DividerSoundSystem {
+            constructor() {
+                this.audioContext = null;
+                this.lastInteractionTime = 0;
+                this.interactionCount = 0;
+                this.dividersVolume = 0.8; // 分割线音效音量，默认80%
+                this.init();
+            }
+            
+            init() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.setupDividerEvents();
+                    
+                    // 延迟初始化音量控制，确保DOM完全加载
+                    setTimeout(() => {
+                        this.initVolumeControl();
+                    }, 100);
+                    
+                    console.log('🎵 分割线音效系统初始化成功');
+                } catch (error) {
+                    console.warn('⚠️ 分割线音效系统初始化失败:', error);
+                }
+            }
+            
+            setupDividerEvents() {
+                // 为所有分割线组添加事件监听
+                const dividerGroups = [
+                    '.additional-dividers',
+                    '.additional-dividers-2', 
+                    '.additional-dividers-3',
+                    '.additional-dividers-4'
+                ];
+                
+                dividerGroups.forEach(selector => {
+                    const group = document.querySelector(selector);
+                    if (group) {
+                        // 鼠标进入分割线组
+                        group.addEventListener('mouseenter', (e) => {
+                            this.playDividerSound('enter', e);
+                        });
+                        
+                        // 鼠标离开分割线组
+                        group.addEventListener('mouseleave', (e) => {
+                            this.playDividerSound('leave', e);
+                        });
+                        
+                        // 鼠标在分割线组内移动
+                        group.addEventListener('mousemove', (e) => {
+                            this.playDividerSound('move', e);
+                        });
+                        
+                        // 鼠标点击分割线组
+                        group.addEventListener('click', (e) => {
+                            this.playDividerSound('click', e);
+                        });
+                    }
+                });
+            }
+            
+            playDividerSound(action, event) {
+                if (!this.audioContext) return;
+                
+                // 防抖：避免过于频繁的音效
+                const currentTime = Date.now();
+                if (currentTime - this.lastInteractionTime < 50) return;
+                this.lastInteractionTime = currentTime;
+                
+                this.interactionCount++;
+                
+                try {
+                    switch (action) {
+                        case 'enter':
+                            this.playSynthPad('enter', event);
+                            break;
+                        case 'leave':
+                            this.playSynthPad('leave', event);
+                            break;
+                        case 'move':
+                            this.playSynthPad('move', event);
+                            break;
+                        case 'click':
+                            this.playSynthPad('click', event);
+                            break;
+                    }
+                } catch (error) {
+                    console.warn('分割线音效播放失败:', error);
+                }
+            }
+            
+            // 初始化音量控制
+            initVolumeControl() {
+                console.log('🔍 开始初始化分割线音效音量控制...');
+                const dividersVolumeSlider = document.getElementById('dividersVolumeSlider');
+                console.log('🔍 查找分割线音量滑块元素:', dividersVolumeSlider);
+                
+                if (dividersVolumeSlider) {
+                    // 设置初始值
+                    dividersVolumeSlider.value = this.dividersVolume * 100;
+                    this.updateDividersVolumeDisplay();
+                    
+                    // 添加音量变化监听器
+                    dividersVolumeSlider.addEventListener('input', (e) => {
+                        this.dividersVolume = e.target.value / 100;
+                        this.updateDividersVolumeDisplay();
+                        console.log(`🔊 分割线音效音量已调整为: ${(this.dividersVolume * 100).toFixed(0)}%`);
+                    });
+                    
+                    // 添加change事件监听器作为备用
+                    dividersVolumeSlider.addEventListener('change', (e) => {
+                        this.dividersVolume = e.target.value / 100;
+                        this.updateDividersVolumeDisplay();
+                        console.log(`🔊 分割线音效音量已调整为: ${(this.dividersVolume * 100).toFixed(0)}%`);
+                    });
+                    
+                    console.log('✅ 分割线音效音量控制已初始化，滑块值:', dividersVolumeSlider.value);
+                } else {
+                    console.error('❌ 找不到分割线音效音量滑块元素');
+                }
+            }
+            
+            // 更新分割线音量显示
+            updateDividersVolumeDisplay() {
+                // 简洁推子设计，无需显示数值
+                console.log(`🔊 分割线音效音量: ${(this.dividersVolume * 100).toFixed(0)}%`);
+            }
+            
+            // 数字化科技合成器音效 - 现代电子节奏（音量增强）
+            playSynthPad(action, event) {
+                const rect = event.currentTarget.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                
+                // 使用现代电子音程，数字化张力
+                const digitalFreqs = [1, 1.125, 1.5, 1.875, 2.25, 3]; // 数字化音程频率比
+                const baseFreq = 180 + (x / rect.width) * 400; // 180-580Hz，稍微降低音域
+                const duration = 0.6; // 稍微延长持续时间，更舒适
+                
+                switch (action) {
+                    case 'enter':
+                        // 进入时创建数字化和弦 - 主音 + 七度 + 九度
+                        this.createWarmPad(baseFreq, duration, 0.45); // 提高音量
+                        setTimeout(() => {
+                            this.createWarmPad(baseFreq * 1.875, duration * 0.8, 0.28); // 七度音程，提高音量
+                        }, 80);
+                        setTimeout(() => {
+                            this.createWarmPad(baseFreq * 2.25, duration * 0.7, 0.22); // 九度音程，提高音量
+                        }, 160);
+                        break;
+                        
+                    case 'leave':
+                        // 离开时创建数字化衰减 - 主音 + 升调
+                        this.createWarmPad(baseFreq, duration * 0.5, 0.32); // 提高音量
+                        setTimeout(() => {
+                            this.createWarmPad(baseFreq * 1.5, duration * 0.4, 0.2); // 升调，提高音量
+                        }, 100);
+                        break;
+                        
+                    case 'move':
+                        // 移动时创建数字化调制音效
+                        const moveFreq = baseFreq + (y / rect.height) * 200; // 减少频率变化范围
+                        this.createWarmPad(moveFreq, duration * 0.3, 0.22); // 提高音量
+                        // 减少触发概率，让音效更轻
+                        if (Math.random() > 0.75) { // 25%概率触发，减少频率
+                            const randomRatio = digitalFreqs[Math.floor(Math.random() * digitalFreqs.length)];
+                            setTimeout(() => {
+                                this.createWarmPad(moveFreq * randomRatio, duration * 0.2, 0.12); // 提高音量
+                            }, 60);
+                        }
+                        break;
+                        
+                    case 'click':
+                        // 点击时创建温和的数字化音效，避免爆音
+                        this.createWarmPad(baseFreq, duration * 0.6, 0.32); // 提高主音音量
+                        setTimeout(() => {
+                            this.createWarmPad(baseFreq * 1.875, duration * 0.4, 0.2); // 七度音程，提高音量
+                        }, 120);
+                        setTimeout(() => {
+                            this.createWarmPad(baseFreq * 2.25, duration * 0.3, 0.18); // 九度音程，提高音量
+                        }, 240);
+                        break;
+                }
+            }
+            
+            // 数字化科技合成器音效 - 现代电子风格（防爆音优化）
+            createWarmPad(frequency, duration, volume) {
+                // === 防爆音保护 ===
+                // 限制频率范围，避免过高频率导致爆音
+                const safeFreq = Math.max(80, Math.min(800, frequency));
+                // 限制音量，确保不会过载，并应用分割线音量控制
+                const safeVolume = Math.max(0.05, Math.min(0.6, volume * this.dividersVolume));
+                
+                // === 主振荡器系统 - 数字化音色 ===
+                const mainOsc = this.audioContext.createOscillator();
+                const mainGain = this.audioContext.createGain();
+                const mainFilter = this.audioContext.createBiquadFilter();
+                
+                // 使用锯齿波作为基础，数字化音色
+                mainOsc.type = 'sawtooth';
+                mainOsc.frequency.setValueAtTime(safeFreq, this.audioContext.currentTime);
+                
+                // === 数字化滤波器系统 ===
+                mainFilter.type = 'bandpass';
+                mainFilter.frequency.setValueAtTime(safeFreq * 2, this.audioContext.currentTime);
+                mainFilter.Q.setValueAtTime(6.0, this.audioContext.currentTime); // 降低Q值，减少共振尖锐度
+                
+                // === 温和数字化LFO调制 ===
+                const lfoOsc = this.audioContext.createOscillator();
+                const lfoGain = this.audioContext.createGain();
+                const lfoFilterGain = this.audioContext.createGain();
+                
+                lfoOsc.type = 'sine'; // 正弦波LFO，更温和
+                lfoOsc.frequency.setValueAtTime(8.0, this.audioContext.currentTime); // 8Hz，稍微降低频率
+                lfoGain.gain.setValueAtTime(safeFreq * 0.08, this.audioContext.currentTime); // 温和频率调制，减少深度
+                lfoFilterGain.gain.setValueAtTime(safeFreq * 0.6, this.audioContext.currentTime); // 温和滤波器调制，减少深度
+                
+                // === 数字化ADSR包络 ===
+                const attackTime = 0.005; // 5ms攻击，数字化快速
+                const decayTime = 0.08;   // 80ms衰减
+                const sustainLevel = 0.6; // 60%持续
+                const releaseTime = 0.2;  // 200ms释放，数字化快速
+                
+                // 数字化ADSR包络（使用安全音量）
+                mainGain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                mainGain.gain.linearRampToValueAtTime(safeVolume, this.audioContext.currentTime + attackTime);
+                mainGain.gain.linearRampToValueAtTime(safeVolume * sustainLevel, this.audioContext.currentTime + attackTime + decayTime);
+                mainGain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration);
+                
+                // === 数字化谐波系统 - 现代音程（轻量化） ===
+                const harmonicOsc1 = this.audioContext.createOscillator();
+                const harmonicOsc2 = this.audioContext.createOscillator();
+                const harmonicGain1 = this.audioContext.createGain();
+                const harmonicGain2 = this.audioContext.createGain();
+                const harmonicFilter1 = this.audioContext.createBiquadFilter();
+                const harmonicFilter2 = this.audioContext.createBiquadFilter();
+                
+                // 第一谐波 - 七度音程（现代感）
+                harmonicOsc1.type = 'triangle'; // 改为三角形波，更柔和
+                harmonicOsc1.frequency.setValueAtTime(safeFreq * 1.875, this.audioContext.currentTime);
+                harmonicFilter1.type = 'lowpass'; // 改为低通，更柔和
+                harmonicFilter1.frequency.setValueAtTime(safeFreq * 2, this.audioContext.currentTime);
+                harmonicFilter1.Q.setValueAtTime(3.0, this.audioContext.currentTime); // 降低Q值
+                
+                // 第二谐波 - 九度音程（数字化张力）
+                harmonicOsc2.type = 'sine'; // 改为正弦波，最柔和
+                harmonicOsc2.frequency.setValueAtTime(safeFreq * 2.25, this.audioContext.currentTime);
+                harmonicFilter2.type = 'lowpass'; // 改为低通，更柔和
+                harmonicFilter2.frequency.setValueAtTime(safeFreq * 2.5, this.audioContext.currentTime);
+                harmonicFilter2.Q.setValueAtTime(2.0, this.audioContext.currentTime); // 降低Q值
+                
+                // 数字化谐波包络（音量增强，使用安全音量）
+                harmonicGain1.gain.setValueAtTime(0, this.audioContext.currentTime);
+                harmonicGain1.gain.linearRampToValueAtTime(safeVolume * 0.28, this.audioContext.currentTime + attackTime);
+                harmonicGain1.gain.linearRampToValueAtTime(safeVolume * 0.18, this.audioContext.currentTime + attackTime + decayTime);
+                harmonicGain1.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration);
+                
+                harmonicGain2.gain.setValueAtTime(0, this.audioContext.currentTime);
+                harmonicGain2.gain.linearRampToValueAtTime(safeVolume * 0.22, this.audioContext.currentTime + attackTime * 1.2);
+                harmonicGain2.gain.linearRampToValueAtTime(safeVolume * 0.15, this.audioContext.currentTime + attackTime * 1.2 + decayTime);
+                harmonicGain2.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration);
+                
+                // === 数字化混响系统 ===
+                const delay1 = this.audioContext.createDelay(0.3);
+                const delay2 = this.audioContext.createDelay(0.6);
+                const delay3 = this.audioContext.createDelay(0.9);
+                const delayGain1 = this.audioContext.createGain();
+                const delayGain2 = this.audioContext.createGain();
+                const delayGain3 = this.audioContext.createGain();
+                
+                // 短延迟时间，数字化节奏感
+                delay1.delayTime.setValueAtTime(0.06, this.audioContext.currentTime);
+                delay2.delayTime.setValueAtTime(0.12, this.audioContext.currentTime);
+                delay3.delayTime.setValueAtTime(0.18, this.audioContext.currentTime);
+                
+                delayGain1.gain.setValueAtTime(0.25, this.audioContext.currentTime);
+                delayGain2.gain.setValueAtTime(0.15, this.audioContext.currentTime);
+                delayGain3.gain.setValueAtTime(0.08, this.audioContext.currentTime);
+                
+                // === 温和数字化压缩器 ===
+                const compressor = this.audioContext.createDynamicsCompressor();
+                compressor.threshold.setValueAtTime(-20, this.audioContext.currentTime);
+                compressor.knee.setValueAtTime(35, this.audioContext.currentTime);
+                compressor.ratio.setValueAtTime(4, this.audioContext.currentTime); // 更温和的压缩
+                compressor.attack.setValueAtTime(0.008, this.audioContext.currentTime);
+                compressor.release.setValueAtTime(0.25, this.audioContext.currentTime);
+                
+                // === 全局音量控制 ===
+                const masterGain = this.audioContext.createGain();
+                masterGain.gain.setValueAtTime(0.7, this.audioContext.currentTime); // 全局音量降低到70%
+                
+                // === 节点连接 ===
+                // 主振荡器链
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(compressor);
+                
+                // 谐波振荡器链
+                harmonicOsc1.connect(harmonicFilter1);
+                harmonicFilter1.connect(harmonicGain1);
+                harmonicGain1.connect(compressor);
+                
+                harmonicOsc2.connect(harmonicFilter2);
+                harmonicFilter2.connect(harmonicGain2);
+                harmonicGain2.connect(compressor);
+                
+                // 数字化LFO调制
+                lfoOsc.connect(lfoGain);
+                lfoOsc.connect(lfoFilterGain);
+                lfoGain.connect(mainOsc.frequency);
+                lfoFilterGain.connect(mainFilter.frequency);
+                
+                // 数字化延迟系统
+                compressor.connect(delay1);
+                compressor.connect(delay2);
+                compressor.connect(delay3);
+                delay1.connect(delayGain1);
+                delay2.connect(delayGain2);
+                delay3.connect(delayGain3);
+                
+                // 输出（通过全局音量控制）
+                compressor.connect(masterGain);
+                delayGain1.connect(masterGain);
+                delayGain2.connect(masterGain);
+                delayGain3.connect(masterGain);
+                masterGain.connect(this.audioContext.destination);
+                
+                // === 启动所有振荡器 ===
+                mainOsc.start(this.audioContext.currentTime);
+                harmonicOsc1.start(this.audioContext.currentTime + 0.01);
+                harmonicOsc2.start(this.audioContext.currentTime + 0.02);
+                lfoOsc.start(this.audioContext.currentTime);
+                
+                // === 停止所有振荡器 ===
+                mainOsc.stop(this.audioContext.currentTime + duration);
+                harmonicOsc1.stop(this.audioContext.currentTime + duration);
+                harmonicOsc2.stop(this.audioContext.currentTime + duration);
+                lfoOsc.stop(this.audioContext.currentTime + duration);
+            }
         }
         
         // ===== 视觉内容保护系统 JavaScript =====
@@ -4392,6 +5625,32 @@
                 this.activeAsciiChars = [];
                 this.asciiInterval = null;
                 
+                // ASCII音效相关
+                this.asciiSoundVolume = 0.6; // 默认音量60%
+                this.lastAsciiSoundTime = 0; // 上次音效播放时间
+                
+                // === 管道赋格配乐系统 ===
+                this.audioContext = null;
+                this.masterGain = null;
+                this.bassline = null;
+                this.lead = null;
+                this.pad = null;
+                this.drums = null;
+                this.reverb = null;
+                this.delay = null;
+                this.lfo = null;
+                this.isMusicActive = false;
+                this.musicStartTime = 0;
+                this.currentBar = 0;
+                this.bpm = 128; // 电子迷幻节奏
+                this.barLength = (60 / this.bpm) * 4; // 4拍为一小节
+                
+                // 管道音乐音量控制
+                this.pipesMusicVolume = 0.8; // 默认音量80%
+                
+                // 简单赋格风格控制
+                this.fugueEntry = 0; // 声部进入顺序
+                
                 this.init();
             }
             
@@ -4419,7 +5678,56 @@
                     });
                 }
                 
+                            // 添加音乐控制按钮事件
+            const musicButton = document.getElementById('music-control');
+            if (musicButton) {
+                musicButton.addEventListener('click', () => {
+                    console.log('🎵 音乐控制按钮被点击');
+                    this.toggleMusic();
+                });
+                
+                // 添加双击测试音效功能
+                musicButton.addEventListener('dblclick', () => {
+                    console.log('🎵 双击测试音效');
+                    this.playTestSound();
+                });
+            }
+                
+                // 初始化音频系统
+                this.initAudio();
+                
+                // 添加用户交互激活音频的监听器
+                this.addAudioActivationListeners();
+                
+                // 初始化管道音乐音量控制
+                this.initPipesMusicVolumeControl();
+                
                 console.log('✅ 管道屏保系统初始化完成');
+            }
+            
+            // 初始化管道音乐音量控制
+            initPipesMusicVolumeControl() {
+                const pipesMusicVolumeSlider = document.getElementById('pipesMusicVolumeSlider');
+                if (pipesMusicVolumeSlider) {
+                    // 设置初始值
+                    pipesMusicVolumeSlider.value = this.pipesMusicVolume * 100;
+                    
+                    // 添加音量变化监听器
+                    pipesMusicVolumeSlider.addEventListener('input', (e) => {
+                        this.pipesMusicVolume = e.target.value / 100;
+                        console.log(`🎵 管道音乐音量已调整为: ${(this.pipesMusicVolume * 100).toFixed(0)}%`);
+                    });
+                    
+                    // 添加change事件监听器作为备用
+                    pipesMusicVolumeSlider.addEventListener('change', (e) => {
+                        this.pipesMusicVolume = e.target.value / 100;
+                        console.log(`🎵 管道音乐音量已调整为: ${(this.pipesMusicVolume * 100).toFixed(0)}%`);
+                    });
+                    
+                    console.log('✅ 管道音乐音量控制已初始化，滑块值:', pipesMusicVolumeSlider.value);
+                } else {
+                    console.error('❌ 找不到管道音乐音量滑块元素');
+                }
             }
             
             updateGrid() {
@@ -4489,6 +5797,9 @@
                 
                 // 启动ASCII动画
                 this.startAsciiAnimation();
+                
+                // 启动管道赋格配乐
+                this.startPipesMusic();
             }
             
             hideScreensaver() {
@@ -4517,6 +5828,521 @@
                 
                 // 停止ASCII动画
                 this.stopAsciiAnimation();
+                
+                // 停止管道赋格配乐
+                this.stopPipesMusic();
+            }
+            
+            // === 管道赋格配乐系统方法 ===
+            
+            // 初始化音频系统
+            initAudio() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.masterGain = this.audioContext.createGain();
+                    this.masterGain.gain.setValueAtTime(0.8, this.audioContext.currentTime); // 提高主音量
+                    
+                    // 创建效果器
+                    this.reverb = this.audioContext.createConvolver();
+                    this.delay = this.audioContext.createDelay(2.0);
+                    this.lfo = this.audioContext.createOscillator();
+                    
+                    // 设置效果器参数
+                    this.delay.delayTime.setValueAtTime(0.5, this.audioContext.currentTime);
+                    this.lfo.frequency.setValueAtTime(0.1, this.audioContext.currentTime);
+                    
+                    // 简化音频连接，直接输出到主音量
+                    this.masterGain.connect(this.audioContext.destination);
+                    
+                    console.log('🎵 管道赋格配乐系统音频初始化成功');
+                    console.log('音频上下文状态:', this.audioContext.state);
+                } catch (error) {
+                    console.warn('⚠️ 管道赋格配乐系统音频初始化失败:', error);
+                }
+            }
+            
+            // 创建LFO（低频振荡器）
+            createLFO() {
+                if (!this.audioContext) return;
+                
+                try {
+                    this.lfo = this.audioContext.createOscillator();
+                    this.lfo.frequency.setValueAtTime(0.1, this.audioContext.currentTime);
+                    this.lfo.start();
+                    console.log('🎵 新的LFO已创建并启动');
+                } catch (error) {
+                    console.warn('⚠️ 创建LFO失败:', error);
+                }
+            }
+            
+            // 启动管道赋格配乐
+            startPipesMusic() {
+                console.log('🎵 尝试启动管道赋格配乐...');
+                console.log('音频上下文状态:', this.audioContext ? this.audioContext.state : '未初始化');
+                console.log('当前音乐状态:', this.isMusicActive);
+                
+                if (!this.audioContext) {
+                    console.warn('⚠️ 音频上下文未初始化');
+                    return;
+                }
+                
+                if (this.isMusicActive) {
+                    console.log('🎵 音乐已在播放中，无需重复启动');
+                    return;
+                }
+                
+                try {
+                    // 确保音频上下文已激活
+                    if (this.audioContext.state === 'suspended') {
+                        console.log('🎵 音频上下文已暂停，正在恢复...');
+                        this.audioContext.resume().then(() => {
+                            console.log('🎵 音频上下文已激活');
+                            this.startMusicTracks();
+                        });
+                    } else {
+                        console.log('🎵 音频上下文已激活，直接启动音轨');
+                        this.startMusicTracks();
+                    }
+                } catch (error) {
+                    console.warn('⚠️ 启动管道赋格配乐失败:', error);
+                }
+            }
+            
+            // 启动音乐音轨（稍微融入赋格元素）
+            startMusicTracks() {
+                if (!this.audioContext) {
+                    console.warn('⚠️ 音频上下文未初始化');
+                    return;
+                }
+                
+                this.isMusicActive = true;
+                this.musicStartTime = this.audioContext.currentTime;
+                this.currentBar = 0;
+                
+                // 确保LFO已启动
+                if (this.lfo && this.lfo.state !== 'running') {
+                    try {
+                        this.lfo.start();
+                        console.log('🎵 LFO已启动');
+                    } catch (e) {
+                        console.log('LFO启动失败，将创建新的LFO');
+                        this.createLFO();
+                    }
+                } else if (!this.lfo) {
+                    // 如果LFO不存在，创建新的
+                    this.createLFO();
+                }
+                
+                // 确保振荡器引用为空，强制创建新的
+                this.bassline = null;
+                this.lead = null;
+                this.pad = null;
+                this.drums = null;
+                
+                // 稍微融入赋格元素：声部依次进入
+                this.createBassline();
+                
+                // 1秒后：主旋律进入（形成对位）
+                setTimeout(() => {
+                    if (this.isMusicActive) {
+                        this.createLead();
+                    }
+                }, 1000);
+                
+                // 2秒后：氛围音进入（和声支持）
+                setTimeout(() => {
+                    if (this.isMusicActive) {
+                        this.createPad();
+                    }
+                }, 2000);
+                
+                // 3秒后：鼓点进入（节奏支持）
+                setTimeout(() => {
+                    if (this.isMusicActive) {
+                        this.createDrums();
+                    }
+                }, 3000);
+                
+                console.log('🎵 管道赋格配乐已启动（简化版）');
+                console.log('当前时间:', this.audioContext.currentTime);
+                console.log('振荡器状态:', {
+                    bassline: !!this.bassline,
+                    lead: !!this.lead,
+                    pad: !!this.pad,
+                    drums: !!this.drums
+                });
+            }
+            
+            // 停止管道赋格配乐
+            stopPipesMusic() {
+                if (!this.isMusicActive) return;
+                
+                try {
+                    this.isMusicActive = false;
+                    
+                    // 停止所有音轨
+                    if (this.bassline) {
+                        try {
+                            this.bassline.stop();
+                        } catch (e) {
+                            console.log('贝斯线已停止或无法停止');
+                        }
+                    }
+                    if (this.lead) {
+                        try {
+                            this.lead.stop();
+                        } catch (e) {
+                            console.log('主旋律已停止或无法停止');
+                        }
+                    }
+                    if (this.pad) {
+                        try {
+                            this.pad.stop();
+                        } catch (e) {
+                            console.log('氛围音已停止或无法停止');
+                        }
+                    }
+                    if (this.drums) {
+                        try {
+                            this.drums.stop();
+                        } catch (e) {
+                            console.log('鼓点已停止或无法停止');
+                        }
+                    }
+                    
+                    // 停止LFO
+                    if (this.lfo && this.lfo.state === 'running') {
+                        try {
+                            this.lfo.stop();
+                        } catch (e) {
+                            console.log('LFO已停止或无法停止');
+                        }
+                    }
+                    
+                    // 清空振荡器引用，确保重新启动时能创建新的
+                    this.bassline = null;
+                    this.lead = null;
+                    this.pad = null;
+                    this.drums = null;
+                    
+                    console.log('🎵 管道赋格配乐已停止，振荡器引用已清空');
+                } catch (error) {
+                    console.warn('⚠️ 停止管道赋格配乐失败:', error);
+                }
+            }
+            
+            // 创建贝斯线（稍微融入赋格元素）
+            createBassline() {
+                if (!this.audioContext) return;
+                
+                // 管道进程赋格主题
+                const pipeNote = this.getPipeNote();
+                const bassOsc = this.audioContext.createOscillator();
+                const bassGain = this.audioContext.createGain();
+                const bassFilter = this.audioContext.createBiquadFilter();
+                
+                bassOsc.type = 'sawtooth';
+                bassOsc.frequency.setValueAtTime(pipeNote, this.audioContext.currentTime);
+                
+                bassFilter.type = 'lowpass';
+                bassFilter.frequency.setValueAtTime(pipeNote * 2, this.audioContext.currentTime);
+                bassFilter.Q.setValueAtTime(4.0, this.audioContext.currentTime);
+                
+                bassGain.gain.setValueAtTime(0.3 * this.pipesMusicVolume, this.audioContext.currentTime);
+                
+                // 管道进程节奏 - 每4拍一个音符
+                const noteDuration = this.barLength / 4;
+                const currentTime = this.audioContext.currentTime;
+                
+                bassOsc.connect(bassFilter);
+                bassFilter.connect(bassGain);
+                bassGain.connect(this.masterGain);
+                
+                // 赋格主题声部 - 作为基础
+                bassOsc.start(currentTime);
+                bassOsc.stop(currentTime + noteDuration);
+                
+                this.bassline = bassOsc;
+                
+                console.log('🎵 赋格主题(贝斯线):', pipeNote.toFixed(2) + 'Hz');
+                
+                // 循环播放
+                setTimeout(() => {
+                    if (this.isMusicActive && this.audioContext) {
+                        this.createBassline();
+                    }
+                }, noteDuration * 1000);
+            }
+            
+            // 创建主旋律（赋格答题声部）
+            createLead() {
+                if (!this.audioContext) return;
+                
+                // 赋格答题 - 与主题形成对位
+                const leadNote = this.getLeadNote();
+                const leadOsc = this.audioContext.createOscillator();
+                const leadGain = this.audioContext.createGain();
+                const leadFilter = this.audioContext.createBiquadFilter();
+                
+                leadOsc.type = 'triangle';
+                leadOsc.frequency.setValueAtTime(leadNote, this.audioContext.currentTime);
+                
+                leadFilter.type = 'highpass';
+                leadFilter.frequency.setValueAtTime(leadNote * 0.5, this.audioContext.currentTime);
+                leadFilter.Q.setValueAtTime(2.0, this.audioContext.currentTime);
+                
+                leadGain.gain.setValueAtTime(0.2 * this.pipesMusicVolume, this.audioContext.currentTime);
+                
+                const currentTime = this.audioContext.currentTime;
+                const noteDuration = this.barLength / 2; // 答题节奏
+                
+                leadOsc.connect(leadFilter);
+                leadFilter.connect(leadGain);
+                leadGain.connect(this.masterGain);
+                
+                // 赋格答题 - 延迟进入，与主题形成对位
+                const answerDelay = this.barLength * 0.25; // 延迟1拍进入
+                leadOsc.start(currentTime + answerDelay);
+                leadOsc.stop(currentTime + answerDelay + noteDuration);
+                
+                this.lead = leadOsc;
+                
+                console.log('🎵 赋格答题(主旋律):', leadNote.toFixed(2) + 'Hz');
+                
+                // 循环播放
+                setTimeout(() => {
+                    if (this.isMusicActive && this.audioContext) {
+                        this.createLead();
+                    }
+                }, noteDuration * 1000);
+            }
+            
+            // 创建氛围音色（迷幻电子）
+            createPad() {
+                if (!this.audioContext) return;
+                
+                // 迷幻氛围音色 - 基于管道Z轴位置
+                const padNote = this.getPadNote();
+                const padOsc = this.audioContext.createOscillator();
+                const padGain = this.audioContext.createGain();
+                const padFilter = this.audioContext.createBiquadFilter();
+                
+                padOsc.type = 'sine';
+                padOsc.frequency.setValueAtTime(padNote, this.audioContext.currentTime);
+                
+                padFilter.type = 'lowpass';
+                padFilter.frequency.setValueAtTime(padNote * 3, this.audioContext.currentTime);
+                padFilter.Q.setValueAtTime(1.5, this.audioContext.currentTime);
+                
+                padGain.gain.setValueAtTime(0.15 * this.pipesMusicVolume, this.audioContext.currentTime);
+                
+                // 长音符 - 持续整个小节
+                const noteDuration = this.barLength;
+                const currentTime = this.audioContext.currentTime;
+                
+                padOsc.connect(padFilter);
+                padFilter.connect(padGain);
+                padGain.connect(this.masterGain);
+                
+                // 赋格对位声部 - 延迟进入，创造层次
+                const counterpointDelay = this.barLength * 0.5; // 延迟2拍进入
+                padOsc.start(currentTime + counterpointDelay);
+                padOsc.stop(currentTime + counterpointDelay + noteDuration);
+                
+                this.pad = padOsc;
+                
+                console.log('🎵 赋格对位(氛围音):', padNote.toFixed(2) + 'Hz');
+                
+                // 循环播放
+                setTimeout(() => {
+                    if (this.isMusicActive && this.audioContext) {
+                        this.createPad();
+                    }
+                }, noteDuration * 1000);
+            }
+            
+            // 创建鼓点（电子节奏）
+            createDrums() {
+                if (!this.audioContext) return;
+                
+                // 电子鼓点 - 基于管道网格位置
+                const drumNote = this.getDrumNote();
+                const drumOsc = this.audioContext.createOscillator();
+                const drumGain = this.audioContext.createGain();
+                const drumFilter = this.audioContext.createBiquadFilter();
+                
+                drumOsc.type = 'square';
+                drumOsc.frequency.setValueAtTime(drumNote, this.audioContext.currentTime);
+                
+                drumFilter.type = 'bandpass';
+                drumFilter.frequency.setValueAtTime(drumNote * 4, this.audioContext.currentTime);
+                drumFilter.Q.setValueAtTime(8.0, this.audioContext.currentTime);
+                
+                drumGain.gain.setValueAtTime(0.25 * this.pipesMusicVolume, this.audioContext.currentTime);
+                
+                // 鼓点节奏 - 每拍一个音符
+                const noteDuration = this.barLength / 4;
+                const currentTime = this.audioContext.currentTime;
+                
+                drumOsc.connect(drumFilter);
+                drumFilter.connect(drumGain);
+                drumGain.connect(this.masterGain);
+                
+                // 赋格节奏声部 - 延迟进入，与主题形成对位
+                const rhythmDelay = this.barLength * 0.75; // 延迟3拍进入
+                drumOsc.start(currentTime + rhythmDelay);
+                drumOsc.stop(currentTime + rhythmDelay + noteDuration * 0.1);
+                
+                this.drums = drumOsc;
+                
+                console.log('🎵 赋格节奏(鼓点):', drumNote.toFixed(2) + 'Hz');
+                
+                // 循环播放
+                setTimeout(() => {
+                    if (this.isMusicActive && this.audioContext) {
+                        this.createDrums();
+                    }
+                }, noteDuration * 1000);
+            }
+            
+            // 获取管道音符（赋格主题）
+            getPipeNote() {
+                const baseFreq = 80; // 低音基础频率
+                const xMod = (this.currentX / this.cols) * 12; // X轴调制
+                const yMod = (this.currentY / this.rows) * 7; // Y轴调制
+                
+                // 赋格主题：使用和谐的音程关系
+                const harmonicInterval = Math.floor((xMod + yMod) / 12) * 7; // 每12个半音使用7度音程
+                const fugueScale = [0, 2, 4, 5, 7, 9, 11]; // 自然大调音阶
+                const scaleNote = fugueScale[Math.floor((xMod + yMod) % 7)];
+                
+                return baseFreq * Math.pow(2, (scaleNote + harmonicInterval) / 12);
+            }
+            
+            // 获取主旋律音符（赋格答题）
+            getLeadNote() {
+                const baseFreq = 220; // 中音基础频率
+                const dirMod = Math.abs(this.direction.x) + Math.abs(this.direction.y) + Math.abs(this.direction.z);
+                
+                // 赋格答题：与主题形成5度关系
+                const fugueInterval = 7; // 纯五度关系
+                const fugueScale = [0, 2, 4, 5, 7, 9, 11]; // 自然大调音阶
+                const scaleNote = fugueScale[Math.floor(dirMod % 7)];
+                
+                return baseFreq * Math.pow(2, (scaleNote + fugueInterval) / 12);
+            }
+            
+            // 获取氛围音符（赋格对位）
+            getPadNote() {
+                const baseFreq = 110; // 中低音基础频率
+                const zMod = (this.currentZ + 5) / 10; // Z轴调制
+                
+                // 赋格对位：与主题形成3度关系
+                const fugueInterval = 4; // 大三度关系
+                const fugueScale = [0, 2, 4, 5, 7, 9, 11]; // 自然大调音阶
+                const scaleNote = fugueScale[Math.floor(zMod * 2 % 7)];
+                
+                return baseFreq * Math.pow(2, (scaleNote + fugueInterval) / 12);
+            }
+            
+            // 获取鼓点音符（赋格节奏）
+            getDrumNote() {
+                const baseFreq = 60; // 低音基础频率
+                const gridMod = ((this.currentX + this.currentY) % 8) / 8;
+                
+                // 添加一点点赋格元素：基于主题的节奏变体
+                const fugueRhythm = Math.sin(gridMod * Math.PI * 2) * 0.5; // 轻微的赋格节奏感
+                return baseFreq * Math.pow(2, gridMod * 3 + fugueRhythm);
+            }
+            
+            // 切换音乐播放状态
+            toggleMusic() {
+                console.log('🎵 切换音乐状态，当前状态:', this.isMusicActive);
+                console.log('音频上下文状态:', this.audioContext ? this.audioContext.state : '未初始化');
+                
+                if (this.isMusicActive) {
+                    this.stopPipesMusic();
+                } else {
+                    this.startPipesMusic();
+                }
+                
+                // 更新按钮文本 - 修复状态显示
+                const musicButton = document.getElementById('music-control');
+                if (musicButton) {
+                    // 根据实际状态更新按钮
+                    if (this.isMusicActive) {
+                        musicButton.textContent = 'STOP';
+                        musicButton.style.background = '#ff0000';
+                        musicButton.style.borderColor = '#ff0000';
+                    } else {
+                        musicButton.textContent = 'MUSIC';
+                        musicButton.style.background = '#00ff00';
+                        musicButton.style.borderColor = '#00ff00';
+                    }
+                }
+                
+                console.log('🎵 音乐状态切换完成，新状态:', this.isMusicActive);
+            }
+            
+            // 添加音频激活监听器
+            addAudioActivationListeners() {
+                const activateAudio = () => {
+                    if (this.audioContext && this.audioContext.state === 'suspended') {
+                        this.audioContext.resume().then(() => {
+                            console.log('🎵 音频上下文已通过用户交互激活');
+                        });
+                    }
+                    // 移除事件监听器，只需要激活一次
+                    document.removeEventListener('click', activateAudio);
+                    document.removeEventListener('touchstart', activateAudio);
+                };
+                
+                // 监听用户交互
+                document.addEventListener('click', activateAudio);
+                document.addEventListener('touchstart', activateAudio);
+                
+                console.log('🎵 音频激活监听器已添加');
+            }
+            
+            // 播放测试音效
+            playTestSound() {
+                if (!this.audioContext) {
+                    console.warn('⚠️ 音频上下文未初始化');
+                    return;
+                }
+                
+                try {
+                    // 确保音频上下文已激活
+                    if (this.audioContext.state === 'suspended') {
+                        this.audioContext.resume().then(() => {
+                            this.playTestTone();
+                        });
+                    } else {
+                        this.playTestTone();
+                    }
+                } catch (error) {
+                    console.warn('⚠️ 播放测试音效失败:', error);
+                }
+            }
+            
+            // 播放测试音调
+            playTestTone() {
+                const testOsc = this.audioContext.createOscillator();
+                const testGain = this.audioContext.createGain();
+                
+                testOsc.type = 'sine';
+                testOsc.frequency.setValueAtTime(440, this.audioContext.currentTime); // A4音符
+                
+                testGain.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                testGain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 1);
+                
+                testOsc.connect(testGain);
+                testGain.connect(this.audioContext.destination);
+                
+                testOsc.start(this.audioContext.currentTime);
+                testOsc.stop(this.audioContext.currentTime + 1);
+                
+                console.log('🎵 测试音效播放成功 - 440Hz A4音符');
             }
             
             clearPipes() {
@@ -4862,6 +6688,9 @@
                     }
                 }, Math.random() * 3000 + 3000); // 3-6秒随机间隔
                 
+                // 添加ASCII音效音量控制
+                this.asciiSoundVolume = 0.6; // 默认音量60%
+                
                 console.log('✅ ASCII动画已启动');
             }
             
@@ -4885,7 +6714,8 @@
             createAsciiChar() {
                 const char = document.createElement('div');
                 char.className = 'ascii-char';
-                char.textContent = this.asciiChars[Math.floor(Math.random() * this.asciiChars.length)];
+                const asciiText = this.asciiChars[Math.floor(Math.random() * this.asciiChars.length)];
+                char.textContent = asciiText;
                 
                 // 随机位置（在左面板范围内）
                 const leftPanel = document.querySelector('.left-panel');
@@ -4900,6 +6730,9 @@
                 this.container.appendChild(char);
                 this.activeAsciiChars.push(char);
                 
+                // 播放ASCII掉落音效
+                this.playAsciiDropSound(asciiText, x, delay);
+                
                 // 动画结束后移除
                 setTimeout(() => {
                     if (char.parentNode) {
@@ -4907,6 +6740,184 @@
                         this.activeAsciiChars = this.activeAsciiChars.filter(c => c !== char);
                     }
                 }, 8000 + delay * 1000);
+            }
+            
+            // 播放ASCII掉落音效
+            playAsciiDropSound(asciiText, x, delay) {
+                if (!this.audioContext) return;
+                
+                // 防抖：避免过于频繁的音效
+                const currentTime = Date.now();
+                if (this.lastAsciiSoundTime && currentTime - this.lastAsciiSoundTime < 500) {
+                    return; // 500ms内不重复播放
+                }
+                this.lastAsciiSoundTime = currentTime;
+                
+                try {
+                    // 根据ASCII字符类型生成不同的音效
+                    const soundType = this.getAsciiSoundType(asciiText);
+                    const frequency = this.getAsciiFrequency(asciiText, x);
+                    
+                    // 创建神奇的数字化复合音效
+                    this.createDigitalAsciiSound(soundType, frequency, delay);
+                    
+                } catch (error) {
+                    console.warn('⚠️ ASCII音效播放失败:', error);
+                }
+            }
+            
+            // 获取ASCII字符的音效类型
+            getAsciiSoundType(asciiText) {
+                if (asciiText === '█' || asciiText === '▓' || asciiText === '▒' || asciiText === '░') {
+                    return 'block'; // 方块字符 - 厚重音效
+                } else if (asciiText === '●' || asciiText === '○' || asciiText === '◆' || asciiText === '◇') {
+                    return 'geometric'; // 几何字符 - 清脆音效
+                } else if (asciiText === '★' || asciiText === '☆' || asciiText === '♦' || asciiText === '♠') {
+                    return 'symbol'; // 符号字符 - 神秘音效
+                } else {
+                    return 'digital'; // 数字字符 - 数字化音效
+                }
+            }
+            
+            // 根据ASCII字符和位置生成频率
+            getAsciiFrequency(asciiText, x) {
+                const baseFreq = 200; // 基础频率
+                const charCode = asciiText.charCodeAt(0); // 字符编码
+                const positionMod = (x / window.innerWidth) * 12; // 位置调制
+                
+                // 根据字符类型调整频率
+                let frequency;
+                switch (this.getAsciiSoundType(asciiText)) {
+                    case 'block':
+                        frequency = baseFreq * Math.pow(2, (charCode % 12) / 12); // 厚重低音
+                        break;
+                    case 'geometric':
+                        frequency = baseFreq * 2 * Math.pow(2, (charCode % 12) / 12); // 清脆中音
+                        break;
+                    case 'symbol':
+                        frequency = baseFreq * 3 * Math.pow(2, (charCode % 12) / 12); // 神秘高音
+                        break;
+                    default:
+                        frequency = baseFreq * Math.pow(2, (charCode % 24) / 24); // 数字化音效
+                }
+                
+                return frequency + positionMod;
+            }
+            
+            // 创建神奇的数字化复合音效
+            createDigitalAsciiSound(soundType, frequency, delay) {
+                const currentTime = this.audioContext.currentTime + delay;
+                const duration = 0.8; // 音效持续时间
+                
+                // 主振荡器
+                const mainOsc = this.audioContext.createOscillator();
+                const mainGain = this.audioContext.createGain();
+                
+                // 根据音效类型选择波形
+                switch (soundType) {
+                    case 'block':
+                        mainOsc.type = 'sawtooth'; // 厚重锯齿波
+                        break;
+                    case 'geometric':
+                        mainOsc.type = 'triangle'; // 清脆三角波
+                        break;
+                    case 'symbol':
+                        mainOsc.type = 'square'; // 神秘方波
+                        break;
+                    default:
+                        mainOsc.type = 'sine'; // 数字化正弦波
+                }
+                
+                mainOsc.frequency.setValueAtTime(frequency, currentTime);
+                
+                // 主音量包络（应用ASCII音效音量和管道音乐音量控制）
+                mainGain.gain.setValueAtTime(0, currentTime);
+                mainGain.gain.linearRampToValueAtTime(0.3 * this.asciiSoundVolume * this.pipesMusicVolume, currentTime + 0.05);
+                mainGain.gain.exponentialRampToValueAtTime(0.01, currentTime + duration);
+                
+                // 和声振荡器（创造复合音效）
+                const harmonicOsc = this.audioContext.createOscillator();
+                const harmonicGain = this.audioContext.createGain();
+                
+                harmonicOsc.type = 'sine';
+                harmonicOsc.frequency.setValueAtTime(frequency * 1.5, currentTime); // 上三度
+                
+                harmonicGain.gain.setValueAtTime(0, currentTime);
+                harmonicGain.gain.linearRampToValueAtTime(0.15 * this.asciiSoundVolume * this.pipesMusicVolume, currentTime + 0.05);
+                harmonicGain.gain.exponentialRampToValueAtTime(0.01, currentTime + duration);
+                
+                // 数字化滤波器
+                const filter = this.audioContext.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(frequency * 4, currentTime);
+                filter.Q.setValueAtTime(8, currentTime);
+                
+                // 数字化延迟效果
+                const delayNode = this.audioContext.createDelay(0.5);
+                const delayGain = this.audioContext.createGain();
+                
+                delayNode.delayTime.setValueAtTime(0.1, currentTime);
+                delayGain.gain.setValueAtTime(0.3, currentTime);
+                
+                // 数字化混响效果
+                const reverbGain = this.audioContext.createGain();
+                reverbGain.gain.setValueAtTime(0.2, currentTime);
+                
+                // 连接音频节点
+                mainOsc.connect(mainGain);
+                harmonicOsc.connect(harmonicGain);
+                
+                mainGain.connect(filter);
+                harmonicGain.connect(filter);
+                
+                filter.connect(delayNode);
+                delayNode.connect(delayGain);
+                delayGain.connect(this.audioContext.destination);
+                
+                filter.connect(reverbGain);
+                reverbGain.connect(this.audioContext.destination);
+                
+                // 启动振荡器
+                mainOsc.start(currentTime);
+                harmonicOsc.start(currentTime);
+                
+                // 停止振荡器
+                mainOsc.stop(currentTime + duration);
+                harmonicOsc.stop(currentTime + duration);
+                
+                // 添加数字化调制效果
+                setTimeout(() => {
+                    if (this.audioContext) {
+                        this.addDigitalModulation(frequency, currentTime + duration * 0.5);
+                    }
+                }, delay * 1000);
+                
+                console.log(`🎵 ASCII音效播放: ${soundType} - ${frequency.toFixed(2)}Hz`);
+            }
+            
+            // 添加数字化调制效果
+            addDigitalModulation(baseFreq, time) {
+                try {
+                    // 创建调制振荡器
+                    const modOsc = this.audioContext.createOscillator();
+                    const modGain = this.audioContext.createGain();
+                    
+                    modOsc.type = 'sine';
+                    modOsc.frequency.setValueAtTime(baseFreq * 0.25, time); // 低频调制
+                    
+                    modGain.gain.setValueAtTime(0, time);
+                    modGain.gain.linearRampToValueAtTime(0.1, time + 0.1);
+                    modGain.gain.exponentialRampToValueAtTime(0.01, time + 0.3);
+                    
+                    modOsc.connect(modGain);
+                    modGain.connect(this.audioContext.destination);
+                    
+                    modOsc.start(time);
+                    modOsc.stop(time + 0.3);
+                    
+                } catch (error) {
+                    console.warn('⚠️ 数字化调制效果添加失败:', error);
+                }
             }
         }
         
@@ -5550,6 +7561,11 @@
                 max-width: 85% !important;
                 height: 1200px !important;
             }
+            
+            /* 音量控制响应式 */
+            .volume-control {
+                right: 15px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -5583,6 +7599,19 @@
             .subtitle-container-6 {
                 margin: 1vh 1vw !important;
                 padding: 0.2vh 0.8vw !important;
+            }
+            
+            /* 音量控制小屏幕优化 */
+            .volume-control {
+                right: 10px;
+            }
+            .volume-slider {
+                width: 3px;
+                height: 60px;
+            }
+            .volume-slider::-webkit-slider-thumb {
+                width: 10px;
+                height: 10px;
             }
         }
 
@@ -5686,5 +7715,4 @@
     </script>
 </body>
 </html>
-</body>
-</html>
+

@@ -1278,8 +1278,8 @@
 
 
         @keyframes pacman-move {
-            0% { left: calc(100vw + 24px); }
-            100% { left: -24px; }
+            0% { transform: translateX(calc(100vw + 24px)); }
+            100% { transform: translateX(-24px); }
         }
 
         @keyframes pacman-chomp {
@@ -1665,6 +1665,10 @@
             border-radius: 50%;
             overflow: hidden;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            /* 性能优化：硬件加速 */
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
 
         .fourth-pacman-mouth {
@@ -1710,20 +1714,20 @@
             transform-origin: center;
         }
 
-        .fourth-line-segment:nth-child(1) { left: 5%; top: 8px; }
-        .fourth-line-segment:nth-child(2) { left: 15%; top: 8px; }
-        .fourth-line-segment:nth-child(3) { left: 25%; top: 8px; }
-        .fourth-line-segment:nth-child(4) { left: 35%; top: 8px; }
-        .fourth-line-segment:nth-child(5) { left: 45%; top: 8px; }
-        .fourth-line-segment:nth-child(6) { left: 55%; top: 8px; }
-        .fourth-line-segment:nth-child(7) { left: 65%; top: 8px; }
-        .fourth-line-segment:nth-child(8) { left: 75%; top: 8px; }
-        .fourth-line-segment:nth-child(9) { left: 85%; top: 8px; }
-        .fourth-line-segment:nth-child(10) { left: 95%; top: 8px; }
+        .fourth-line-segment:nth-child(1) { left: 5%; top: 7px; }
+        .fourth-line-segment:nth-child(2) { left: 15%; top: 7px; }
+        .fourth-line-segment:nth-child(3) { left: 25%; top: 7px; }
+        .fourth-line-segment:nth-child(4) { left: 35%; top: 7px; }
+        .fourth-line-segment:nth-child(5) { left: 45%; top: 7px; }
+        .fourth-line-segment:nth-child(6) { left: 55%; top: 7px; }
+        .fourth-line-segment:nth-child(7) { left: 65%; top: 7px; }
+        .fourth-line-segment:nth-child(8) { left: 75%; top: 7px; }
+        .fourth-line-segment:nth-child(9) { left: 85%; top: 7px; }
+        .fourth-line-segment:nth-child(10) { left: 95%; top: 7px; }
 
         @keyframes fourth-pacman-move {
-            0% { left: calc(100vw + 24px); }
-            100% { left: -24px; }
+            0% { transform: translateX(calc(100vw + 24px)); }
+            100% { transform: translateX(-24px); }
         }
 
         .fourth-story-image-container-copy {
@@ -2819,6 +2823,10 @@
             overflow: hidden;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
             z-index: 3;
+            /* 性能优化：硬件加速 */
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
 
         .sixth-pacman-mouth {
@@ -2865,16 +2873,16 @@
             z-index: 2;
         }
 
-        .sixth-line-segment:nth-child(1) { left: 5%; top: 8px; }
-        .sixth-line-segment:nth-child(2) { left: 15%; top: 8px; }
-        .sixth-line-segment:nth-child(3) { left: 25%; top: 8px; }
-        .sixth-line-segment:nth-child(4) { left: 35%; top: 8px; }
-        .sixth-line-segment:nth-child(5) { left: 45%; top: 8px; }
-        .sixth-line-segment:nth-child(6) { left: 55%; top: 8px; }
-        .sixth-line-segment:nth-child(7) { left: 65%; top: 8px; }
-        .sixth-line-segment:nth-child(8) { left: 75%; top: 8px; }
-        .sixth-line-segment:nth-child(9) { left: 85%; top: 8px; }
-        .sixth-line-segment:nth-child(10) { left: 95%; top: 8px; }
+        .sixth-line-segment:nth-child(1) { left: 5%; top: 7px; }
+        .sixth-line-segment:nth-child(2) { left: 15%; top: 7px; }
+        .sixth-line-segment:nth-child(3) { left: 25%; top: 7px; }
+        .sixth-line-segment:nth-child(4) { left: 35%; top: 7px; }
+        .sixth-line-segment:nth-child(5) { left: 45%; top: 7px; }
+        .sixth-line-segment:nth-child(6) { left: 55%; top: 7px; }
+        .sixth-line-segment:nth-child(7) { left: 65%; top: 7px; }
+        .sixth-line-segment:nth-child(8) { left: 75%; top: 7px; }
+        .sixth-line-segment:nth-child(9) { left: 85%; top: 7px; }
+        .sixth-line-segment:nth-child(10) { left: 95%; top: 7px; }
 
         /* YouTube Video Container - Below Sixth Pacman */
         .youtube-video-container {
@@ -3671,7 +3679,7 @@
 
         .fourth-still-frame-image-container-06 {
             position: absolute;
-            top: 2000px;
+            top: 2100px;
             left: 20px;
             width: 600px;
             height: 338px;
@@ -3707,7 +3715,7 @@
 
         .fourth-still-frame-shadow-06 {
             position: absolute;
-            top: 2000px;
+            top: 2100px;
             left: 320px;
             width: 600px;
             height: 338px;
@@ -3732,7 +3740,7 @@
             position: absolute;
             width: 24px;
             height: 24px;
-            background: #fac800;
+            background: #ff0000;
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
@@ -3741,6 +3749,10 @@
             overflow: hidden;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
             z-index: 3;
+            /* 性能优化：硬件加速 */
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
 
         .first-pacman-mouth {
@@ -3760,7 +3772,7 @@
             right: 4px;
             width: 4px;
             height: 4px;
-            background: #ff0000;
+            background: #000000;
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
@@ -3787,16 +3799,16 @@
             z-index: 2;
         }
 
-        .first-line-segment:nth-child(1) { left: 5%; top: 8px; }
-        .first-line-segment:nth-child(2) { left: 15%; top: 8px; }
-        .first-line-segment:nth-child(3) { left: 25%; top: 8px; }
-        .first-line-segment:nth-child(4) { left: 35%; top: 8px; }
-        .first-line-segment:nth-child(5) { left: 45%; top: 8px; }
-        .first-line-segment:nth-child(6) { left: 55%; top: 8px; }
-        .first-line-segment:nth-child(7) { left: 65%; top: 8px; }
-        .first-line-segment:nth-child(8) { left: 75%; top: 8px; }
-        .first-line-segment:nth-child(9) { left: 85%; top: 8px; }
-        .first-line-segment:nth-child(10) { left: 95%; top: 8px; }
+        .first-line-segment:nth-child(1) { left: 5%; top: 9px; }
+        .first-line-segment:nth-child(2) { left: 15%; top: 9px; }
+        .first-line-segment:nth-child(3) { left: 25%; top: 9px; }
+        .first-line-segment:nth-child(4) { left: 35%; top: 9px; }
+        .first-line-segment:nth-child(5) { left: 45%; top: 9px; }
+        .first-line-segment:nth-child(6) { left: 55%; top: 9px; }
+        .first-line-segment:nth-child(7) { left: 65%; top: 9px; }
+        .first-line-segment:nth-child(8) { left: 75%; top: 9px; }
+        .first-line-segment:nth-child(9) { left: 85%; top: 9px; }
+        .first-line-segment:nth-child(10) { left: 95%; top: 9px; }
 
         .first-line-segment.eaten {
             display: none !important;
@@ -3806,9 +3818,98 @@
         }
 
         @keyframes first-pacman-move {
-            0% { left: -24px; }
-            100% { left: calc(100vw + 24px); }
+            0% { transform: translateX(-24px); }
+            100% { transform: translateX(calc(100vw + 24px)); }
         }
+
+        /* 红色吃豆人动画 - 在第一和第二作品组之间 */
+        .red-pacman {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #ff0000;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            animation: red-pacman-move 8s linear infinite;
+            border-radius: 50%;
+            overflow: hidden;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            z-index: 3;
+            /* 性能优化：硬件加速 */
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        .red-pacman-mouth {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            clip-path: polygon(100% 0, 100% 100%, 50% 50%);
+            animation: pacman-chomp 0.2s linear infinite;
+        }
+
+        .red-pacman-eye {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 4px;
+            height: 4px;
+            background: #ffffff;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .red-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+        }
+
+        .red-line-segment {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            border-radius: 50%;
+            transform-origin: center;
+            z-index: 2;
+        }
+
+        .red-line-segment:nth-child(1) { left: 5%; top: 7px; }
+        .red-line-segment:nth-child(2) { left: 15%; top: 7px; }
+        .red-line-segment:nth-child(3) { left: 25%; top: 7px; }
+        .red-line-segment:nth-child(4) { left: 35%; top: 7px; }
+        .red-line-segment:nth-child(5) { left: 45%; top: 7px; }
+        .red-line-segment:nth-child(6) { left: 55%; top: 7px; }
+        .red-line-segment:nth-child(7) { left: 65%; top: 7px; }
+        .red-line-segment:nth-child(8) { left: 75%; top: 7px; }
+        .red-line-segment:nth-child(9) { left: 85%; top: 7px; }
+        .red-line-segment:nth-child(10) { left: 95%; top: 7px; }
+
+        .red-line-segment.eaten {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            transform: scale(0) !important;
+        }
+
+        @keyframes red-pacman-move {
+            0% { transform: translateX(-24px); }
+            100% { transform: translateX(calc(100vw + 24px)); }
+        }
+
+
 
 
 
@@ -3875,6 +3976,10 @@
             will-change: transform;
             animation: rasterize 2s linear infinite;
             filter: blur(1.5px);
+            /* 性能优化：硬件加速 */
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            contain: layout style paint;
         }
 
         @keyframes rasterize {
@@ -4587,6 +4692,26 @@
 
 
 
+        <!-- 第一组吃豆人动画 -->
+        <div class="first-pacman-animation" style="position: absolute; top: 2300px; left: 0; width: 100vw; height: 20px; z-index: 3;">
+            <div class="first-pacman">
+                <div class="first-pacman-mouth"></div>
+                <div class="first-pacman-eye"></div>
+            </div>
+            <div class="first-dots">
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+                <div class="first-line-segment"></div>
+            </div>
+        </div>
+
                   <div class="second-artwork-group-container" style="margin-top: 800px;">
         <div class="second-artwork-container">
             <div class="second-artwork-background">
@@ -4678,6 +4803,8 @@
                 </div>
             </div>
         </div>
+
+
 
 
 
@@ -4789,7 +4916,7 @@
             <div class="fourth-story-image-player">
                 <img src="../Rasterize Chaos of Cyclical Details 1.jpeg" alt="Rasterize Chaos of Cyclical Details 1">
             </div>
-                </div>
+            </div>
         </div>
     </div>
 
@@ -5388,15 +5515,26 @@
         function createRasterizeEffect() {
             const stripes = document.querySelector('.rasterize-stripes');
             let position = 0;
+            let animationId;
             
             function animate() {
                 position += 0.5;
-                stripes.style.transform = `translateY(${position}px)`;
-                requestAnimationFrame(animate);
+                // 性能优化：使用transform3d强制硬件加速
+                stripes.style.transform = `translate3d(0, ${position}px, 0)`;
+                animationId = requestAnimationFrame(animate);
             }
             
             animate();
+            
+            // 清理函数
+            return () => {
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                }
+            };
         }
+
+
 
         // 贪吃豆动画控制
         function initPacmanAnimation() {
@@ -5405,6 +5543,7 @@
             initSinglePacmanAnimation('.mid-pacman', '.mid-line-segment');
             initSinglePacmanAnimation('.fourth-pacman', '.fourth-line-segment');
             initSinglePacmanAnimation('.fifth-pacman', '.fifth-line-segment');
+            initSinglePacmanAnimation('.red-pacman', '.red-line-segment');
         }
 
         function initSinglePacmanAnimation(pacmanSelector, segmentSelector) {
@@ -5439,8 +5578,20 @@
                 });
             }
             
-            setInterval(checkLineCollision, 1);
+            // 性能优化：使用requestAnimationFrame替代高频setInterval
+            let animationId;
+            function animateCollision() {
             checkLineCollision();
+                animationId = requestAnimationFrame(animateCollision);
+            }
+            animateCollision();
+            
+            // 清理函数
+            return () => {
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                }
+            };
         }
 
         // Fifth color carousel animation

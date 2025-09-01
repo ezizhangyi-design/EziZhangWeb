@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音量推子测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .volume-control {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px;
+        }
+        
+        .volume-control::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #0041ff;
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+        
+        .dots-volume-control::before {
+            background: #ff4444;
+        }
+        
+        .dividers-volume-control::before {
+            background: #44ff44;
+        }
+        
+        .volume-slider {
+            width: 4px;
+            height: 80px;
+            border-radius: 2px;
+            background: #0041ff;
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            border: 1px solid #0041ff;
+            transition: all 0.2s ease;
+            writing-mode: bt-lr;
+            -webkit-appearance: slider-vertical;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .volume-slider::-webkit-slider-track {
+            background: #0041ff !important;
+            border-radius: 2px !important;
+            border: none !important;
+            width: 4px !important;
+            height: 80px !important;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            border: 2px solid #0041ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-top: -4px;
+        }
+        
+        .volume-slider::-moz-range-track {
+            background: #0041ff !important;
+            border-radius: 2px !important;
+            border: none !important;
+            height: 4px !important;
+            width: 4px !important;
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            border: 2px solid #0041ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .volume-slider:hover {
+            background: rgba(0, 65, 255, 0.8);
+            border-color: rgba(0, 65, 255, 1);
+        }
+        
+        .volume-slider:active {
+            background: rgba(0, 65, 255, 1);
+            border-color: #ffffff;
+        }
+        
+        .value-display {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .test-button {
+            background: #0041ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        
+        .test-button:hover {
+            background: #0033cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>音量推子测试页面</h1>
+        <p>这个页面用来测试音量推子是否能正常工作。</p>
+        
+        <div class="volume-control dots-volume-control">
+            <input type="range" id="testVolumeSlider" min="0" max="100" value="80" class="volume-slider" title="测试音量">
+            <div class="value-display">当前值: <span id="volumeValue">80</span>%</div>
+        </div>
+        
+        <div class="volume-control dividers-volume-control">
+            <input type="range" id="testVolumeSlider2" min="0" max="100" value="60" class="volume-slider" title="测试音量2">
+            <div class="value-display">当前值: <span id="volumeValue2">60</span>%</div>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <button class="test-button" onclick="testVolume()">测试音量变化</button>
+            <button class="test-button" onclick="resetVolume()">重置音量</button>
+        </div>
+        
+        <div id="log" style="margin-top: 20px; padding: 10px; background: #f8f8f8; border-radius: 5px; font-family: monospace; font-size: 12px;">
+            <strong>事件日志:</strong><br>
+            <div id="logContent"></div>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logContent = document.getElementById('logContent');
+            const timestamp = new Date().toLocaleTimeString();
+            logContent.innerHTML += `[${timestamp}] ${message}<br>`;
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+        
+        function testVolume() {
+            const slider = document.getElementById('testVolumeSlider');
+            const currentValue = slider.value;
+            log(`当前音量值: ${currentValue}%`);
+            
+            // 播放测试音效
+            playTestSound(currentValue / 100);
+        }
+        
+        function resetVolume() {
+            const slider = document.getElementById('testVolumeSlider');
+            const slider2 = document.getElementById('testVolumeSlider2');
+            
+            slider.value = 80;
+            slider2.value = 60;
+            
+            document.getElementById('volumeValue').textContent = '80';
+            document.getElementById('volumeValue2').textContent = '60';
+            
+            log('音量已重置');
+        }
+        
+        function playTestSound(volume) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(volume * 0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+                
+                log(`播放测试音效，音量: ${(volume * 100).toFixed(0)}%`);
+            } catch (error) {
+                log(`播放音效失败: ${error.message}`);
+            }
+        }
+        
+        // 初始化事件监听器
+        document.addEventListener('DOMContentLoaded', () => {
+            const slider = document.getElementById('testVolumeSlider');
+            const slider2 = document.getElementById('testVolumeSlider2');
+            const valueDisplay = document.getElementById('volumeValue');
+            const valueDisplay2 = document.getElementById('volumeValue2');
+            
+            // 第一个滑块
+            slider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                valueDisplay.textContent = value;
+                log(`滑块1值变化: ${value}%`);
+            });
+            
+            slider.addEventListener('change', (e) => {
+                const value = e.target.value;
+                log(`滑块1值确认: ${value}%`);
+            });
+            
+            // 第二个滑块
+            slider2.addEventListener('input', (e) => {
+                const value = e.target.value;
+                valueDisplay2.textContent = value;
+                log(`滑块2值变化: ${value}%`);
+            });
+            
+            slider2.addEventListener('change', (e) => {
+                const value = e.target.value;
+                log(`滑块2值确认: ${value}%`);
+            });
+            
+            // 添加鼠标事件监听
+            slider.addEventListener('mousedown', () => log('滑块1: 鼠标按下'));
+            slider.addEventListener('mouseup', () => log('滑块1: 鼠标释放'));
+            slider.addEventListener('mousemove', () => log('滑块1: 鼠标移动'));
+            
+            slider2.addEventListener('mousedown', () => log('滑块2: 鼠标按下'));
+            slider2.addEventListener('mouseup', () => log('滑块2: 鼠标释放'));
+            slider2.addEventListener('mousemove', () => log('滑块2: 鼠标移动'));
+            
+            log('页面加载完成，事件监听器已设置');
+        });
+    </script>
+</body>
+</html>
