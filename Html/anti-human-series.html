@@ -964,9 +964,493 @@
             }
         }
         
+        // ===== Anti-Human Series 全局天气客户端系统 =====
+        // 全局天气数据
+        let antiHumanWeatherData = null;
+        let isAntiHumanWeatherActive = false;
+        
+        // 初始化 Anti-Human Series 全局天气客户端
+        function initAntiHumanWeatherClient() {
+            console.log('🌍 初始化 Anti-Human Series 全局天气客户端...');
+            
+            // 尝试从 localStorage 获取展览界面的天气数据
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    antiHumanWeatherData = JSON.parse(storedWeather);
+                    console.log('📡 Anti-Human Series 从 localStorage 获取到展览界面天气数据:', antiHumanWeatherData);
+                    
+                    // 检查数据是否过期（超过30分钟）
+                    const now = Date.now();
+                    const dataAge = now - antiHumanWeatherData.timestamp;
+                    if (dataAge < 1800000) { // 30分钟 = 1800000毫秒
+                        // 数据有效，立即应用背景颜色
+                        applyAntiHumanWeatherBackground(antiHumanWeatherData);
+                        isAntiHumanWeatherActive = true;
+                    } else {
+                        console.log('⚠️ Anti-Human Series 天气数据已过期，等待展览界面更新...');
+                    }
+                } catch (error) {
+                    console.error('❌ Anti-Human Series 解析天气数据失败:', error);
+                }
+            }
+            
+            // 监听全局天气变化事件
+            window.addEventListener('globalWeatherChange', handleAntiHumanWeatherChange);
+            
+            // 监听 localStorage 变化
+            window.addEventListener('storage', handleAntiHumanStorageChange);
+            
+            // 启动定期检查
+            setInterval(checkAntiHumanWeather, 60000); // 每分钟检查一次
+            
+            console.log('✅ Anti-Human Series 全局天气客户端初始化完成');
+        }
+        
+        // 处理 Anti-Human Series 全局天气变化事件
+        function handleAntiHumanWeatherChange(event) {
+            const newWeatherData = event.detail;
+            console.log('📡 Anti-Human Series 收到展览界面天气变化事件:', newWeatherData);
+            
+            antiHumanWeatherData = newWeatherData;
+            applyAntiHumanWeatherBackground(newWeatherData);
+            isAntiHumanWeatherActive = true;
+        }
+        
+        // 处理 Anti-Human Series localStorage 变化
+        function handleAntiHumanStorageChange(event) {
+            if (event.key === 'globalWeatherData') {
+                try {
+                    const newWeatherData = JSON.parse(event.newValue);
+                    console.log('📡 Anti-Human Series localStorage 天气数据已更新:', newWeatherData);
+                    
+                    antiHumanWeatherData = newWeatherData;
+                    applyAntiHumanWeatherBackground(newWeatherData);
+                    isAntiHumanWeatherActive = true;
+                } catch (error) {
+                    console.error('❌ Anti-Human Series 解析更新的天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 定期检查 Anti-Human Series 全局天气数据
+        function checkAntiHumanWeather() {
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    const weatherData = JSON.parse(storedWeather);
+                    const now = Date.now();
+                    const dataAge = now - weatherData.timestamp;
+                    
+                    // 如果数据较新（15分钟内）且与当前数据不同，则更新
+                    if (dataAge < 900000 && (!antiHumanWeatherData || antiHumanWeatherData.timestamp !== weatherData.timestamp)) {
+                        console.log('📡 Anti-Human Series 定期检查发现新的天气数据:', weatherData);
+                        antiHumanWeatherData = weatherData;
+                        applyAntiHumanWeatherBackground(weatherData);
+                        isAntiHumanWeatherActive = true;
+                    }
+                } catch (error) {
+                    console.error('❌ Anti-Human Series 定期检查天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 应用 Anti-Human Series 全局天气背景颜色
+        function applyAntiHumanWeatherBackground(weatherData) {
+            if (!weatherData || !weatherData.baseColor) {
+                console.log('⚠️ Anti-Human Series 天气数据无效，跳过背景更新');
+                return;
+            }
+            
+            console.log('🎨 Anti-Human Series 应用展览界面的天气背景颜色:', weatherData.baseColor);
+            
+            // 创建CSS变量来动态调整颜色
+            const style = document.createElement('style');
+            style.id = 'antihuman-global-weather-style';
+            
+            // 移除之前的样式
+            const existingStyle = document.getElementById('antihuman-global-weather-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // 生成动态CSS - 使用纯色而不是渐变
+            const css = `
+                body {
+                    --antihuman-weather-blue-base: ${weatherData.baseColor};
+                    --antihuman-weather-blue-intensity: ${weatherData.intensity};
+                    --antihuman-weather-blue-humidity: ${weatherData.humidityFactor};
+                    --antihuman-weather-blue-wind: ${weatherData.windFactor};
+                    --antihuman-weather-blue-season: ${weatherData.seasonalAdjustment};
+                    --antihuman-weather-blue-time: ${weatherData.timeAdjustment};
+                    
+                    background-color: ${weatherData.baseColor};
+                    transition: background-color 2s ease-in-out;
+                }
+                
+                /* 为页面添加一些微妙的层次感，但保持纯色 */
+                body::before {
+                    content: '';
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: ${weatherData.baseColor};
+                    opacity: 0.98;
+                    z-index: -1;
+                    pointer-events: none;
+                }
+                
+                /* 动态调整滚动动画的深蓝色部分 */
+                .rasterize-stripes {
+                    background: repeating-linear-gradient(
+                        to bottom,
+                        #0041ff 0px,
+                        #0041ff 3px,
+                        ${weatherData.baseColor} 3px,
+                        ${weatherData.baseColor} 20px
+                    ) !important;
+                }
+            `;
+            
+            style.textContent = css;
+            document.head.appendChild(style);
+            
+            console.log(`🎨 Anti-Human Series 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)}`);
+            console.log(`🎨 滚动动画深蓝色部分已更新为天气颜色: ${weatherData.baseColor}`);
+        }
+        
+        // ===== Anti-Human Series 太空数字化开场音效系统 =====
+        // 开场音效变量
+        let antiHumanAudioContext = null;
+        let isAntiHumanGreetingPlayed = false;
+        
+        // 播放 Anti-Human Series 开场音效
+        function playAntiHumanSeriesGreeting() {
+            if (isAntiHumanGreetingPlayed) return; // 防止重复播放
+            
+            console.log('🚀 开始播放 Anti-Human Series 太空数字化开场音效...');
+            
+            try {
+                // 创建音频上下文
+                antiHumanAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 创建主混音器
+                const masterGain = antiHumanAudioContext.createGain();
+                masterGain.connect(antiHumanAudioContext.destination);
+                masterGain.gain.setValueAtTime(0.4, antiHumanAudioContext.currentTime); // 主音量40%
+                
+                // 创建太空数字化特有的混响效果
+                const spaceReverbGain = antiHumanAudioContext.createGain();
+                const spaceDelay = antiHumanAudioContext.createDelay(0.4);
+                const spaceFeedback = antiHumanAudioContext.createGain();
+                const spaceFilter = antiHumanAudioContext.createBiquadFilter();
+                
+                spaceReverbGain.connect(spaceDelay);
+                spaceDelay.connect(spaceFilter);
+                spaceFilter.connect(spaceFeedback);
+                spaceFeedback.connect(spaceDelay);
+                spaceFeedback.connect(masterGain);
+                
+                spaceReverbGain.gain.setValueAtTime(0.2, antiHumanAudioContext.currentTime);
+                spaceFeedback.gain.setValueAtTime(0.25, antiHumanAudioContext.currentTime);
+                spaceFilter.type = 'lowpass';
+                spaceFilter.frequency.setValueAtTime(8000, antiHumanAudioContext.currentTime);
+                spaceFilter.Q.setValueAtTime(2.0, antiHumanAudioContext.currentTime);
+                
+                // 创建"Anti-Human"音效 - 太空数字化风格
+                createAntiHumanSound(antiHumanAudioContext, masterGain, spaceReverbGain, 0);
+                
+                // 延迟播放"Series"音效
+                setTimeout(() => {
+                    createAntiHumanSeriesSound(antiHumanAudioContext, masterGain, spaceReverbGain, 0.8);
+                }, 800);
+                
+                // 延迟播放太空特效音效
+                setTimeout(() => {
+                    createAntiHumanSpaceEffectSound(antiHumanAudioContext, masterGain);
+                }, 1.6);
+                
+                isAntiHumanGreetingPlayed = true;
+                console.log('🚀 Anti-Human Series 太空数字化开场音效开始播放！');
+                
+            } catch (error) {
+                console.error('❌ Anti-Human Series 开场音效播放失败:', error);
+            }
+        }
+        
+        // 创建"Anti-Human"音效 - 太空数字化风格
+        function createAntiHumanSound(audioContext, masterGain, spaceReverbGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"Anti-Human"的音节 - 太空数字化风格
+            const antiHumanNotes = [
+                { freq: 110, duration: 0.3, gain: 0.35 }, // A2 - "An" - 低音基础
+                { freq: 220, duration: 0.25, gain: 0.3 }, // A3 - "ti" - 中音上升
+                { freq: 330, duration: 0.2, gain: 0.4 }, // E4 - "Hu" - 高音
+                { freq: 165, duration: 0.35, gain: 0.45 } // E3 - "man" - 低音结束
+            ];
+            
+            antiHumanNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.25);
+                
+                // 主音调 - 使用太空数字化风格的音色
+                const mainOsc = audioContext.createOscillator();
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                const lfo = audioContext.createOscillator(); // 低频振荡器
+                const lfoGain = audioContext.createGain();
+                const ringMod = audioContext.createOscillator(); // 环形调制
+                const ringModGain = audioContext.createGain();
+                
+                // 设置主音调 - 太空数字化风格
+                mainOsc.type = 'sawtooth'; // 锯齿波，太空感
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // LFO调制 - 创造太空动态效果
+                lfo.type = 'triangle';
+                lfo.frequency.setValueAtTime(6, noteTime); // 6Hz调制
+                lfoGain.gain.setValueAtTime(note.freq * 0.08, noteTime);
+                lfo.connect(lfoGain);
+                lfoGain.connect(mainOsc.frequency);
+                
+                // 环形调制 - 太空数字化特色
+                ringMod.type = 'sine';
+                ringMod.frequency.setValueAtTime(note.freq * 0.7, noteTime);
+                ringModGain.gain.setValueAtTime(note.freq * 0.05, noteTime);
+                ringMod.connect(ringModGain);
+                ringModGain.connect(mainOsc.frequency);
+                
+                // 滤波器 - 太空数字化风格
+                mainFilter.type = 'bandpass'; // 带通滤波，太空感
+                mainFilter.frequency.setValueAtTime(note.freq, noteTime);
+                mainFilter.Q.setValueAtTime(3.0, noteTime);
+                
+                // 音量包络 - 太空数字化风格
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.01);
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.02);
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
+                
+                // 连接音频节点
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(spaceReverbGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                lfo.start(noteTime);
+                lfo.stop(noteTime + note.duration);
+                ringMod.start(noteTime);
+                ringMod.stop(noteTime + note.duration);
+                
+                // 添加太空数字化风格的谐波
+                addAntiHumanSpaceHarmonics(audioContext, masterGain, spaceReverbGain, noteTime, note.freq, note.gain * 0.15);
+            });
+            
+            console.log('🎵 播放"Anti-Human"音效 - 太空数字化风格');
+        }
+        
+        // 创建"Series"音效 - 太空数字化风格
+        function createAntiHumanSeriesSound(audioContext, masterGain, spaceReverbGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"Series"的音节 - 太空数字化风格
+            const seriesNotes = [
+                { freq: 880, duration: 0.2, gain: 0.35 }, // A5 - "Se" - 高音基础
+                { freq: 659, duration: 0.18, gain: 0.3 }, // E5 - "ri" - 中音下降
+                { freq: 523, duration: 0.25, gain: 0.4 }  // C5 - "es" - 低音结束
+            ];
+            
+            seriesNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.2);
+                
+                // 主音调 - 使用太空数字化风格的音色
+                const mainOsc = audioContext.createOscillator();
+                const subOsc = audioContext.createOscillator(); // 次振荡器
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                const distortion = audioContext.createWaveShaper(); // 失真效果
+                const fmOsc = audioContext.createOscillator(); // FM调制
+                const fmGain = audioContext.createGain();
+                
+                // 设置主音调 - 太空数字化风格
+                mainOsc.type = 'square'; // 方波，太空感
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 次振荡器 - 增加厚度
+                subOsc.type = 'triangle';
+                subOsc.frequency.setValueAtTime(note.freq * 0.5, noteTime);
+                
+                // FM调制 - 太空数字化特色
+                fmOsc.type = 'sine';
+                fmOsc.frequency.setValueAtTime(note.freq * 1.2, noteTime);
+                fmGain.gain.setValueAtTime(note.freq * 0.3, noteTime);
+                fmOsc.connect(fmGain);
+                fmGain.connect(mainOsc.frequency);
+                
+                // 失真效果 - 太空感
+                const distortionCurve = new Float32Array(4096);
+                for (let i = 0; i < 4096; i++) {
+                    const x = (i * 2) / 4096 - 1;
+                    distortionCurve[i] = Math.tanh(x * 2) * 0.5;
+                }
+                distortion.curve = distortionCurve;
+                
+                // 滤波器 - 太空数字化风格
+                mainFilter.type = 'notch'; // 陷波滤波，太空特色
+                mainFilter.frequency.setValueAtTime(note.freq, noteTime);
+                mainFilter.Q.setValueAtTime(4.0, noteTime);
+                
+                // 音量包络 - 太空数字化风格
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.008);
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.015);
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
+                
+                // 连接音频节点
+                mainOsc.connect(distortion);
+                subOsc.connect(distortion);
+                distortion.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(spaceReverbGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                subOsc.start(noteTime);
+                subOsc.stop(noteTime + note.duration);
+                fmOsc.start(noteTime);
+                fmOsc.stop(noteTime + note.duration);
+                
+                // 添加太空数字化风格的谐波
+                addAntiHumanSeriesHarmonics(audioContext, masterGain, spaceReverbGain, noteTime, note.freq, note.gain * 0.12);
+            });
+            
+            console.log('🎵 播放"Series"音效 - 太空数字化风格');
+        }
+        
+        // 创建太空特效音效 - 太空数字化风格
+        function createAntiHumanSpaceEffectSound(audioContext, masterGain) {
+            const currentTime = audioContext.currentTime;
+            
+            // 创建太空数字化风格的结尾音效
+            const spaceOsc = audioContext.createOscillator();
+            const spaceGain = audioContext.createGain();
+            const spaceFilter = audioContext.createBiquadFilter();
+            const spaceDelay = audioContext.createDelay(0.2);
+            const spaceDelayGain = audioContext.createGain();
+            
+            // 设置太空特效音效
+            spaceOsc.type = 'sine'; // 正弦波，纯净太空感
+            spaceOsc.frequency.setValueAtTime(220, currentTime); // A3音符
+            spaceOsc.frequency.exponentialRampToValueAtTime(880, currentTime + 0.3); // 滑到A5
+            spaceOsc.frequency.exponentialRampToValueAtTime(110, currentTime + 0.6); // 滑到A2
+            
+            // 太空延迟效果
+            spaceDelay.delayTime.setValueAtTime(0.1, currentTime);
+            spaceDelay.delayTime.exponentialRampToValueAtTime(0.05, currentTime + 0.6);
+            spaceDelayGain.gain.setValueAtTime(0.25, currentTime);
+            
+            // 滤波器 - 太空数字化风格
+            spaceFilter.type = 'highpass'; // 高通滤波，太空感
+            spaceFilter.frequency.setValueAtTime(220, currentTime);
+            spaceFilter.frequency.exponentialRampToValueAtTime(880, currentTime + 0.3);
+            spaceFilter.frequency.exponentialRampToValueAtTime(110, currentTime + 0.6);
+            spaceFilter.Q.setValueAtTime(6.0, currentTime);
+            
+            // 音量包络 - 太空数字化风格
+            spaceGain.gain.setValueAtTime(0, currentTime);
+            spaceGain.gain.linearRampToValueAtTime(0.45, currentTime + 0.005);
+            spaceGain.gain.setValueAtTime(0.45, currentTime + 0.4);
+            spaceGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.8);
+            
+            // 连接音频节点
+            spaceOsc.connect(spaceFilter);
+            spaceFilter.connect(spaceGain);
+            spaceGain.connect(masterGain);
+            spaceGain.connect(spaceDelay);
+            spaceDelay.connect(spaceDelayGain);
+            spaceDelayGain.connect(masterGain);
+            
+            // 播放音效
+            spaceOsc.start(currentTime);
+            spaceOsc.stop(currentTime + 0.8);
+            
+            console.log('🚀 播放太空特效音效 - 太空数字化风格');
+        }
+        
+        // 添加 Anti-Human 太空数字化风格的谐波
+        function addAntiHumanSpaceHarmonics(audioContext, masterGain, spaceReverbGain, noteTime, baseFreq, baseGain) {
+            // 添加太空数字化谐波
+            const spaceOsc = audioContext.createOscillator();
+            const spaceGain = audioContext.createGain();
+            const spaceFilter = audioContext.createBiquadFilter();
+            
+            spaceOsc.type = 'triangle';
+            spaceOsc.frequency.setValueAtTime(baseFreq * 1.8, noteTime);
+            
+            spaceFilter.type = 'highpass';
+            spaceFilter.frequency.setValueAtTime(baseFreq * 1.5, noteTime);
+            spaceFilter.Q.setValueAtTime(2.5, noteTime);
+            
+            spaceGain.gain.setValueAtTime(0, noteTime);
+            spaceGain.gain.linearRampToValueAtTime(baseGain * 0.1, noteTime + 0.01);
+            spaceGain.gain.setValueAtTime(baseGain * 0.1, noteTime + 0.15);
+            spaceGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.3);
+            
+            spaceOsc.connect(spaceFilter);
+            spaceFilter.connect(spaceGain);
+            spaceGain.connect(masterGain);
+            spaceGain.connect(spaceReverbGain);
+            
+            spaceOsc.start(noteTime);
+            spaceOsc.stop(noteTime + 0.3);
+        }
+        
+        // 添加 Series 太空数字化风格的谐波
+        function addAntiHumanSeriesHarmonics(audioContext, masterGain, spaceReverbGain, noteTime, baseFreq, baseGain) {
+            // 添加太空数字化谐波
+            const seriesOsc = audioContext.createOscillator();
+            const seriesGain = audioContext.createGain();
+            const seriesFilter = audioContext.createBiquadFilter();
+            
+            seriesOsc.type = 'sawtooth';
+            seriesOsc.frequency.setValueAtTime(baseFreq * 2.2, noteTime);
+            
+            seriesFilter.type = 'bandpass';
+            seriesFilter.frequency.setValueAtTime(baseFreq * 2.2, noteTime);
+            seriesFilter.Q.setValueAtTime(3.5, noteTime);
+            
+            seriesGain.gain.setValueAtTime(0, noteTime);
+            seriesGain.gain.linearRampToValueAtTime(baseGain * 0.08, noteTime + 0.008);
+            seriesGain.gain.setValueAtTime(baseGain * 0.08, noteTime + 0.12);
+            seriesGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.25);
+            
+            seriesOsc.connect(seriesFilter);
+            seriesFilter.connect(seriesGain);
+            seriesGain.connect(masterGain);
+            seriesGain.connect(spaceReverbGain);
+            
+            seriesOsc.start(noteTime);
+            seriesOsc.stop(noteTime + 0.25);
+        }
+        
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('页面加载完成，开始初始化轮播');
+            console.log('页面加载完成，开始初始化 Anti-Human Series 系统');
+            
+            // 初始化全局天气客户端系统
+            initAntiHumanWeatherClient();
+            
+            // 播放开场音效
+            setTimeout(() => {
+                playAntiHumanSeriesGreeting();
+            }, 500); // 页面加载完成后500ms播放开场音效
             
             // 直接初始化轮播，不等待图片加载
             console.log('直接初始化轮播');

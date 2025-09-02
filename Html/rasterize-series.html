@@ -5828,7 +5828,514 @@
             initLanguage();
         });
 
+        // ===== Rasterize Series 全局天气客户端系统 =====
+        // 全局天气数据
+        let globalWeatherData = null;
+        let isWeatherClientActive = false;
+        
+        // 初始化全局天气客户端
+        function initGlobalWeatherClient() {
+            console.log('🌍 初始化 Rasterize Series 全局天气客户端...');
+            
+            // 尝试从 localStorage 获取展览界面的天气数据
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    globalWeatherData = JSON.parse(storedWeather);
+                    console.log('📡 从 localStorage 获取到展览界面天气数据:', globalWeatherData);
+                    
+                    // 检查数据是否过期（超过30分钟）
+                    const now = Date.now();
+                    const dataAge = now - globalWeatherData.timestamp;
+                    if (dataAge < 1800000) { // 30分钟 = 1800000毫秒
+                        // 数据有效，立即应用背景颜色
+                        applyGlobalWeatherBackground(globalWeatherData);
+                        isWeatherClientActive = true;
+                    } else {
+                        console.log('⚠️ 天气数据已过期，等待展览界面更新...');
+                    }
+                } catch (error) {
+                    console.error('❌ 解析天气数据失败:', error);
+                }
+            }
+            
+            // 监听全局天气变化事件
+            window.addEventListener('globalWeatherChange', handleGlobalWeatherChange);
+            
+            // 监听 localStorage 变化
+            window.addEventListener('storage', handleStorageChange);
+            
+            // 启动定期检查
+            setInterval(checkGlobalWeather, 60000); // 每分钟检查一次
+            
+            console.log('✅ 全局天气客户端初始化完成');
+        }
+        
+        // 处理全局天气变化事件
+        function handleGlobalWeatherChange(event) {
+            const newWeatherData = event.detail;
+            console.log('📡 收到展览界面天气变化事件:', newWeatherData);
+            
+            globalWeatherData = newWeatherData;
+            applyGlobalWeatherBackground(newWeatherData);
+            isWeatherClientActive = true;
+        }
+        
+        // 处理 localStorage 变化
+        function handleStorageChange(event) {
+            if (event.key === 'globalWeatherData') {
+                try {
+                    const newWeatherData = JSON.parse(event.newValue);
+                    console.log('📡 localStorage 天气数据已更新:', newWeatherData);
+                    
+                    globalWeatherData = newWeatherData;
+                    applyGlobalWeatherBackground(newWeatherData);
+                    isWeatherClientActive = true;
+                } catch (error) {
+                    console.error('❌ 解析更新的天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 定期检查全局天气数据
+        function checkGlobalWeather() {
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    const weatherData = JSON.parse(storedWeather);
+                    const now = Date.now();
+                    const dataAge = now - weatherData.timestamp;
+                    
+                    // 如果数据较新（15分钟内）且与当前数据不同，则更新
+                    if (dataAge < 900000 && (!globalWeatherData || globalWeatherData.timestamp !== weatherData.timestamp)) {
+                        console.log('📡 定期检查发现新的天气数据:', weatherData);
+                        globalWeatherData = weatherData;
+                        applyGlobalWeatherBackground(weatherData);
+                        isWeatherClientActive = true;
+                    }
+                } catch (error) {
+                    console.error('❌ 定期检查天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 应用全局天气背景颜色
+        function applyGlobalWeatherBackground(weatherData) {
+            if (!weatherData || !weatherData.baseColor) {
+                console.log('⚠️ 天气数据无效，跳过背景更新');
+                return;
+            }
+            
+            console.log('🎨 应用展览界面的天气背景颜色:', weatherData.baseColor);
+            
+            // 创建CSS变量来动态调整颜色
+            const style = document.createElement('style');
+            style.id = 'rasterize-global-weather-style';
+            
+            // 移除之前的样式
+            const existingStyle = document.getElementById('rasterize-global-weather-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // 生成动态CSS - 使用纯色而不是渐变
+            const css = `
+                body {
+                    --global-weather-blue-base: ${weatherData.baseColor};
+                    --global-weather-blue-intensity: ${weatherData.intensity};
+                    --global-weather-blue-humidity: ${weatherData.humidityFactor};
+                    --global-weather-blue-wind: ${weatherData.windFactor};
+                    --global-weather-blue-season: ${weatherData.seasonalAdjustment};
+                    --global-weather-blue-time: ${weatherData.timeAdjustment};
+                    
+                    background-color: ${weatherData.baseColor};
+                    transition: background-color 2s ease-in-out;
+                }
+                
+                /* 为页面添加一些微妙的层次感，但保持纯色 */
+                body::before {
+                    content: '';
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: ${weatherData.baseColor};
+                    opacity: 0.98;
+                    z-index: -1;
+                    pointer-events: none;
+                }
+                
+                /* 动态调整滚动动画的深蓝色部分 */
+                .rasterize-stripes {
+                    background: repeating-linear-gradient(
+                        to bottom,
+                        #0041ff 0px,
+                        #0041ff 3px,
+                        ${weatherData.baseColor} 3px,
+                        ${weatherData.baseColor} 20px
+                    ) !important;
+                }
+            `;
+            
+            style.textContent = css;
+            document.head.appendChild(style);
+            
+            console.log(`🎨 Rasterize Series 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)}`);
+            console.log(`🎨 滚动动画深蓝色部分已更新为天气颜色: ${weatherData.baseColor}`);
+        }
+        
+        // ===== Rasterize Series 开场音效系统 =====
+        // 开场音效变量
+        let rasterizeAudioContext = null;
+        let isRasterizeGreetingPlayed = false;
+        
+        // 播放 Rasterize Series 开场音效
+        function playRasterizeSeriesGreeting() {
+            if (isRasterizeGreetingPlayed) return; // 防止重复播放
+            
+            console.log('🎨 开始播放 Rasterize Series 开场音效...');
+            
+            try {
+                // 创建音频上下文
+                rasterizeAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 创建主混音器
+                const masterGain = rasterizeAudioContext.createGain();
+                masterGain.connect(rasterizeAudioContext.destination);
+                masterGain.gain.setValueAtTime(0.35, rasterizeAudioContext.currentTime); // 主音量35%
+                
+                // 创建光栅化特有的混响效果
+                const reverbGain = rasterizeAudioContext.createGain();
+                const reverbDelay = rasterizeAudioContext.createDelay(0.3);
+                const reverbFeedback = rasterizeAudioContext.createGain();
+                reverbGain.connect(reverbDelay);
+                reverbDelay.connect(reverbFeedback);
+                reverbFeedback.connect(reverbDelay);
+                reverbFeedback.connect(masterGain);
+                reverbGain.gain.setValueAtTime(0.15, rasterizeAudioContext.currentTime);
+                reverbFeedback.gain.setValueAtTime(0.3, rasterizeAudioContext.currentTime);
+                
+                // 创建"Rasterize"音效 - 现代科技风格
+                createRasterizeSound(rasterizeAudioContext, masterGain, reverbGain, 0);
+                
+                // 延迟播放"Series"音效 - 折中调整
+                setTimeout(() => {
+                    createSeriesSound(rasterizeAudioContext, masterGain, reverbGain, 0.8);
+                }, 800); // 折中调整：从1000ms缩短到800ms
+                
+                // 延迟播放光栅化特效音效 - 折中调整
+                setTimeout(() => {
+                    createRasterizeEffectSound(rasterizeAudioContext, masterGain);
+                }, 1.6); // 折中调整：从2.0秒缩短到1.6秒
+                
+                isRasterizeGreetingPlayed = true;
+                console.log('🎨 Rasterize Series 开场音效开始播放！');
+                
+            } catch (error) {
+                console.error('❌ Rasterize Series 开场音效播放失败:', error);
+            }
+        }
+        
+        // 创建"Rasterize"音效 - 现代科技风格
+        function createRasterizeSound(audioContext, masterGain, reverbGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"Rasterize"的音节 - 现代科技风格
+            const rasterizeNotes = [
+                { freq: 220, duration: 0.2, gain: 0.3 }, // A3 - "Ra" - 低音基础
+                { freq: 330, duration: 0.15, gain: 0.25 }, // E4 - "ster" - 中音上升
+                { freq: 440, duration: 0.25, gain: 0.35 }, // A4 - "ize" - 高音结束
+            ];
+            
+            rasterizeNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.22); // 折中调整：从0.25秒缩短到0.22秒
+                
+                // 主音调 - 使用现代科技风格的音色
+                const mainOsc = audioContext.createOscillator();
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                const lfo = audioContext.createOscillator(); // 低频振荡器
+                const lfoGain = audioContext.createGain();
+                
+                // 设置主音调 - 现代科技风格
+                mainOsc.type = 'square'; // 方波，现代科技感
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // LFO调制 - 创造动态效果
+                lfo.type = 'sine';
+                lfo.frequency.setValueAtTime(8, noteTime); // 8Hz调制
+                lfoGain.gain.setValueAtTime(note.freq * 0.1, noteTime);
+                lfo.connect(lfoGain);
+                lfoGain.connect(mainOsc.frequency);
+                
+                // 滤波器 - 现代科技风格
+                mainFilter.type = 'highpass'; // 高通滤波，现代锐利感
+                mainFilter.frequency.setValueAtTime(note.freq * 0.6, noteTime);
+                mainFilter.Q.setValueAtTime(4.0, noteTime); // 高Q值，锐利
+                
+                // 音量包络 - 现代科技风格
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.005); // 极快攻击
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.02);
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
+                
+                // 连接音频节点
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(reverbGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                lfo.start(noteTime);
+                lfo.stop(noteTime + note.duration);
+                
+                // 添加现代科技风格的谐波
+                addModernTechHarmonics(audioContext, masterGain, reverbGain, noteTime, note.freq, note.gain * 0.2);
+            });
+            
+            console.log('🎵 播放"Rasterize"音效 - 现代科技风格');
+        }
+        
+        // 创建"Series"音效 - 未来合成器风格
+        function createSeriesSound(audioContext, masterGain, reverbGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"Series"的音节 - 未来合成器风格
+            const seriesNotes = [
+                { freq: 880, duration: 0.15, gain: 0.3 }, // A5 - "Se" - 高音基础
+                { freq: 659, duration: 0.12, gain: 0.25 }, // E5 - "ri" - 中音下降
+                { freq: 523, duration: 0.18, gain: 0.35 }, // C5 - "es" - 低音结束
+            ];
+            
+            seriesNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.18); // 折中调整：从0.2秒缩短到0.18秒
+                
+                // 主音调 - 使用未来合成器风格的音色
+                const mainOsc = audioContext.createOscillator();
+                const subOsc = audioContext.createOscillator(); // 次振荡器
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                const distortion = audioContext.createWaveShaper(); // 失真效果
+                
+                // 设置主音调 - 未来合成器风格
+                mainOsc.type = 'sawtooth'; // 锯齿波，未来感
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 次振荡器 - 增加厚度
+                subOsc.type = 'sine';
+                subOsc.frequency.setValueAtTime(note.freq * 0.5, noteTime);
+                
+                // 失真效果 - 现代感
+                const distortionCurve = new Float32Array(4096);
+                for (let i = 0; i < 4096; i++) {
+                    const x = (i * 2) / 4096 - 1;
+                    distortionCurve[i] = (Math.PI + x) * x * x / (Math.PI + x * x);
+                }
+                distortion.curve = distortionCurve;
+                
+                // 滤波器 - 未来合成器风格
+                mainFilter.type = 'notch'; // 陷波滤波，未来特色
+                mainFilter.frequency.setValueAtTime(note.freq, noteTime);
+                mainFilter.Q.setValueAtTime(6.0, noteTime); // 高Q值，锐利
+                
+                // 音量包络 - 未来合成器风格
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.003); // 极快攻击
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.015);
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
+                
+                // 连接音频节点
+                mainOsc.connect(distortion);
+                subOsc.connect(distortion);
+                distortion.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(reverbGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                subOsc.start(noteTime);
+                subOsc.stop(noteTime + note.duration);
+                
+                // 添加未来合成器风格的谐波
+                addFutureSynthHarmonics(audioContext, masterGain, reverbGain, noteTime, note.freq, note.gain * 0.15);
+            });
+            
+            console.log('🎵 播放"Series"音效 - 未来合成器风格');
+        }
+        
+        // 创建光栅化特效音效 - 颗粒合成风格
+        function createRasterizeEffectSound(audioContext, masterGain) {
+            const currentTime = audioContext.currentTime;
+            
+            // 创建颗粒合成风格的结尾音效
+            const effectOsc = audioContext.createOscillator();
+            const effectGain = audioContext.createGain();
+            const effectFilter = audioContext.createBiquadFilter();
+            const granularDelay = audioContext.createDelay(0.1);
+            const granularGain = audioContext.createGain();
+            
+            // 设置特效音效 - 颗粒合成风格
+            effectOsc.type = 'sine'; // 正弦波，纯净基础
+            effectOsc.frequency.setValueAtTime(1760, currentTime); // A6音符，超高音
+            effectOsc.frequency.exponentialRampToValueAtTime(220, currentTime + 0.4); // 滑到A3，大幅下降
+            
+            // 颗粒延迟效果
+            granularDelay.delayTime.setValueAtTime(0.05, currentTime);
+            granularDelay.delayTime.exponentialRampToValueAtTime(0.02, currentTime + 0.4);
+            granularGain.gain.setValueAtTime(0.2, currentTime);
+            
+            // 滤波器 - 颗粒合成风格
+            effectFilter.type = 'bandpass'; // 带通滤波，颗粒感
+            effectFilter.frequency.setValueAtTime(1760, currentTime);
+            effectFilter.frequency.exponentialRampToValueAtTime(220, currentTime + 0.4);
+            effectFilter.Q.setValueAtTime(8.0, currentTime); // 极高Q值，锐利颗粒
+            
+            // 音量包络 - 颗粒合成风格
+            effectGain.gain.setValueAtTime(0, currentTime);
+            effectGain.gain.linearRampToValueAtTime(0.4, currentTime + 0.005);
+            effectGain.gain.setValueAtTime(0.4, currentTime + 0.3);
+            effectGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.6);
+            
+            // 连接音频节点
+            effectOsc.connect(effectFilter);
+            effectFilter.connect(effectGain);
+            effectGain.connect(masterGain);
+            effectGain.connect(granularDelay);
+            granularDelay.connect(granularGain);
+            granularGain.connect(masterGain);
+            
+            // 播放音效
+            effectOsc.start(currentTime);
+            effectOsc.stop(currentTime + 0.6);
+            
+            console.log('🎨 播放光栅化特效音效 - 颗粒合成风格');
+        }
+        
+        // 添加现代科技风格的谐波
+        function addModernTechHarmonics(audioContext, masterGain, reverbGain, noteTime, baseFreq, baseGain) {
+            // 添加FM调制谐波
+            const fmOsc = audioContext.createOscillator();
+            const fmGain = audioContext.createGain();
+            const fmFilter = audioContext.createBiquadFilter();
+            
+            fmOsc.type = 'sine';
+            fmOsc.frequency.setValueAtTime(baseFreq * 1.5, noteTime);
+            
+            fmFilter.type = 'highpass';
+            fmFilter.frequency.setValueAtTime(baseFreq * 1.2, noteTime);
+            fmFilter.Q.setValueAtTime(3.0, noteTime);
+            
+            fmGain.gain.setValueAtTime(0, noteTime);
+            fmGain.gain.linearRampToValueAtTime(baseGain * 0.12, noteTime + 0.005);
+            fmGain.gain.setValueAtTime(baseGain * 0.12, noteTime + 0.12);
+            fmGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.25);
+            
+            fmOsc.connect(fmFilter);
+            fmFilter.connect(fmGain);
+            fmGain.connect(masterGain);
+            fmGain.connect(reverbGain);
+            
+            fmOsc.start(noteTime);
+            fmOsc.stop(noteTime + 0.25);
+            
+            // 添加噪声谐波
+            const noiseBuffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.1, audioContext.sampleRate);
+            const noiseData = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < noiseData.length; i++) {
+                noiseData[i] = (Math.random() - 0.5) * 0.1;
+            }
+            
+            const noiseSource = audioContext.createBufferSource();
+            const noiseGain = audioContext.createGain();
+            const noiseFilter = audioContext.createBiquadFilter();
+            
+            noiseSource.buffer = noiseBuffer;
+            noiseFilter.type = 'bandpass';
+            noiseFilter.frequency.setValueAtTime(baseFreq * 2, noteTime);
+            noiseFilter.Q.setValueAtTime(2.0, noteTime);
+            
+            noiseGain.gain.setValueAtTime(0, noteTime);
+            noiseGain.gain.setValueAtTime(baseGain * 0.08, noteTime + 0.005);
+            noiseGain.gain.setValueAtTime(baseGain * 0.08, noteTime + 0.08);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.2);
+            
+            noiseSource.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(masterGain);
+            noiseGain.connect(reverbGain);
+            
+            noiseSource.start(noteTime);
+            noiseSource.stop(noteTime + 0.2);
+        }
+        
+        // 添加未来合成器风格的谐波
+        function addFutureSynthHarmonics(audioContext, masterGain, reverbGain, noteTime, baseFreq, baseGain) {
+            // 添加环形调制谐波
+            const ringModOsc = audioContext.createOscillator();
+            const ringModGain = audioContext.createGain();
+            const ringModFilter = audioContext.createBiquadFilter();
+            
+            ringModOsc.type = 'sine';
+            ringModOsc.frequency.setValueAtTime(baseFreq * 0.8, noteTime);
+            
+            ringModFilter.type = 'lowpass';
+            ringModFilter.frequency.setValueAtTime(baseFreq * 1.8, noteTime);
+            ringModFilter.Q.setValueAtTime(4.0, noteTime);
+            
+            ringModGain.gain.setValueAtTime(0, noteTime);
+            ringModGain.gain.linearRampToValueAtTime(baseGain * 0.1, noteTime + 0.003);
+            ringModGain.gain.setValueAtTime(baseGain * 0.1, noteTime + 0.1);
+            ringModGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.2);
+            
+            ringModOsc.connect(ringModFilter);
+            ringModFilter.connect(ringModGain);
+            ringModGain.connect(masterGain);
+            ringModGain.connect(reverbGain);
+            
+            ringModOsc.start(noteTime);
+            ringModOsc.stop(noteTime + 0.2);
+            
+            // 添加共振峰谐波
+            const formantOsc = audioContext.createOscillator();
+            const formantGain = audioContext.createGain();
+            const formantFilter = audioContext.createBiquadFilter();
+            
+            formantOsc.type = 'triangle';
+            formantOsc.frequency.setValueAtTime(baseFreq * 2.5, noteTime);
+            
+            formantFilter.type = 'peaking';
+            formantFilter.frequency.setValueAtTime(baseFreq * 2.5, noteTime);
+            formantFilter.Q.setValueAtTime(5.0, noteTime);
+            formantFilter.gain.setValueAtTime(6, noteTime);
+            
+            formantGain.gain.setValueAtTime(0, noteTime);
+            formantGain.gain.linearRampToValueAtTime(baseGain * 0.06, noteTime + 0.003);
+            formantGain.gain.setValueAtTime(baseGain * 0.06, noteTime + 0.08);
+            formantGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.15);
+            
+            formantOsc.connect(formantFilter);
+            formantFilter.connect(formantGain);
+            formantGain.connect(masterGain);
+            formantGain.connect(reverbGain);
+            
+            formantOsc.start(noteTime);
+            formantOsc.stop(noteTime + 0.15);
+        }
+
         window.addEventListener('load', function() {
+            // 初始化全局天气客户端系统
+            initGlobalWeatherClient();
+            
+            // 播放开场音效
+            setTimeout(() => {
+                playRasterizeSeriesGreeting();
+            }, 500); // 页面加载完成后500ms播放开场音效
+            
             createRasterizeEffect();
             initPacmanAnimation();
             

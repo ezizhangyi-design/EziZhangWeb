@@ -5932,6 +5932,9 @@
         // 初始化语音问候系统
         this.initVoiceGreeting();
         
+        // 初始化主页面全局天气客户端
+        this.initMainPageWeatherClient();
+        
         console.log('✅ 管道屏保系统初始化完成');
             }
             
@@ -6055,6 +6058,157 @@
             
             console.log(`✅ 光标样式系统初始化完成: ${clickableElements.length}个可点击元素, ${textElements.length}个文本元素`);
             console.log('🖱️ 现在移动鼠标，应该能看到原来的光标样式了！');
+        }
+        
+        // ===== 主页面全局天气客户端系统 =====
+        // 全局天气数据
+        mainPageWeatherData = null;
+        isMainPageWeatherActive = false;
+        
+        // 初始化主页面全局天气客户端
+        initMainPageWeatherClient() {
+            console.log('🌍 初始化主页面全局天气客户端...');
+            
+            // 尝试从 localStorage 获取展览界面的天气数据
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    this.mainPageWeatherData = JSON.parse(storedWeather);
+                    console.log('📡 主页面从 localStorage 获取到展览界面天气数据:', this.mainPageWeatherData);
+                    
+                    // 检查数据是否过期（超过30分钟）
+                    const now = Date.now();
+                    const dataAge = now - this.mainPageWeatherData.timestamp;
+                    if (dataAge < 1800000) { // 30分钟 = 1800000毫秒
+                        // 数据有效，立即应用背景颜色
+                        this.applyMainPageWeatherBackground(this.mainPageWeatherData);
+                        this.isMainPageWeatherActive = true;
+                    } else {
+                        console.log('⚠️ 主页面天气数据已过期，等待展览界面更新...');
+                    }
+                } catch (error) {
+                    console.error('❌ 主页面解析天气数据失败:', error);
+                }
+            }
+            
+            // 监听全局天气变化事件
+            window.addEventListener('globalWeatherChange', (event) => {
+                this.handleMainPageWeatherChange(event);
+            });
+            
+            // 监听 localStorage 变化
+            window.addEventListener('storage', (event) => {
+                this.handleMainPageStorageChange(event);
+            });
+            
+            // 启动定期检查
+            setInterval(() => {
+                this.checkMainPageWeather();
+            }, 60000); // 每分钟检查一次
+            
+            console.log('✅ 主页面全局天气客户端初始化完成');
+        }
+        
+        // 处理主页面全局天气变化事件
+        handleMainPageWeatherChange(event) {
+            const newWeatherData = event.detail;
+            console.log('📡 主页面收到展览界面天气变化事件:', newWeatherData);
+            
+            this.mainPageWeatherData = newWeatherData;
+            this.applyMainPageWeatherBackground(newWeatherData);
+            this.isMainPageWeatherActive = true;
+        }
+        
+        // 处理主页面 localStorage 变化
+        handleMainPageStorageChange(event) {
+            if (event.key === 'globalWeatherData') {
+                try {
+                    const newWeatherData = JSON.parse(event.newValue);
+                    console.log('📡 主页面 localStorage 天气数据已更新:', newWeatherData);
+                    
+                    this.mainPageWeatherData = newWeatherData;
+                    this.applyMainPageWeatherBackground(newWeatherData);
+                    this.isMainPageWeatherActive = true;
+                } catch (error) {
+                    console.error('❌ 主页面解析更新的天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 定期检查主页面全局天气数据
+        checkMainPageWeather() {
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    const weatherData = JSON.parse(storedWeather);
+                    const now = Date.now();
+                    const dataAge = now - weatherData.timestamp;
+                    
+                    // 如果数据较新（15分钟内）且与当前数据不同，则更新
+                    if (dataAge < 900000 && (!this.mainPageWeatherData || this.mainPageWeatherData.timestamp !== weatherData.timestamp)) {
+                        console.log('📡 主页面定期检查发现新的天气数据:', weatherData);
+                        this.mainPageWeatherData = weatherData;
+                        this.applyMainPageWeatherBackground(weatherData);
+                        this.isMainPageWeatherActive = true;
+                    }
+                } catch (error) {
+                    console.error('❌ 主页面定期检查天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 应用主页面全局天气背景颜色
+        applyMainPageWeatherBackground(weatherData) {
+            if (!weatherData || !weatherData.baseColor) {
+                console.log('⚠️ 主页面天气数据无效，跳过背景更新');
+                return;
+            }
+            
+            console.log('🎨 主页面应用展览界面的天气背景颜色:', weatherData.baseColor);
+            
+            // 创建CSS变量来动态调整颜色
+            const style = document.createElement('style');
+            style.id = 'mainpage-global-weather-style';
+            
+            // 移除之前的样式
+            const existingStyle = document.getElementById('mainpage-global-weather-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // 生成动态CSS - 使用纯色而不是渐变
+            const css = `
+                body {
+                    --mainpage-weather-blue-base: ${weatherData.baseColor};
+                    --mainpage-weather-blue-intensity: ${weatherData.intensity};
+                    --mainpage-weather-blue-humidity: ${weatherData.humidityFactor};
+                    --mainpage-weather-blue-wind: ${weatherData.windFactor};
+                    --mainpage-weather-blue-season: ${weatherData.seasonalAdjustment};
+                    --mainpage-weather-blue-time: ${weatherData.timeAdjustment};
+                    
+                    background-color: ${weatherData.baseColor};
+                    transition: background-color 2s ease-in-out;
+                }
+                
+                /* 为主页面添加一些微妙的层次感，但保持纯色 */
+                body::before {
+                    content: '';
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: ${weatherData.baseColor};
+                    opacity: 0.98;
+                    z-index: -1;
+                    pointer-events: none;
+                }
+            `;
+            
+            style.textContent = css;
+            document.head.appendChild(style);
+            
+            console.log(`🎨 主页面已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)}`);
         }
         
         // 初始化语音问候系统 - 帝国时代风格！

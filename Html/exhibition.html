@@ -2373,14 +2373,14 @@
                 // 创建主混音器
                 const masterGain = audioContext.createGain();
                 masterGain.connect(audioContext.destination);
-                masterGain.gain.setValueAtTime(0.3, audioContext.currentTime); // 主音量30%，更柔和
+                masterGain.gain.setValueAtTime(0.22, audioContext.currentTime); // 主音量从30%降到22%，更轻柔
                 
                 // 创建展览特有的延迟效果
                 const delayGain = audioContext.createGain();
                 const delayNode = audioContext.createDelay(0.15);
                 delayGain.connect(delayNode);
                 delayNode.connect(masterGain);
-                delayGain.gain.setValueAtTime(0.15, audioContext.currentTime); // 延迟音量降低
+                delayGain.gain.setValueAtTime(0.11, audioContext.currentTime); // 延迟音量从15%降到11%，更轻柔
                 
                 // 创建"Ezi's"音效 - 现代电子风格
                 createEziSound(audioContext, masterGain, delayGain, 0);
@@ -2413,9 +2413,9 @@
             
             // 创建"Ezi's"的音节 - 现代电子风格，更简洁
             const eziNotes = [
-                { freq: 440, duration: 0.2, gain: 0.3 }, // A4 - "E" - 中音，更现代，音量降低
-                { freq: 554, duration: 0.2, gain: 0.3 }, // C#5 - "zi" - 半音上升，音量降低
-                { freq: 659, duration: 0.15, gain: 0.25 }, // E5 - "'s" - 全音上升，音量降低
+                { freq: 440, duration: 0.2, gain: 0.22 }, // A4 - "E" - 中音，更现代，音量从0.3降到0.22
+                { freq: 554, duration: 0.2, gain: 0.22 }, // C#5 - "zi" - 半音上升，音量从0.3降到0.22
+                { freq: 659, duration: 0.15, gain: 0.18 }, // E5 - "'s" - 全音上升，音量从0.25降到0.18
             ];
             
             eziNotes.forEach((note, index) => {
@@ -2464,10 +2464,10 @@
             
             // 创建"EXHIBITION"的音节 - 现代科技风格，更简洁
             const exhibitionNotes = [
-                { freq: 523, duration: 0.25, gain: 0.6 }, // C5 - "EX" - 基础音
-                { freq: 659, duration: 0.25, gain: 0.6 }, // E5 - "HI" - 上升音
-                { freq: 523, duration: 0.25, gain: 0.6 }, // C5 - "BI" - 回音
-                { freq: 440, duration: 0.3, gain: 0.5 }, // A4 - "TION" - 下降音
+                { freq: 523, duration: 0.25, gain: 0.44 }, // C5 - "EX" - 基础音，音量从0.6降到0.44
+                { freq: 659, duration: 0.25, gain: 0.44 }, // E5 - "HI" - 上升音，音量从0.6降到0.44
+                { freq: 523, duration: 0.25, gain: 0.44 }, // C5 - "BI" - 回音，音量从0.6降到0.44
+                { freq: 440, duration: 0.3, gain: 0.37 }, // A4 - "TION" - 下降音，音量从0.5降到0.37
             ];
             
             exhibitionNotes.forEach((note, index) => {
@@ -2516,10 +2516,10 @@
             
             // 创建"EXPERIENCE"的音节 - 未来科技风格，更简洁
             const experienceNotes = [
-                { freq: 659, duration: 0.2, gain: 0.5 }, // E5 - "EX" - 基础音
-                { freq: 523, duration: 0.2, gain: 0.5 }, // C5 - "PE" - 下降音
-                { freq: 440, duration: 0.2, gain: 0.5 }, // A4 - "RI" - 继续下降
-                { freq: 659, duration: 0.25, gain: 0.4 }, // E5 - "ENCE" - 上升结束
+                { freq: 659, duration: 0.2, gain: 0.37 }, // E5 - "EX" - 基础音，音量从0.5降到0.37
+                { freq: 523, duration: 0.2, gain: 0.37 }, // C5 - "PE" - 下降音，音量从0.5降到0.37
+                { freq: 440, duration: 0.2, gain: 0.37 }, // A4 - "RI" - 继续下降，音量从0.5降到0.37
+                { freq: 659, duration: 0.25, gain: 0.3 }, // E5 - "ENCE" - 上升结束，音量从0.4降到0.3
             ];
             
             experienceNotes.forEach((note, index) => {
@@ -2617,8 +2617,8 @@
             
             // 音量包络 - 现代科技风格
             endingGain.gain.setValueAtTime(0, currentTime);
-            endingGain.gain.linearRampToValueAtTime(0.4, currentTime + 0.01); // 快速攻击
-            endingGain.gain.setValueAtTime(0.4, currentTime + 0.15); // 保持音量
+            endingGain.gain.linearRampToValueAtTime(0.3, currentTime + 0.01); // 快速攻击，音量从0.4降到0.3
+            endingGain.gain.setValueAtTime(0.3, currentTime + 0.15); // 保持音量，音量从0.4降到0.3
             endingGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.4); // 快速衰减
             
             // 连接音频节点
@@ -2654,8 +2654,8 @@
             
             // 音量包络 - 展览风格，更有艺术感
             dingGain.gain.setValueAtTime(0, currentTime);
-            dingGain.gain.linearRampToValueAtTime(0.6, currentTime + 0.02); // 快速攻击
-            dingGain.gain.setValueAtTime(0.6, currentTime + 0.3); // 保持音量
+            dingGain.gain.linearRampToValueAtTime(0.44, currentTime + 0.02); // 快速攻击，音量从0.6降到0.44
+            dingGain.gain.setValueAtTime(0.44, currentTime + 0.3); // 保持音量，音量从0.6降到0.44
             dingGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.6); // 更慢的衰减
             
             // 连接音频节点
@@ -2677,7 +2677,7 @@
         let windOscillators = [];
         let windLayers = []; // 风声层数组
         let isWindPlaying = false;
-        let windVolume = 0.5; // 基础风声音量，设置更高
+        let windVolume = 0.65; // 基础风声音量，从0.5提升到0.65，增加30%
         
         // 初始化风声系统
         function initWindSoundSystem() {
@@ -3324,7 +3324,51 @@
             style.textContent = css;
             document.head.appendChild(style);
             
+            // 广播天气变化事件，让其他页面同步更新
+            broadcastWeatherChange(baseColor, intensity, humidityFactor, windFactor, seasonalAdjustment, timeAdjustment);
+            
             console.log(`🎨 纯色背景应用完成: 基础色=${baseColor}, 强度=${intensity.toFixed(2)}, 湿度因子=${humidityFactor.toFixed(2)}, 风速因子=${windFactor.toFixed(2)}, 季节调整=${seasonalAdjustment}, 时间调整=${timeAdjustment}`);
+        }
+        
+        // ===== 全局天气共享系统 =====
+        // 广播天气变化事件
+        function broadcastWeatherChange(baseColor, intensity, humidityFactor, windFactor, seasonalAdjustment, timeAdjustment) {
+            // 使用 localStorage 作为全局天气数据存储
+            const globalWeatherData = {
+                baseColor: baseColor,
+                intensity: intensity,
+                humidityFactor: humidityFactor,
+                windFactor: windFactor,
+                seasonalAdjustment: seasonalAdjustment,
+                timeAdjustment: timeAdjustment,
+                timestamp: Date.now(),
+                source: 'exhibition'
+            };
+            
+            // 存储到 localStorage
+            localStorage.setItem('globalWeatherData', JSON.stringify(globalWeatherData));
+            
+            // 触发自定义事件
+            const weatherEvent = new CustomEvent('globalWeatherChange', {
+                detail: globalWeatherData
+            });
+            window.dispatchEvent(weatherEvent);
+            
+            console.log('🌍 全局天气数据已广播，其他页面将同步更新');
+        }
+        
+        // 获取当前天气数据供其他页面使用
+        function getCurrentWeatherData() {
+            return {
+                clouds: shanghaiWeather.clouds,
+                humidity: shanghaiWeather.humidity,
+                windSpeed: shanghaiWeather.windSpeed,
+                temperature: shanghaiWeather.temperature,
+                season: shanghaiWeather.season,
+                timeOfDay: shanghaiWeather.timeOfDay,
+                description: shanghaiWeather.description,
+                lastUpdate: shanghaiWeather.lastUpdate
+            };
         }
         
         // 根据天气调整云朵系统
@@ -3465,7 +3509,7 @@
             const windIntensity = Math.max(0.1, 1 - cloudRatio * 2);
             
             // 风声基础参数 - 真实风声的特点
-            const windVolume = 0.35 + windIntensity * 0.4; // 0.35-0.75，稍微大一点的音量
+            const windVolume = 0.45 + windIntensity * 0.5; // 从0.35+0.4提升到0.45+0.5，0.45-0.95，更大的音量
             const windSpeed = 3 + windIntensity * 4; // 3-7秒变化周期，真实风的节奏
             
             console.log(`🌪️ 真实风声参数: 强度=${windIntensity.toFixed(2)}, 音量=${windVolume.toFixed(2)}`);
@@ -3497,8 +3541,8 @@
             
             // 主风声音量 - 更平滑的起伏
             mainGain.gain.setValueAtTime(0, windAudioContext.currentTime);
-            mainGain.gain.linearRampToValueAtTime(windVolume * 0.6, windAudioContext.currentTime + 3);
-            mainGain.gain.setValueAtTime(windVolume * 0.6, windAudioContext.currentTime + 6);
+            mainGain.gain.linearRampToValueAtTime(windVolume * 0.75, windAudioContext.currentTime + 3); // 从0.6提升到0.75，增加25%
+            mainGain.gain.setValueAtTime(windVolume * 0.75, windAudioContext.currentTime + 6); // 从0.6提升到0.75，增加25%
             
             // 连接主风声 - 多层平滑处理
             mainWindSource.connect(mainGain);
@@ -3527,8 +3571,8 @@
             
             // 高频音量 - 更平滑的协调
             highGain.gain.setValueAtTime(0, windAudioContext.currentTime);
-            highGain.gain.linearRampToValueAtTime(windVolume * 0.3, windAudioContext.currentTime + 3.5);
-            highGain.gain.setValueAtTime(windVolume * 0.3, windAudioContext.currentTime + 6);
+            highGain.gain.linearRampToValueAtTime(windVolume * 0.4, windAudioContext.currentTime + 3.5); // 从0.3提升到0.4，增加33%
+            highGain.gain.setValueAtTime(windVolume * 0.4, windAudioContext.currentTime + 6); // 从0.3提升到0.4，增加33%
             
             // 连接高频风声 - 多层平滑处理
             highWindSource.connect(highGain);
@@ -3565,18 +3609,18 @@
                 const t = i / windAudioContext.sampleRate;
                 
                 // 生成平滑的噪声 - 使用低通滤波减少高频颗粒
-                const rawNoise = (Math.random() - 0.5) * 0.4; // 增加噪声音量
+                const rawNoise = (Math.random() - 0.5) * 0.5; // 从0.4提升到0.5，增加噪声音量
                 const smoothedNoise = lastSample * smoothingFactor + rawNoise * (1 - smoothingFactor);
                 lastSample = smoothedNoise;
                 
                 // 添加多个频率的正弦波，模拟风的自然频率
-                const windFreq1 = Math.sin(t * 0.8) * 0.2;   // 慢速风 - 增加音量
-                const windFreq2 = Math.sin(t * 1.5) * 0.16;  // 中速风 - 增加音量
-                const windFreq3 = Math.sin(t * 2.3) * 0.12;  // 快速风 - 增加音量
-                const windFreq4 = Math.sin(t * 3.1) * 0.08;  // 微妙风 - 增加音量
+                const windFreq1 = Math.sin(t * 0.8) * 0.25;   // 慢速风 - 从0.2提升到0.25，增加音量
+                const windFreq2 = Math.sin(t * 1.5) * 0.2;    // 中速风 - 从0.16提升到0.2，增加音量
+                const windFreq3 = Math.sin(t * 2.3) * 0.15;   // 快速风 - 从0.12提升到0.15，增加音量
+                const windFreq4 = Math.sin(t * 3.1) * 0.1;    // 微妙风 - 从0.08提升到0.1，增加音量
                 
                 // 添加风的自然起伏 - 使用更平滑的包络
-                const windEnvelope = Math.sin(t * 0.2) * 0.15 + Math.sin(t * 0.4) * 0.1; // 增加包络音量
+                const windEnvelope = Math.sin(t * 0.2) * 0.18 + Math.sin(t * 0.4) * 0.12; // 从0.15+0.1提升到0.18+0.12，增加包络音量
                 
                 // 组合所有元素，创造平滑的风声
                 output[i] = smoothedNoise + windFreq1 + windFreq2 + windFreq3 + windFreq4 + windEnvelope;
@@ -3618,19 +3662,19 @@
                 highFilter.frequency.exponentialRampToValueAtTime(newHighFreq, currentTime + speed);
                 
                 // 音量变化 - 根据云朵情况
-                const baseVolume = 0.2 + windIntensity * 0.3;
-                const volumeVariation = 0.05 + windIntensity * 0.15;
+                const baseVolume = 0.25 + windIntensity * 0.4; // 从0.2+0.3提升到0.25+0.4，增加基础音量
+                const volumeVariation = 0.06 + windIntensity * 0.2; // 从0.05+0.15提升到0.06+0.2，增加变化幅度
                 
                 // 主风声音量 - 自然的起伏
                 const mainVolume = baseVolume * (0.8 + Math.sin(currentTime * 0.2) * volumeVariation);
                 mainGain.gain.setValueAtTime(mainVolume, currentTime);
                 
                 // 高频风声音量 - 与主风声协调
-                const highVolume = baseVolume * 0.6 * (0.7 + Math.sin(currentTime * 0.2 + 0.5) * volumeVariation);
+                const highVolume = baseVolume * 0.7 * (0.7 + Math.sin(currentTime * 0.2 + 0.5) * volumeVariation); // 从0.6提升到0.7
                 highGain.gain.setValueAtTime(highVolume, currentTime);
                 
                 // 动态调整主混音器音量
-                const masterVolume = windIntensity * 0.6;
+                const masterVolume = windIntensity * 0.75; // 从0.6提升到0.75，增加主混音器音量
                 windGain.gain.setValueAtTime(masterVolume, currentTime);
                 
                 console.log(`🌪️ 真实风声状态: 强度=${windIntensity.toFixed(2)}, 主音量=${mainVolume.toFixed(2)}, 高频音量=${highVolume.toFixed(2)}`);
@@ -3658,14 +3702,14 @@
             const windIntensity = (cloudWindIntensity + realWindIntensity) / 2; // 综合风强度
             
             // 风声基础参数 - 真实风声的特点
-            const windVolume = 0.35 + windIntensity * 0.4; // 0.35-0.75，稍微大一点的音量
+            const windVolume = 0.45 + windIntensity * 0.5; // 从0.35+0.4提升到0.45+0.5，0.45-0.95，更大的音量
             const windSpeed = 3 + windIntensity * 4; // 3-7秒变化周期，真实风的节奏
             
             console.log(`🌪️ 风声参数调整: 云朵比例=${cloudRatio.toFixed(2)}, 风强度=${windIntensity.toFixed(2)}, 音量=${windVolume.toFixed(2)}`);
             console.log(`🌤️ 上海天气: 云量=${weather.clouds}%, 风速=${weather.windSpeed}m/s, 温度=${weather.temperature}°C`);
             
             // 动态调整主混音器音量
-            const masterVolume = windIntensity * 0.8; // 增加主混音器音量
+            const masterVolume = windIntensity * 0.9; // 从0.8提升到0.9，增加主混音器音量
             windGain.gain.setValueAtTime(masterVolume, windAudioContext.currentTime);
             
             // 调整滤波器参数

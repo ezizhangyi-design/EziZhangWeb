@@ -366,6 +366,14 @@
     </style>
 </head>
 <body>
+
+    
+    <!-- 简单状态显示 -->
+    <div id="statusDisplay" style="position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 1001;">
+        <div>🎨 Digital Painting 状态</div>
+        <div id="statusText">等待初始化...</div>
+    </div>
+    
     <div class="content-container">
         <a href="../index.html" class="back-btn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
         
@@ -459,5 +467,612 @@
         <!-- 添加大量空白空间用于编辑 -->
         <div style="height: 7700px; margin-top: 100px;"></div>
     </div>
+    
+    <script>
+        // ===== Digital Painting 全局天气客户端系统 =====
+        // 全局天气数据
+        let digitalPaintingWeatherData = null;
+        let isDigitalPaintingWeatherActive = false;
+        
+        // 初始化 Digital Painting 全局天气客户端
+        function initDigitalPaintingWeatherClient() {
+            console.log('🌍 初始化 Digital Painting 全局天气客户端...');
+            
+            // 页面一开始保持亮蓝色，不立即应用天气颜色
+            console.log('🎨 Digital Painting 页面初始保持亮蓝色背景');
+            
+            // 尝试从 localStorage 获取展览界面的天气数据（但不立即应用）
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    digitalPaintingWeatherData = JSON.parse(storedWeather);
+                    console.log('📡 Digital Painting 从 localStorage 获取到展览界面天气数据:', digitalPaintingWeatherData);
+                    
+                    // 检查数据是否过期（超过30分钟）
+                    const now = Date.now();
+                    const dataAge = now - digitalPaintingWeatherData.timestamp;
+                    if (dataAge < 1800000) { // 30分钟 = 1800000毫秒
+                        // 数据有效，但等待音效结束后再应用
+                        isDigitalPaintingWeatherActive = true;
+                        console.log('✅ Digital Painting 天气数据有效，等待音效结束后应用');
+                    } else {
+                        console.log('⚠️ Digital Painting 天气数据已过期，等待展览界面更新...');
+                    }
+                } catch (error) {
+                    console.error('❌ Digital Painting 解析天气数据失败:', error);
+                }
+            }
+            
+            // 监听全局天气变化事件
+            window.addEventListener('globalWeatherChange', handleDigitalPaintingWeatherChange);
+            
+            // 监听 localStorage 变化
+            window.addEventListener('storage', handleDigitalPaintingStorageChange);
+            
+            // 启动定期检查
+            setInterval(checkDigitalPaintingWeather, 60000); // 每分钟检查一次
+            
+            console.log('✅ Digital Painting 全局天气客户端初始化完成');
+        }
+        
+        // 处理 Digital Painting 全局天气变化事件
+        function handleDigitalPaintingWeatherChange(event) {
+            const newWeatherData = event.detail;
+            console.log('📡 Digital Painting 收到展览界面天气变化事件:', newWeatherData);
+            
+            digitalPaintingWeatherData = newWeatherData;
+            applyDigitalPaintingWeatherBackground(newWeatherData);
+            isDigitalPaintingWeatherActive = true;
+        }
+        
+        // 处理 Digital Painting localStorage 变化
+        function handleDigitalPaintingStorageChange(event) {
+            if (event.key === 'globalWeatherData') {
+                try {
+                    const newWeatherData = JSON.parse(event.newValue);
+                    console.log('📡 Digital Painting localStorage 天气数据已更新:', newWeatherData);
+                    
+                    digitalPaintingWeatherData = newWeatherData;
+                    applyDigitalPaintingWeatherBackground(newWeatherData);
+                    isDigitalPaintingWeatherActive = true;
+                } catch (error) {
+                    console.error('❌ Digital Painting 解析更新的天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 定期检查 Digital Painting 全局天气数据
+        function checkDigitalPaintingWeather() {
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    const weatherData = JSON.parse(storedWeather);
+                    const now = Date.now();
+                    const dataAge = now - weatherData.timestamp;
+                    
+                    // 如果数据较新（15分钟内）且与当前数据不同，则更新
+                    if (dataAge < 900000 && (!digitalPaintingWeatherData || digitalPaintingWeatherData.timestamp !== weatherData.timestamp)) {
+                        console.log('📡 Digital Painting 定期检查发现新的天气数据:', weatherData);
+                        digitalPaintingWeatherData = weatherData;
+                        applyDigitalPaintingWeatherBackground(weatherData);
+                        isDigitalPaintingWeatherActive = true;
+                    }
+                } catch (error) {
+                    console.error('❌ Digital Painting 定期检查天气数据失败:', error);
+                }
+            }
+        }
+        
+
+        
+        // 应用 Digital Painting 全局天气背景颜色
+        function applyDigitalPaintingWeatherBackground(weatherData) {
+            if (!weatherData || !weatherData.baseColor) {
+                console.log('⚠️ Digital Painting 天气数据无效，跳过背景更新');
+                return;
+            }
+            
+            console.log('🎨 Digital Painting 应用展览界面的天气背景颜色:', weatherData.baseColor);
+            
+            // 创建CSS变量来动态调整颜色
+            const style = document.createElement('style');
+            style.id = 'digitalpainting-global-weather-style';
+            
+            // 移除之前的样式
+            const existingStyle = document.getElementById('digitalpainting-global-weather-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // 生成动态CSS - 使用纯色而不是渐变
+            const css = `
+                body {
+                    --digitalpainting-weather-blue-base: ${weatherData.baseColor};
+                    --digitalpainting-weather-blue-intensity: ${weatherData.intensity};
+                    --digitalpainting-weather-blue-humidity: ${weatherData.humidityFactor};
+                    --digitalpainting-weather-blue-wind: ${weatherData.windFactor};
+                    --digitalpainting-weather-blue-season: ${weatherData.seasonalAdjustment};
+                    --digitalpainting-weather-blue-time: ${weatherData.timeAdjustment};
+                    
+                    background-color: ${weatherData.baseColor} !important;
+                    transition: background-color 2s ease-in-out;
+                }
+                
+                /* 为页面添加一些微妙的层次感，但保持纯色 */
+                body::before {
+                    content: '';
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: ${weatherData.baseColor};
+                    opacity: 0.95;
+                    z-index: -1;
+                    pointer-events: none;
+                }
+            `;
+            
+            style.textContent = css;
+            document.head.appendChild(style);
+            
+            console.log(`🎨 Digital Painting 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)}`);
+        }
+        
+        // ===== Digital Painting 2D创战纪风格红白机音效系统 =====
+        // 开场音效变量
+        let digitalPaintingAudioContext = null;
+        let isDigitalPaintingGreetingPlayed = false;
+        
+        // 播放 Digital Painting 开场音效 - 全新设计的特别音效！
+        function playDigitalPaintingGreeting() {
+            if (isDigitalPaintingGreetingPlayed) return; // 防止重复播放
+            
+            console.log('🎨 开始播放 Digital Painting 全新特别音效...');
+            updateStatus('🎵 正在播放音效...');
+            
+            try {
+                // 创建音频上下文
+                digitalPaintingAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 创建主混音器
+                const masterGain = digitalPaintingAudioContext.createGain();
+                masterGain.connect(digitalPaintingAudioContext.destination);
+                masterGain.gain.setValueAtTime(0.3, digitalPaintingAudioContext.currentTime); // 主音量降低到30%，更温和
+                
+                // 创建独特的音效处理链
+                const digitalGain = digitalPaintingAudioContext.createGain();
+                const paintingGain = digitalPaintingAudioContext.createGain();
+                const effectGain = digitalPaintingAudioContext.createGain();
+                
+                // 创建独特的滤波器组合
+                const digitalFilter = digitalPaintingAudioContext.createBiquadFilter();
+                const paintingFilter = digitalPaintingAudioContext.createBiquadFilter();
+                const effectFilter = digitalPaintingAudioContext.createBiquadFilter();
+                
+                // 创建独特的延迟和混响效果
+                const digitalDelay = digitalPaintingAudioContext.createDelay(0.2);
+                const paintingDelay = digitalPaintingAudioContext.createDelay(0.15);
+                const effectDelay = digitalPaintingAudioContext.createDelay(0.3);
+                
+                // 连接音效处理链
+                digitalGain.connect(digitalFilter);
+                digitalFilter.connect(digitalDelay);
+                digitalDelay.connect(masterGain);
+                
+                paintingGain.connect(paintingFilter);
+                paintingFilter.connect(paintingDelay);
+                paintingDelay.connect(masterGain);
+                
+                effectGain.connect(effectFilter);
+                effectFilter.connect(effectDelay);
+                effectDelay.connect(masterGain);
+                
+                // 设置独特的音效参数 - 大幅降低音量，避免刺耳
+                digitalGain.gain.setValueAtTime(0.25, digitalPaintingAudioContext.currentTime);
+                paintingGain.gain.setValueAtTime(0.22, digitalPaintingAudioContext.currentTime);
+                effectGain.gain.setValueAtTime(0.28, digitalPaintingAudioContext.currentTime);
+                
+                // 创建"Digital"音效 - 全新的数字艺术风格
+                createDigitalArtSound(digitalPaintingAudioContext, masterGain, digitalGain, digitalFilter, 0);
+                
+                // 延迟播放"Painting"音效
+                setTimeout(() => {
+                    createPaintingArtSound(digitalPaintingAudioContext, masterGain, paintingGain, paintingFilter, 0.8);
+                }, 800);
+                
+                // 延迟播放艺术特效音效
+                setTimeout(() => {
+                    createDigitalPaintingArtEffectSound(digitalPaintingAudioContext, masterGain, effectGain, effectFilter);
+                }, 1.6);
+                
+                // 音效结束后应用天气背景颜色
+                setTimeout(() => {
+                    console.log('🎨 音效播放完成，开始应用天气背景颜色...');
+                    updateStatus('🎨 音效完成，准备应用天气背景...');
+                    if (digitalPaintingWeatherData && isDigitalPaintingWeatherActive) {
+                        applyDigitalPaintingWeatherBackground(digitalPaintingWeatherData);
+                        updateStatus('✅ 天气背景已应用');
+                    } else {
+                        console.log('⚠️ 没有有效的天气数据，保持亮蓝色背景');
+                        updateStatus('⚠️ 无天气数据，保持原背景');
+                    }
+                }, 3000); // 等待音效完全播放完毕，与展览界面保持同步
+                
+                isDigitalPaintingGreetingPlayed = true;
+                updateStatus('✅ 音效播放完成');
+                console.log('🎨 Digital Painting 全新特别音效开始播放！');
+                
+            } catch (error) {
+                console.error('❌ Digital Painting 开场音效播放失败:', error);
+                updateStatus('❌ 音效播放失败: ' + error.message);
+            }
+        }
+        
+        // 创建"Digital"音效 - 现代电子音乐风格！
+        function createDigitalArtSound(audioContext, masterGain, digitalGain, digitalFilter, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"Digital"的音节 - 现代电子音乐风格
+            const digitalNotes = [
+                { freq: 220, duration: 0.2, gain: 0.3 }, // A3 - "Di" - 中音基础，电子感
+                { freq: 330, duration: 0.18, gain: 0.28 }, // E4 - "gi" - 中音上升，电子感
+                { freq: 440, duration: 0.25, gain: 0.32 }, // A4 - "tal" - 高音结束，电子感
+            ];
+            
+            digitalNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.2);
+                
+                // 主音调 - 使用现代电子音乐风格音色
+                const mainOsc = audioContext.createOscillator();
+                const subOsc = audioContext.createOscillator(); // 次振荡器增加厚度
+                const mainGain = audioContext.createGain();
+                const lfo = audioContext.createOscillator(); // 低频振荡器
+                const lfoGain = audioContext.createGain();
+                const waveShaper = audioContext.createWaveShaper(); // 波形整形器，电子感
+                const distortionFilter = audioContext.createBiquadFilter(); // 失真滤波器
+                
+                // 设置主音调 - 现代电子音乐风格
+                mainOsc.type = 'sawtooth'; // 锯齿波，电子感十足
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 次振荡器 - 增加厚度和电子感
+                subOsc.type = 'square'; // 方波，电子感
+                subOsc.frequency.setValueAtTime(note.freq * 0.5, noteTime);
+                
+                // LFO调制 - 创造电子动态效果
+                lfo.type = 'triangle';
+                lfo.frequency.setValueAtTime(12, noteTime); // 12Hz调制，电子感
+                lfoGain.gain.setValueAtTime(note.freq * 0.03, noteTime); // 增加调制强度
+                lfo.connect(lfoGain);
+                lfoGain.connect(mainOsc.frequency);
+                
+                // 波形整形 - 创造电子失真效果
+                const distortionCurve = new Float32Array(4096);
+                for (let i = 0; i < 4096; i++) {
+                    const x = (i * 2) / 4096 - 1;
+                    distortionCurve[i] = Math.sign(x) * (1 - Math.exp(-Math.abs(x) * 1.5));
+                }
+                waveShaper.curve = distortionCurve;
+                
+                // 失真滤波器 - 电子感
+                distortionFilter.type = 'highpass';
+                distortionFilter.frequency.setValueAtTime(note.freq * 0.8, noteTime);
+                distortionFilter.Q.setValueAtTime(3.0, noteTime);
+                
+                // 主滤波器 - 现代电子音乐风格
+                digitalFilter.type = 'peaking'; // 峰值滤波，电子感
+                digitalFilter.frequency.setValueAtTime(note.freq, noteTime);
+                digitalFilter.Q.setValueAtTime(4.0, noteTime); // 高Q值，电子感
+                digitalFilter.gain.setValueAtTime(8, noteTime); // 增益提升，电子感
+                
+                // 音量包络 - 现代电子音乐风格
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.002);
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.01);
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
+                
+                // 连接音频节点
+                mainOsc.connect(waveShaper);
+                subOsc.connect(waveShaper);
+                waveShaper.connect(distortionFilter);
+                distortionFilter.connect(digitalFilter);
+                digitalFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(digitalGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                subOsc.start(noteTime);
+                subOsc.stop(noteTime + note.duration);
+                lfo.start(noteTime);
+                lfo.stop(noteTime + note.duration);
+                
+                // 添加现代电子音乐谐波
+                addDigitalArtHarmonics(audioContext, masterGain, digitalGain, noteTime, note.freq, note.gain * 0.15);
+            });
+            
+            console.log('⚡ 播放"Digital"音效 - 现代电子音乐风格');
+        }
+        
+        // 创建"Painting"音效 - 现代电子音乐风格！
+        function createPaintingArtSound(audioContext, masterGain, paintingGain, paintingFilter, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"Painting"的音节 - 现代电子音乐风格
+            const paintingNotes = [
+                { freq: 392, duration: 0.25, gain: 0.32 }, // G4 - "Pai" - 中音基础，电子感
+                { freq: 294, duration: 0.22, gain: 0.28 }, // D4 - "nt" - 中音，电子感
+                { freq: 440, duration: 0.3, gain: 0.35 }, // A4 - "ing" - 高音结束，电子感
+            ];
+            
+            paintingNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.22);
+                
+                // 主音调 - 使用现代电子音乐风格音色
+                const mainOsc = audioContext.createOscillator();
+                const subOsc = audioContext.createOscillator(); // 次振荡器
+                const mainGain = audioContext.createGain();
+                const lfo = audioContext.createOscillator(); // 低频振荡器
+                const lfoGain = audioContext.createGain();
+                const chorus = audioContext.createOscillator(); // 合唱效果
+                const chorusGain = audioContext.createGain();
+                const reverb = audioContext.createDelay(0.15); // 混响效果
+                const reverbGain = audioContext.createGain();
+                
+                // 设置主音调 - 现代电子音乐风格
+                mainOsc.type = 'sawtooth'; // 锯齿波，电子感十足
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 次振荡器 - 增加厚度和电子感
+                subOsc.type = 'square'; // 方波，电子感
+                subOsc.frequency.setValueAtTime(note.freq * 0.5, noteTime);
+                
+                // LFO调制 - 创造电子动态效果
+                lfo.type = 'square';
+                lfo.frequency.setValueAtTime(8, noteTime); // 8Hz调制，电子感
+                lfoGain.gain.setValueAtTime(note.freq * 0.025, noteTime); // 增加调制强度
+                lfo.connect(lfoGain);
+                lfoGain.connect(mainOsc.frequency);
+                
+                // 合唱效果 - 创造电子空间感
+                chorus.type = 'sine';
+                chorus.frequency.setValueAtTime(5, noteTime); // 5Hz合唱调制
+                chorusGain.gain.setValueAtTime(note.freq * 0.02, noteTime);
+                chorus.connect(chorusGain);
+                chorusGain.connect(subOsc.frequency);
+                
+                // 混响效果 - 增加电子空间感
+                reverbGain.gain.setValueAtTime(0.4, noteTime);
+                
+                // 主滤波器 - 现代电子音乐风格
+                paintingFilter.type = 'notch'; // 陷波滤波，电子感
+                paintingFilter.frequency.setValueAtTime(note.freq, noteTime);
+                paintingFilter.Q.setValueAtTime(6.0, noteTime); // 高Q值，电子感
+                
+                // 音量包络 - 现代电子音乐风格
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.002);
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.01);
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
+                
+                // 连接音频节点
+                mainOsc.connect(paintingFilter);
+                subOsc.connect(paintingFilter);
+                paintingFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(paintingGain);
+                mainGain.connect(reverb);
+                reverb.connect(reverbGain);
+                reverbGain.connect(masterGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                subOsc.start(noteTime);
+                subOsc.stop(noteTime + note.duration);
+                lfo.start(noteTime);
+                lfo.stop(noteTime + note.duration);
+                chorus.start(noteTime);
+                chorus.stop(noteTime + note.duration);
+                
+                // 添加现代电子音乐谐波
+                addPaintingArtHarmonics(audioContext, masterGain, paintingGain, noteTime, note.freq, note.gain * 0.12);
+            });
+            
+            console.log('⚡ 播放"Painting"音效 - 现代电子音乐风格');
+        }
+        
+        // 创建艺术特效音效 - 现代电子音乐风格！
+        function createDigitalPaintingArtEffectSound(audioContext, masterGain, effectGain, effectFilter) {
+            const currentTime = audioContext.currentTime;
+            
+            // 创建现代电子音乐风格结尾音效
+            const synthOsc = audioContext.createOscillator();
+            const synthGain = audioContext.createGain();
+            const synthDelay = audioContext.createDelay(0.2);
+            const synthDelayGain = audioContext.createGain();
+            const waveShaper = audioContext.createWaveShaper(); // 波形整形器
+            const distortionFilter = audioContext.createBiquadFilter(); // 失真滤波器
+            const lfo = audioContext.createOscillator(); // 低频振荡器
+            const lfoGain = audioContext.createGain();
+            
+            // 设置现代电子音乐风格特效音效
+            synthOsc.type = 'sawtooth'; // 锯齿波，电子感十足
+            synthOsc.frequency.setValueAtTime(440, currentTime); // A4音符，电子感
+            synthOsc.frequency.exponentialRampToValueAtTime(880, currentTime + 0.15); // 滑到A5，电子感
+            synthOsc.frequency.exponentialRampToValueAtTime(220, currentTime + 0.3); // 滑到A3，电子感
+            synthOsc.frequency.exponentialRampToValueAtTime(660, currentTime + 0.45); // 滑到E5，电子感
+            
+            // LFO调制 - 创造电子动态效果
+            lfo.type = 'triangle';
+            lfo.frequency.setValueAtTime(15, currentTime); // 15Hz调制，电子感
+            lfoGain.gain.setValueAtTime(440 * 0.04, currentTime); // 调制强度
+            lfo.connect(lfoGain);
+            lfoGain.connect(synthOsc.frequency);
+            
+            // 波形整形 - 创造电子失真效果
+            const distortionCurve = new Float32Array(4096);
+            for (let i = 0; i < 4096; i++) {
+                const x = (i * 2) / 4096 - 1;
+                distortionCurve[i] = Math.sign(x) * (1 - Math.exp(-Math.abs(x) * 2));
+            }
+            waveShaper.curve = distortionCurve;
+            
+            // 失真滤波器 - 电子感
+            distortionFilter.type = 'highpass';
+            distortionFilter.frequency.setValueAtTime(200, currentTime);
+            distortionFilter.Q.setValueAtTime(4.0, currentTime);
+            
+            // 电子延迟效果 - 创造空间感
+            synthDelay.delayTime.setValueAtTime(0.15, currentTime);
+            synthDelay.delayTime.exponentialRampToValueAtTime(0.08, currentTime + 0.45);
+            synthDelayGain.gain.setValueAtTime(0.35, currentTime); // 增加延迟音量
+            
+            // 主滤波器 - 现代电子音乐风格
+            effectFilter.type = 'peaking'; // 峰值滤波，电子感
+            effectFilter.frequency.setValueAtTime(440, currentTime);
+            effectFilter.Q.setValueAtTime(5.0, currentTime); // 高Q值，电子感
+            effectFilter.gain.setValueAtTime(10, currentTime); // 增益提升，电子感
+            
+            // 音量包络 - 现代电子音乐风格
+            synthGain.gain.setValueAtTime(0, currentTime);
+            synthGain.gain.linearRampToValueAtTime(0.4, currentTime + 0.01); // 增加音量
+            synthGain.gain.setValueAtTime(0.4, currentTime + 0.35);
+            synthGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.7);
+            
+            // 连接音频节点
+            synthOsc.connect(waveShaper);
+            waveShaper.connect(distortionFilter);
+            distortionFilter.connect(effectFilter);
+            effectFilter.connect(synthGain);
+            synthGain.connect(masterGain);
+            synthGain.connect(effectGain);
+            synthGain.connect(synthDelay);
+            synthDelay.connect(synthDelayGain);
+            synthDelayGain.connect(masterGain);
+            
+            // 播放音效
+            synthOsc.start(currentTime);
+            synthOsc.stop(currentTime + 0.7);
+            lfo.start(currentTime);
+            lfo.stop(currentTime + 0.7);
+            
+            console.log('⚡ 播放现代电子音乐风格特效音效');
+        }
+        
+        // 添加 Digital 现代电子音乐风格的谐波
+        function addDigitalArtHarmonics(audioContext, masterGain, digitalGain, noteTime, baseFreq, baseGain) {
+            // 添加现代电子音乐谐波
+            const synthOsc = audioContext.createOscillator();
+            const synthGain = audioContext.createGain();
+            const synthFilter = audioContext.createBiquadFilter();
+            const waveShaper = audioContext.createWaveShaper(); // 波形整形器
+            
+            synthOsc.type = 'sawtooth'; // 锯齿波，电子感
+            synthOsc.frequency.setValueAtTime(baseFreq * 1.5, noteTime);
+            
+            // 波形整形 - 创造电子失真效果
+            const distortionCurve = new Float32Array(4096);
+            for (let i = 0; i < 4096; i++) {
+                const x = (i * 2) / 4096 - 1;
+                distortionCurve[i] = Math.sign(x) * (1 - Math.exp(-Math.abs(x) * 1.8));
+            }
+            waveShaper.curve = distortionCurve;
+            
+            synthFilter.type = 'peaking'; // 峰值滤波，电子感
+            synthFilter.frequency.setValueAtTime(baseFreq * 1.5, noteTime);
+            synthFilter.Q.setValueAtTime(4.0, noteTime); // 高Q值，电子感
+            synthFilter.gain.setValueAtTime(6, noteTime); // 增益提升，电子感
+            
+            synthGain.gain.setValueAtTime(0, noteTime);
+            synthGain.gain.linearRampToValueAtTime(baseGain * 0.12, noteTime + 0.01); // 增加音量
+            synthGain.gain.setValueAtTime(baseGain * 0.12, noteTime + 0.1);
+            synthGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.2);
+            
+            synthOsc.connect(waveShaper);
+            waveShaper.connect(synthFilter);
+            synthFilter.connect(synthGain);
+            synthGain.connect(masterGain);
+            synthGain.connect(digitalGain);
+            
+            synthOsc.start(noteTime);
+            synthOsc.stop(noteTime + 0.2);
+        }
+        
+        // 添加 Painting 现代电子音乐风格的谐波
+        function addPaintingArtHarmonics(audioContext, masterGain, paintingGain, noteTime, baseFreq, baseGain) {
+            // 添加现代电子音乐谐波
+            const synthOsc = audioContext.createOscillator();
+            const synthGain = audioContext.createGain();
+            const synthFilter = audioContext.createBiquadFilter();
+            const chorus = audioContext.createOscillator(); // 合唱效果
+            const chorusGain = audioContext.createGain();
+            
+            synthOsc.type = 'square'; // 方波，电子感
+            synthOsc.frequency.setValueAtTime(baseFreq * 1.5, noteTime);
+            
+            // 合唱效果 - 创造电子空间感
+            chorus.type = 'sine';
+            chorus.frequency.setValueAtTime(6, noteTime); // 6Hz合唱调制
+            chorusGain.gain.setValueAtTime(baseFreq * 0.015, noteTime);
+            chorus.connect(chorusGain);
+            chorusGain.connect(synthOsc.frequency);
+            
+            synthFilter.type = 'notch'; // 陷波滤波，电子感
+            synthFilter.frequency.setValueAtTime(baseFreq * 1.5, noteTime);
+            synthFilter.Q.setValueAtTime(5.0, noteTime); // 高Q值，电子感
+            
+            synthGain.gain.setValueAtTime(0, noteTime);
+            synthGain.gain.linearRampToValueAtTime(baseGain * 0.1, noteTime + 0.01); // 增加音量
+            synthGain.gain.setValueAtTime(baseGain * 0.1, noteTime + 0.1);
+            synthGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.2);
+            
+            synthOsc.connect(synthFilter);
+            synthFilter.connect(synthGain);
+            synthGain.connect(masterGain);
+            synthGain.connect(paintingGain);
+            
+            synthOsc.start(noteTime);
+            synthOsc.stop(noteTime + 0.2);
+            chorus.start(noteTime);
+            chorus.stop(noteTime + 0.2);
+        }
+        
+        // 更新状态显示
+        function updateStatus(message) {
+            const statusText = document.getElementById('statusText');
+            if (statusText) {
+                statusText.textContent = message;
+            }
+            console.log('📊 状态更新:', message);
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，开始初始化 Digital Painting 系统');
+            updateStatus('🔄 正在初始化...');
+            
+            try {
+                // 初始化全局天气客户端系统
+                initDigitalPaintingWeatherClient();
+                updateStatus('🌍 天气系统已初始化');
+                
+                // 播放开场音效
+                setTimeout(() => {
+                    updateStatus('🎵 准备播放音效...');
+                    playDigitalPaintingGreeting();
+                }, 500); // 页面加载完成后500ms播放开场音效
+                
+                updateStatus('✅ 系统初始化完成');
+                console.log('✅ Digital Painting 系统初始化完成');
+                
+            } catch (error) {
+                console.error('❌ 初始化失败:', error);
+                updateStatus('❌ 初始化失败: ' + error.message);
+            }
+        });
+    </script>
 </body>
 </html> 
