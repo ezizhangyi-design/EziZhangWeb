@@ -145,12 +145,12 @@
             width: 4px !important;
             height: 80px !important;
             border-radius: 2px !important;
-            background: #0041ff !important;
+            background: #00aaff !important;
             outline: none !important;
             cursor: pointer !important;
             -webkit-appearance: none !important;
             appearance: none !important;
-            border: 1px solid #0041ff !important;
+            border: 1px solid #00aaff !important;
             transition: all 0.2s ease !important;
             writing-mode: bt-lr !important;
             -webkit-appearance: slider-vertical !important;
@@ -160,7 +160,7 @@
         
         /* Webkit浏览器滑块轨道 - 使用更强的选择器 */
         input[type="range"].volume-slider::-webkit-slider-track {
-            background: #0041ff !important;
+            background: #00aaff !important;
             border-radius: 2px !important;
             border: none !important;
             width: 4px !important;
@@ -176,14 +176,14 @@
             border-radius: 50% !important;
             background: #ffffff !important;
             cursor: pointer !important;
-            border: 2px solid #0041ff !important;
+            border: 2px solid #00aaff !important;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
             margin-top: -4px !important;
         }
         
         /* Firefox浏览器滑块轨道 - 使用更强的选择器 */
         input[type="range"].volume-slider::-moz-range-track {
-            background: #0041ff !important;
+            background: #00aaff !important;
             border-radius: 2px !important;
             border: none !important;
             height: 4px !important;
@@ -197,7 +197,7 @@
             border-radius: 50% !important;
             background: #ffffff !important;
             cursor: pointer !important;
-            border: 2px solid #0041ff !important;
+            border: 2px solid #00aaff !important;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
         }
         
@@ -2298,7 +2298,7 @@
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
             font-size: 18px;
             font-weight: bold;
-        }
+            }
         
         /* 页面底部额外空间 */
         .bottom-spacer {
@@ -3443,9 +3443,52 @@
                 
                 <!-- 音乐控制按钮 -->
                 <button id="music-control" style="position: relative; margin-top: 20px; z-index: 20; background: #00ff00; color: white; border: 3px solid #00ff00; width: 60px; height: 60px; cursor: pointer; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-family: 'VCR OSD Mono', monospace; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.3);" title="单击播放/停止音乐，双击测试音效">MUSIC</button>
+                
+
+                
+
             </div>
         </div>
         <div class="right-panel">
+            <!-- 管道音调推子 - 左右两侧黄圈位置 -->
+            <div class="pipes-mixer-container">
+                <!-- 左侧推子组 -->
+                <div class="left-faders">
+                    <!-- Bassline 推子 -->
+                    <div class="fader-control pipes-bassline-fader">
+                        <div class="fader-track">
+                            <input type="range" id="bassline-mixer" min="0" max="100" value="100" class="volume-slider" title="Bassline音量">
+                        </div>
+                    </div>
+                    
+                    <!-- Lead 推子 -->
+                    <div class="fader-control pipes-lead-fader">
+                        <div class="fader-track">
+                            <input type="range" id="lead-mixer" min="0" max="100" value="100" class="volume-slider" title="Lead音量">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧推子组 -->
+                <div class="right-faders">
+                    <!-- Pad 推子 -->
+                    <div class="fader-control pipes-pad-fader">
+                        <div class="fader-track">
+                            <input type="range" id="pad-mixer" min="0" max="100" value="100" class="volume-slider" title="Pad音量">
+                        </div>
+                    </div>
+                    
+                    <!-- Drums 推子 -->
+                    <div class="fader-control pipes-drums-fader">
+                        <div class="fader-track">
+                            <input type="range" id="drums-mixer" min="0" max="100" value="100" class="volume-slider" title="Drums音量">
+                        </div>
+                    </div>
+                </div>
+                
+
+            </div>
+            
             <!-- 动态波点背景 -->
             <div class="animated-dots"></div>
             <div class="social-info">
@@ -3744,7 +3787,7 @@
         <div class="subtitle-container-5">
             <h3 class="subtitle-5">
                                 <span class="lang-content active" data-lang="en">
-                    <span class="letter-r">R</span>.<span class="letter-g">G</span>.<span class="letter-b">B</span>. <span class="word-star">Star</span> History Series
+                <span class="letter-r">R</span>.<span class="letter-g">G</span>.<span class="letter-b">B</span>. <span class="word-star">Star</span> History Series
                 </span>
                 <span class="lang-content" data-lang="zh">
                     <span class="letter-r">R</span>.<span class="letter-g">G</span>.<span class="letter-b">B</span>. <span class="word-star">星</span>史系列
@@ -4439,7 +4482,7 @@
                         return 28; // 中高性能Mac (M1/M2/M3)
                     } else if (cpuCores >= 4) {
                         return 22; // 标准Mac (Intel i5/i7)
-                    } else {
+                } else {
                         return 18; // 低端Mac
                     }
                 } else if (isMobile) {
@@ -4615,21 +4658,21 @@
                     updateContainerHeight();
                 });
                 
-                // 防抖函数
-                function debounce(func, wait) {
-                    let timeout;
-                    return function executedFunction(...args) {
-                        const later = () => {
-                            clearTimeout(timeout);
-                            func(...args);
-                        };
-                        clearTimeout(timeout);
-                        timeout = setTimeout(later, wait);
-                    };
-                }
-                
-                // 监听窗口大小变化（防抖优化）
-                window.addEventListener('resize', debounce(updateContainerHeight, 250));
+                        // 防抖函数
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        
+        // 监听窗口大小变化（防抖优化）
+        window.addEventListener('resize', debounce(updateContainerHeight, 250));
                 
                 // 创建波点
                 console.log(`🎯 开始创建 ${this.dotCount} 个波点`);
@@ -4752,13 +4795,13 @@
                             if (overlap > 0) {
                                 const separateX = (overlap / 2) * (dx / distance);
                                 const separateY = (overlap / 2) * (dy / distance);
-                                
-                                dot1.x -= separateX;
-                                dot1.y -= separateY;
-                                dot2.x += separateX;
-                                dot2.y += separateY;
-                            }
+                            
+                            dot1.x -= separateX;
+                            dot1.y -= separateY;
+                            dot2.x += separateX;
+                            dot2.y += separateY;
                         }
+                    }
                     }
                 }
                 
@@ -4824,7 +4867,7 @@
                         // 如果已经有scale效果，保持它
                         dot.element.style.transform = `translate(${dot.x}px, ${dot.y}px) scale(1.2)`;
                     } else {
-                        dot.element.style.transform = `translate(${dot.x}px, ${dot.y}px)`;
+                    dot.element.style.transform = `translate(${dot.x}px, ${dot.y}px)`;
                     }
                 });
                 
@@ -5103,15 +5146,15 @@
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 console.log('🚀 DOM加载完成，开始创建波点系统');
-                window.dotSystem = new DotSystem();
+            window.dotSystem = new DotSystem();
                 console.log('✅ 波点系统创建成功');
                 
                 // 初始化分割线音效系统
                 window.dividerSoundSystem = new DividerSoundSystem();
                 console.log('✅ 分割线音效系统创建成功');
-            } catch (error) {
+        } catch (error) {
                 console.error('❌ 波点系统创建失败:', error);
-                // 静默处理错误，避免影响页面其他功能
+            // 静默处理错误，避免影响页面其他功能
             }
         });
         
@@ -5642,11 +5685,29 @@
                 this.isMusicActive = false;
                 this.musicStartTime = 0;
                 this.currentBar = 0;
-                this.bpm = 128; // 电子迷幻节奏
+                this.bpm = 80; // 降低BPM，让节奏更慢
                 this.barLength = (60 / this.bpm) * 4; // 4拍为一小节
                 
                 // 管道音乐音量控制
                 this.pipesMusicVolume = 0.8; // 默认音量80%
+                
+                // 音色调色器控制
+                this.basslineVolume = 1.0; // Bassline音量 100%
+                this.leadVolume = 1.0;     // Lead音量 100%
+                this.padVolume = 1.0;      // Pad音量 100%
+                this.drumsVolume = 1.0;    // Drums音量 100%
+                
+                // 音调参数控制
+                this.basslinePitch = 0.5;   // Bassline音调 50%
+                this.leadPitch = 0.5;       // Lead音调 50%
+                this.padPitch = 0.5;        // Pad音调 50%
+                this.drumsPitch = 0.5;      // Drums音调 50%
+                
+                // 事件处理器引用
+                this.basslineHandler = null;
+                this.leadHandler = null;
+                this.padHandler = null;
+                this.drumsHandler = null;
                 
                 // 简单赋格风格控制
                 this.fugueEntry = 0; // 声部进入顺序
@@ -5695,6 +5756,9 @@
                 
                 // 初始化音频系统
                 this.initAudio();
+                
+                // 初始化音色调色器
+                this.initSoundMixer();
                 
                 // 添加用户交互激活音频的监听器
                 this.addAudioActivationListeners();
@@ -5988,11 +6052,20 @@
                             console.log('贝斯线已停止或无法停止');
                         }
                     }
+
                     if (this.lead) {
                         try {
                             this.lead.stop();
                         } catch (e) {
                             console.log('主旋律已停止或无法停止');
+                        }
+                    }
+                    
+                    if (this.leadHarmony) {
+                        try {
+                            this.leadHarmony.stop();
+                        } catch (e) {
+                            console.log('主旋律和声已停止或无法停止');
                         }
                     }
                     if (this.pad) {
@@ -6022,6 +6095,7 @@
                     // 清空振荡器引用，确保重新启动时能创建新的
                     this.bassline = null;
                     this.lead = null;
+                    this.leadHarmony = null;
                     this.pad = null;
                     this.drums = null;
                     
@@ -6031,7 +6105,594 @@
                 }
             }
             
-            // 创建贝斯线（稍微融入赋格元素）
+            // 初始化音色调色器
+            initSoundMixer() {
+                console.log('🎵 开始初始化音色调色器...');
+                
+                // 延迟初始化，确保DOM完全加载
+                setTimeout(() => {
+                    this.setupMixerControls();
+                }, 100);
+            }
+            
+            // 设置调音器控制
+            setupMixerControls() {
+                console.log('🎵 设置调音器控制...');
+                
+                // Bassline 音调推子
+                const basslineMixer = document.getElementById('bassline-mixer');
+                console.log('🎵 Bassline音调推子元素:', basslineMixer);
+                if (basslineMixer) {
+                    // 绑定音调调节事件
+                    basslineMixer.addEventListener('input', (e) => {
+                        const value = e.target.value / 100;
+                        this.basslineVolume = value;
+                        this.basslinePitch = value; // 音调参数
+                        console.log('🎵 Bassline音调调整为:', this.basslinePitch, '原始值:', e.target.value);
+                        
+                        // 实时应用音调变化
+                        this.applyBasslinePitch();
+                    });
+                    
+                    console.log('✅ Bassline音调推子事件监听器已绑定');
+                } else {
+                    console.warn('⚠️ 未找到Bassline音调推子元素');
+                }
+                
+                // Lead 音调推子
+                const leadMixer = document.getElementById('lead-mixer');
+                console.log('🎵 Lead音调推子元素:', leadMixer);
+                if (leadMixer) {
+                    // 绑定音调调节事件
+                    leadMixer.addEventListener('input', (e) => {
+                        const value = e.target.value / 100;
+                        this.leadVolume = value;
+                        this.leadPitch = value; // 音调参数
+                        console.log('🎵 Lead音调调整为:', this.leadPitch, '原始值:', e.target.value);
+                        
+                        // 实时应用音调变化
+                        this.applyLeadPitch();
+                    });
+                    
+                    console.log('✅ Lead音调推子事件监听器已绑定');
+                } else {
+                    console.warn('⚠️ 未找到Lead音调推子元素');
+                }
+                
+                // Pad 音调推子
+                const padMixer = document.getElementById('pad-mixer');
+                console.log('🎵 Pad音调推子元素:', padMixer);
+                if (padMixer) {
+                    // 绑定音调调节事件
+                    padMixer.addEventListener('input', (e) => {
+                        const value = e.target.value / 100;
+                        this.padVolume = value;
+                        this.padPitch = value; // 音调参数
+                        console.log('🎵 Pad音调调整为:', this.padPitch, '原始值:', e.target.value);
+                        
+                        // 实时应用音调变化
+                        this.applyPadPitch();
+                    });
+                    
+                    console.log('✅ Pad音调推子事件监听器已绑定');
+                } else {
+                    console.warn('⚠️ 未找到Pad音调推子元素');
+                }
+                
+                // Drums 音调推子
+                const drumsMixer = document.getElementById('drums-mixer');
+                console.log('🎵 Drums音调推子元素:', drumsMixer);
+                if (drumsMixer) {
+                    // 绑定音调调节事件
+                    drumsMixer.addEventListener('input', (e) => {
+                        const value = e.target.value / 100;
+                        this.drumsVolume = value;
+                        this.drumsPitch = value; // 音调参数
+                        console.log('🎵 Drums音调调整为:', this.drumsPitch, '原始值:', e.target.value);
+                        
+                        // 实时应用音调变化
+                        this.applyDrumsPitch();
+                    });
+                    
+                    console.log('✅ Drums音调推子事件监听器已绑定');
+                } else {
+                    console.warn('⚠️ 未找到Drums音调推子元素');
+                }
+                
+                console.log('🎵 管道音调推子初始化完成');
+                
+                // 添加测试按钮事件
+                const testFadersBtn = document.getElementById('test-faders');
+                if (testFadersBtn) {
+                    testFadersBtn.addEventListener('click', () => {
+                        console.log('🧪 推子测试按钮被点击');
+                        console.log('当前推子状态:');
+                        console.log('- Bassline:', this.basslineVolume, '(', (this.basslineVolume * 100).toFixed(0) + '%)');
+                        console.log('- Lead:', this.leadVolume, '(', (this.leadVolume * 100).toFixed(0) + '%)');
+                        console.log('- Pad:', this.padVolume, '(', (this.padVolume * 100).toFixed(0) + '%)');
+                        console.log('- Drums:', this.drumsVolume, '(', (this.drumsVolume * 100).toFixed(0) + '%)');
+                        
+                        // 测试推子元素
+                        const basslineMixer = document.getElementById('bassline-mixer');
+                        const leadMixer = document.getElementById('lead-mixer');
+                        const padMixer = document.getElementById('pad-mixer');
+                        const drumsMixer = document.getElementById('drums-mixer');
+                        
+                        if (basslineMixer) {
+                            console.log('✅ Bassline推子元素正常，当前值:', basslineMixer.value);
+                            console.log('🧪 Bassline推子当前状态：', basslineMixer.value + '%');
+                        }
+                        
+                        if (leadMixer) {
+                            console.log('✅ Lead推子元素正常，当前值:', leadMixer.value);
+                            console.log('🧪 Lead推子当前状态：', leadMixer.value + '%');
+                        }
+                        
+                        if (padMixer) {
+                            console.log('✅ Pad推子元素正常，当前值:', padMixer.value);
+                            console.log('🧪 Pad推子当前状态：', padMixer.value + '%');
+                        }
+                        
+                        if (drumsMixer) {
+                            console.log('✅ Drums推子元素正常，当前值:', drumsMixer.value);
+                            console.log('🧪 Drums推子当前状态：', drumsMixer.value + '%');
+                        }
+                        
+                        // 显示测试结果
+                        setTimeout(() => {
+                            console.log('🎵 推子测试完成！请检查：');
+                            console.log('1. 推子手柄是否移动');
+                            console.log('2. 数值显示是否更新');
+                            console.log('3. 控制台是否有音量调整日志');
+                            
+                            // 详细检查推子状态
+                            this.debugFaderStatus();
+                        }, 100);
+                    });
+                                    console.log('✅ 推子测试按钮事件监听器已绑定');
+                
+                // 初始化后立即测试推子功能
+                setTimeout(() => {
+                    console.log('🧪 推子初始化后自动测试...');
+                    this.debugFaderStatus();
+                    
+                    // 测试推子是否可以正常获取值
+                    if (basslineMixer) {
+                        console.log('🎵 Bassline推子初始值:', basslineMixer.value);
+                        // 测试推子是否可以正常拖拽
+                        console.log('🧪 测试推子拖拽功能...');
+                        console.log('  - 推子元素:', basslineMixer);
+                        console.log('  - 推子类名:', basslineMixer.className);
+                        console.log('  - 推子样式:', getComputedStyle(basslineMixer));
+                        console.log('  - 推子是否可见:', basslineMixer.offsetWidth > 0 && basslineMixer.offsetHeight > 0);
+                        console.log('  - 推子位置:', basslineMixer.getBoundingClientRect());
+                    }
+                }, 500);
+            }
+            }
+            
+            // 调试推子状态的方法
+            debugFaderStatus() {
+                console.log('🔍 推子状态详细检查:');
+                
+                const basslineMixer = document.getElementById('bassline-mixer');
+                const leadMixer = document.getElementById('lead-mixer');
+                const padMixer = document.getElementById('pad-mixer');
+                const drumsMixer = document.getElementById('drums-mixer');
+                
+                if (basslineMixer) {
+                    console.log('🎵 Bassline音色调音器:');
+                    console.log('  - 元素存在:', !!basslineMixer);
+                    console.log('  - 当前值:', basslineMixer.value);
+                    console.log('  - 最小值:', basslineMixer.min);
+                    console.log('  - 最大值:', basslineMixer.max);
+                    console.log('  - 是否禁用:', basslineMixer.disabled);
+                    console.log('  - 样式:', getComputedStyle(basslineMixer));
+                    console.log('  - 父元素:', basslineMixer.parentElement);
+                }
+                
+                if (leadMixer) {
+                    console.log('🎵 Lead音色调音器:');
+                    console.log('  - 元素存在:', !!leadMixer);
+                    console.log('  - 当前值:', leadMixer.value);
+                    console.log('  - 最小值:', leadMixer.min);
+                    console.log('  - 最大值:', leadMixer.max);
+                    console.log('  - 是否禁用:', leadMixer.disabled);
+                }
+                
+                if (padMixer) {
+                    console.log('🎵 Pad音色调音器:');
+                    console.log('  - 元素存在:', !!padMixer);
+                    console.log('  - 当前值:', padMixer.value);
+                    console.log('  - 最小值:', padMixer.min);
+                    console.log('  - 最大值:', padMixer.max);
+                    console.log('  - 是否禁用:', padMixer.disabled);
+                }
+                
+                if (drumsMixer) {
+                    console.log('🎵 Drums音色调音器:');
+                    console.log('  - 元素存在:', !!drumsMixer);
+                    console.log('  - 当前值:', drumsMixer.value);
+                    console.log('  - 最小值:', drumsMixer.min);
+                    console.log('  - 最大值:', drumsMixer.max);
+                    console.log('  - 是否禁用:', drumsMixer.disabled);
+                }
+                
+                // 检查CSS样式
+                console.log('🎨 推子CSS样式检查:');
+                const testFader = document.querySelector('.volume-slider');
+                if (testFader) {
+                    const styles = getComputedStyle(testFader);
+                    console.log('  - 宽度:', styles.width);
+                    console.log('  - 高度:', styles.height);
+                    console.log('  - 位置:', styles.position);
+                    console.log('  - Z-index:', styles.zIndex);
+                    console.log('  - 指针事件:', styles.pointerEvents);
+                    console.log('  - 光标:', styles.cursor);
+                }
+            }
+            
+            // 音调调节方法
+            applyBasslinePitch() {
+                if (this.bassline && this.audioContext) {
+                    // 根据音调参数调整频率
+                    const pitchValue = this.basslinePitch;
+                    
+                    // 计算音调变化：从-12半音到+12半音
+                    const semitones = (pitchValue - 0.5) * 24; // -12到+12半音
+                    const pitchRatio = Math.pow(2, semitones / 12); // 频率比例
+                    
+                    // 获取当前音符的基础频率
+                    const baseFreq = this.getCurrentBasslineFreq();
+                    const newFreq = baseFreq * pitchRatio;
+                    
+                    // 应用音调变化
+                    this.bassline.frequency.setValueAtTime(newFreq, this.audioContext.currentTime);
+                    
+                    // 创建IDM风格的Bassline变化
+                    this.createIDMBassline(newFreq);
+                    
+                    console.log('🎵 Bassline音调已调整:', {
+                        '半音变化': semitones.toFixed(1) + '半音',
+                        '频率比例': pitchRatio.toFixed(3),
+                        '基础频率': baseFreq.toFixed(1) + 'Hz',
+                        '新频率': newFreq.toFixed(1) + 'Hz'
+                    });
+                }
+            }
+            
+            // 创建IDM风格的Bassline - 与Drums配合
+            createIDMBassline(baseFreq) {
+                if (!this.audioContext) return;
+                
+                const currentTime = this.audioContext.currentTime;
+                
+                // 根据Bassline调音器值选择IDM模式
+                const basslineMode = this.getBasslineIDMMode();
+                
+                switch(basslineMode) {
+                    case 'minimal':
+                        this.createMinimalBassline(baseFreq, currentTime);
+                        break;
+                    case 'glitch':
+                        this.createGlitchBassline(baseFreq, currentTime);
+                        break;
+                    case 'breakbeat':
+                        this.createBreakbeatBassline(baseFreq, currentTime);
+                        break;
+                    case 'ambient':
+                        this.createAmbientBassline(baseFreq, currentTime);
+                        break;
+                    case 'idm':
+                        this.createComplexIDMBassline(baseFreq, currentTime);
+                        break;
+                }
+                
+                console.log(`🎵 Bassline IDM模式: ${basslineMode}, 基础频率: ${baseFreq.toFixed(1)}Hz`);
+            }
+            
+            // 获取Bassline IDM模式
+            getBasslineIDMMode() {
+                const value = this.basslinePitch;
+                if (value < 0.2) return 'minimal';        // 0-20%: 极简
+                if (value < 0.4) return 'glitch';         // 20-40%: 故障
+                if (value < 0.6) return 'breakbeat';      // 40-60%: 碎拍
+                if (value < 0.8) return 'ambient';        // 60-80%: 氛围
+                return 'idm';                             // 80-100%: 智能舞曲
+            }
+            
+            applyLeadPitch() {
+                if (this.lead && this.audioContext) {
+                    // 根据音调参数调整频率
+                    const pitchValue = this.leadPitch;
+                    
+                    // 计算音调变化：从-12半音到+12半音
+                    const semitones = (pitchValue - 0.5) * 24; // -12到+12半音
+                    const pitchRatio = Math.pow(2, semitones / 12); // 频率比例
+                    
+                    // 获取当前音符的基础频率
+                    const baseFreq = this.getCurrentLeadFreq();
+                    const newFreq = baseFreq * pitchRatio;
+                    
+                    // 应用音调变化
+                    this.lead.frequency.setValueAtTime(newFreq, this.audioContext.currentTime);
+                    
+                    // 创建电子化效果 - 添加谐波和调制
+                    this.createLeadHarmonics(newFreq);
+                    
+                    // 创建白噪音穿插效果
+                    this.createLeadWhiteNoise(newFreq);
+                    
+                    console.log('🎵 Lead音调已调整:', {
+                        '半音变化': semitones.toFixed(1) + '半音',
+                        '频率比例': pitchRatio.toFixed(3),
+                        '基础频率': baseFreq.toFixed(1) + 'Hz',
+                        '新频率': newFreq.toFixed(1) + 'Hz'
+                    });
+                }
+            }
+            
+            // 创建Lead谐波 - 增加电子感
+            createLeadHarmonics(baseFreq) {
+                if (!this.audioContext) return;
+                
+                const currentTime = this.audioContext.currentTime;
+                
+                // 创建多个谐波振荡器
+                const harmonics = [
+                    { freq: baseFreq * 2, gain: 0.3, type: 'sawtooth' },    // 2次谐波
+                    { freq: baseFreq * 3, gain: 0.2, type: 'square' },      // 3次谐波
+                    { freq: baseFreq * 5, gain: 0.15, type: 'triangle' }    // 5次谐波
+                ];
+                
+                harmonics.forEach((harmonic, index) => {
+                    const osc = this.audioContext.createOscillator();
+                    const gain = this.audioContext.createGain();
+                    const filter = this.audioContext.createBiquadFilter();
+                    
+                    osc.type = harmonic.type;
+                    osc.frequency.setValueAtTime(harmonic.freq, currentTime);
+                    
+                    // 滤波器 - 让谐波更电子化
+                    filter.type = 'bandpass';
+                    filter.frequency.setValueAtTime(harmonic.freq, currentTime);
+                    filter.Q.setValueAtTime(2.0, currentTime);
+                    
+                    // 音量包络 - 快速攻击，缓慢衰减
+                    gain.gain.setValueAtTime(0, currentTime);
+                    gain.gain.linearRampToValueAtTime(harmonic.gain * this.pipesMusicVolume * this.leadVolume, currentTime + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.5);
+                    
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(this.masterGain);
+                    
+                    osc.start(currentTime);
+                    osc.stop(currentTime + 0.5);
+                });
+            }
+            
+            // 创建Lead白噪音 - 增加质感和随机脉冲
+            createLeadWhiteNoise(baseFreq) {
+                if (!this.audioContext) return;
+                
+                const currentTime = this.audioContext.currentTime;
+                
+                // 创建白噪音振荡器
+                const noiseOsc = this.audioContext.createOscillator();
+                const noiseGain = this.audioContext.createGain();
+                const noiseFilter = this.audioContext.createBiquadFilter();
+                const noiseDelay = this.audioContext.createDelay(0.1);
+                const noiseReverb = this.audioContext.createGain();
+                
+                // 白噪音 - 使用高频方波模拟
+                noiseOsc.type = 'square';
+                noiseOsc.frequency.setValueAtTime(baseFreq * 8, currentTime); // 8倍频率
+                
+                // 滤波器 - 带通，让白噪音更有旋律感
+                noiseFilter.type = 'bandpass';
+                noiseFilter.frequency.setValueAtTime(baseFreq * 4, currentTime);
+                noiseFilter.Q.setValueAtTime(1.5, currentTime);
+                
+                // 延迟效果 - 增加空间感
+                noiseDelay.delayTime.setValueAtTime(0.05, currentTime);
+                
+                // 音量包络 - 随机化，模拟自然白噪音
+                const randomGain = 0.1 + Math.random() * 0.2; // 0.1-0.3随机音量
+                noiseGain.gain.setValueAtTime(0, currentTime);
+                noiseGain.gain.linearRampToValueAtTime(randomGain * this.pipesMusicVolume * this.leadVolume, currentTime + 0.01);
+                noiseGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.3);
+                
+                // 连接 - 主路径 + 延迟路径
+                noiseOsc.connect(noiseFilter);
+                noiseFilter.connect(noiseGain);
+                noiseGain.connect(this.masterGain);
+                
+                // 延迟路径
+                noiseGain.connect(noiseDelay);
+                noiseDelay.connect(noiseReverb);
+                noiseReverb.gain.setValueAtTime(0.3, currentTime);
+                noiseReverb.connect(this.masterGain);
+                
+                noiseOsc.start(currentTime);
+                noiseOsc.stop(currentTime + 0.3);
+                
+                // 创建随机脉冲效果
+                this.createRandomPulse(baseFreq, currentTime);
+            }
+            
+            // 创建随机脉冲效果 - 增加动感
+            createRandomPulse(baseFreq, startTime) {
+                if (!this.audioContext) return;
+                
+                // 随机决定是否创建脉冲
+                if (Math.random() > 0.6) return; // 40%概率创建脉冲
+                
+                // 随机脉冲参数
+                const pulseCount = 2 + Math.floor(Math.random() * 4); // 2-5个脉冲
+                const pulseInterval = 0.05 + Math.random() * 0.1; // 0.05-0.15s间隔
+                const pulseDuration = 0.02 + Math.random() * 0.03; // 0.02-0.05s持续时间
+                
+                for (let i = 0; i < pulseCount; i++) {
+                    const pulseTime = startTime + (i * pulseInterval);
+                    
+                    // 创建脉冲振荡器
+                    const pulseOsc = this.audioContext.createOscillator();
+                    const pulseGain = this.audioContext.createGain();
+                    const pulseFilter = this.audioContext.createBiquadFilter();
+                    
+                    // 随机脉冲类型
+                    const pulseTypes = ['sawtooth', 'square', 'triangle'];
+                    const randomType = pulseTypes[Math.floor(Math.random() * pulseTypes.length)];
+                    pulseOsc.type = randomType;
+                    
+                    // 随机频率 - 基于基础频率的随机倍数
+                    const freqMultiplier = 1 + Math.random() * 3; // 1-4倍
+                    const pulseFreq = baseFreq * freqMultiplier;
+                    pulseOsc.frequency.setValueAtTime(pulseFreq, pulseTime);
+                    
+                    // 脉冲滤波器 - 随机设置
+                    pulseFilter.type = Math.random() > 0.5 ? 'bandpass' : 'highpass';
+                    pulseFilter.frequency.setValueAtTime(pulseFreq * (1 + Math.random()), pulseTime);
+                    pulseFilter.Q.setValueAtTime(1 + Math.random() * 2, pulseTime);
+                    
+                    // 脉冲音量 - 随机化
+                    const pulseVolume = (0.1 + Math.random() * 0.3) * this.pipesMusicVolume * this.leadVolume;
+                    pulseGain.gain.setValueAtTime(0, pulseTime);
+                    pulseGain.gain.linearRampToValueAtTime(pulseVolume, pulseTime + 0.001);
+                    pulseGain.gain.exponentialRampToValueAtTime(0.01, pulseTime + pulseDuration);
+                    
+                    // 连接脉冲
+                    pulseOsc.connect(pulseFilter);
+                    pulseFilter.connect(pulseGain);
+                    pulseGain.connect(this.masterGain);
+                    
+                    pulseOsc.start(pulseTime);
+                    pulseOsc.stop(pulseTime + pulseDuration);
+                }
+                
+                console.log(`🎵 随机脉冲: ${pulseCount}个脉冲, 间隔${pulseInterval.toFixed(3)}s, 持续${pulseDuration.toFixed(3)}s`);
+            }
+            
+            applyPadTone() {
+                if (this.pad && this.audioContext) {
+                    // 根据音色参数调整多个音色特征
+                    const toneValue = this.padTone;
+                    
+                    // 1. 调整混响时间 - 影响音色的空间感
+                    const reverbTime = 0.1 + (toneValue * 2.9); // 0.1s - 3s
+                    if (this.reverb) {
+                        this.reverb.decay = reverbTime;
+                    }
+                    
+                    // 2. 调整延迟时间 - 影响音色的层次感
+                    if (this.padDelay) {
+                        this.padDelay.delayTime.setValueAtTime(0.1 + (toneValue * 0.9), this.audioContext.currentTime);
+                    }
+                    
+                    // 3. 调整合唱效果 - 影响音色的丰富度
+                    if (this.padChorus) {
+                        this.padChorus.frequency.setValueAtTime(1 + (toneValue * 4), this.audioContext.currentTime);
+                        this.padChorus.depth = toneValue * 0.3;
+                    }
+                    
+                    // 4. 调整波形类型 - 影响音色的基础特征
+                    if (this.pad) {
+                        const waveforms = ['sine', 'triangle', 'square'];
+                        const waveformIndex = Math.floor(toneValue * (waveforms.length - 1));
+                        this.pad.type = waveforms[waveformIndex];
+                    }
+                    
+                    console.log('🎵 Pad音色已调整:', {
+                        '混响时间': reverbTime + 's',
+                        '延迟时间': (0.1 + (toneValue * 0.9)).toFixed(2) + 's',
+                        '合唱频率': (1 + (toneValue * 4)).toFixed(1) + 'Hz',
+                        '波形类型': this.pad ? this.pad.type : 'N/A'
+                    });
+                }
+            }
+            
+            applyDrumsTone() {
+                if (this.drums && this.audioContext) {
+                    // 根据音色参数调整多个音色特征
+                    const toneValue = this.drumsTone;
+                    
+                    // 1. 调整滤波器Q值 - 影响鼓点的紧实度
+                    const filterQ = 1 + (toneValue * 9); // Q值 1-10
+                    if (this.drumsFilter) {
+                        this.drumsFilter.Q.setValueAtTime(filterQ, this.audioContext.currentTime);
+                    }
+                    
+                    // 2. 调整压缩器阈值 - 影响鼓点的冲击力
+                    if (this.drumsCompressor) {
+                        this.drumsCompressor.threshold.setValueAtTime(-50 + (toneValue * 40), this.audioContext.currentTime);
+                        this.drumsCompressor.ratio.setValueAtTime(1 + (toneValue * 19), this.audioContext.currentTime);
+                    }
+                    
+                    // 3. 调整波形类型 - 影响鼓点的谐波特征
+                    if (this.drums) {
+                        const waveforms = ['square', 'sawtooth', 'triangle', 'sine'];
+                        const waveformIndex = Math.floor(toneValue * (waveforms.length - 1));
+                        this.drums.type = waveforms[waveformIndex];
+                    }
+                    
+                    // 4. 调整包络 - 影响鼓点的衰减特性
+                    if (this.drumsEnvelope) {
+                        this.drumsEnvelope.attack = 0.01 + (toneValue * 0.09);
+                        this.drumsEnvelope.decay = 0.1 + (toneValue * 0.4);
+                        this.drumsEnvelope.sustain = 0.3 + (toneValue * 0.4);
+                        this.drumsEnvelope.release = 0.1 + (toneValue * 0.9);
+                    }
+                    
+                    console.log('🎵 Drums音色已调整:', {
+                        '滤波器Q值': filterQ.toFixed(1),
+                        '压缩阈值': (-50 + (toneValue * 40)).toFixed(1) + 'dB',
+                        '压缩比例': (1 + (toneValue * 19)).toFixed(1) + ':1',
+                        '波形类型': this.drums ? this.drums.type : 'N/A',
+                        '包络攻击': (0.01 + (toneValue * 0.09)).toFixed(3) + 's'
+                    });
+                }
+            }
+            
+            // 获取当前Bassline频率
+            getCurrentBasslineFreq() {
+                // 返回Bassline的基础频率，这里使用一个示例频率
+                return 110; // A2音符，约110Hz
+            }
+            
+            // 获取当前Lead频率
+            getCurrentLeadFreq() {
+                // 返回Lead的基础频率
+                return 220; // A3音符，约220Hz
+            }
+            
+            // 获取当前Pad频率
+            getCurrentPadFreq() {
+                // 返回Pad的基础频率
+                return 440; // A4音符，约440Hz
+            }
+            
+            // 获取当前Drums频率
+            getCurrentDrumsFreq() {
+                // 返回Drums的基础频率
+                return 880; // A5音符，约880Hz
+            }
+            
+            // 创建失真曲线 - 用于音色调节
+            createDistortionCurve(amount) {
+                const k = typeof amount === 'number' ? amount : 50;
+                const n_samples = 44100;
+                const curve = new Float32Array(n_samples);
+                const deg = Math.PI / 180;
+                
+                for (let i = 0; i < n_samples; ++i) {
+                    const x = (i * 2) / n_samples - 1;
+                    curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x));
+                }
+                return curve;
+            }
+            
+            // 创建贝斯线（赋格主题）
             createBassline() {
                 if (!this.audioContext) return;
                 
@@ -6048,7 +6709,7 @@
                 bassFilter.frequency.setValueAtTime(pipeNote * 2, this.audioContext.currentTime);
                 bassFilter.Q.setValueAtTime(4.0, this.audioContext.currentTime);
                 
-                bassGain.gain.setValueAtTime(0.3 * this.pipesMusicVolume, this.audioContext.currentTime);
+                bassGain.gain.setValueAtTime(0.3 * this.pipesMusicVolume * this.basslineVolume, this.audioContext.currentTime);
                 
                 // 管道进程节奏 - 每4拍一个音符
                 const noteDuration = this.barLength / 4;
@@ -6074,7 +6735,7 @@
                 }, noteDuration * 1000);
             }
             
-            // 创建主旋律（赋格答题声部）
+            // 创建主旋律（赋格答题声部 - 悦耳版）
             createLead() {
                 if (!this.audioContext) return;
                 
@@ -6084,30 +6745,67 @@
                 const leadGain = this.audioContext.createGain();
                 const leadFilter = this.audioContext.createBiquadFilter();
                 
-                leadOsc.type = 'triangle';
-                leadOsc.frequency.setValueAtTime(leadNote, this.audioContext.currentTime);
+                // 使用更电子化的音色组合
+                const timeMod = (Date.now() % 6000) / 6000;
                 
-                leadFilter.type = 'highpass';
-                leadFilter.frequency.setValueAtTime(leadNote * 0.5, this.audioContext.currentTime);
-                leadFilter.Q.setValueAtTime(2.0, this.audioContext.currentTime);
+                // 主要音色：使用更有电子感的波形
+                const primaryType = timeMod > 0.5 ? 'sawtooth' : 'square'; // 改为锯齿波和方波
+                leadOsc.type = primaryType;
                 
-                leadGain.gain.setValueAtTime(0.2 * this.pipesMusicVolume, this.audioContext.currentTime);
+                // 添加和声层，创造更丰富的电子音色
+                const harmonyOsc = this.audioContext.createOscillator();
+                const harmonyGain = this.audioContext.createGain();
+                harmonyOsc.type = 'sawtooth'; // 和声也用电子的锯齿波
+                harmonyOsc.frequency.setValueAtTime(leadNote * 1.5, this.audioContext.currentTime); // 上三度
+                
+                // 随机频率变化，增加动感
+                const freqVariation = (Math.random() - 0.5) * 0.1; // -0.05到+0.05随机变化
+                const finalFreq = leadNote * (1 + freqVariation);
+                leadOsc.frequency.setValueAtTime(finalFreq, this.audioContext.currentTime);
+                harmonyOsc.frequency.setValueAtTime(finalFreq * 1.5, this.audioContext.currentTime);
+                
+                // 随机脉冲调制 - 增加电子感
+                this.createLeadPulseModulation(finalFreq, currentTime);
+                
+                // 更电子化的滤波器设置
+                leadFilter.type = 'lowpass'; // 保持低通，但调整参数
+                leadFilter.frequency.setValueAtTime(leadNote * 4, this.audioContext.currentTime); // 提高频率
+                leadFilter.Q.setValueAtTime(2.0, this.audioContext.currentTime); // 增加Q值，更有电子感
+                
+                // 和声滤波器 - 更电子化
+                const harmonyFilter = this.audioContext.createBiquadFilter();
+                harmonyFilter.type = 'bandpass'; // 改为带通，更有电子感
+                harmonyFilter.frequency.setValueAtTime(leadNote * 5, this.audioContext.currentTime); // 提高频率
+                harmonyFilter.Q.setValueAtTime(1.5, this.audioContext.currentTime); // 增加Q值
+                
+                // 更稳定的音量设置
+                const baseVolume = 0.15 * this.pipesMusicVolume * this.leadVolume;
+                leadGain.gain.setValueAtTime(baseVolume, this.audioContext.currentTime);
+                harmonyGain.gain.setValueAtTime(baseVolume * 0.3, this.audioContext.currentTime); // 和声较轻
                 
                 const currentTime = this.audioContext.currentTime;
                 const noteDuration = this.barLength / 2; // 答题节奏
                 
+                // 连接音频节点
                 leadOsc.connect(leadFilter);
                 leadFilter.connect(leadGain);
                 leadGain.connect(this.masterGain);
+                
+                harmonyOsc.connect(harmonyFilter);
+                harmonyFilter.connect(harmonyGain);
+                harmonyGain.connect(this.masterGain);
                 
                 // 赋格答题 - 延迟进入，与主题形成对位
                 const answerDelay = this.barLength * 0.25; // 延迟1拍进入
                 leadOsc.start(currentTime + answerDelay);
                 leadOsc.stop(currentTime + answerDelay + noteDuration);
+                harmonyOsc.start(currentTime + answerDelay);
+                harmonyOsc.stop(currentTime + answerDelay + noteDuration);
                 
                 this.lead = leadOsc;
+                this.leadHarmony = harmonyOsc; // 保存和声引用
                 
-                console.log('🎵 赋格答题(主旋律):', leadNote.toFixed(2) + 'Hz');
+                console.log(`🎵 赋格答题(主旋律): ${finalFreq.toFixed(2)}Hz [${primaryType}] + 和声`);
                 
                 // 循环播放
                 setTimeout(() => {
@@ -6117,7 +6815,51 @@
                 }, noteDuration * 1000);
             }
             
-            // 创建氛围音色（迷幻电子）
+            // 创建Lead脉冲调制 - 增加电子感
+            createLeadPulseModulation(baseFreq, startTime) {
+                if (!this.audioContext) return;
+                
+                // 随机决定是否创建脉冲调制
+                if (Math.random() > 0.7) return; // 30%概率创建脉冲调制
+                
+                // 随机脉冲调制参数
+                const modulationDepth = 0.1 + Math.random() * 0.2; // 0.1-0.3调制深度
+                const modulationRate = 3 + Math.random() * 7; // 3-10Hz调制频率
+                const modulationDuration = 0.1 + Math.random() * 0.2; // 0.1-0.3s持续时间
+                
+                // 创建调制振荡器
+                const modOsc = this.audioContext.createOscillator();
+                const modGain = this.audioContext.createGain();
+                const modFilter = this.audioContext.createBiquadFilter();
+                
+                // 调制类型 - 随机选择
+                const modTypes = ['sine', 'triangle', 'sawtooth'];
+                const randomModType = modTypes[Math.floor(Math.random() * modTypes.length)];
+                modOsc.type = randomModType;
+                
+                // 调制频率
+                modOsc.frequency.setValueAtTime(modulationRate, startTime);
+                
+                // 调制滤波器
+                modFilter.type = 'lowpass';
+                modFilter.frequency.setValueAtTime(modulationRate * 2, startTime);
+                modFilter.Q.setValueAtTime(1.0, startTime);
+                
+                // 调制增益
+                modGain.gain.setValueAtTime(modulationDepth * baseFreq, startTime);
+                
+                // 连接调制
+                modOsc.connect(modFilter);
+                modFilter.connect(modGain);
+                modGain.connect(this.masterGain);
+                
+                modOsc.start(startTime);
+                modOsc.stop(startTime + modulationDuration);
+                
+                console.log(`🎵 Lead脉冲调制: ${randomModType}波, ${modulationRate.toFixed(1)}Hz, 深度${modulationDepth.toFixed(2)}`);
+            }
+            
+            // 创建氛围音色（迷幻电子 + 电视白噪音）
             createPad() {
                 if (!this.audioContext) return;
                 
@@ -6134,11 +6876,20 @@
                 padFilter.frequency.setValueAtTime(padNote * 3, this.audioContext.currentTime);
                 padFilter.Q.setValueAtTime(1.5, this.audioContext.currentTime);
                 
-                padGain.gain.setValueAtTime(0.15 * this.pipesMusicVolume, this.audioContext.currentTime);
+                padGain.gain.setValueAtTime(0.15 * this.pipesMusicVolume * this.padVolume, this.audioContext.currentTime);
                 
                 // 长音符 - 持续整个小节
                 const noteDuration = this.barLength;
                 const currentTime = this.audioContext.currentTime;
+                
+                // 随机穿插电视白噪音
+                this.createTVWhiteNoise(padNote, currentTime, noteDuration);
+                
+                // 强制测试白噪音（临时）
+                if (Math.random() > 0.8) { // 20%概率强制测试
+                    console.log('🔍 强制测试白噪音...');
+                    this.createTVWhiteNoise(padNote, currentTime + 0.5, 1.0); // 延迟0.5秒，持续1秒
+                }
                 
                 padOsc.connect(padFilter);
                 padFilter.connect(padGain);
@@ -6161,41 +6912,313 @@
                 }, noteDuration * 1000);
             }
             
-            // 创建鼓点（电子节奏）
+            // 创建电视白噪音 - 复古电视机效果
+            createTVWhiteNoise(baseFreq, startTime, duration) {
+                if (!this.audioContext) return;
+                
+                // 随机决定是否创建电视白噪音
+                if (Math.random() > 0.2) return; // 80%概率创建电视白噪音
+                
+                // 随机电视白噪音参数
+                const noiseCount = 5 + Math.floor(Math.random() * 8); // 5-12个噪音层，增加数量
+                const noiseSpacing = duration / (noiseCount + 1); // 均匀分布
+                
+                console.log(`📺 开始创建电视白噪音: ${noiseCount}层, 基础频率: ${baseFreq.toFixed(1)}Hz`);
+                
+                for (let i = 0; i < noiseCount; i++) {
+                    const noiseTime = startTime + (noiseSpacing * (i + 1));
+                    
+                    // 创建电视白噪音振荡器
+                    const tvNoiseOsc = this.audioContext.createOscillator();
+                    const tvNoiseGain = this.audioContext.createGain();
+                    const tvNoiseFilter = this.audioContext.createBiquadFilter();
+                    const tvNoiseDelay = this.audioContext.createDelay(0.2);
+                    const tvNoiseReverb = this.audioContext.createGain();
+                    
+                    // 电视白噪音 - 使用多个高频振荡器叠加
+                    const noiseTypes = ['sawtooth', 'square', 'triangle'];
+                    const randomType = noiseTypes[Math.floor(Math.random() * noiseTypes.length)];
+                    tvNoiseOsc.type = randomType;
+                    
+                    // 随机频率 - 模拟电视信号干扰，降低频率让声音更明显
+                    const tvFreq = 200 + Math.random() * 800; // 200-1000Hz，降低频率
+                    tvNoiseOsc.frequency.setValueAtTime(tvFreq, noiseTime);
+                    
+                    // 电视噪音滤波器 - 模拟老式电视的频响特性
+                    tvNoiseFilter.type = 'bandpass';
+                    tvNoiseFilter.frequency.setValueAtTime(tvFreq, noiseTime);
+                    tvNoiseFilter.Q.setValueAtTime(0.8 + Math.random() * 1.2, noiseTime); // 0.8-2.0
+                    
+                    // 延迟效果 - 模拟电视信号的反射
+                    tvNoiseDelay.delayTime.setValueAtTime(0.1 + Math.random() * 0.2, noiseTime);
+                    
+                    // 音量包络 - 大幅提高音量，让白噪音更明显
+                    const noiseVolume = (0.3 + Math.random() * 0.4) * this.pipesMusicVolume * this.padVolume; // 0.3-0.7，提高音量
+                    tvNoiseGain.gain.setValueAtTime(0, noiseTime);
+                    tvNoiseGain.gain.linearRampToValueAtTime(noiseVolume, noiseTime + 0.02);
+                    tvNoiseGain.gain.exponentialRampToValueAtTime(0.01, noiseTime + 0.3);
+                    
+                    // 连接电视白噪音
+                    tvNoiseOsc.connect(tvNoiseFilter);
+                    tvNoiseFilter.connect(tvNoiseGain);
+                    tvNoiseGain.connect(this.masterGain);
+                    
+                    // 延迟路径 - 增加空间感
+                    tvNoiseGain.connect(tvNoiseDelay);
+                    tvNoiseDelay.connect(tvNoiseReverb);
+                    tvNoiseReverb.gain.setValueAtTime(0.4, noiseTime);
+                    tvNoiseReverb.connect(this.masterGain);
+                    
+                    tvNoiseOsc.start(noiseTime);
+                    tvNoiseOsc.stop(noiseTime + 0.5); // 延长持续时间
+                    
+                    console.log(`📺 第${i+1}层白噪音: ${randomType}波, ${tvFreq.toFixed(0)}Hz, 音量${(noiseVolume * 100).toFixed(0)}%`);
+                }
+                
+                console.log(`📺 电视白噪音完成: ${noiseCount}层噪音, 持续${duration.toFixed(2)}s`);
+            }
+            
+            // 创建极简Bassline - 与极简Drums配合
+            createMinimalBassline(baseFreq, startTime) {
+                if (!this.audioContext) return;
+                
+                // 创建极简的Bassline - 纯正弦波，温暖圆润
+                const bassOsc = this.audioContext.createOscillator();
+                const bassGain = this.audioContext.createGain();
+                const bassFilter = this.audioContext.createBiquadFilter();
+                
+                bassOsc.type = 'sine';
+                bassOsc.frequency.setValueAtTime(baseFreq, startTime);
+                
+                // 温暖的滤波器
+                bassFilter.type = 'lowpass';
+                bassFilter.frequency.setValueAtTime(baseFreq * 2, startTime);
+                bassFilter.Q.setValueAtTime(0.5, startTime);
+                
+                // 温暖的音量包络
+                bassGain.gain.setValueAtTime(0, startTime);
+                bassGain.gain.linearRampToValueAtTime(0.4 * this.pipesMusicVolume * this.basslineVolume, startTime + 0.1);
+                bassGain.gain.exponentialRampToValueAtTime(0.01, startTime + 1.0);
+                
+                bassOsc.connect(bassFilter);
+                bassFilter.connect(bassGain);
+                bassGain.connect(this.masterGain);
+                
+                bassOsc.start(startTime);
+                bassOsc.stop(startTime + 1.0);
+            }
+            
+            // 创建故障Bassline - 与故障Drums配合
+            createGlitchBassline(baseFreq, startTime) {
+                if (!this.audioContext) return;
+                
+                // 创建故障Bassline - 数字故障效果
+                const bassOsc = this.audioContext.createOscillator();
+                const bassGain = this.audioContext.createGain();
+                const bassFilter = this.audioContext.createBiquadFilter();
+                const glitchFilter = this.audioContext.createBiquadFilter();
+                
+                bassOsc.type = 'square'; // 方波，更有数字感
+                bassOsc.frequency.setValueAtTime(baseFreq, startTime);
+                
+                // 主滤波器
+                bassFilter.type = 'lowpass';
+                bassFilter.frequency.setValueAtTime(baseFreq * 3, startTime);
+                bassFilter.Q.setValueAtTime(1.5, startTime);
+                
+                // 故障滤波器 - 带通，创造故障效果
+                glitchFilter.type = 'bandpass';
+                glitchFilter.frequency.setValueAtTime(baseFreq * 1.5, startTime);
+                glitchFilter.Q.setValueAtTime(3.0, startTime);
+                
+                // 故障音量包络
+                bassGain.gain.setValueAtTime(0, startTime);
+                bassGain.gain.linearRampToValueAtTime(0.5 * this.pipesMusicVolume * this.basslineVolume, startTime + 0.05);
+                bassGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.8);
+                
+                bassOsc.connect(bassFilter);
+                bassFilter.connect(bassGain);
+                bassGain.connect(this.masterGain);
+                
+                // 故障路径
+                bassOsc.connect(glitchFilter);
+                glitchFilter.connect(bassGain);
+                
+                bassOsc.start(startTime);
+                bassOsc.stop(startTime + 0.8);
+            }
+            
+            // 创建碎拍Bassline - 与碎拍Drums配合
+            createBreakbeatBassline(baseFreq, startTime) {
+                if (!this.audioContext) return;
+                
+                // 创建碎拍Bassline - 复杂的切分音
+                const bassOsc1 = this.audioContext.createOscillator();
+                const bassOsc2 = this.audioContext.createOscillator();
+                const bassGain = this.audioContext.createGain();
+                const bassFilter = this.audioContext.createBiquadFilter();
+                
+                bassOsc1.type = 'sawtooth';
+                bassOsc1.frequency.setValueAtTime(baseFreq, startTime);
+                
+                bassOsc2.type = 'triangle';
+                bassOsc2.frequency.setValueAtTime(baseFreq * 0.5, startTime); // 低八度
+                
+                // 碎拍滤波器
+                bassFilter.type = 'lowpass';
+                bassFilter.frequency.setValueAtTime(baseFreq * 2.5, startTime);
+                bassFilter.Q.setValueAtTime(2.0, startTime);
+                
+                // 碎拍音量包络
+                bassGain.gain.setValueAtTime(0, startTime);
+                bassGain.gain.linearRampToValueAtTime(0.6 * this.pipesMusicVolume * this.basslineVolume, startTime + 0.08);
+                bassGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.6);
+                
+                bassOsc1.connect(bassFilter);
+                bassOsc2.connect(bassFilter);
+                bassFilter.connect(bassGain);
+                bassGain.connect(this.masterGain);
+                
+                bassOsc1.start(startTime);
+                bassOsc2.start(startTime);
+                bassOsc1.stop(startTime + 0.6);
+                bassOsc2.stop(startTime + 0.6);
+            }
+            
+            // 创建氛围Bassline - 与氛围Drums配合
+            createAmbientBassline(baseFreq, startTime) {
+                if (!this.audioContext) return;
+                
+                // 创建氛围Bassline - 空间感
+                const bassOsc = this.audioContext.createOscillator();
+                const bassGain = this.audioContext.createGain();
+                const bassFilter = this.audioContext.createBiquadFilter();
+                const ambientDelay = this.audioContext.createDelay(0.3);
+                const ambientReverb = this.audioContext.createGain();
+                
+                bassOsc.type = 'sine';
+                bassOsc.frequency.setValueAtTime(baseFreq, startTime);
+                
+                // 氛围滤波器
+                bassFilter.type = 'lowpass';
+                bassFilter.frequency.setValueAtTime(baseFreq * 1.8, startTime);
+                bassFilter.Q.setValueAtTime(0.8, startTime);
+                
+                // 氛围音量包络 - 缓慢
+                bassGain.gain.setValueAtTime(0, startTime);
+                bassGain.gain.linearRampToValueAtTime(0.4 * this.pipesMusicVolume * this.basslineVolume, startTime + 0.2);
+                bassGain.gain.exponentialRampToValueAtTime(0.01, startTime + 1.5);
+                
+                bassOsc.connect(bassFilter);
+                bassFilter.connect(bassGain);
+                bassGain.connect(this.masterGain);
+                
+                // 氛围延迟路径
+                bassGain.connect(ambientDelay);
+                ambientDelay.connect(ambientReverb);
+                ambientReverb.gain.setValueAtTime(0.3, startTime);
+                ambientReverb.connect(this.masterGain);
+                
+                bassOsc.start(startTime);
+                bassOsc.stop(startTime + 1.5);
+            }
+            
+            // 创建复杂IDM Bassline - 与IDM Drums配合
+            createComplexIDMBassline(baseFreq, startTime) {
+                if (!this.audioContext) return;
+                
+                // 创建复杂IDM Bassline - 智能舞曲风格
+                const bassOsc1 = this.audioContext.createOscillator();
+                const bassOsc2 = this.audioContext.createOscillator();
+                const bassOsc3 = this.audioContext.createOscillator();
+                const bassGain = this.audioContext.createGain();
+                const bassFilter = this.audioContext.createBiquadFilter();
+                const idmFilter = this.audioContext.createBiquadFilter();
+                const idmDelay = this.audioContext.createDelay(0.15);
+                const idmReverb = this.audioContext.createGain();
+                
+                // 三个振荡器 - 复杂叠加
+                bassOsc1.type = 'sawtooth';
+                bassOsc1.frequency.setValueAtTime(baseFreq, startTime);
+                
+                bassOsc2.type = 'square';
+                bassOsc2.frequency.setValueAtTime(baseFreq * 1.25, startTime); // 大三度
+                
+                bassOsc3.type = 'triangle';
+                bassOsc3.frequency.setValueAtTime(baseFreq * 0.75, startTime); // 低五度
+                
+                // 主滤波器
+                bassFilter.type = 'lowpass';
+                bassFilter.frequency.setValueAtTime(baseFreq * 3, startTime);
+                bassFilter.Q.setValueAtTime(2.5, startTime);
+                
+                // IDM滤波器
+                idmFilter.type = 'bandpass';
+                idmFilter.frequency.setValueAtTime(baseFreq * 2, startTime);
+                idmFilter.Q.setValueAtTime(4.0, startTime);
+                
+                // IDM音量包络 - 快速攻击，复杂衰减
+                bassGain.gain.setValueAtTime(0, startTime);
+                bassGain.gain.linearRampToValueAtTime(0.7 * this.pipesMusicVolume * this.basslineVolume, startTime + 0.03);
+                bassGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.9);
+                
+                // 连接主路径
+                bassOsc1.connect(bassFilter);
+                bassOsc2.connect(bassFilter);
+                bassOsc3.connect(bassFilter);
+                bassFilter.connect(bassGain);
+                bassGain.connect(this.masterGain);
+                
+                // 连接IDM路径
+                bassOsc1.connect(idmFilter);
+                idmFilter.connect(idmDelay);
+                idmDelay.connect(idmReverb);
+                idmReverb.gain.setValueAtTime(0.4, startTime);
+                idmReverb.connect(this.masterGain);
+                
+                bassOsc1.start(startTime);
+                bassOsc2.start(startTime);
+                bassOsc3.start(startTime);
+                bassOsc1.stop(startTime + 0.9);
+                bassOsc2.stop(startTime + 0.9);
+                bassOsc3.stop(startTime + 0.9);
+            }
+            
+            // 创建真正的鼓点音色 - 支持音色和节奏调节
             createDrums() {
                 if (!this.audioContext) return;
                 
-                // 电子鼓点 - 基于管道网格位置
-                const drumNote = this.getDrumNote();
-                const drumOsc = this.audioContext.createOscillator();
-                const drumGain = this.audioContext.createGain();
-                const drumFilter = this.audioContext.createBiquadFilter();
-                
-                drumOsc.type = 'square';
-                drumOsc.frequency.setValueAtTime(drumNote, this.audioContext.currentTime);
-                
-                drumFilter.type = 'bandpass';
-                drumFilter.frequency.setValueAtTime(drumNote * 4, this.audioContext.currentTime);
-                drumFilter.Q.setValueAtTime(8.0, this.audioContext.currentTime);
-                
-                drumGain.gain.setValueAtTime(0.25 * this.pipesMusicVolume, this.audioContext.currentTime);
-                
-                // 鼓点节奏 - 每拍一个音符
-                const noteDuration = this.barLength / 4;
                 const currentTime = this.audioContext.currentTime;
+                const noteDuration = this.barLength / 2; // 从4分音符改为2分音符，节奏更慢
+                const rhythmDelay = this.barLength * 0.5; // 延迟2拍进入，配合慢节奏
                 
-                drumOsc.connect(drumFilter);
-                drumFilter.connect(drumGain);
-                drumGain.connect(this.masterGain);
+                // 根据调音器值创建不同的鼓点模式
+                const drumMode = this.getDrumMode();
                 
-                // 赋格节奏声部 - 延迟进入，与主题形成对位
-                const rhythmDelay = this.barLength * 0.75; // 延迟3拍进入
-                drumOsc.start(currentTime + rhythmDelay);
-                drumOsc.stop(currentTime + rhythmDelay + noteDuration * 0.1);
+                switch(drumMode) {
+                    case 'minimal':
+                        // 极简鼓点模式 - 微妙的节奏变化
+                        this.createMinimalDrums(currentTime + rhythmDelay, noteDuration);
+                        break;
+                    case 'glitch':
+                        // 故障鼓点模式 - 数字故障效果
+                        this.createGlitchDrums(currentTime + rhythmDelay, noteDuration);
+                        break;
+                    case 'breakbeat':
+                        // 碎拍鼓点模式 - 复杂的切分音
+                        this.createBreakbeatDrums(currentTime + rhythmDelay, noteDuration);
+                        break;
+                    case 'ambient':
+                        // 氛围鼓点模式 - 空间感节奏
+                        this.createAmbientDrums(currentTime + rhythmDelay, noteDuration);
+                        break;
+                    case 'idm':
+                        // 智能舞曲模式 - 复杂的智能节奏
+                        this.createIDMDrums(currentTime + rhythmDelay, noteDuration);
+                        break;
+                }
                 
-                this.drums = drumOsc;
-                
-                console.log('🎵 赋格节奏(鼓点):', drumNote.toFixed(2) + 'Hz');
+                console.log('🥁 鼓点模式:', drumMode, '音色值:', this.drumsPitch.toFixed(2));
                 
                 // 循环播放
                 setTimeout(() => {
@@ -6203,6 +7226,738 @@
                         this.createDrums();
                     }
                 }, noteDuration * 1000);
+            }
+            
+            // 获取鼓点模式 - 基于调音器值，加入IDM风格
+            getDrumMode() {
+                const value = this.drumsPitch;
+                if (value < 0.2) return 'minimal';        // 0-20%: 极简
+                if (value < 0.4) return 'glitch';         // 20-40%: 故障
+                if (value < 0.6) return 'breakbeat';      // 40-60%: 碎拍
+                if (value < 0.8) return 'ambient';        // 60-80%: 氛围
+                return 'idm';                             // 80-100%: 智能舞曲
+            }
+            
+            // 创建底鼓 - 更猛、更干脆利落！
+            createKickDrum(startTime, duration) {
+                const toneValue = this.drumsPitch;
+                
+                // 创建多个振荡器叠加，包括噪声
+                const kickOsc1 = this.audioContext.createOscillator();
+                const kickOsc2 = this.audioContext.createOscillator();
+                const kickNoise = this.audioContext.createOscillator(); // 噪声振荡器
+                const kickGain = this.audioContext.createGain();
+                const kickFilter = this.audioContext.createBiquadFilter();
+                const noiseFilter = this.audioContext.createBiquadFilter(); // 噪声滤波器
+                
+                // 根据IDM模式选择完全不同的音色
+                if (toneValue < 0.2) {
+                    // 极简模式 - 正弦波+噪声，温暖圆润
+                    kickOsc1.type = 'sine';
+                    kickOsc1.frequency.setValueAtTime(80, startTime);
+                    kickOsc1.frequency.exponentialRampToValueAtTime(40, startTime + 0.15); // 更快频率下降
+                    
+                    kickOsc2.type = 'sine';
+                    kickOsc2.frequency.setValueAtTime(60, startTime);
+                    kickOsc2.frequency.exponentialRampToValueAtTime(30, startTime + 0.15);
+                    
+                    kickNoise.type = 'sawtooth'; // 温和噪声
+                    kickNoise.frequency.setValueAtTime(50, startTime);
+                    kickNoise.frequency.exponentialRampToValueAtTime(25, startTime + 0.15);
+                    
+                } else if (toneValue < 0.4) {
+                    // 故障模式 - 三角形波+噪声，数字感
+                    kickOsc1.type = 'triangle';
+                    kickOsc1.frequency.setValueAtTime(120, startTime);
+                    kickOsc1.frequency.exponentialRampToValueAtTime(60, startTime + 0.12); // 更快频率下降
+                    
+                    kickOsc2.type = 'triangle';
+                    kickOsc2.frequency.setValueAtTime(90, startTime);
+                    kickOsc2.frequency.exponentialRampToValueAtTime(45, startTime + 0.12);
+                    
+                    kickNoise.type = 'square'; // 数字噪声
+                    kickNoise.frequency.setValueAtTime(70, startTime);
+                    kickNoise.frequency.exponentialRampToValueAtTime(35, startTime + 0.12);
+                    
+                } else if (toneValue < 0.6) {
+                    // 碎拍模式 - 正弦+三角形+噪声，节奏感
+                    kickOsc1.type = 'sine';
+                    kickOsc1.frequency.setValueAtTime(100, startTime);
+                    kickOsc1.frequency.exponentialRampToValueAtTime(50, startTime + 0.14); // 更快频率下降
+                    
+                    kickOsc2.type = 'triangle';
+                    kickOsc2.frequency.setValueAtTime(75, startTime);
+                    kickOsc2.frequency.exponentialRampToValueAtTime(38, startTime + 0.14);
+                    
+                    kickNoise.type = 'sawtooth'; // 节奏噪声
+                    kickNoise.frequency.setValueAtTime(65, startTime);
+                    kickNoise.frequency.exponentialRampToValueAtTime(32, startTime + 0.14);
+                    
+                } else if (toneValue < 0.8) {
+                    // 氛围模式 - 正弦+噪声，空间感
+                    kickOsc1.type = 'sine';
+                    kickOsc1.frequency.setValueAtTime(70, startTime);
+                    kickOsc1.frequency.exponentialRampToValueAtTime(35, startTime + 0.18); // 更快频率下降
+                    
+                    kickOsc2.type = 'sine';
+                    kickOsc2.frequency.setValueAtTime(55, startTime);
+                    kickOsc2.frequency.exponentialRampToValueAtTime(28, startTime + 0.18);
+                    
+                    kickNoise.type = 'triangle'; // 氛围噪声
+                    kickNoise.frequency.setValueAtTime(45, startTime);
+                    kickNoise.frequency.exponentialRampToValueAtTime(22, startTime + 0.18);
+                    
+                } else {
+                    // IDM模式 - 复杂叠加+噪声，智能感
+                    kickOsc1.type = 'sine';
+                    kickOsc1.frequency.setValueAtTime(110, startTime);
+                    kickOsc1.frequency.exponentialRampToValueAtTime(55, startTime + 0.1); // 更快频率下降
+                    
+                    kickOsc2.type = 'triangle';
+                    kickOsc2.frequency.setValueAtTime(85, startTime);
+                    kickOsc2.frequency.exponentialRampToValueAtTime(42, startTime + 0.1);
+                    
+                    kickNoise.type = 'sawtooth'; // 智能噪声
+                    kickNoise.frequency.setValueAtTime(75, startTime);
+                    kickNoise.frequency.exponentialRampToValueAtTime(38, startTime + 0.1);
+                }
+                
+                // 更猛的滤波器设置 - 增加Q值，让声音更有冲击力
+                kickFilter.type = 'lowpass';
+                kickFilter.frequency.setValueAtTime(120, startTime); // 提高起始频率
+                kickFilter.frequency.exponentialRampToValueAtTime(70, startTime + 0.2); // 更快频率下降
+                kickFilter.Q.setValueAtTime(0.8, startTime); // 增加Q值，更有冲击力
+                
+                // 噪声滤波器 - 低通，让噪声更有力量
+                noiseFilter.type = 'lowpass';
+                noiseFilter.frequency.setValueAtTime(100, startTime); // 提高起始频率
+                noiseFilter.frequency.exponentialRampToValueAtTime(60, startTime + 0.2); // 更快频率下降
+                noiseFilter.Q.setValueAtTime(0.6, startTime); // 增加Q值
+                
+                // 更猛的音量包络 - 快速攻击，快速衰减，更干脆利落
+                kickGain.gain.setValueAtTime(0, startTime);
+                kickGain.gain.linearRampToValueAtTime(1.0 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.01); // 更快攻击
+                kickGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3); // 更快衰减，更干脆
+                
+                // 连接多个振荡器，包括噪声
+                kickOsc1.connect(kickFilter);
+                kickOsc2.connect(kickFilter);
+                kickNoise.connect(noiseFilter);
+                kickFilter.connect(kickGain);
+                noiseFilter.connect(kickGain);
+                kickGain.connect(this.masterGain);
+                
+                kickOsc1.start(startTime);
+                kickOsc2.start(startTime);
+                kickNoise.start(startTime);
+                kickOsc1.stop(startTime + 0.3); // 更短的持续时间
+                kickOsc2.stop(startTime + 0.3);
+                kickNoise.stop(startTime + 0.3);
+            }
+            
+            // 创建军鼓 - 添加噪声元素，更丰富的音色
+            createSnareDrum(startTime, duration) {
+                const toneValue = this.drumsPitch;
+                
+                // 创建多个振荡器叠加，包括噪声
+                const snareOsc1 = this.audioContext.createOscillator();
+                const snareOsc2 = this.audioContext.createOscillator();
+                const snareNoise = this.audioContext.createOscillator(); // 噪声振荡器
+                const snareGain = this.audioContext.createGain();
+                const snareFilter = this.audioContext.createBiquadFilter();
+                const noiseFilter = this.audioContext.createBiquadFilter(); // 噪声滤波器
+                
+                // 根据IDM模式选择完全不同的音色
+                if (toneValue < 0.2) {
+                    // 极简模式 - 正弦波+噪声，温暖圆润
+                    snareOsc1.type = 'sine';
+                    snareOsc1.frequency.setValueAtTime(180, startTime);
+                    snareOsc2.type = 'sine';
+                    snareOsc2.frequency.setValueAtTime(130, startTime);
+                    
+                    snareNoise.type = 'sawtooth'; // 温和噪声
+                    snareNoise.frequency.setValueAtTime(160, startTime);
+                    
+                } else if (toneValue < 0.4) {
+                    // 故障模式 - 三角形波+噪声，数字感
+                    snareOsc1.type = 'triangle';
+                    snareOsc1.frequency.setValueAtTime(230, startTime);
+                    snareOsc2.type = 'triangle';
+                    snareOsc2.frequency.setValueAtTime(160, startTime);
+                    
+                    snareNoise.type = 'square'; // 数字噪声
+                    snareNoise.frequency.setValueAtTime(200, startTime);
+                    
+                } else if (toneValue < 0.6) {
+                    // 碎拍模式 - 正弦+三角形+噪声，节奏感
+                    snareOsc1.type = 'sine';
+                    snareOsc1.frequency.setValueAtTime(200, startTime);
+                    snareOsc2.type = 'triangle';
+                    snareOsc2.frequency.setValueAtTime(140, startTime);
+                    
+                    snareNoise.type = 'sawtooth'; // 节奏噪声
+                    snareNoise.frequency.setValueAtTime(180, startTime);
+                    
+                } else if (toneValue < 0.8) {
+                    // 氛围模式 - 正弦+噪声，空间感
+                    snareOsc1.type = 'sine';
+                    snareOsc1.frequency.setValueAtTime(160, startTime);
+                    snareOsc2.type = 'sine';
+                    snareOsc2.frequency.setValueAtTime(120, startTime);
+                    
+                    snareNoise.type = 'triangle'; // 氛围噪声
+                    snareNoise.frequency.setValueAtTime(150, startTime);
+                    
+                } else {
+                    // IDM模式 - 复杂叠加+噪声，智能感
+                    snareOsc1.type = 'sine';
+                    snareOsc1.frequency.setValueAtTime(220, startTime);
+                    snareOsc2.type = 'triangle';
+                    snareOsc2.frequency.setValueAtTime(150, startTime);
+                    
+                    snareNoise.type = 'sawtooth'; // 智能噪声
+                    snareNoise.frequency.setValueAtTime(190, startTime);
+                }
+                
+                // 超柔和的滤波器设置
+                snareFilter.type = 'lowpass'; // 低通，减少尖锐感
+                snareFilter.frequency.setValueAtTime(350, startTime);
+                snareFilter.Q.setValueAtTime(0.2, startTime); // 极低Q值，完全消除锐耳
+                
+                // 噪声滤波器 - 低通，让噪声更温暖
+                noiseFilter.type = 'lowpass';
+                noiseFilter.frequency.setValueAtTime(300, startTime);
+                noiseFilter.Q.setValueAtTime(0.15, startTime);
+                
+                // 温暖的音量包络 - 延长持续时间
+                snareGain.gain.setValueAtTime(0, startTime);
+                snareGain.gain.linearRampToValueAtTime(0.5 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.05);
+                snareGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.6);
+                
+                // 连接多个振荡器，包括噪声
+                snareOsc1.connect(snareFilter);
+                snareOsc2.connect(snareFilter);
+                snareNoise.connect(noiseFilter);
+                snareFilter.connect(snareGain);
+                noiseFilter.connect(snareGain);
+                snareGain.connect(this.masterGain);
+                
+                snareOsc1.start(startTime);
+                snareOsc2.start(startTime);
+                snareNoise.start(startTime);
+                snareOsc1.stop(startTime + 0.6);
+                snareOsc2.stop(startTime + 0.6);
+                snareNoise.stop(startTime + 0.6);
+            }
+            
+            // 创建踩镲 - 完全柔和的音色，IDM变化明显
+            createHiHat(startTime, duration) {
+                const toneValue = this.drumsPitch;
+                
+                // 创建多个振荡器叠加，产生更丰富的音色
+                const hihatOsc1 = this.audioContext.createOscillator();
+                const hihatOsc2 = this.audioContext.createOscillator();
+                const hihatGain = this.audioContext.createGain();
+                const hihatFilter = this.audioContext.createBiquadFilter();
+                
+                // 根据IDM模式选择完全不同的音色
+                if (toneValue < 0.2) {
+                    // 极简模式 - 纯正弦波，温暖圆润
+                    hihatOsc1.type = 'sine';
+                    hihatOsc1.frequency.setValueAtTime(3000, startTime);
+                    hihatOsc2.type = 'sine';
+                    hihatOsc2.frequency.setValueAtTime(2500, startTime);
+                    
+                } else if (toneValue < 0.4) {
+                    // 故障模式 - 三角形波，数字感
+                    hihatOsc1.type = 'triangle';
+                    hihatOsc1.frequency.setValueAtTime(4000, startTime);
+                    hihatOsc2.type = 'triangle';
+                    hihatOsc2.frequency.setValueAtTime(3200, startTime);
+                    
+                } else if (toneValue < 0.6) {
+                    // 碎拍模式 - 正弦+三角形，节奏感
+                    hihatOsc1.type = 'sine';
+                    hihatOsc1.frequency.setValueAtTime(3500, startTime);
+                    hihatOsc2.type = 'triangle';
+                    hihatOsc2.frequency.setValueAtTime(2800, startTime);
+                    
+                } else if (toneValue < 0.8) {
+                    // 氛围模式 - 纯正弦，空间感
+                    hihatOsc1.type = 'sine';
+                    hihatOsc1.frequency.setValueAtTime(2800, startTime);
+                    hihatOsc2.type = 'sine';
+                    hihatOsc2.frequency.setValueAtTime(2400, startTime);
+                    
+                } else {
+                    // IDM模式 - 复杂叠加，智能感
+                    hihatOsc1.type = 'sine';
+                    hihatOsc1.frequency.setValueAtTime(3800, startTime);
+                    hihatOsc2.type = 'triangle';
+                    hihatOsc2.frequency.setValueAtTime(3000, startTime);
+                }
+                
+                // 超柔和的滤波器设置
+                hihatFilter.type = 'highpass';
+                hihatFilter.frequency.setValueAtTime(2000, startTime);
+                hihatFilter.Q.setValueAtTime(1.0, startTime); // 极低Q值，完全消除锐耳
+                
+                // 温暖的音量包络
+                hihatGain.gain.setValueAtTime(0, startTime);
+                hihatGain.gain.linearRampToValueAtTime(0.4 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.003);
+                hihatGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.1);
+                
+                // 连接多个振荡器
+                hihatOsc1.connect(hihatFilter);
+                hihatOsc2.connect(hihatFilter);
+                hihatFilter.connect(hihatGain);
+                hihatGain.connect(this.masterGain);
+                
+                hihatOsc1.start(startTime);
+                hihatOsc2.start(startTime);
+                hihatOsc1.stop(startTime + 0.1);
+                hihatOsc2.stop(startTime + 0.1);
+            }
+            
+            // 创建开镲 - 完全柔和的音色，IDM变化明显
+            createCrash(startTime, duration) {
+                const toneValue = this.drumsPitch;
+                
+                // 创建多个振荡器叠加，产生更丰富的音色
+                const crashOsc1 = this.audioContext.createOscillator();
+                const crashOsc2 = this.audioContext.createOscillator();
+                const crashGain = this.audioContext.createGain();
+                const crashFilter = this.audioContext.createBiquadFilter();
+                
+                // 根据IDM模式选择完全不同的音色
+                if (toneValue < 0.2) {
+                    // 极简模式 - 纯正弦波，温暖圆润
+                    crashOsc1.type = 'sine';
+                    crashOsc1.frequency.setValueAtTime(300, startTime);
+                    crashOsc1.frequency.exponentialRampToValueAtTime(180, startTime + 0.8);
+                    crashOsc2.type = 'sine';
+                    crashOsc2.frequency.setValueAtTime(250, startTime);
+                    crashOsc2.frequency.exponentialRampToValueAtTime(150, startTime + 0.8);
+                    
+                } else if (toneValue < 0.4) {
+                    // 故障模式 - 三角形波，数字感
+                    crashOsc1.type = 'triangle';
+                    crashOsc1.frequency.setValueAtTime(400, startTime);
+                    crashOsc1.frequency.exponentialRampToValueAtTime(220, startTime + 0.6);
+                    crashOsc2.type = 'triangle';
+                    crashOsc2.frequency.setValueAtTime(320, startTime);
+                    crashOsc2.frequency.exponentialRampToValueAtTime(180, startTime + 0.6);
+                    
+                } else if (toneValue < 0.6) {
+                    // 碎拍模式 - 正弦+三角形，节奏感
+                    crashOsc1.type = 'sine';
+                    crashOsc1.frequency.setValueAtTime(350, startTime);
+                    crashOsc1.frequency.exponentialRampToValueAtTime(200, startTime + 0.7);
+                    crashOsc2.type = 'triangle';
+                    crashOsc2.frequency.setValueAtTime(280, startTime);
+                    crashOsc2.frequency.exponentialRampToValueAtTime(180, startTime + 0.7);
+                    
+                } else if (toneValue < 0.8) {
+                    // 氛围模式 - 纯正弦，空间感
+                    crashOsc1.type = 'sine';
+                    crashOsc1.frequency.setValueAtTime(280, startTime);
+                    crashOsc1.frequency.exponentialRampToValueAtTime(170, startTime + 0.9);
+                    crashOsc2.type = 'sine';
+                    crashOsc2.frequency.setValueAtTime(230, startTime);
+                    crashOsc2.frequency.exponentialRampToValueAtTime(140, startTime + 0.9);
+                    
+                } else {
+                    // IDM模式 - 复杂叠加，智能感
+                    crashOsc1.type = 'sine';
+                    crashOsc1.frequency.setValueAtTime(380, startTime);
+                    crashOsc1.frequency.exponentialRampToValueAtTime(210, startTime + 0.5);
+                    crashOsc2.type = 'triangle';
+                    crashOsc2.frequency.setValueAtTime(300, startTime);
+                    crashOsc2.frequency.exponentialRampToValueAtTime(170, startTime + 0.5);
+                }
+                
+                // 超柔和的滤波器设置
+                crashFilter.type = 'bandpass';
+                crashFilter.frequency.setValueAtTime(600, startTime);
+                crashFilter.frequency.exponentialRampToValueAtTime(300, startTime + 0.8);
+                crashFilter.Q.setValueAtTime(1.0, startTime); // 极低Q值，完全消除锐耳
+                
+                // 温暖的音量包络
+                crashGain.gain.setValueAtTime(0, startTime);
+                crashGain.gain.linearRampToValueAtTime(0.5 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.03);
+                crashGain.gain.exponentialRampToValueAtTime(0.01, startTime + 1.2);
+                
+                // 连接多个振荡器
+                crashOsc1.connect(crashFilter);
+                crashOsc2.connect(crashFilter);
+                crashFilter.connect(crashGain);
+                crashGain.connect(this.masterGain);
+                
+                crashOsc1.start(startTime);
+                crashOsc2.start(startTime);
+                crashOsc1.stop(startTime + 1.2);
+                crashOsc2.stop(startTime + 1.2);
+            }
+            
+            // 极简鼓点模式 - 真正的随机性 (IDM风格)
+            createMinimalDrums(startTime, noteDuration) {
+                // 使用多重随机种子，增加不可预测性
+                const randomSeed1 = Math.random();
+                const randomSeed2 = Math.random();
+                const randomSeed3 = Math.random();
+                
+                // 随机决定是否播放
+                const shouldPlay = randomSeed1 > 0.3;
+                
+                if (shouldPlay) {
+                    // 底鼓 - 随机时间偏移
+                    const kickOffset = (randomSeed2 - 0.5) * noteDuration * 0.4;
+                    this.createKickDrum(startTime + kickOffset, noteDuration * (0.6 + randomSeed3 * 0.4));
+                    
+                    // 军鼓 - 随机概率出现
+                    if (randomSeed2 > 0.6) {
+                        const snareOffset = (randomSeed3 - 0.5) * noteDuration * 0.6;
+                        this.createSnareDrum(startTime + noteDuration * 0.5 + snareOffset, noteDuration * (0.4 + randomSeed1 * 0.4));
+                    }
+                    
+                    // 踩镲 - 随机节奏点缀
+                    if (randomSeed3 > 0.7) {
+                        const hihatOffset = (randomSeed1 - 0.5) * noteDuration * 0.8;
+                        this.createHiHat(startTime + hihatOffset, noteDuration * (0.2 + randomSeed2 * 0.3));
+                    }
+                }
+            }
+            
+            // 故障鼓点模式 - 真正的随机故障 (IDM风格)
+            createGlitchDrums(startTime, noteDuration) {
+                // 使用多重随机种子，创造真正的随机故障
+                const randomSeed1 = Math.random();
+                const randomSeed2 = Math.random();
+                const randomSeed3 = Math.random();
+                const randomSeed4 = Math.random();
+                
+                // 随机故障概率
+                const glitchProbability = 0.4 + randomSeed1 * 0.3; // 40-70%概率
+                
+                // 底鼓 - 随机故障节奏
+                if (randomSeed1 > 0.4) {
+                    const kickOffset = (randomSeed2 - 0.5) * noteDuration * 0.8;
+                    const kickDuration = noteDuration * (0.2 + randomSeed3 * 0.6);
+                    this.createKickDrum(startTime + kickOffset, kickDuration);
+                }
+                
+                if (randomSeed2 > 0.6) {
+                    const kickOffset2 = (randomSeed3 - 0.5) * noteDuration * 0.6;
+                    const kickDuration2 = noteDuration * (0.1 + randomSeed4 * 0.4);
+                    this.createKickDrum(startTime + noteDuration * 0.5 + kickOffset2, kickDuration2);
+                }
+                
+                // 军鼓 - 随机故障切分音
+                if (randomSeed3 > 0.5) {
+                    const snareOffset = (randomSeed4 - 0.5) * noteDuration * 0.8;
+                    const snareDuration = noteDuration * (0.3 + randomSeed1 * 0.5);
+                    this.createSnareDrum(startTime + noteDuration * 0.5 + snareOffset, snareDuration);
+                }
+                
+                // 踩镲 - 随机故障高频
+                if (randomSeed4 > 0.3) {
+                    const hihatOffset = (randomSeed1 - 0.5) * noteDuration * 0.6;
+                    const hihatDuration = noteDuration * (0.1 + randomSeed2 * 0.3);
+                    this.createHiHat(startTime + hihatOffset, hihatDuration);
+                }
+                
+                if (randomSeed1 > 0.7) {
+                    const hihatOffset2 = (randomSeed2 - 0.5) * noteDuration * 0.7;
+                    const hihatDuration2 = noteDuration * (0.15 + randomSeed3 * 0.25);
+                    this.createHiHat(startTime + noteDuration * 0.5 + hihatOffset2, hihatDuration2);
+                }
+                
+                // 随机故障效果 - 增加概率
+                if (Math.random() < 0.3) { // 30%概率
+                    const glitchOffset = (Math.random() - 0.5) * noteDuration * 0.5;
+                    const glitchDuration = noteDuration * (0.05 + Math.random() * 0.15);
+                    this.createGlitchEffect(startTime + noteDuration * 0.5 + glitchOffset, glitchDuration);
+                }
+            }
+            
+            // 碎拍鼓点模式 - 真正的随机碎拍 (IDM风格)
+            createBreakbeatDrums(startTime, noteDuration) {
+                // 使用多重随机种子，创造真正的随机碎拍
+                const randomSeed1 = Math.random();
+                const randomSeed2 = Math.random();
+                const randomSeed3 = Math.random();
+                const randomSeed4 = Math.random();
+                
+                // 底鼓 - 随机碎拍节奏
+                this.createKickDrum(startTime, noteDuration);
+                
+                // 随机额外底鼓
+                if (randomSeed1 > 0.4) {
+                    const kickOffset1 = (randomSeed2 - 0.5) * noteDuration * 0.8;
+                    const kickDuration1 = noteDuration * (0.3 + randomSeed3 * 0.4);
+                    this.createKickDrum(startTime + noteDuration * 0.375 + kickOffset1, kickDuration1);
+                }
+                
+                if (randomSeed2 > 0.6) {
+                    const kickOffset2 = (randomSeed3 - 0.5) * noteDuration * 0.7;
+                    const kickDuration2 = noteDuration * (0.2 + randomSeed4 * 0.5);
+                    this.createKickDrum(startTime + noteDuration * 0.625 + kickOffset2, kickDuration2);
+                }
+                
+                // 军鼓 - 随机复杂切分音
+                this.createSnareDrum(startTime + noteDuration * 0.5, noteDuration);
+                
+                if (randomSeed3 > 0.5) {
+                    const snareOffset1 = (randomSeed4 - 0.5) * noteDuration * 0.6;
+                    const snareDuration1 = noteDuration * (0.4 + randomSeed1 * 0.4);
+                    this.createSnareDrum(startTime + noteDuration * 0.25 + snareOffset1, snareDuration1);
+                }
+                
+                if (randomSeed4 > 0.7) {
+                    const snareOffset2 = (randomSeed1 - 0.5) * noteDuration * 0.5;
+                    const snareDuration2 = noteDuration * (0.3 + randomSeed2 * 0.5);
+                    this.createSnareDrum(startTime + noteDuration * 0.75 + snareOffset2, snareDuration2);
+                }
+                
+                // 踩镲 - 随机碎拍高频
+                this.createHiHat(startTime, noteDuration * 0.25);
+                this.createHiHat(startTime + noteDuration * 0.5, noteDuration * 0.25);
+                this.createHiHat(startTime + noteDuration * 0.75, noteDuration * 0.25);
+                
+                // 随机额外碎拍元素
+                if (randomSeed1 > 0.6) {
+                    const hihatOffset = (randomSeed2 - 0.5) * noteDuration * 0.4;
+                    const hihatDuration = noteDuration * (0.1 + randomSeed3 * 0.2);
+                    this.createHiHat(startTime + noteDuration * 0.125 + hihatOffset, hihatDuration);
+                }
+                
+                if (randomSeed2 > 0.8) {
+                    const hihatOffset2 = (randomSeed3 - 0.5) * noteDuration * 0.6;
+                    const hihatDuration2 = noteDuration * (0.15 + randomSeed4 * 0.25);
+                    this.createHiHat(startTime + noteDuration * 0.875 + hihatOffset2, hihatDuration2);
+                }
+            }
+            
+            // 氛围鼓点模式 - 真正的随机氛围 (IDM风格)
+            createAmbientDrums(startTime, noteDuration) {
+                // 使用多重随机种子，创造真正的随机氛围
+                const randomSeed1 = Math.random();
+                const randomSeed2 = Math.random();
+                const randomSeed3 = Math.random();
+                const randomSeed4 = Math.random();
+                
+                // 随机决定是否播放
+                const shouldPlay = randomSeed1 > 0.2; // 80%概率播放
+                
+                if (shouldPlay) {
+                    // 底鼓 - 随机空间感低频
+                    const kickOffset = (randomSeed2 - 0.5) * noteDuration * 0.6;
+                    const kickDuration = noteDuration * (0.8 + randomSeed3 * 0.8);
+                    this.createKickDrum(startTime + kickOffset, kickDuration);
+                    
+                    // 军鼓 - 随机延迟出现
+                    if (randomSeed2 > 0.4) {
+                        const snareOffset = (randomSeed3 - 0.5) * noteDuration * 0.8;
+                        const snareDelay = noteDuration * (0.3 + randomSeed4 * 0.6);
+                        const snareDuration = noteDuration * (0.6 + randomSeed1 * 0.6);
+                        this.createSnareDrum(startTime + snareDelay + snareOffset, snareDuration);
+                    }
+                    
+                    // 踩镲 - 随机空间感高频
+                    if (randomSeed3 > 0.5) {
+                        const hihatOffset = (randomSeed4 - 0.5) * noteDuration * 0.7;
+                        const hihatDelay = noteDuration * (0.4 + randomSeed1 * 0.5);
+                        const hihatDuration = noteDuration * (0.3 + randomSeed2 * 0.5);
+                        this.createHiHat(startTime + hihatDelay + hihatOffset, hihatDuration);
+                    }
+                    
+                    // 随机氛围音效 - 增加概率
+                    if (Math.random() < 0.4) { // 40%概率
+                        const ambientOffset = (Math.random() - 0.5) * noteDuration * 0.8;
+                        const ambientDelay = noteDuration * (0.6 + Math.random() * 0.6);
+                        const ambientDuration = noteDuration * (0.4 + Math.random() * 0.6);
+                        this.createAmbientEffect(startTime + ambientDelay + ambientOffset, ambientDuration);
+                    }
+                }
+            }
+            
+            // 智能舞曲模式 - 真正的随机IDM (IDM风格)
+            createIDMDrums(startTime, noteDuration) {
+                // 使用多重随机种子，创造真正的随机IDM
+                const randomSeed1 = Math.random();
+                const randomSeed2 = Math.random();
+                const randomSeed3 = Math.random();
+                const randomSeed4 = Math.random();
+                const randomSeed5 = Math.random();
+                
+                // 底鼓 - 随机智能节奏
+                if (randomSeed1 > 0.3) {
+                    const kickOffset1 = (randomSeed2 - 0.5) * noteDuration * 0.6;
+                    const kickDuration1 = noteDuration * (0.4 + randomSeed3 * 0.4);
+                    this.createKickDrum(startTime + kickOffset1, kickDuration1);
+                }
+                
+                if (randomSeed2 > 0.5) {
+                    const kickOffset2 = (randomSeed3 - 0.5) * noteDuration * 0.8;
+                    const kickDuration2 = noteDuration * (0.2 + randomSeed4 * 0.5);
+                    this.createKickDrum(startTime + noteDuration * 0.2 + kickOffset2, kickDuration2);
+                }
+                
+                if (randomSeed3 > 0.7) {
+                    const kickOffset3 = (randomSeed4 - 0.5) * noteDuration * 0.7;
+                    const kickDuration3 = noteDuration * (0.3 + randomSeed5 * 0.4);
+                    this.createKickDrum(startTime + noteDuration * 0.6 + kickOffset3, kickDuration3);
+                }
+                
+                // 军鼓 - 随机智能切分音
+                if (randomSeed4 > 0.4) {
+                    const snareOffset1 = (randomSeed5 - 0.5) * noteDuration * 0.5;
+                    const snareDuration1 = noteDuration * (0.8 + randomSeed1 * 0.4);
+                    this.createSnareDrum(startTime + noteDuration * 0.5 + snareOffset1, snareDuration1);
+                }
+                
+                if (randomSeed5 > 0.6) {
+                    const snareOffset2 = (randomSeed1 - 0.5) * noteDuration * 0.6;
+                    const snareDuration2 = noteDuration * (0.4 + randomSeed2 * 0.5);
+                    this.createSnareDrum(startTime + noteDuration * 0.25 + snareOffset2, snareDuration2);
+                }
+                
+                if (randomSeed1 > 0.8) {
+                    const snareOffset3 = (randomSeed2 - 0.5) * noteDuration * 0.4;
+                    const snareDuration3 = noteDuration * (0.3 + randomSeed3 * 0.6);
+                    this.createSnareDrum(startTime + noteDuration * 0.75 + snareOffset3, snareDuration3);
+                }
+                
+                // 踩镲 - 随机智能高频
+                if (randomSeed2 > 0.2) {
+                    const hihatOffset1 = (randomSeed3 - 0.5) * noteDuration * 0.3;
+                    const hihatDuration1 = noteDuration * (0.15 + randomSeed4 * 0.25);
+                    this.createHiHat(startTime + hihatOffset1, hihatDuration1);
+                }
+                
+                if (randomSeed3 > 0.4) {
+                    const hihatOffset2 = (randomSeed4 - 0.5) * noteDuration * 0.4;
+                    const hihatDuration2 = noteDuration * (0.18 + randomSeed5 * 0.22);
+                    this.createHiHat(startTime + noteDuration * 0.4 + hihatOffset2, hihatDuration2);
+                }
+                
+                if (randomSeed4 > 0.6) {
+                    const hihatOffset3 = (randomSeed5 - 0.5) * noteDuration * 0.5;
+                    const hihatDuration3 = noteDuration * (0.16 + randomSeed1 * 0.24);
+                    this.createHiHat(startTime + noteDuration * 0.6 + hihatOffset3, hihatDuration3);
+                }
+                
+                if (randomSeed5 > 0.8) {
+                    const hihatOffset4 = (randomSeed1 - 0.5) * noteDuration * 0.6;
+                    const hihatDuration4 = noteDuration * (0.17 + randomSeed2 * 0.23);
+                    this.createHiHat(startTime + noteDuration * 0.8 + hihatOffset4, hihatDuration4);
+                }
+                
+                // 随机IDM效果 - 增加概率和随机性
+                if (Math.random() < 0.5) { // 50%概率
+                    const idmOffset = (Math.random() - 0.5) * noteDuration * 0.6;
+                    const idmDelay = noteDuration * (0.2 + Math.random() * 0.6);
+                    const idmDuration = noteDuration * (0.15 + Math.random() * 0.25);
+                    this.createIDMEffect(startTime + idmDelay + idmOffset, idmDuration);
+                }
+                
+                // 额外随机效果
+                if (Math.random() < 0.3) { // 30%概率
+                    const extraOffset = (Math.random() - 0.5) * noteDuration * 0.8;
+                    const extraDelay = noteDuration * (0.1 + Math.random() * 0.8);
+                    const extraDuration = noteDuration * (0.1 + Math.random() * 0.2);
+                    this.createGlitchEffect(startTime + extraDelay + extraOffset, extraDuration);
+                }
+            }
+            
+            // 创建故障效果 - IDM风格，更柔和的音色
+            createGlitchEffect(startTime, duration) {
+                const glitchOsc = this.audioContext.createOscillator();
+                const glitchGain = this.audioContext.createGain();
+                const glitchFilter = this.audioContext.createBiquadFilter();
+                
+                // 故障音色 - 使用更柔和的波形
+                glitchOsc.type = 'triangle'; // 改为三角形，减少锐耳
+                glitchOsc.frequency.setValueAtTime(1500 + Math.random() * 2000, startTime); // 降低频率范围
+                
+                // 故障滤波器 - 更柔和的设置
+                glitchFilter.type = 'bandpass';
+                glitchFilter.frequency.setValueAtTime(800, startTime);
+                glitchFilter.frequency.exponentialRampToValueAtTime(4000, startTime + duration * 0.5); // 降低最高频率
+                glitchFilter.Q.setValueAtTime(8, startTime); // 大幅降低Q值，减少锐耳
+                
+                // 故障音量 - 更平缓
+                glitchGain.gain.setValueAtTime(0, startTime);
+                glitchGain.gain.linearRampToValueAtTime(0.2 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.002); // 降低音量，延长攻击
+                glitchGain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                
+                glitchOsc.connect(glitchFilter);
+                glitchFilter.connect(glitchGain);
+                glitchGain.connect(this.masterGain);
+                
+                glitchOsc.start(startTime);
+                glitchOsc.stop(startTime + duration);
+            }
+            
+            // 创建氛围效果 - IDM风格
+            createAmbientEffect(startTime, duration) {
+                const ambientOsc = this.audioContext.createOscillator();
+                const ambientGain = this.audioContext.createGain();
+                const ambientFilter = this.audioContext.createBiquadFilter();
+                
+                // 氛围音色 - 低频共鸣
+                ambientOsc.type = 'sine';
+                ambientOsc.frequency.setValueAtTime(120, startTime);
+                ambientOsc.frequency.exponentialRampToValueAtTime(60, startTime + duration);
+                
+                // 氛围滤波器 - 低通共鸣
+                ambientFilter.type = 'lowpass';
+                ambientFilter.frequency.setValueAtTime(200, startTime);
+                ambientFilter.Q.setValueAtTime(8, startTime);
+                
+                // 氛围音量 - 缓慢衰减
+                ambientGain.gain.setValueAtTime(0, startTime);
+                ambientGain.gain.linearRampToValueAtTime(0.2 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.1);
+                ambientGain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                
+                ambientOsc.connect(ambientFilter);
+                ambientFilter.connect(ambientGain);
+                ambientGain.connect(this.masterGain);
+                
+                ambientOsc.start(startTime);
+                ambientOsc.stop(startTime + duration);
+            }
+            
+            // 创建IDM效果 - 智能舞曲风格，更柔和的音色
+            createIDMEffect(startTime, duration) {
+                const idmOsc = this.audioContext.createOscillator();
+                const idmGain = this.audioContext.createGain();
+                const idmFilter = this.audioContext.createBiquadFilter();
+                
+                // IDM音色 - 使用更柔和的波形
+                idmOsc.type = 'triangle'; // 改为三角形，减少锐耳
+                idmOsc.frequency.setValueAtTime(300, startTime);
+                idmOsc.frequency.exponentialRampToValueAtTime(600, startTime + duration * 0.3); // 降低频率范围
+                idmOsc.frequency.exponentialRampToValueAtTime(150, startTime + duration);
+                
+                // IDM滤波器 - 更柔和的设置
+                idmFilter.type = 'bandpass';
+                idmFilter.frequency.setValueAtTime(400, startTime);
+                idmFilter.frequency.exponentialRampToValueAtTime(1200, startTime + duration * 0.5); // 降低最高频率
+                idmFilter.Q.setValueAtTime(6, startTime); // 大幅降低Q值，减少锐耳
+                
+                // IDM音量 - 更平缓的包络
+                idmGain.gain.setValueAtTime(0, startTime);
+                idmGain.gain.linearRampToValueAtTime(0.3 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.02); // 降低音量，延长攻击
+                idmGain.gain.linearRampToValueAtTime(0.15 * this.pipesMusicVolume * this.drumsVolume, startTime + duration * 0.3);
+                idmGain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                
+                idmOsc.connect(idmFilter);
+                idmFilter.connect(idmGain);
+                idmGain.connect(this.masterGain);
+                
+                idmOsc.start(startTime);
+                idmOsc.stop(startTime + duration);
             }
             
             // 获取管道音符（赋格主题）
@@ -6247,12 +8002,15 @@
             
             // 获取鼓点音符（赋格节奏）
             getDrumNote() {
-                const baseFreq = 60; // 低音基础频率
+                const baseFreq = 120; // 提升基础频率，让鼓点更明显
                 const gridMod = ((this.currentX + this.currentY) % 8) / 8;
                 
-                // 添加一点点赋格元素：基于主题的节奏变体
-                const fugueRhythm = Math.sin(gridMod * Math.PI * 2) * 0.5; // 轻微的赋格节奏感
-                return baseFreq * Math.pow(2, gridMod * 3 + fugueRhythm);
+                // 增强赋格节奏感 - 让鼓点更有变化
+                const fugueRhythm = Math.sin(gridMod * Math.PI * 2) * 1.0; // 增强赋格节奏感
+                const enhancedFreq = baseFreq * Math.pow(2, gridMod * 4 + fugueRhythm); // 增加频率变化范围
+                
+                // 确保频率在可听范围内
+                return Math.max(80, Math.min(800, enhancedFreq)); // 限制在80Hz-800Hz之间
             }
             
             // 切换音乐播放状态
@@ -6999,7 +8757,7 @@
             // 如果是从后退/前进按钮访问，强制刷新
             window.location.reload(true);
         }
-        
+
         // 专门为The Signifer Relic Series眼睛添加事件监听器
         document.addEventListener('DOMContentLoaded', () => {
             const signiferEye = document.querySelector('.green-eye-hint-4');
@@ -7506,6 +9264,272 @@
             }
         }
         
+        /* 极简音色调音器样式 */
+        /* 管道音色调音器样式 - 推子形式 */
+        .pipes-mixer-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10000;
+            pointer-events: none;
+        }
+        
+        /* 左侧推子组 */
+        .left-faders {
+            position: fixed;
+            left: 0px;
+            top: 80%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            pointer-events: auto;
+        }
+        
+        /* 右侧推子组 */
+        .right-faders {
+            position: fixed;
+            left: 27%;
+            top: 80%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            pointer-events: auto;
+        }
+        
+        /* 推子控制器样式 */
+        .fader-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 60px;
+        }
+        
+        /* 推子标签 */
+        .fader-label {
+            font-family: 'VCR OSD Mono', monospace;
+            font-size: 10px;
+            color: #ffffff;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        
+        /* 推子轨道 */
+        .fader-track {
+            position: relative;
+            width: 4px;
+            height: 100px;
+            background: #333;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 推子滑块 - 参考右侧调音器的成功实现 */
+        .fader-slider {
+            width: 4px !important;
+            height: 100px !important;
+            border-radius: 2px !important;
+            background: #0041ff !important;
+            outline: none !important;
+            cursor: pointer !important;
+            -webkit-appearance: slider-vertical !important;
+            appearance: none !important;
+            border: 1px solid #0041ff !important;
+            transition: all 0.2s ease !important;
+            writing-mode: bt-lr !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        
+        /* Webkit浏览器推子轨道 - 参考右侧调音器 */
+        .fader-slider::-webkit-slider-track {
+            background: #0041ff !important;
+            border-radius: 2px !important;
+            border: none !important;
+            width: 4px !important;
+            height: 100px !important;
+        }
+        
+        /* Webkit浏览器推子手柄 - 参考右侧调音器 */
+        .fader-slider::-webkit-slider-thumb {
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+            background: #ffffff !important;
+            cursor: pointer !important;
+            border: 2px solid #0041ff !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+            margin-top: -4px !important;
+        }
+        
+        .fader-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 4px 12px rgba(0, 65, 255, 0.4) !important;
+        }
+        
+        /* Firefox浏览器推子轨道 - 参考右侧调音器 */
+        .fader-slider::-moz-range-track {
+            background: #0041ff !important;
+            border-radius: 2px !important;
+            border: none !important;
+            height: 4px !important;
+            width: 4px !important;
+        }
+        
+        /* Firefox浏览器推子手柄 - 参考右侧调音器 */
+        .fader-slider::-moz-range-thumb {
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+            background: #ffffff !important;
+            cursor: pointer !important;
+            border: 2px solid #0041ff !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        .fader-slider::-moz-range-thumb:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 4px 12px rgba(0, 65, 255, 0.4) !important;
+        }
+        
+        /* 悬停和激活状态 - 参考右侧调音器 */
+        .fader-slider:hover {
+            background: rgba(0, 65, 255, 0.8) !important;
+        }
+        
+        .fader-slider:active {
+            background: rgba(0, 65, 255, 1) !important;
+        }
+        
+        /* 管道音调推子专用样式 - 覆盖默认的80px高度 */
+        .fader-track .volume-slider {
+            height: 100px !important;
+            background: #00aaff !important;
+            border-color: #00aaff !important;
+        }
+        
+        .fader-track .volume-slider::-webkit-slider-track {
+            height: 100px !important;
+            background: #00aaff !important;
+        }
+        
+        .fader-track .volume-slider::-moz-range-track {
+            background: #00aaff !important;
+        }
+        
+        /* 推子数值显示 */
+        .fader-value {
+            font-family: 'VCR OSD Mono', monospace;
+            font-size: 8px;
+            color: #0066ff;
+            text-align: center;
+            min-width: 30px;
+        }
+        
+        /* 推子颜色主题 */
+        .pipes-bassline-fader .volume-slider::-webkit-slider-thumb {
+            border-color: #ff6600 !important;
+        }
+        
+        .pipes-bassline-fader .fader-value {
+            color: #ff6600;
+        }
+        
+        .pipes-lead-fader .volume-slider::-webkit-slider-thumb {
+            border-color: #00ccff !important;
+        }
+        
+        .pipes-lead-fader .fader-value {
+            color: #00ccff;
+        }
+        
+        .pipes-pad-fader .volume-slider::-webkit-slider-thumb {
+            border-color: #cc66ff !important;
+        }
+        
+        .pipes-pad-fader .fader-value {
+            color: #cc66ff;
+        }
+        
+        .pipes-drums-fader .volume-slider::-webkit-slider-thumb {
+            border-color: #ffcc00 !important;
+        }
+        
+        .pipes-drums-fader .fader-value {
+            color: #ffcc00;
+        }
+        
+        /* Firefox颜色主题 */
+        .pipes-bassline-fader .volume-slider::-moz-range-thumb {
+            border-color: #ff6600 !important;
+        }
+        
+        .pipes-lead-fader .volume-slider::-moz-range-thumb {
+            border-color: #00ccff !important;
+        }
+        
+        .pipes-pad-fader .volume-slider::-moz-range-thumb {
+            border-color: #cc66ff !important;
+        }
+        
+        .pipes-drums-fader .volume-slider::-moz-range-thumb {
+            border-color: #ffcc00 !important;
+        }
+        
+        /* 混音器标题 */
+        .mixer-title {
+            font-family: 'VCR OSD Mono', monospace;
+            font-size: 12px;
+            color: #0041ff;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid #0041ff;
+        }
+        
+        /* 测试按钮 */
+        .test-fader-btn {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #0041ff;
+            color: white;
+            border: 2px solid #0041ff;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-family: 'VCR OSD Mono', monospace;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10001;
+            pointer-events: auto;
+        }
+        
+        .test-fader-btn:hover {
+            background: #0066ff;
+            border-color: #0066ff;
+            transform: scale(1.05);
+        }
+        
         @media (max-width: 768px) {
             /* 移动设备优化 */
             .container {
@@ -7549,6 +9573,42 @@
             .preview-image-container-7 {
                 width: 90% !important;
                 max-width: 90% !important;
+            }
+            
+            /* 移动设备管道音色调音器优化 */
+            .left-faders {
+                left: 15px !important;
+                gap: 20px !important;
+            }
+            
+            .right-faders {
+                right: 15px !important;
+                gap: 20px !important;
+            }
+            
+            .fader-control {
+                width: 40px !important;
+            }
+            
+            .fader-track {
+                height: 60px !important;
+            }
+            
+            .fader-slider {
+                height: 60px !important;
+            }
+            
+            .fader-label {
+                font-size: 7px !important;
+            }
+            
+            .fader-value {
+                font-size: 5px !important;
+            }
+            
+            .test-fader-btn {
+                padding: 6px 10px !important;
+                font-size: 9px !important;
             }
             
             .preview-image-container-4 {
