@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Ezi.Zhang - Exhibition Experience</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
@@ -2727,19 +2730,21 @@
                         console.log('🌤️ 初始化上海天气系统...');
                         getShanghaiWeather(); // 获取初始天气
                         
-                        // 设置天气更新定时器（每15分钟更新一次，更动态）
+                        // 设置天气更新定时器（每天早上太阳升起时更新，更符合自然规律）
                         setInterval(() => {
-                            console.log('🕐 定时更新上海天气...');
-                            getShanghaiWeather();
-                        }, 15 * 60 * 1000); // 15分钟
-                        
-                        // 设置微天气变化（每5分钟微调，模拟真实天气的细微变化）
-                        setInterval(() => {
-                            if (shanghaiWeather.lastUpdate > 0) {
-                                console.log('🌤️ 微调天气参数...');
-                                adjustWeatherSubtly();
+                            const now = new Date();
+                            const hour = now.getHours();
+                            const minute = now.getMinutes();
+                            
+                            // 北京时间早上6-8点之间更新天气（太阳升起时间）
+                            if (hour >= 6 && hour < 8 && minute === 0) {
+                                console.log('🌅 太阳升起，更新上海天气...');
+                                getShanghaiWeather();
                             }
-                        }, 5 * 60 * 1000); // 5分钟
+                        }, 60 * 1000); // 每分钟检查一次，但只在指定时间更新
+                        
+                        // 移除频繁的微调，改为每天一次自然更新
+                        console.log('🌤️ 天气系统已设置为每天早晨自然更新模式');
                         
                         // 尝试自动激活音频上下文
                         if (windAudioContext.state === 'suspended') {

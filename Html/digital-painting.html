@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Digital Painting - EziZhang</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
@@ -369,10 +372,7 @@
 
     
     <!-- 简单状态显示 -->
-    <div id="statusDisplay" style="position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 1001;">
-        <div>🎨 Digital Painting 状态</div>
-        <div id="statusText">等待初始化...</div>
-    </div>
+
     
     <div class="content-container">
         <a href="../index.html" class="back-btn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
@@ -509,8 +509,8 @@
             // 监听 localStorage 变化
             window.addEventListener('storage', handleDigitalPaintingStorageChange);
             
-            // 启动定期检查
-            setInterval(checkDigitalPaintingWeather, 60000); // 每分钟检查一次
+            // 启动定期检查 - 改为每天早晨检查一次，与展览页面同步
+            setInterval(checkDigitalPaintingWeather, 60 * 60 * 1000); // 每小时检查一次，但只在早晨更新
             
             console.log('✅ Digital Painting 全局天气客户端初始化完成');
         }
@@ -543,22 +543,28 @@
         
         // 定期检查 Digital Painting 全局天气数据
         function checkDigitalPaintingWeather() {
-            const storedWeather = localStorage.getItem('globalWeatherData');
-            if (storedWeather) {
-                try {
-                    const weatherData = JSON.parse(storedWeather);
-                    const now = Date.now();
-                    const dataAge = now - weatherData.timestamp;
-                    
-                    // 如果数据较新（15分钟内）且与当前数据不同，则更新
-                    if (dataAge < 900000 && (!digitalPaintingWeatherData || digitalPaintingWeatherData.timestamp !== weatherData.timestamp)) {
-                        console.log('📡 Digital Painting 定期检查发现新的天气数据:', weatherData);
-                        digitalPaintingWeatherData = weatherData;
-                        applyDigitalPaintingWeatherBackground(weatherData);
-                        isDigitalPaintingWeatherActive = true;
+            const now = new Date();
+            const hour = now.getHours();
+            
+            // 只在北京时间早上6-8点之间检查天气更新（太阳升起时间）
+            if (hour >= 6 && hour < 8) {
+                const storedWeather = localStorage.getItem('globalWeatherData');
+                if (storedWeather) {
+                    try {
+                        const weatherData = JSON.parse(storedWeather);
+                        const currentTime = Date.now();
+                        const dataAge = currentTime - weatherData.timestamp;
+                        
+                        // 如果数据较新（24小时内）且与当前数据不同，则更新
+                        if (dataAge < 24 * 60 * 60 * 1000 && (!digitalPaintingWeatherData || digitalPaintingWeatherData.timestamp !== weatherData.timestamp)) {
+                            console.log('🌅 Digital Painting 早晨检查发现新的天气数据:', weatherData);
+                            digitalPaintingWeatherData = weatherData;
+                            applyDigitalPaintingWeatherBackground(weatherData);
+                            isDigitalPaintingWeatherActive = true;
+                        }
+                    } catch (error) {
+                        console.error('❌ Digital Painting 定期检查天气数据失败:', error);
                     }
-                } catch (error) {
-                    console.error('❌ Digital Painting 定期检查天气数据失败:', error);
                 }
             }
         }
@@ -611,15 +617,43 @@
                     z-index: -1;
                     pointer-events: none;
                 }
+                
+                /* 确保所有页面元素都能看到背景色 */
+                html {
+                    background-color: ${weatherData.baseColor} !important;
+                    transition: background-color 2s ease-in-out;
+                }
+                
+                /* 确保主容器也能看到背景色 */
+                .main-container {
+                    background-color: ${weatherData.baseColor} !important;
+                    transition: background-color 2s ease-in-out;
+                }
+                
+                /* 确保页面背景完全覆盖 */
+                .page-background {
+                    background-color: ${weatherData.baseColor} !important;
+                    transition: background-color 2s ease-in-out;
+                }
             `;
             
             style.textContent = css;
             document.head.appendChild(style);
             
-            console.log(`🎨 Digital Painting 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)}`);
-        }
+                    // 强制刷新DOM，确保背景颜色立即生效，防止缓存问题
+        document.body.style.backgroundColor = weatherData.baseColor;
+        document.documentElement.style.backgroundColor = weatherData.baseColor;
         
-        // ===== Digital Painting 2D创战纪风格红白机音效系统 =====
+        // 强制重绘，确保背景颜色立即显示
+        document.body.offsetHeight; // 触发重排
+        document.documentElement.offsetHeight; // 触发重排
+        
+        console.log(`🎨 Digital Painting 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)} (强制刷新)`);
+    }
+    
+
+    
+    // ===== Digital Painting 2D创战纪风格红白机音效系统 =====
         // 开场音效变量
         let digitalPaintingAudioContext = null;
         let isDigitalPaintingGreetingPlayed = false;
@@ -629,7 +663,6 @@
             if (isDigitalPaintingGreetingPlayed) return; // 防止重复播放
             
             console.log('🎨 开始播放 Digital Painting 全新特别音效...');
-            updateStatus('🎵 正在播放音效...');
             
             try {
                 // 创建音频上下文
@@ -674,101 +707,115 @@
                 effectGain.gain.setValueAtTime(0.28, digitalPaintingAudioContext.currentTime);
                 
                 // 创建"Digital"音效 - 全新的数字艺术风格
+                console.log('🎵 开始创建"Digital"音效...');
                 createDigitalArtSound(digitalPaintingAudioContext, masterGain, digitalGain, digitalFilter, 0);
                 
                 // 延迟播放"Painting"音效
                 setTimeout(() => {
+                    console.log('🎵 开始创建"Painting"音效...');
                     createPaintingArtSound(digitalPaintingAudioContext, masterGain, paintingGain, paintingFilter, 0.8);
                 }, 800);
                 
                 // 延迟播放艺术特效音效
                 setTimeout(() => {
+                    console.log('🎵 开始创建艺术特效音效...');
                     createDigitalPaintingArtEffectSound(digitalPaintingAudioContext, masterGain, effectGain, effectFilter);
-                }, 1.6);
+                }, 1600); // 修复时间单位，应该是1600ms
                 
-                // 音效结束后应用天气背景颜色
+                // 音效结束后应用天气背景颜色并启动沙丘背景音乐
                 setTimeout(() => {
                     console.log('🎨 音效播放完成，开始应用天气背景颜色...');
-                    updateStatus('🎨 音效完成，准备应用天气背景...');
                     if (digitalPaintingWeatherData && isDigitalPaintingWeatherActive) {
                         applyDigitalPaintingWeatherBackground(digitalPaintingWeatherData);
-                        updateStatus('✅ 天气背景已应用');
                     } else {
                         console.log('⚠️ 没有有效的天气数据，保持亮蓝色背景');
-                        updateStatus('⚠️ 无天气数据，保持原背景');
                     }
+                    
+                    // 启动沙丘风格背景音乐
+                    setTimeout(() => {
+                        console.log('🏜️ 准备启动沙丘背景音乐...');
+                        startDuneBackgroundMusic();
+                    }, 1000); // 天气背景应用后1秒启动背景音乐
+                    
                 }, 3000); // 等待音效完全播放完毕，与展览界面保持同步
                 
                 isDigitalPaintingGreetingPlayed = true;
-                updateStatus('✅ 音效播放完成');
                 console.log('🎨 Digital Painting 全新特别音效开始播放！');
                 
             } catch (error) {
                 console.error('❌ Digital Painting 开场音效播放失败:', error);
-                updateStatus('❌ 音效播放失败: ' + error.message);
             }
         }
         
-        // 创建"Digital"音效 - 现代电子音乐风格！
+        // 创建"Digital"音效 - 沉稳的电子科技风格！
         function createDigitalArtSound(audioContext, masterGain, digitalGain, digitalFilter, startTime) {
             const currentTime = audioContext.currentTime + startTime;
             
-            // 创建"Digital"的音节 - 现代电子音乐风格
+            // 创建"Digital"的音节 - 沉稳的电子科技风格
             const digitalNotes = [
-                { freq: 220, duration: 0.2, gain: 0.3 }, // A3 - "Di" - 中音基础，电子感
-                { freq: 330, duration: 0.18, gain: 0.28 }, // E4 - "gi" - 中音上升，电子感
-                { freq: 440, duration: 0.25, gain: 0.32 }, // A4 - "tal" - 高音结束，电子感
+                { freq: 196, duration: 0.22, gain: 0.28 }, // G3 - "Di" - 中音基础，沉稳感
+                { freq: 293, duration: 0.20, gain: 0.25 }, // D4 - "gi" - 中音上升，沉稳感
+                { freq: 392, duration: 0.25, gain: 0.30 }, // G4 - "tal" - 高音结束，沉稳感
             ];
             
             digitalNotes.forEach((note, index) => {
-                const noteTime = currentTime + (index * 0.2);
+                const noteTime = currentTime + (index * 0.22);
                 
-                // 主音调 - 使用现代电子音乐风格音色
+                // 主音调 - 使用沉稳的电子科技风格音色
                 const mainOsc = audioContext.createOscillator();
                 const subOsc = audioContext.createOscillator(); // 次振荡器增加厚度
                 const mainGain = audioContext.createGain();
                 const lfo = audioContext.createOscillator(); // 低频振荡器
                 const lfoGain = audioContext.createGain();
-                const waveShaper = audioContext.createWaveShaper(); // 波形整形器，电子感
+                const waveShaper = audioContext.createWaveShaper(); // 波形整形器，沉稳感
                 const distortionFilter = audioContext.createBiquadFilter(); // 失真滤波器
+                const ringMod = audioContext.createOscillator(); // 环形调制器，沉稳感
+                const ringModGain = audioContext.createGain();
                 
-                // 设置主音调 - 现代电子音乐风格
-                mainOsc.type = 'sawtooth'; // 锯齿波，电子感十足
+                // 设置主音调 - 沉稳的电子科技风格
+                mainOsc.type = 'sine'; // 正弦波，更沉稳
                 mainOsc.frequency.setValueAtTime(note.freq, noteTime);
                 
-                // 次振荡器 - 增加厚度和电子感
-                subOsc.type = 'square'; // 方波，电子感
+                // 次振荡器 - 增加厚度和沉稳感
+                subOsc.type = 'triangle'; // 三角波，更沉稳
                 subOsc.frequency.setValueAtTime(note.freq * 0.5, noteTime);
                 
-                // LFO调制 - 创造电子动态效果
-                lfo.type = 'triangle';
-                lfo.frequency.setValueAtTime(12, noteTime); // 12Hz调制，电子感
-                lfoGain.gain.setValueAtTime(note.freq * 0.03, noteTime); // 增加调制强度
+                // LFO调制 - 创造沉稳动态效果
+                lfo.type = 'sine'; // 正弦波调制，更沉稳
+                lfo.frequency.setValueAtTime(8, noteTime); // 8Hz调制，沉稳感
+                lfoGain.gain.setValueAtTime(note.freq * 0.015, noteTime); // 降低调制强度，更沉稳
                 lfo.connect(lfoGain);
                 lfoGain.connect(mainOsc.frequency);
                 
-                // 波形整形 - 创造电子失真效果
+                // 环形调制 - 创造沉稳感音色
+                ringMod.type = 'sine';
+                ringMod.frequency.setValueAtTime(note.freq * 0.15, noteTime);
+                ringModGain.gain.setValueAtTime(0.08, noteTime);
+                ringMod.connect(ringModGain);
+                ringModGain.connect(mainOsc.frequency);
+                
+                // 波形整形 - 创造沉稳失真效果
                 const distortionCurve = new Float32Array(4096);
                 for (let i = 0; i < 4096; i++) {
                     const x = (i * 2) / 4096 - 1;
-                    distortionCurve[i] = Math.sign(x) * (1 - Math.exp(-Math.abs(x) * 1.5));
+                    distortionCurve[i] = Math.sign(x) * (1 - Math.exp(-Math.abs(x) * 1.2));
                 }
                 waveShaper.curve = distortionCurve;
                 
-                // 失真滤波器 - 电子感
-                distortionFilter.type = 'highpass';
-                distortionFilter.frequency.setValueAtTime(note.freq * 0.8, noteTime);
-                distortionFilter.Q.setValueAtTime(3.0, noteTime);
+                // 失真滤波器 - 沉稳感
+                distortionFilter.type = 'lowpass'; // 低通滤波，更沉稳
+                distortionFilter.frequency.setValueAtTime(note.freq * 1.2, noteTime);
+                distortionFilter.Q.setValueAtTime(2.0, noteTime);
                 
-                // 主滤波器 - 现代电子音乐风格
-                digitalFilter.type = 'peaking'; // 峰值滤波，电子感
-                digitalFilter.frequency.setValueAtTime(note.freq, noteTime);
-                digitalFilter.Q.setValueAtTime(4.0, noteTime); // 高Q值，电子感
-                digitalFilter.gain.setValueAtTime(8, noteTime); // 增益提升，电子感
+                // 主滤波器 - 沉稳的电子科技风格
+                digitalFilter.type = 'lowpass'; // 低通滤波，更沉稳
+                digitalFilter.frequency.setValueAtTime(note.freq * 1.5, noteTime);
+                digitalFilter.Q.setValueAtTime(2.5, noteTime); // 降低Q值，更沉稳
+                digitalFilter.gain.setValueAtTime(3, noteTime); // 降低增益，更沉稳
                 
-                // 音量包络 - 现代电子音乐风格
+                // 音量包络 - 沉稳的电子科技风格
                 mainGain.gain.setValueAtTime(0, noteTime);
-                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.002);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.005); // 更缓慢的上升
                 mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.01);
                 mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
                 
@@ -788,78 +835,109 @@
                 subOsc.stop(noteTime + note.duration);
                 lfo.start(noteTime);
                 lfo.stop(noteTime + note.duration);
+                ringMod.start(noteTime);
+                ringMod.stop(noteTime + note.duration);
                 
-                // 添加现代电子音乐谐波
-                addDigitalArtHarmonics(audioContext, masterGain, digitalGain, noteTime, note.freq, note.gain * 0.15);
+                // 添加超现代电子科技谐波
+                addDigitalArtHarmonics(audioContext, masterGain, digitalGain, noteTime, note.freq, note.gain * 0.18);
             });
             
-            console.log('⚡ 播放"Digital"音效 - 现代电子音乐风格');
+            console.log('🚀 播放"Digital"音效 - 超现代电子科技风格');
         }
         
-        // 创建"Painting"音效 - 现代电子音乐风格！
+        // 创建"Painting"音效 - 沉稳的沙丘电影风格！
         function createPaintingArtSound(audioContext, masterGain, paintingGain, paintingFilter, startTime) {
             const currentTime = audioContext.currentTime + startTime;
             
-            // 创建"Painting"的音节 - 现代电子音乐风格
+            // 创建"Painting"的音节 - 沉稳的沙丘电影风格
             const paintingNotes = [
-                { freq: 392, duration: 0.25, gain: 0.32 }, // G4 - "Pai" - 中音基础，电子感
-                { freq: 294, duration: 0.22, gain: 0.28 }, // D4 - "nt" - 中音，电子感
-                { freq: 440, duration: 0.3, gain: 0.35 }, // A4 - "ing" - 高音结束，电子感
+                { freq: 293, duration: 0.35, gain: 0.28 }, // D4 - "Pai" - 中音基础，沉稳沙丘感
+                { freq: 220, duration: 0.30, gain: 0.25 }, // A3 - "nt" - 中音，沉稳沙丘感
+                { freq: 329, duration: 0.40, gain: 0.30 }, // E4 - "ing" - 高音结束，沉稳沙丘感
             ];
             
             paintingNotes.forEach((note, index) => {
-                const noteTime = currentTime + (index * 0.22);
+                const noteTime = currentTime + (index * 0.32);
                 
-                // 主音调 - 使用现代电子音乐风格音色
+                // 主音调 - 使用沉稳的沙丘电影风格音色
                 const mainOsc = audioContext.createOscillator();
                 const subOsc = audioContext.createOscillator(); // 次振荡器
+                const bassOsc = audioContext.createOscillator(); // 低音振荡器，沙丘厚重感
                 const mainGain = audioContext.createGain();
                 const lfo = audioContext.createOscillator(); // 低频振荡器
                 const lfoGain = audioContext.createGain();
                 const chorus = audioContext.createOscillator(); // 合唱效果
                 const chorusGain = audioContext.createGain();
-                const reverb = audioContext.createDelay(0.15); // 混响效果
+                const reverb = audioContext.createDelay(0.4); // 混响效果，沙丘空间感
                 const reverbGain = audioContext.createGain();
+                const phaser = audioContext.createBiquadFilter(); // 相位器效果
+                const metalFilter = audioContext.createBiquadFilter(); // 金属质感滤波器
+                const windOsc = audioContext.createOscillator(); // 风沙效果
+                const windGain = audioContext.createGain();
                 
-                // 设置主音调 - 现代电子音乐风格
-                mainOsc.type = 'sawtooth'; // 锯齿波，电子感十足
+                // 设置主音调 - 沉稳的沙丘电影风格
+                mainOsc.type = 'sine'; // 正弦波，更沉稳
                 mainOsc.frequency.setValueAtTime(note.freq, noteTime);
                 
-                // 次振荡器 - 增加厚度和电子感
-                subOsc.type = 'square'; // 方波，电子感
+                // 次振荡器 - 增加厚度和沉稳沙丘感
+                subOsc.type = 'triangle'; // 三角波，更沉稳
                 subOsc.frequency.setValueAtTime(note.freq * 0.5, noteTime);
                 
-                // LFO调制 - 创造电子动态效果
-                lfo.type = 'square';
-                lfo.frequency.setValueAtTime(8, noteTime); // 8Hz调制，电子感
-                lfoGain.gain.setValueAtTime(note.freq * 0.025, noteTime); // 增加调制强度
+                // 低音振荡器 - 沙丘史诗感
+                bassOsc.type = 'sine';
+                bassOsc.frequency.setValueAtTime(note.freq * 0.25, noteTime);
+                
+                // LFO调制 - 创造沉稳沙丘动态效果
+                lfo.type = 'sine'; // 正弦波调制，更沉稳
+                lfo.frequency.setValueAtTime(2, noteTime); // 2Hz调制，沉稳沙丘缓慢感
+                lfoGain.gain.setValueAtTime(note.freq * 0.012, noteTime); // 降低调制强度，更沉稳
                 lfo.connect(lfoGain);
                 lfoGain.connect(mainOsc.frequency);
                 
-                // 合唱效果 - 创造电子空间感
+                // 合唱效果 - 创造沉稳沙丘空间感
                 chorus.type = 'sine';
-                chorus.frequency.setValueAtTime(5, noteTime); // 5Hz合唱调制
-                chorusGain.gain.setValueAtTime(note.freq * 0.02, noteTime);
+                chorus.frequency.setValueAtTime(1.5, noteTime); // 1.5Hz合唱调制，沉稳沙丘缓慢感
+                chorusGain.gain.setValueAtTime(note.freq * 0.010, noteTime); // 降低调制强度，更沉稳
                 chorus.connect(chorusGain);
                 chorusGain.connect(subOsc.frequency);
                 
-                // 混响效果 - 增加电子空间感
-                reverbGain.gain.setValueAtTime(0.4, noteTime);
+                // 风沙效果 - 沙丘特色
+                windOsc.type = 'sine'; // 正弦波，更沉稳
+                windOsc.frequency.setValueAtTime(note.freq * 0.08, noteTime);
+                windGain.gain.setValueAtTime(0.06, noteTime); // 降低音量，更沉稳
                 
-                // 主滤波器 - 现代电子音乐风格
-                paintingFilter.type = 'notch'; // 陷波滤波，电子感
-                paintingFilter.frequency.setValueAtTime(note.freq, noteTime);
-                paintingFilter.Q.setValueAtTime(6.0, noteTime); // 高Q值，电子感
+                // 混响效果 - 增加沉稳沙丘空间感
+                reverbGain.gain.setValueAtTime(0.5, noteTime); // 降低混响，更沉稳
                 
-                // 音量包络 - 现代电子音乐风格
+                // 相位器效果 - 创造沉稳沙丘神秘感
+                phaser.type = 'allpass';
+                phaser.frequency.setValueAtTime(note.freq * 0.4, noteTime); // 降低频率，更沉稳
+                phaser.Q.setValueAtTime(2.5, noteTime); // 降低Q值，更沉稳
+                
+                // 金属质感滤波器 - 沉稳沙丘金属感
+                metalFilter.type = 'lowpass'; // 低通滤波，更沉稳
+                metalFilter.frequency.setValueAtTime(note.freq * 1.2, noteTime);
+                metalFilter.Q.setValueAtTime(2.0, noteTime); // 降低Q值，更沉稳
+                metalFilter.gain.setValueAtTime(3, noteTime); // 降低增益，更沉稳
+                
+                // 主滤波器 - 沉稳的沙丘电影风格
+                paintingFilter.type = 'lowpass'; // 低通滤波，沙丘厚重感
+                paintingFilter.frequency.setValueAtTime(note.freq * 1.8, noteTime); // 提高频率，更沉稳
+                paintingFilter.Q.setValueAtTime(2.0, noteTime); // 降低Q值，更沉稳
+                
+                // 音量包络 - 沉稳的沙丘电影风格
                 mainGain.gain.setValueAtTime(0, noteTime);
-                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.002);
-                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.01);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.012); // 更缓慢的上升
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.025);
                 mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
                 
                 // 连接音频节点
-                mainOsc.connect(paintingFilter);
-                subOsc.connect(paintingFilter);
+                mainOsc.connect(phaser);
+                subOsc.connect(phaser);
+                bassOsc.connect(phaser);
+                windOsc.connect(phaser);
+                phaser.connect(metalFilter);
+                metalFilter.connect(paintingFilter);
                 paintingFilter.connect(mainGain);
                 mainGain.connect(masterGain);
                 mainGain.connect(paintingGain);
@@ -872,80 +950,101 @@
                 mainOsc.stop(noteTime + note.duration);
                 subOsc.start(noteTime);
                 subOsc.stop(noteTime + note.duration);
+                bassOsc.start(noteTime);
+                bassOsc.stop(noteTime + note.duration);
                 lfo.start(noteTime);
                 lfo.stop(noteTime + note.duration);
                 chorus.start(noteTime);
                 chorus.stop(noteTime + note.duration);
+                windOsc.start(noteTime);
+                windOsc.stop(noteTime + note.duration);
                 
-                // 添加现代电子音乐谐波
+                // 添加沙丘电影风格谐波
                 addPaintingArtHarmonics(audioContext, masterGain, paintingGain, noteTime, note.freq, note.gain * 0.12);
             });
             
-            console.log('⚡ 播放"Painting"音效 - 现代电子音乐风格');
+            console.log('🏜️ 播放"Painting"音效 - 沙丘电影风格');
         }
         
-        // 创建艺术特效音效 - 现代电子音乐风格！
+        // 创建艺术特效音效 - 超现代电子科技风格！
         function createDigitalPaintingArtEffectSound(audioContext, masterGain, effectGain, effectFilter) {
             const currentTime = audioContext.currentTime;
             
-            // 创建现代电子音乐风格结尾音效
+            // 创建超现代电子科技风格结尾音效
             const synthOsc = audioContext.createOscillator();
             const synthGain = audioContext.createGain();
-            const synthDelay = audioContext.createDelay(0.2);
+            const synthDelay = audioContext.createDelay(0.25);
             const synthDelayGain = audioContext.createGain();
             const waveShaper = audioContext.createWaveShaper(); // 波形整形器
             const distortionFilter = audioContext.createBiquadFilter(); // 失真滤波器
             const lfo = audioContext.createOscillator(); // 低频振荡器
             const lfoGain = audioContext.createGain();
+            const ringMod = audioContext.createOscillator(); // 环形调制器
+            const ringModGain = audioContext.createGain();
+            const combFilter = audioContext.createBiquadFilter(); // 梳状滤波器
             
-            // 设置现代电子音乐风格特效音效
-            synthOsc.type = 'sawtooth'; // 锯齿波，电子感十足
-            synthOsc.frequency.setValueAtTime(440, currentTime); // A4音符，电子感
-            synthOsc.frequency.exponentialRampToValueAtTime(880, currentTime + 0.15); // 滑到A5，电子感
-            synthOsc.frequency.exponentialRampToValueAtTime(220, currentTime + 0.3); // 滑到A3，电子感
-            synthOsc.frequency.exponentialRampToValueAtTime(660, currentTime + 0.45); // 滑到E5，电子感
+            // 设置超现代电子科技风格特效音效
+            synthOsc.type = 'sawtooth'; // 锯齿波，科技感十足
+            synthOsc.frequency.setValueAtTime(440, currentTime); // A4音符，科技感
+            synthOsc.frequency.exponentialRampToValueAtTime(880, currentTime + 0.12); // 滑到A5，科技感
+            synthOsc.frequency.exponentialRampToValueAtTime(220, currentTime + 0.25); // 滑到A3，科技感
+            synthOsc.frequency.exponentialRampToValueAtTime(660, currentTime + 0.38); // 滑到E5，科技感
+            synthOsc.frequency.exponentialRampToValueAtTime(110, currentTime + 0.5); // 滑到A2，科技感
             
-            // LFO调制 - 创造电子动态效果
-            lfo.type = 'triangle';
-            lfo.frequency.setValueAtTime(15, currentTime); // 15Hz调制，电子感
-            lfoGain.gain.setValueAtTime(440 * 0.04, currentTime); // 调制强度
+            // LFO调制 - 创造科技动态效果
+            lfo.type = 'square'; // 方波调制，更科技
+            lfo.frequency.setValueAtTime(22, currentTime); // 22Hz调制，科技感
+            lfoGain.gain.setValueAtTime(440 * 0.06, currentTime); // 增加调制强度
             lfo.connect(lfoGain);
             lfoGain.connect(synthOsc.frequency);
             
-            // 波形整形 - 创造电子失真效果
+            // 环形调制 - 创造科技感音色
+            ringMod.type = 'triangle';
+            ringMod.frequency.setValueAtTime(220, currentTime);
+            ringModGain.gain.setValueAtTime(0.3, currentTime);
+            ringMod.connect(ringModGain);
+            ringModGain.connect(synthOsc.frequency);
+            
+            // 波形整形 - 创造科技失真效果（降低强度避免破音）
             const distortionCurve = new Float32Array(4096);
             for (let i = 0; i < 4096; i++) {
                 const x = (i * 2) / 4096 - 1;
-                distortionCurve[i] = Math.sign(x) * (1 - Math.exp(-Math.abs(x) * 2));
+                distortionCurve[i] = Math.sign(x) * (1 - Math.exp(-Math.abs(x) * 2.0));
             }
             waveShaper.curve = distortionCurve;
             
-            // 失真滤波器 - 电子感
+            // 失真滤波器 - 科技感（降低Q值避免破音）
             distortionFilter.type = 'highpass';
-            distortionFilter.frequency.setValueAtTime(200, currentTime);
+            distortionFilter.frequency.setValueAtTime(180, currentTime);
             distortionFilter.Q.setValueAtTime(4.0, currentTime);
             
-            // 电子延迟效果 - 创造空间感
-            synthDelay.delayTime.setValueAtTime(0.15, currentTime);
-            synthDelay.delayTime.exponentialRampToValueAtTime(0.08, currentTime + 0.45);
-            synthDelayGain.gain.setValueAtTime(0.35, currentTime); // 增加延迟音量
+            // 梳状滤波器 - 科技感（降低Q值避免破音）
+            combFilter.type = 'notch';
+            combFilter.frequency.setValueAtTime(440, currentTime);
+            combFilter.Q.setValueAtTime(5.0, currentTime);
             
-            // 主滤波器 - 现代电子音乐风格
-            effectFilter.type = 'peaking'; // 峰值滤波，电子感
+            // 科技延迟效果 - 创造空间感
+            synthDelay.delayTime.setValueAtTime(0.2, currentTime);
+            synthDelay.delayTime.exponentialRampToValueAtTime(0.08, currentTime + 0.5);
+            synthDelayGain.gain.setValueAtTime(0.35, currentTime); // 降低延迟音量避免破音
+            
+            // 主滤波器 - 超现代电子科技风格（降低增益避免破音）
+            effectFilter.type = 'peaking'; // 峰值滤波，科技感
             effectFilter.frequency.setValueAtTime(440, currentTime);
-            effectFilter.Q.setValueAtTime(5.0, currentTime); // 高Q值，电子感
-            effectFilter.gain.setValueAtTime(10, currentTime); // 增益提升，电子感
+            effectFilter.Q.setValueAtTime(5.0, currentTime); // 适中Q值，科技感但不会破音
+            effectFilter.gain.setValueAtTime(8, currentTime); // 适中增益提升，科技感但不会破音
             
-            // 音量包络 - 现代电子音乐风格
+            // 音量包络 - 超现代电子科技风格
             synthGain.gain.setValueAtTime(0, currentTime);
-            synthGain.gain.linearRampToValueAtTime(0.4, currentTime + 0.01); // 增加音量
-            synthGain.gain.setValueAtTime(0.4, currentTime + 0.35);
-            synthGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.7);
+            synthGain.gain.linearRampToValueAtTime(0.5, currentTime + 0.01); // 增加音量
+            synthGain.gain.setValueAtTime(0.5, currentTime + 0.4);
+            synthGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.8);
             
             // 连接音频节点
             synthOsc.connect(waveShaper);
             waveShaper.connect(distortionFilter);
-            distortionFilter.connect(effectFilter);
+            distortionFilter.connect(combFilter);
+            combFilter.connect(effectFilter);
             effectFilter.connect(synthGain);
             synthGain.connect(masterGain);
             synthGain.connect(effectGain);
@@ -955,25 +1054,33 @@
             
             // 播放音效
             synthOsc.start(currentTime);
-            synthOsc.stop(currentTime + 0.7);
+            synthOsc.stop(currentTime + 0.8);
             lfo.start(currentTime);
-            lfo.stop(currentTime + 0.7);
+            lfo.stop(currentTime + 0.8);
+            ringMod.start(currentTime);
+            ringMod.stop(currentTime + 0.8);
             
-            console.log('⚡ 播放现代电子音乐风格特效音效');
+            console.log('🚀 播放超现代电子科技风格特效音效');
         }
         
-        // 添加 Digital 现代电子音乐风格的谐波
+        // 添加 Digital 超现代电子科技风格的谐波
         function addDigitalArtHarmonics(audioContext, masterGain, digitalGain, noteTime, baseFreq, baseGain) {
-            // 添加现代电子音乐谐波
+            // 添加超现代电子科技谐波
             const synthOsc = audioContext.createOscillator();
             const synthGain = audioContext.createGain();
             const synthFilter = audioContext.createBiquadFilter();
             const waveShaper = audioContext.createWaveShaper(); // 波形整形器
+            const ringMod = audioContext.createOscillator(); // 环形调制器
             
-            synthOsc.type = 'sawtooth'; // 锯齿波，电子感
+            synthOsc.type = 'sawtooth'; // 锯齿波，科技感
             synthOsc.frequency.setValueAtTime(baseFreq * 1.5, noteTime);
             
-            // 波形整形 - 创造电子失真效果
+            // 环形调制 - 创造科技感音色
+            ringMod.type = 'square';
+            ringMod.frequency.setValueAtTime(baseFreq * 0.4, noteTime);
+            ringMod.connect(synthOsc.frequency);
+            
+            // 波形整形 - 创造科技失真效果（降低强度避免破音）
             const distortionCurve = new Float32Array(4096);
             for (let i = 0; i < 4096; i++) {
                 const x = (i * 2) / 4096 - 1;
@@ -981,14 +1088,14 @@
             }
             waveShaper.curve = distortionCurve;
             
-            synthFilter.type = 'peaking'; // 峰值滤波，电子感
+            synthFilter.type = 'peaking'; // 峰值滤波，科技感
             synthFilter.frequency.setValueAtTime(baseFreq * 1.5, noteTime);
-            synthFilter.Q.setValueAtTime(4.0, noteTime); // 高Q值，电子感
-            synthFilter.gain.setValueAtTime(6, noteTime); // 增益提升，电子感
+            synthFilter.Q.setValueAtTime(4.0, noteTime); // 适中Q值，科技感但不会破音
+            synthFilter.gain.setValueAtTime(5, noteTime); // 适中增益提升，科技感但不会破音
             
             synthGain.gain.setValueAtTime(0, noteTime);
-            synthGain.gain.linearRampToValueAtTime(baseGain * 0.12, noteTime + 0.01); // 增加音量
-            synthGain.gain.setValueAtTime(baseGain * 0.12, noteTime + 0.1);
+            synthGain.gain.linearRampToValueAtTime(baseGain * 0.15, noteTime + 0.01); // 增加音量
+            synthGain.gain.setValueAtTime(baseGain * 0.15, noteTime + 0.1);
             synthGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.2);
             
             synthOsc.connect(waveShaper);
@@ -999,80 +1106,696 @@
             
             synthOsc.start(noteTime);
             synthOsc.stop(noteTime + 0.2);
+            ringMod.start(noteTime);
+            ringMod.stop(noteTime + 0.2);
         }
         
-        // 添加 Painting 现代电子音乐风格的谐波
+        // 添加 Painting 沙丘电影风格的谐波
         function addPaintingArtHarmonics(audioContext, masterGain, paintingGain, noteTime, baseFreq, baseGain) {
-            // 添加现代电子音乐谐波
+            // 添加沙丘电影风格谐波
             const synthOsc = audioContext.createOscillator();
             const synthGain = audioContext.createGain();
             const synthFilter = audioContext.createBiquadFilter();
             const chorus = audioContext.createOscillator(); // 合唱效果
             const chorusGain = audioContext.createGain();
+            const phaser = audioContext.createBiquadFilter(); // 相位器效果
+            const metalFilter = audioContext.createBiquadFilter(); // 金属质感滤波器
+            const windOsc = audioContext.createOscillator(); // 风沙效果
             
-            synthOsc.type = 'square'; // 方波，电子感
+            synthOsc.type = 'sawtooth'; // 锯齿波，沙丘金属感
             synthOsc.frequency.setValueAtTime(baseFreq * 1.5, noteTime);
             
-            // 合唱效果 - 创造电子空间感
+            // 合唱效果 - 创造沙丘空间感
             chorus.type = 'sine';
-            chorus.frequency.setValueAtTime(6, noteTime); // 6Hz合唱调制
+            chorus.frequency.setValueAtTime(3, noteTime); // 3Hz合唱调制，沙丘缓慢感
             chorusGain.gain.setValueAtTime(baseFreq * 0.015, noteTime);
             chorus.connect(chorusGain);
             chorusGain.connect(synthOsc.frequency);
             
-            synthFilter.type = 'notch'; // 陷波滤波，电子感
-            synthFilter.frequency.setValueAtTime(baseFreq * 1.5, noteTime);
-            synthFilter.Q.setValueAtTime(5.0, noteTime); // 高Q值，电子感
+            // 相位器效果 - 创造沙丘神秘感
+            phaser.type = 'allpass';
+            phaser.frequency.setValueAtTime(baseFreq * 1.0, noteTime);
+            phaser.Q.setValueAtTime(3.0, noteTime);
+            
+            // 金属质感滤波器 - 沙丘金属感
+            metalFilter.type = 'peaking';
+            metalFilter.frequency.setValueAtTime(baseFreq * 1.2, noteTime);
+            metalFilter.Q.setValueAtTime(3.5, noteTime);
+            metalFilter.gain.setValueAtTime(4, noteTime);
+            
+            // 风沙效果 - 沙丘特色
+            windOsc.type = 'sawtooth';
+            windOsc.frequency.setValueAtTime(baseFreq * 0.15, noteTime);
+            
+            synthFilter.type = 'lowpass'; // 低通滤波，沙丘厚重感
+            synthFilter.frequency.setValueAtTime(baseFreq * 2.0, noteTime);
+            synthFilter.Q.setValueAtTime(2.5, noteTime); // 适中Q值，沙丘感
             
             synthGain.gain.setValueAtTime(0, noteTime);
-            synthGain.gain.linearRampToValueAtTime(baseGain * 0.1, noteTime + 0.01); // 增加音量
+            synthGain.gain.linearRampToValueAtTime(baseGain * 0.1, noteTime + 0.01); // 适中音量
             synthGain.gain.setValueAtTime(baseGain * 0.1, noteTime + 0.1);
-            synthGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.2);
+            synthGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.25);
             
-            synthOsc.connect(synthFilter);
+            synthOsc.connect(phaser);
+            phaser.connect(metalFilter);
+            metalFilter.connect(synthFilter);
             synthFilter.connect(synthGain);
             synthGain.connect(masterGain);
             synthGain.connect(paintingGain);
             
             synthOsc.start(noteTime);
-            synthOsc.stop(noteTime + 0.2);
+            synthOsc.stop(noteTime + 0.25);
             chorus.start(noteTime);
-            chorus.stop(noteTime + 0.2);
+            chorus.stop(noteTime + 0.25);
+            windOsc.start(noteTime);
+            windOsc.stop(noteTime + 0.25);
         }
         
-        // 更新状态显示
-        function updateStatus(message) {
-            const statusText = document.getElementById('statusText');
-            if (statusText) {
-                statusText.textContent = message;
+
+        
+        // ===== 沙丘风格背景音乐系统 =====
+        let backgroundMusicGain = null;
+        let duneBackgroundMusic = null;
+        let isBackgroundMusicPlaying = false;
+        
+
+        
+        // 创建《沙丘》主旋律系统 - 神秘的主旋律，像电影配乐，增强旋律感
+        function createDuneMelody(audioContext) {
+            try {
+                // 创建主旋律振荡器系统
+                const melodyOsc1 = audioContext.createOscillator();
+                const melodyOsc2 = audioContext.createOscillator();
+                const melodyOsc3 = audioContext.createOscillator();
+                const melodyGain = audioContext.createGain();
+                const melodyFilter = audioContext.createBiquadFilter();
+                const melodyPhaser = audioContext.createBiquadFilter();
+                const melodyChorus = audioContext.createDelay(0.08);
+                const melodyChorusGain = audioContext.createGain();
+                
+                // 设置主旋律振荡器1 - 《沙丘》主旋律
+                melodyOsc1.type = 'sine';
+                melodyOsc1.frequency.setValueAtTime(146.83, audioContext.currentTime); // D3，神秘主音
+                
+                // 设置主旋律振荡器2 - 《沙丘》次旋律
+                melodyOsc2.type = 'triangle';
+                melodyOsc2.frequency.setValueAtTime(220.00, audioContext.currentTime); // A3，神秘次音
+                
+                // 设置主旋律振荡器3 - 《沙丘》高旋律
+                melodyOsc3.type = 'sine';
+                melodyOsc3.frequency.setValueAtTime(293.66, audioContext.currentTime); // D4，高音旋律
+                
+                // 设置旋律滤波器 - 增强神秘感
+                melodyFilter.type = 'lowpass';
+                melodyFilter.frequency.setValueAtTime(500, audioContext.currentTime);
+                melodyFilter.Q.setValueAtTime(2.5, audioContext.currentTime);
+                
+                // 设置旋律相位器 - 创造《沙丘》空间感
+                melodyPhaser.type = 'allpass';
+                melodyPhaser.frequency.setValueAtTime(3.2, audioContext.currentTime);
+                melodyPhaser.Q.setValueAtTime(4.5, audioContext.currentTime);
+                
+                // 设置旋律合唱效果 - 增强旋律感
+                melodyChorusGain.gain.setValueAtTime(0.35, audioContext.currentTime);
+                
+                // 设置旋律增益
+                melodyGain.gain.setValueAtTime(0.35, audioContext.currentTime);
+                
+                // 连接旋律系统
+                melodyOsc1.connect(melodyFilter);
+                melodyOsc2.connect(melodyFilter);
+                melodyOsc3.connect(melodyFilter);
+                melodyFilter.connect(melodyPhaser);
+                melodyPhaser.connect(melodyGain);
+                melodyPhaser.connect(melodyChorus);
+                melodyChorus.connect(melodyChorusGain);
+                melodyChorusGain.connect(melodyGain);
+                
+                // 启动旋律振荡器
+                melodyOsc1.start(audioContext.currentTime);
+                melodyOsc2.start(audioContext.currentTime);
+                melodyOsc3.start(audioContext.currentTime);
+                
+                console.log('🎵 《沙丘》主旋律系统创建成功');
+                // 返回包含振荡器的对象，这样我们可以直接调整频率
+                return {
+                    gain: melodyGain,
+                    oscillators: [melodyOsc1, melodyOsc2, melodyOsc3],
+                    filter: melodyFilter,
+                    phaser: melodyPhaser
+                };
+                
+            } catch (error) {
+                console.error('❌ 创建《沙丘》主旋律系统失败:', error);
+                return null;
             }
-            console.log('📊 状态更新:', message);
+        }
+        
+        // 创建《沙丘》和声系统 - 神秘的和声背景，像电影配乐，增强变化感
+        function createDuneHarmony(audioContext) {
+            try {
+                // 创建和声振荡器系统
+                const harmonyOsc1 = audioContext.createOscillator();
+                const harmonyOsc2 = audioContext.createOscillator();
+                const harmonyOsc3 = audioContext.createOscillator();
+                const harmonyOsc4 = audioContext.createOscillator();
+                const harmonyGain = audioContext.createGain();
+                const harmonyFilter = audioContext.createBiquadFilter();
+                const harmonyChorus = audioContext.createDelay(0.12);
+                const harmonyChorusGain = audioContext.createGain();
+                const harmonyPhaser = audioContext.createBiquadFilter();
+                
+                // 设置和声振荡器1 - 《沙丘》和声主音
+                harmonyOsc1.type = 'sawtooth';
+                harmonyOsc1.frequency.setValueAtTime(110.00, audioContext.currentTime); // A2，和声主音
+                
+                // 设置和声振荡器2 - 《沙丘》和声次音
+                harmonyOsc2.type = 'square';
+                harmonyOsc2.frequency.setValueAtTime(164.81, audioContext.currentTime); // E3，和声次音
+                
+                // 设置和声振荡器3 - 《沙丘》和声三音
+                harmonyOsc3.type = 'sine';
+                harmonyOsc3.frequency.setValueAtTime(196.00, audioContext.currentTime); // G3，和声三音
+                
+                // 设置和声振荡器4 - 《沙丘》和声四音
+                harmonyOsc4.type = 'triangle';
+                harmonyOsc4.frequency.setValueAtTime(246.94, audioContext.currentTime); // B3，和声四音
+                
+                // 设置和声滤波器 - 增强《沙丘》感
+                harmonyFilter.type = 'bandpass';
+                harmonyFilter.frequency.setValueAtTime(180, audioContext.currentTime);
+                harmonyFilter.Q.setValueAtTime(2.2, audioContext.currentTime);
+                
+                // 设置和声相位器 - 增强变化感
+                harmonyPhaser.type = 'allpass';
+                harmonyPhaser.frequency.setValueAtTime(1.8, audioContext.currentTime);
+                harmonyPhaser.Q.setValueAtTime(3.5, audioContext.currentTime);
+                
+                // 设置和声合唱效果 - 创造《沙丘》空间感
+                harmonyChorusGain.gain.setValueAtTime(0.45, audioContext.currentTime);
+                
+                // 设置和声增益
+                harmonyGain.gain.setValueAtTime(0.25, audioContext.currentTime);
+                
+                // 连接和声系统
+                harmonyOsc1.connect(harmonyFilter);
+                harmonyOsc2.connect(harmonyFilter);
+                harmonyOsc3.connect(harmonyFilter);
+                harmonyOsc4.connect(harmonyFilter);
+                harmonyFilter.connect(harmonyPhaser);
+                harmonyPhaser.connect(harmonyGain);
+                harmonyPhaser.connect(harmonyChorus);
+                harmonyChorus.connect(harmonyChorusGain);
+                harmonyChorusGain.connect(harmonyGain);
+                
+                // 启动和声振荡器
+                harmonyOsc1.start(audioContext.currentTime);
+                harmonyOsc2.start(audioContext.currentTime);
+                harmonyOsc3.start(audioContext.currentTime);
+                harmonyOsc4.start(audioContext.currentTime);
+                
+                console.log('🎶 《沙丘》和声系统创建成功');
+                // 返回包含振荡器的对象，这样我们可以直接调整频率
+                return {
+                    gain: harmonyGain,
+                    oscillators: [harmonyOsc1, harmonyOsc2, harmonyOsc3, harmonyOsc4],
+                    filter: harmonyFilter,
+                    phaser: harmonyPhaser
+                };
+                
+            } catch (error) {
+                console.error('❌ 创建《沙丘》和声系统失败:', error);
+                return null;
+            }
+        }
+        
+        // 创建《沙丘》低频共鸣 - 史诗般的低频，像电影配乐，增强变化感
+        function createDuneBass(audioContext) {
+            try {
+                // 创建低频振荡器系统
+                const bassOsc1 = audioContext.createOscillator();
+                const bassOsc2 = audioContext.createOscillator();
+                const bassOsc3 = audioContext.createOscillator();
+                const bassGain = audioContext.createGain();
+                const bassFilter = audioContext.createBiquadFilter();
+                const bassDistortion = audioContext.createWaveShaper();
+                const bassChorus = audioContext.createDelay(0.06);
+                const bassChorusGain = audioContext.createGain();
+                
+                // 设置低频振荡器1 - 《沙丘》主低音
+                bassOsc1.type = 'sine';
+                bassOsc1.frequency.setValueAtTime(55.00, audioContext.currentTime); // A1，史诗低音
+                
+                // 设置低频振荡器2 - 《沙丘》次低音
+                bassOsc2.type = 'triangle';
+                bassOsc2.frequency.setValueAtTime(73.42, audioContext.currentTime); // D2，史诗次低音
+                
+                // 设置低频振荡器3 - 《沙丘》超低音
+                bassOsc3.type = 'sine';
+                bassOsc3.frequency.setValueAtTime(36.71, audioContext.currentTime); // D1，超低音
+                
+                // 设置低频滤波器 - 增强史诗感
+                bassFilter.type = 'lowpass';
+                bassFilter.frequency.setValueAtTime(90, audioContext.currentTime);
+                bassFilter.Q.setValueAtTime(1.5, audioContext.currentTime);
+                
+                // 设置低频失真 - 创造《沙丘》金属质感
+                const distortionCurve = new Float32Array(4096);
+                for (let i = 0; i < 4096; i++) {
+                    const x = (i * 2) / 4096 - 1;
+                    distortionCurve[i] = Math.sign(x) * (1 - Math.exp(-Math.abs(x) * 1.8));
+                }
+                bassDistortion.curve = distortionCurve;
+                
+                // 设置低频合唱效果 - 增强变化感
+                bassChorusGain.gain.setValueAtTime(0.3, audioContext.currentTime);
+                
+                // 设置低频增益
+                bassGain.gain.setValueAtTime(0.32, audioContext.currentTime);
+                
+                // 连接低频系统
+                bassOsc1.connect(bassFilter);
+                bassOsc2.connect(bassFilter);
+                bassOsc3.connect(bassFilter);
+                bassFilter.connect(bassDistortion);
+                bassDistortion.connect(bassGain);
+                bassDistortion.connect(bassChorus);
+                bassChorus.connect(bassChorusGain);
+                bassChorusGain.connect(bassGain);
+                
+                // 启动低频振荡器
+                bassOsc1.start(audioContext.currentTime);
+                bassOsc2.start(audioContext.currentTime);
+                bassOsc3.start(audioContext.currentTime);
+                
+                console.log('🔮 《沙丘》低频共鸣创建成功');
+                // 返回包含振荡器的对象，这样我们可以直接调整频率
+                return {
+                    gain: bassGain,
+                    oscillators: [bassOsc1, bassOsc2, bassOsc3],
+                    filter: bassFilter,
+                    distortion: bassDistortion
+                };
+                
+            } catch (error) {
+                console.error('❌ 创建《沙丘》低频共鸣失败:', error);
+                return null;
+            }
+        }
+        
+        // 创建背景音乐增益节点
+        function createBackgroundMusicGain() {
+            if (!digitalPaintingAudioContext) return null;
+            
+            try {
+                backgroundMusicGain = digitalPaintingAudioContext.createGain();
+                backgroundMusicGain.gain.setValueAtTime(0.3, digitalPaintingAudioContext.currentTime);
+                backgroundMusicGain.connect(digitalPaintingAudioContext.destination);
+                console.log('🎵 背景音乐增益节点创建成功');
+                return backgroundMusicGain;
+            } catch (error) {
+                console.error('❌ 创建背景音乐增益节点失败:', error);
+                return null;
+            }
+        }
+        
+        // 启动沙丘风格背景音乐 - 电影《沙丘》风格，带旋律的神秘设计
+        function startDuneBackgroundMusic() {
+            if (isBackgroundMusicPlaying || !digitalPaintingAudioContext) return;
+            
+            try {
+                console.log('🏜️ 启动《沙丘》风格背景音乐...');
+                
+                // 确保背景音乐增益节点存在
+                if (!backgroundMusicGain) {
+                    backgroundMusicGain = createBackgroundMusicGain();
+                    if (!backgroundMusicGain) {
+                        console.error('❌ 无法创建背景音乐增益节点');
+                        return;
+                    }
+                }
+                
+                // 创建《沙丘》主旋律系统 - 高音层次，神秘的主旋律
+                const duneMelody = createDuneMelody(digitalPaintingAudioContext);
+                const melodyGain = digitalPaintingAudioContext.createGain();
+                melodyGain.gain.setValueAtTime(0.30, digitalPaintingAudioContext.currentTime); // 高音层次，稍微突出
+                
+                // 创建《沙丘》和声系统 - 中音层次，神秘的和声背景
+                const duneHarmony = createDuneHarmony(digitalPaintingAudioContext);
+                const harmonyGain = digitalPaintingAudioContext.createGain();
+                harmonyGain.gain.setValueAtTime(0.24, digitalPaintingAudioContext.currentTime); // 中音层次，适中
+                
+                // 创建《沙丘》低频共鸣 - 低音层次，史诗般的低频
+                const duneBass = createDuneBass(digitalPaintingAudioContext);
+                const bassGain = digitalPaintingAudioContext.createGain();
+                bassGain.gain.setValueAtTime(0.26, digitalPaintingAudioContext.currentTime); // 低音层次，厚重感
+                
+                // 创建《沙丘》空间混响 - 广阔的空间感
+                const reverb = digitalPaintingAudioContext.createDelay(1.2);
+                const reverbGain = digitalPaintingAudioContext.createGain();
+                reverbGain.gain.setValueAtTime(0.6, digitalPaintingAudioContext.currentTime);
+                
+                // 创建《沙丘》LFO调制 - 缓慢的神秘变化
+                const lfo = digitalPaintingAudioContext.createOscillator();
+                const lfoGain = digitalPaintingAudioContext.createGain();
+                lfo.type = 'sine';
+                lfo.frequency.setValueAtTime(0.2, digitalPaintingAudioContext.currentTime); // 极缓慢
+                lfoGain.gain.setValueAtTime(25, digitalPaintingAudioContext.currentTime);
+                
+                // 连接音频节点
+                duneMelody.gain.connect(melodyGain);
+                duneHarmony.gain.connect(harmonyGain);
+                duneBass.gain.connect(bassGain);
+                
+                melodyGain.connect(backgroundMusicGain);
+                harmonyGain.connect(backgroundMusicGain);
+                bassGain.connect(backgroundMusicGain);
+                
+                // 添加混响效果
+                melodyGain.connect(reverb);
+                harmonyGain.connect(reverb);
+                bassGain.connect(reverb);
+                reverb.connect(reverbGain);
+                reverbGain.connect(backgroundMusicGain);
+                
+                // 移除LFO调制，让声音更纯净
+                // lfo.connect(lfoGain);
+                // 不再调制振荡器频率，避免声音扭曲
+                // lfo.start(digitalPaintingAudioContext.currentTime);
+                
+                // 设置背景音乐为循环播放
+                duneBackgroundMusic = {
+                    duneMelody: duneMelody,
+                    duneHarmony: duneHarmony,
+                    duneBass: duneBass,
+                    lfo: lfo,
+                    lfoGain: lfoGain,
+                    melodyGain: melodyGain,
+                    harmonyGain: harmonyGain,
+                    bassGain: bassGain,
+                    reverb: reverb,
+                    reverbGain: reverbGain
+                };
+                
+                isBackgroundMusicPlaying = true;
+                console.log('🏜️ 《沙丘》风格背景音乐启动成功');
+                
+                // 更新按钮状态
+                const startBtn = document.getElementById('startBackgroundMusic');
+                const stopBtn = document.getElementById('stopBackgroundMusic');
+                const testChangeBtn = document.getElementById('testChange');
+                if (startBtn) startBtn.style.display = 'none';
+                if (stopBtn) stopBtn.style.display = 'inline-block';
+                if (testChangeBtn) testChangeBtn.style.display = 'inline-block';
+                
+                // 定期调整背景音乐参数，创造自然的动态变化
+                function scheduleNextChange() {
+                    if (!isBackgroundMusicPlaying || !duneBackgroundMusic) {
+                        console.log('⚠️ 背景音乐未播放或未初始化，无法调度变化');
+                        return;
+                    }
+                    
+                    // 随机变化间隔：3-15秒，更自然
+                    const randomInterval = 3000 + Math.random() * 12000;
+                    console.log(`⏰ 下次变化将在 ${(randomInterval/1000).toFixed(1)} 秒后进行`);
+                    
+                    setTimeout(() => {
+                        if (isBackgroundMusicPlaying && duneBackgroundMusic) {
+                            console.log('🎯 开始执行背景音乐变化...');
+                            adjustDuneBackgroundMusic();
+                            // 递归调用，创造连续的变化
+                            scheduleNextChange();
+                        } else {
+                            console.log('⚠️ 背景音乐已停止，停止调度变化');
+                        }
+                    }, randomInterval);
+                }
+                
+                // 启动第一次变化
+                console.log('🚀 启动背景音乐变化调度系统...');
+                scheduleNextChange();
+                
+            } catch (error) {
+                console.error('❌ 沙丘背景音乐启动失败:', error);
+            }
+        }
+        
+        // 调整沙丘背景音乐参数 - 《沙丘》电影风格，带旋律性的变化
+        function adjustDuneBackgroundMusic() {
+            console.log('🎵 进入背景音乐调整函数...');
+            
+            if (!duneBackgroundMusic || !digitalPaintingAudioContext) {
+                console.log('⚠️ 背景音乐或音频上下文未初始化');
+                return;
+            }
+            
+            try {
+                const currentTime = digitalPaintingAudioContext.currentTime;
+                console.log(`⏰ 当前时间: ${currentTime.toFixed(2)}s`);
+                
+                // 移除LFO调制，让声音更纯净
+                // 不再调整LFO频率，避免声音扭曲
+                
+                // 使用计数器来创造旋律性的变化模式
+                if (!duneBackgroundMusic.changeCounter) {
+                    duneBackgroundMusic.changeCounter = 0;
+                }
+                duneBackgroundMusic.changeCounter++;
+                
+                // 高音层次变化 - 旋律性的变化模式，带随机性
+                if (duneBackgroundMusic.duneMelody && duneBackgroundMusic.duneMelody.oscillators) {
+                    // 定义旋律变化序列 - 更有音乐性
+                    const melodySequence = [
+                        { base: 146.83, name: "D3", harmony: 220.00 }, // D3 + A3
+                        { base: 164.81, name: "E3", harmony: 246.94 }, // E3 + B3
+                        { base: 196.00, name: "G3", harmony: 293.66 }, // G3 + D4
+                        { base: 220.00, name: "A3", harmony: 329.63 }, // A3 + E4
+                        { base: 146.83, name: "D3", harmony: 220.00 }  // 回到开始
+                    ];
+                    
+                    // 添加随机性：80%概率按顺序，20%概率随机选择
+                    let currentMelody;
+                    if (Math.random() < 0.8) {
+                        // 按顺序变化
+                        currentMelody = melodySequence[duneBackgroundMusic.changeCounter % melodySequence.length];
+                    } else {
+                        // 随机选择，创造意外感
+                        currentMelody = melodySequence[Math.floor(Math.random() * melodySequence.length)];
+                        console.log('🎲 随机旋律选择！');
+                    }
+                    
+                    // 添加微调：±3Hz的随机变化，让声音更自然
+                    const microTune = (Math.random() - 0.5) * 6;
+                    
+                    // 调整主旋律振荡器频率，创造和谐的变化
+                    duneBackgroundMusic.duneMelody.oscillators.forEach((osc, index) => {
+                        let targetFreq;
+                        if (index === 0) {
+                            targetFreq = currentMelody.base + microTune; // 主音 + 微调
+                        } else if (index === 1) {
+                            targetFreq = currentMelody.harmony + microTune; // 和声音 + 微调
+                        } else {
+                            targetFreq = (currentMelody.base + microTune) * 2; // 八度音 + 微调
+                        }
+                        
+                        osc.frequency.setValueAtTime(targetFreq, currentTime);
+                    });
+                    
+                    console.log(`🎵 高音层次旋律变化: ${currentMelody.name} (${currentMelody.base + microTune}Hz)`);
+                }
+                
+                // 中音层次变化 - 大幅变化，非常明显
+                if (duneBackgroundMusic.duneHarmony && duneBackgroundMusic.duneHarmony.oscillators) {
+                    // 和声变化序列 - 与主旋律和谐
+                    const harmonySequence = [
+                        { base: 110.00, name: "A2", interval: 1.5 }, // 与D3形成和谐关系
+                        { base: 164.81, name: "E3", interval: 1.25 }, // 与E3形成和谐关系
+                        { base: 196.00, name: "G3", interval: 1.0 },  // 与G3形成和谐关系
+                        { base: 220.00, name: "A3", interval: 1.0 },  // 与A3形成和谐关系
+                        { base: 110.00, name: "A2", interval: 1.5 }   // 回到开始
+                    ];
+                    
+                    // 添加随机性：70%概率按顺序，30%概率随机选择
+                    let currentHarmony;
+                    if (Math.random() < 0.7) {
+                        // 按顺序变化
+                        currentHarmony = harmonySequence[duneBackgroundMusic.changeCounter % harmonySequence.length];
+                    } else {
+                        // 随机选择，创造意外感
+                        currentHarmony = harmonySequence[Math.floor(Math.random() * harmonySequence.length)];
+                        console.log('🎲 随机和声选择！');
+                    }
+                    
+                    // 添加微调：±2Hz的随机变化
+                    const microTune = (Math.random() - 0.5) * 4;
+                    
+                    // 调整和声振荡器频率，创造和谐的变化
+                    duneBackgroundMusic.duneHarmony.oscillators.forEach((osc, index) => {
+                        let targetFreq;
+                        if (index === 0) {
+                            targetFreq = currentHarmony.base + microTune; // 基础和声 + 微调
+                        } else if (index === 1) {
+                            targetFreq = (currentHarmony.base + microTune) * currentHarmony.interval; // 和谐音程 + 微调
+                        } else {
+                            targetFreq = (currentHarmony.base + microTune) * 1.8; // 和谐的三音 + 微调
+                        }
+                        
+                        osc.frequency.setValueAtTime(targetFreq, currentTime);
+                    });
+                    
+                    console.log(`🎶 中音层次和声变化: ${currentHarmony.name} (${currentHarmony.base + microTune}Hz)`);
+                }
+                
+                // 低音层次变化 - 稳定的低音支撑，带随机性
+                if (duneBackgroundMusic.duneBass && duneBackgroundMusic.duneBass.oscillators) {
+                    // 低音变化序列 - 提供稳定的基础
+                    const bassSequence = [
+                        { base: 55.00, name: "A1", harmony: 73.42 }, // A1 + D2
+                        { base: 73.42, name: "D2", harmony: 55.00 }, // D2 + A1
+                        { base: 55.00, name: "A1", harmony: 73.42 }, // A1 + D2
+                        { base: 73.42, name: "D2", harmony: 55.00 }, // D2 + A1
+                        { base: 55.00, name: "A1", harmony: 73.42 }  // 回到开始
+                    ];
+                    
+                    // 添加随机性：60%概率按顺序，40%概率随机选择
+                    let currentBass;
+                    if (Math.random() < 0.6) {
+                        // 按顺序变化
+                        currentBass = bassSequence[duneBackgroundMusic.changeCounter % bassSequence.length];
+                    } else {
+                        // 随机选择，创造意外感
+                        currentBass = bassSequence[Math.floor(Math.random() * bassSequence.length)];
+                        console.log('🎲 随机低音选择！');
+                    }
+                    
+                    // 添加微调：±1Hz的随机变化（低音变化要更小）
+                    const microTune = (Math.random() - 0.5) * 2;
+                    // 调整低音振荡器频率，提供稳定的基础
+                    duneBackgroundMusic.duneBass.oscillators.forEach((osc, index) => {
+                        let targetFreq;
+                        if (index === 0) {
+                            targetFreq = currentBass.base + microTune; // 主低音 + 微调
+                        } else if (index === 1) {
+                            targetFreq = currentBass.harmony + microTune; // 和谐低音 + 微调
+                        } else {
+                            targetFreq = (currentBass.base + microTune) * 0.5; // 更低的基础音 + 微调
+                        }
+                        
+                        osc.frequency.setValueAtTime(targetFreq, currentTime);
+                    });
+                    
+                    console.log(`🔮 低音层次基础变化: ${currentBass.name} (${currentBass.base + microTune}Hz)`);
+                }
+                
+                // 适度调整混响，创造《沙丘》空间感变化
+                const newReverbGain = 0.5 + Math.random() * 0.2; // 0.5-0.7，适度空间感变化
+                duneBackgroundMusic.reverbGain.gain.setValueAtTime(newReverbGain, currentTime);
+                
+                // 移除LFO强度变化，让声音更纯净
+                // 不再调整LFO强度，避免声音扭曲
+                
+                // 添加适度的音量变化，让高中低三层次旋律有轻微变化
+                if (duneBackgroundMusic.melodyGain) {
+                    const newMelodyGain = 0.25 + Math.random() * 0.15; // 0.25-0.40，高音层次音量适度变化
+                    duneBackgroundMusic.melodyGain.gain.setValueAtTime(newMelodyGain, currentTime);
+                    console.log(`🎵 高音层次音量调整: ${newMelodyGain.toFixed(2)}`);
+                }
+                
+                if (duneBackgroundMusic.harmonyGain) {
+                    const newHarmonyGain = 0.20 + Math.random() * 0.10; // 0.20-0.30，中音层次音量适度变化
+                    duneBackgroundMusic.harmonyGain.gain.setValueAtTime(newHarmonyGain, currentTime);
+                    console.log(`🎶 中音层次音量调整: ${newHarmonyGain.toFixed(2)}`);
+                }
+                
+                if (duneBackgroundMusic.bassGain) {
+                    const newBassGain = 0.22 + Math.random() * 0.08; // 0.22-0.30，低音层次音量适度变化
+                    duneBackgroundMusic.bassGain.gain.setValueAtTime(newBassGain, currentTime);
+                    console.log(`🔮 低音层次音量调整: ${newBassGain.toFixed(2)}`);
+                }
+                
+                console.log('🏜️ 《沙丘》风格背景音乐旋律性变化完成！');
+                
+                // 添加立即测试变化的功能
+                console.log('🎯 旋律变化已应用！请仔细听高中低三层次的和谐变化...');
+                console.log('🎵 背景音乐变化执行完成，等待下次调度...');
+                
+            } catch (error) {
+                console.error('❌ 调整沙丘背景音乐参数失败:', error);
+            }
+        }
+        
+
+        
+        // 停止沙丘背景音乐
+        function stopDuneBackgroundMusic() {
+            if (!isBackgroundMusicPlaying || !duneBackgroundMusic) return;
+            
+            try {
+                const currentTime = digitalPaintingAudioContext.currentTime;
+                
+                // 渐弱停止所有音频元素
+                duneBackgroundMusic.melodyGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 3);
+                duneBackgroundMusic.harmonyGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 3);
+                duneBackgroundMusic.bassGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 3);
+                duneBackgroundMusic.reverbGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 3);
+                
+                // 3秒后完全停止
+                setTimeout(() => {
+                    if (duneBackgroundMusic) {
+                        // 停止LFO
+                        if (duneBackgroundMusic.lfo) {
+                            duneBackgroundMusic.lfo.stop();
+                        }
+                        
+                        // 清理资源
+                        duneBackgroundMusic = null;
+                        isBackgroundMusicPlaying = false;
+                        console.log('🏜️ 《沙丘》风格背景音乐已停止');
+                        
+                        // 更新按钮状态
+                        const startBtn = document.getElementById('startBackgroundMusic');
+                        const stopBtn = document.getElementById('stopBackgroundMusic');
+                        const testChangeBtn = document.getElementById('testChange');
+                        if (startBtn) startBtn.style.display = 'inline-block';
+                        if (stopBtn) stopBtn.style.display = 'none';
+                        if (testChangeBtn) testChangeBtn.style.display = 'none';
+                    }
+                }, 3000);
+                
+            } catch (error) {
+                console.error('❌ 停止沙丘背景音乐失败:', error);
+            }
         }
         
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
             console.log('页面加载完成，开始初始化 Digital Painting 系统');
-            updateStatus('🔄 正在初始化...');
             
             try {
                 // 初始化全局天气客户端系统
                 initDigitalPaintingWeatherClient();
-                updateStatus('🌍 天气系统已初始化');
-                
-                // 播放开场音效
-                setTimeout(() => {
-                    updateStatus('🎵 准备播放音效...');
-                    playDigitalPaintingGreeting();
-                }, 500); // 页面加载完成后500ms播放开场音效
-                
-                updateStatus('✅ 系统初始化完成');
                 console.log('✅ Digital Painting 系统初始化完成');
+                
+                // 显示背景音乐控制按钮
+                const startBtn = document.getElementById('startBackgroundMusic');
+                if (startBtn) startBtn.style.display = 'inline-block';
                 
             } catch (error) {
                 console.error('❌ 初始化失败:', error);
-                updateStatus('❌ 初始化失败: ' + error.message);
             }
         });
+        
+        // 添加页面点击事件来激活音频上下文
+        document.addEventListener('click', function() {
+            if (!digitalPaintingAudioContext) {
+                console.log('🎵 页面被点击，准备播放开场音效...');
+                
+                // 延迟一点时间再播放，确保点击事件处理完成
+                setTimeout(() => {
+                    playDigitalPaintingGreeting();
+                }, 100);
+            }
+        }, { once: true }); // 只触发一次
     </script>
 </body>
 </html> 

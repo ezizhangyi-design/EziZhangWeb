@@ -3660,6 +3660,8 @@
             
 
             
+
+            
             <!-- 额外的26根分割线 -->
             <div class="additional-dividers">
                 <div class="additional-divider" style="height: 2px !important; background: #0041ff !important; width: 100% !important; margin: 0 !important; padding: 0 !important;"></div>
@@ -6101,10 +6103,10 @@
                 this.handleMainPageStorageChange(event);
             });
             
-            // 启动定期检查
+            // 启动定期检查 - 改为每天早晨检查一次，与展览页面同步
             setInterval(() => {
                 this.checkMainPageWeather();
-            }, 60000); // 每分钟检查一次
+            }, 60 * 60 * 1000); // 每小时检查一次，但只在早晨更新
             
             console.log('✅ 主页面全局天气客户端初始化完成');
         }
@@ -6137,22 +6139,28 @@
         
         // 定期检查主页面全局天气数据
         checkMainPageWeather() {
-            const storedWeather = localStorage.getItem('globalWeatherData');
-            if (storedWeather) {
-                try {
-                    const weatherData = JSON.parse(storedWeather);
-                    const now = Date.now();
-                    const dataAge = now - weatherData.timestamp;
-                    
-                    // 如果数据较新（15分钟内）且与当前数据不同，则更新
-                    if (dataAge < 900000 && (!this.mainPageWeatherData || this.mainPageWeatherData.timestamp !== weatherData.timestamp)) {
-                        console.log('📡 主页面定期检查发现新的天气数据:', weatherData);
-                        this.mainPageWeatherData = weatherData;
-                        this.applyMainPageWeatherBackground(weatherData);
-                        this.isMainPageWeatherActive = true;
+            const now = new Date();
+            const hour = now.getHours();
+            
+            // 只在北京时间早上6-8点之间检查天气更新（太阳升起时间）
+            if (hour >= 6 && hour < 8) {
+                const storedWeather = localStorage.getItem('globalWeatherData');
+                if (storedWeather) {
+                    try {
+                        const weatherData = JSON.parse(storedWeather);
+                        const currentTime = Date.now();
+                        const dataAge = currentTime - weatherData.timestamp;
+                        
+                        // 如果数据较新（24小时内）且与当前数据不同，则更新
+                        if (dataAge < 24 * 60 * 60 * 1000 && (!this.mainPageWeatherData || this.mainPageWeatherData.timestamp !== weatherData.timestamp)) {
+                            console.log('🌅 主页面早晨检查发现新的天气数据:', weatherData);
+                            this.mainPageWeatherData = weatherData;
+                            this.applyMainPageWeatherBackground(weatherData);
+                            this.isMainPageWeatherActive = true;
+                        }
+                    } catch (error) {
+                        console.error('❌ 主页面定期检查天气数据失败:', error);
                     }
-                } catch (error) {
-                    console.error('❌ 主页面定期检查天气数据失败:', error);
                 }
             }
         }
@@ -6208,8 +6216,18 @@
             style.textContent = css;
             document.head.appendChild(style);
             
-            console.log(`🎨 主页面已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)}`);
+            // 强制刷新DOM，确保背景颜色立即生效，防止缓存问题
+            document.body.style.backgroundColor = weatherData.baseColor;
+            document.documentElement.style.backgroundColor = weatherData.baseColor;
+            
+            // 强制重绘，确保背景颜色立即显示
+            document.body.offsetHeight; // 触发重排
+            document.documentElement.offsetHeight; // 触发重排
+            
+            console.log(`🎨 主页面已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)} (强制刷新)`);
         }
+        
+
         
         // 初始化语音问候系统 - 帝国时代风格！
         initVoiceGreeting() {
