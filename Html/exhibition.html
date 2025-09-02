@@ -1414,6 +1414,29 @@
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', initSlideshow);
         
+        // 初始化展览页面语音问候系统
+        initExhibitionVoiceGreeting();
+        
+        // 等待云朵系统初始化完成后再启动风声系统
+        setTimeout(() => {
+            if (window.automataLeft && window.automataRight) {
+                console.log('☁️ 云朵系统已就绪，启动风声系统...');
+                initWindSoundSystem();
+            } else {
+                console.log('⏳ 云朵系统未就绪，继续等待...');
+                // 继续等待
+                setTimeout(() => {
+                    if (window.automataLeft && window.automataRight) {
+                        console.log('☁️ 云朵系统已就绪，启动风声系统...');
+                        initWindSoundSystem();
+                    } else {
+                        console.log('⚠️ 云朵系统仍未就绪，强制启动风声系统...');
+                        initWindSoundSystem();
+                    }
+                }, 3000);
+            }
+        }, 2000);
+        
         // Performance Exhibition Slideshow JavaScript
         let currentSlidePerf = 0;
         const slidesPerf = document.querySelectorAll('.performance-slideshow-container .slide');
@@ -2327,6 +2350,1357 @@
             
 
         });
+        
+        // ===== 展览页面语音问候系统 =====
+        // 初始化展览页面语音问候系统
+        function initExhibitionVoiceGreeting() {
+            console.log('🎮 开始初始化展览页面语音问候系统...');
+            
+            // 延迟播放，确保页面完全加载
+            setTimeout(() => {
+                playExhibitionGreeting();
+            }, 1000); // 延迟1秒播放
+        }
+        
+        // 展览页面语音问候 - 完全不同的风格！
+        function playExhibitionGreeting() {
+            console.log('🎨 开始播放展览页面问候...');
+            
+            try {
+                // 创建音频上下文
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 创建主混音器
+                const masterGain = audioContext.createGain();
+                masterGain.connect(audioContext.destination);
+                masterGain.gain.setValueAtTime(0.3, audioContext.currentTime); // 主音量30%，更柔和
+                
+                // 创建展览特有的延迟效果
+                const delayGain = audioContext.createGain();
+                const delayNode = audioContext.createDelay(0.15);
+                delayGain.connect(delayNode);
+                delayNode.connect(masterGain);
+                delayGain.gain.setValueAtTime(0.15, audioContext.currentTime); // 延迟音量降低
+                
+                // 创建"Ezi's"音效 - 现代电子风格
+                createEziSound(audioContext, masterGain, delayGain, 0);
+                
+                // 延迟播放"EXHIBITION"音效
+                setTimeout(() => {
+                    createExhibitionSound(audioContext, masterGain, delayGain, 0.6);
+                }, 600);
+                
+                // 延迟播放"EXPERIENCE"音效
+                setTimeout(() => {
+                    createExperienceSound(audioContext, masterGain, delayGain, 1.2);
+                }, 1200);
+                
+                // 添加展览特有的结尾音效
+                setTimeout(() => {
+                    createExhibitionEndingSound(audioContext, masterGain);
+                }, 2.4); // 2.4秒后播放结尾音效
+                
+                console.log('🎨 展览页面问候开始播放！');
+                
+            } catch (error) {
+                console.error('❌ 展览页面问候播放失败:', error);
+            }
+        }
+        
+        // 创建"Ezi's"音效 - 现代电子风格，完全不同于Hello World
+        function createEziSound(audioContext, masterGain, delayGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"Ezi's"的音节 - 现代电子风格，更简洁
+            const eziNotes = [
+                { freq: 440, duration: 0.2, gain: 0.3 }, // A4 - "E" - 中音，更现代，音量降低
+                { freq: 554, duration: 0.2, gain: 0.3 }, // C#5 - "zi" - 半音上升，音量降低
+                { freq: 659, duration: 0.15, gain: 0.25 }, // E5 - "'s" - 全音上升，音量降低
+            ];
+            
+            eziNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.2); // 每个音节间隔0.2秒，更紧凑
+                
+                // 主音调 - 使用现代电子风格的音色
+                const mainOsc = audioContext.createOscillator();
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                
+                // 设置主音调 - 现代电子风格，更简洁
+                mainOsc.type = 'square'; // 方波，与Hello World的三角波完全区分
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 滤波器 - 现代电子风格，更锐利
+                mainFilter.type = 'highpass'; // 高通滤波，与Hello World的低通滤波区分
+                mainFilter.frequency.setValueAtTime(note.freq * 0.8, noteTime); // 更低的截止频率
+                mainFilter.Q.setValueAtTime(3.0, noteTime); // 更高的Q值，更锐利
+                
+                // 音量包络 - 现代电子风格，更快速
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.01); // 极快攻击
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.03); // 短保持时间
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration); // 快速衰减
+                
+                // 连接音频节点
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(delayGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                
+                // 添加现代电子风格的谐波
+                addModernHarmonics(audioContext, masterGain, delayGain, noteTime, note.freq, note.gain * 0.3);
+            });
+            
+            console.log('🎵 播放"Ezi\'s"音效 - 现代电子风格');
+        }
+        
+        // 创建"EXHIBITION"音效 - 现代科技风格，完全不同于Hello World
+        function createExhibitionSound(audioContext, masterGain, delayGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"EXHIBITION"的音节 - 现代科技风格，更简洁
+            const exhibitionNotes = [
+                { freq: 523, duration: 0.25, gain: 0.6 }, // C5 - "EX" - 基础音
+                { freq: 659, duration: 0.25, gain: 0.6 }, // E5 - "HI" - 上升音
+                { freq: 523, duration: 0.25, gain: 0.6 }, // C5 - "BI" - 回音
+                { freq: 440, duration: 0.3, gain: 0.5 }, // A4 - "TION" - 下降音
+            ];
+            
+            exhibitionNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.3); // 每个音节间隔0.3秒，更紧凑
+                
+                // 主音调 - 使用现代科技风格的音色
+                const mainOsc = audioContext.createOscillator();
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                
+                // 设置主音调 - 现代科技风格，更简洁
+                mainOsc.type = 'sawtooth'; // 锯齿波，与Hello World的方波完全区分
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 滤波器 - 现代科技风格，更锐利
+                mainFilter.type = 'notch'; // 陷波滤波，与Hello World的低通滤波区分
+                mainFilter.frequency.setValueAtTime(note.freq, noteTime);
+                mainFilter.Q.setValueAtTime(4.0, noteTime); // 更高的Q值，更锐利
+                
+                // 音量包络 - 现代科技风格，更快速
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.02); // 快速攻击
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.05); // 短保持时间
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration); // 快速衰减
+                
+                // 连接音频节点
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(delayGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                
+                // 添加现代科技风格的谐波
+                addModernHarmonics(audioContext, masterGain, delayGain, noteTime, note.freq, note.gain * 0.4);
+            });
+            
+            console.log('🎵 播放"EXHIBITION"音效 - 现代科技风格');
+        }
+        
+        // 创建"EXPERIENCE"音效 - 未来科技风格，完全不同于Hello World
+        function createExperienceSound(audioContext, masterGain, delayGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"EXPERIENCE"的音节 - 未来科技风格，更简洁
+            const experienceNotes = [
+                { freq: 659, duration: 0.2, gain: 0.5 }, // E5 - "EX" - 基础音
+                { freq: 523, duration: 0.2, gain: 0.5 }, // C5 - "PE" - 下降音
+                { freq: 440, duration: 0.2, gain: 0.5 }, // A4 - "RI" - 继续下降
+                { freq: 659, duration: 0.25, gain: 0.4 }, // E5 - "ENCE" - 上升结束
+            ];
+            
+            experienceNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.25); // 每个音节间隔0.25秒，更紧凑
+                
+                // 主音调 - 使用未来科技风格的音色
+                const mainOsc = audioContext.createOscillator();
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                
+                // 设置主音调 - 未来科技风格，更简洁
+                mainOsc.type = 'triangle'; // 三角波，与Hello World的方波区分
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 滤波器 - 未来科技风格，更锐利
+                mainFilter.type = 'highpass'; // 高通滤波，与Hello World的低通滤波区分
+                mainFilter.frequency.setValueAtTime(note.freq * 1.2, noteTime);
+                mainFilter.Q.setValueAtTime(2.5, noteTime); // 更高的Q值，更锐利
+                
+                // 音量包络 - 未来科技风格，更快速
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.01); // 极快攻击
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.04); // 短保持时间
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration); // 快速衰减
+                
+                // 连接音频节点
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(delayGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                
+                // 添加未来科技风格的谐波
+                addModernHarmonics(audioContext, masterGain, delayGain, noteTime, note.freq, note.gain * 0.3);
+            });
+            
+            console.log('🎵 播放"EXPERIENCE"音效 - 未来科技风格');
+        }
+        
+        // 添加现代谐波 - 现代电子风格
+        function addModernHarmonics(audioContext, masterGain, delayGain, startTime, baseFreq, volume) {
+            const harmonics = [
+                { freq: baseFreq * 1.5, gain: volume * 0.3, type: 'square' },
+                { freq: baseFreq * 2.5, gain: volume * 0.2, type: 'sawtooth' },
+                { freq: baseFreq * 0.75, gain: volume * 0.25, type: 'triangle' }
+            ];
+            
+            harmonics.forEach((harmonic) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                
+                osc.type = harmonic.type;
+                osc.frequency.setValueAtTime(harmonic.freq, startTime);
+                
+                filter.type = 'highpass'; // 高通滤波，现代风格
+                filter.frequency.setValueAtTime(harmonic.freq * 0.8, startTime);
+                filter.Q.setValueAtTime(2.0, startTime);
+                
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(harmonic.gain, startTime + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+                
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(masterGain);
+                gain.connect(delayGain);
+                
+                osc.start(startTime);
+                osc.stop(startTime + 0.3);
+            });
+        }
+        
+        // 创建展览结尾音效 - 现代科技风格
+        function createExhibitionEndingSound(audioContext, masterGain) {
+            const currentTime = audioContext.currentTime;
+            
+            // 创建现代科技风格的结尾音效
+            const endingOsc = audioContext.createOscillator();
+            const endingGain = audioContext.createGain();
+            const endingFilter = audioContext.createBiquadFilter();
+            
+            // 设置结尾音效 - 现代科技风格
+            endingOsc.type = 'sawtooth'; // 锯齿波，现代科技感
+            endingOsc.frequency.setValueAtTime(880, currentTime); // A5音符，高音
+            endingOsc.frequency.exponentialRampToValueAtTime(440, currentTime + 0.2); // 滑到A4，下降音
+            
+            // 滤波器 - 现代科技风格
+            endingFilter.type = 'bandpass'; // 带通滤波，现代风格
+            endingFilter.frequency.setValueAtTime(880, currentTime);
+            endingFilter.Q.setValueAtTime(3.0, currentTime);
+            
+            // 音量包络 - 现代科技风格
+            endingGain.gain.setValueAtTime(0, currentTime);
+            endingGain.gain.linearRampToValueAtTime(0.4, currentTime + 0.01); // 快速攻击
+            endingGain.gain.setValueAtTime(0.4, currentTime + 0.15); // 保持音量
+            endingGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.4); // 快速衰减
+            
+            // 连接音频节点
+            endingOsc.connect(endingFilter);
+            endingFilter.connect(endingGain);
+            endingGain.connect(masterGain);
+            
+            // 播放音效
+            endingOsc.start(currentTime);
+            endingOsc.stop(currentTime + 0.4);
+            
+            console.log('🎨 播放展览结尾音效 - 现代科技风格');
+        }
+        
+        // 创建展览完成音效 - 展览风格的"叮"声
+        function createExhibitionCompletionSound(audioContext, masterGain) {
+            const currentTime = audioContext.currentTime;
+            
+            // 创建展览风格的"叮"声 - 更有艺术感
+            const dingOsc = audioContext.createOscillator();
+            const dingGain = audioContext.createGain();
+            const dingFilter = audioContext.createBiquadFilter();
+            
+            // 设置"叮"声 - 展览风格，更有艺术感
+            dingOsc.type = 'triangle'; // 三角波，与Hello World的正弦波区分
+            dingOsc.frequency.setValueAtTime(1046.50, currentTime); // C6音符，高音
+            dingOsc.frequency.exponentialRampToValueAtTime(1318.51, currentTime + 0.15); // 滑到E6，更慢的滑音
+            
+            // 滤波器 - 展览风格，更有艺术感
+            dingFilter.type = 'bandpass'; // 带通滤波，更有特色
+            dingFilter.frequency.setValueAtTime(1046.50, currentTime);
+            dingFilter.Q.setValueAtTime(2.5, currentTime); // 更高的Q值，更有特色
+            
+            // 音量包络 - 展览风格，更有艺术感
+            dingGain.gain.setValueAtTime(0, currentTime);
+            dingGain.gain.linearRampToValueAtTime(0.6, currentTime + 0.02); // 快速攻击
+            dingGain.gain.setValueAtTime(0.6, currentTime + 0.3); // 保持音量
+            dingGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.6); // 更慢的衰减
+            
+            // 连接音频节点
+            dingOsc.connect(dingFilter);
+            dingFilter.connect(dingGain);
+            dingGain.connect(masterGain);
+            
+            // 播放音效
+            dingOsc.start(currentTime);
+            dingOsc.stop(currentTime + 0.6);
+            
+            console.log('🔔 播放展览完成音效 - 艺术感十足');
+        }
+        
+        // ===== 展览页面风声系统 =====
+        // 风声系统变量
+        let windAudioContext = null;
+        let windGain = null;
+        let windOscillators = [];
+        let windLayers = []; // 风声层数组
+        let isWindPlaying = false;
+        let windVolume = 0.5; // 基础风声音量，设置更高
+        
+        // 初始化风声系统
+        function initWindSoundSystem() {
+            console.log('🌪️ 开始初始化展览页面风声系统...');
+            
+            try {
+                // 创建音频上下文
+                windAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                console.log('🔍 音频上下文状态:', windAudioContext.state);
+                
+                // 创建主混音器
+                windGain = windAudioContext.createGain();
+                windGain.connect(windAudioContext.destination);
+                windGain.gain.setValueAtTime(windVolume, windAudioContext.currentTime);
+                
+                console.log('✅ 展览页面风声系统初始化成功');
+                
+                // 添加用户交互激活音频
+                const activateWindAudio = () => {
+                    console.log('🖱️ 用户交互检测到，尝试激活音频...');
+                    if (windAudioContext && windAudioContext.state === 'suspended') {
+                        windAudioContext.resume().then(() => {
+                            console.log('✅ 风声音频上下文已激活');
+                            startWindSound();
+                        }).catch(err => {
+                            console.error('❌ 音频激活失败:', err);
+                        });
+                    } else if (windAudioContext && windAudioContext.state === 'running') {
+                        console.log('✅ 音频上下文已运行，直接启动风声');
+                        startWindSound();
+                    }
+                    // 移除事件监听器，只需要激活一次
+                    document.removeEventListener('click', activateWindAudio);
+                    document.removeEventListener('touchstart', activateWindAudio);
+                };
+                
+                // 监听用户交互
+                document.addEventListener('click', activateWindAudio);
+                document.addEventListener('touchstart', activateWindAudio);
+                
+                // 等待云朵系统就绪后再启动风声
+                const waitForClouds = () => {
+                    if (window.automataLeft && window.automataRight) {
+                        console.log('☁️ 云朵系统已就绪，准备启动风声...');
+                        
+                        // 初始化上海天气系统
+                        console.log('🌤️ 初始化上海天气系统...');
+                        getShanghaiWeather(); // 获取初始天气
+                        
+                        // 设置天气更新定时器（每15分钟更新一次，更动态）
+                        setInterval(() => {
+                            console.log('🕐 定时更新上海天气...');
+                            getShanghaiWeather();
+                        }, 15 * 60 * 1000); // 15分钟
+                        
+                        // 设置微天气变化（每5分钟微调，模拟真实天气的细微变化）
+                        setInterval(() => {
+                            if (shanghaiWeather.lastUpdate > 0) {
+                                console.log('🌤️ 微调天气参数...');
+                                adjustWeatherSubtly();
+                            }
+                        }, 5 * 60 * 1000); // 5分钟
+                        
+                        // 尝试自动激活音频上下文
+                        if (windAudioContext.state === 'suspended') {
+                            console.log('🔧 尝试自动激活音频上下文...');
+                            windAudioContext.resume().then(() => {
+                                console.log('✅ 音频上下文自动激活成功');
+                                setTimeout(() => startWindSound(), 1000);
+                            }).catch(err => {
+                                console.log('⚠️ 自动激活失败，等待用户交互...');
+                                // 如果自动激活失败，等待用户交互
+                                const activateWindAudio = () => {
+                                    console.log('🖱️ 用户交互检测到，启动风声...');
+                                    startWindSound();
+                                    document.removeEventListener('click', activateWindAudio);
+                                    document.removeEventListener('touchstart', activateWindAudio);
+                                };
+                                document.addEventListener('click', activateWindAudio);
+                                document.addEventListener('touchstart', activateWindAudio);
+                            });
+                        } else if (windAudioContext.state === 'running') {
+                            console.log('✅ 音频上下文已运行，直接启动风声');
+                            setTimeout(() => startWindSound(), 1000);
+                        }
+                    } else {
+                        console.log('⏳ 等待云朵系统初始化...');
+                        setTimeout(waitForClouds, 1000);
+                    }
+                };
+                
+                waitForClouds();
+                
+            } catch (error) {
+                console.error('❌ 展览页面风声系统初始化失败:', error);
+            }
+        }
+        
+        // 启动风声
+        function startWindSound() {
+            if (isWindPlaying) {
+                console.log('🌪️ 风声已在播放中');
+                return;
+            }
+            
+            if (!windAudioContext || windAudioContext.state !== 'running') {
+                console.log('❌ 音频上下文未就绪');
+                return;
+            }
+            
+            console.log('🌪️ 启动持续循环风声...');
+            isWindPlaying = true;
+            
+            // 创建真实自然风声
+            createRealNaturalWind();
+            
+            // 设置持续的风声更新 - 根据云朵变化动态调整
+            const windUpdateInterval = setInterval(() => {
+                if (!isWindPlaying || !windAudioContext || windAudioContext.state !== 'running') {
+                    clearInterval(windUpdateInterval);
+                    return;
+                }
+                
+                // 获取最新的云朵信息
+                const cloudInfo = getCloudInfo();
+                console.log('☁️ 云朵状态更新:', cloudInfo);
+                
+                // 根据云朵变化调整风声参数，而不是重新创建
+                updateWindParameters(cloudInfo);
+                
+            }, 3000); // 每3秒检查一次云朵状态并调整风声参数
+            
+            // 保存更新间隔的引用
+            window.windUpdateInterval = windUpdateInterval;
+        }
+        
+        // 创建简单的风声
+        function createSimpleWind() {
+            const currentTime = windAudioContext.currentTime;
+            
+            // 创建基础风声振荡器
+            const windOsc = windAudioContext.createOscillator();
+            const windOscGain = windAudioContext.createGain();
+            
+            // 设置风声参数
+            windOsc.type = 'sawtooth'; // 锯齿波，模拟风声
+            windOsc.frequency.setValueAtTime(120, currentTime); // 120Hz基础频率
+            
+            // 音量包络 - 风声的起伏
+            windOscGain.gain.setValueAtTime(0, currentTime);
+            windOscGain.gain.linearRampToValueAtTime(windVolume, currentTime + 0.5);
+            
+            // 连接音频节点
+            windOsc.connect(windOscGain);
+            windOscGain.connect(windGain);
+            
+            // 启动振荡器
+            windOsc.start(currentTime);
+            
+            // 保存引用
+            windOscillators.push(windOsc);
+            
+            // 添加频率变化，模拟风的起伏
+            addWindVariation(windOsc);
+            
+            console.log('🌪️ 简单风声已创建，频率: 120Hz, 音量:', windVolume);
+        }
+        
+        // 添加风声变化
+        function addWindVariation(windOsc) {
+            setInterval(() => {
+                if (!isWindPlaying || !windAudioContext) return;
+                
+                const currentTime = windAudioContext.currentTime;
+                const randomFreq = 100 + Math.random() * 60; // 100-160Hz随机变化
+                const randomDuration = 1 + Math.random() * 2; // 1-3秒随机变化
+                
+                windOsc.frequency.exponentialRampToValueAtTime(randomFreq, currentTime + randomDuration);
+            }, 2000); // 每2秒变化一次
+        }
+        
+        // 清理风声层（用于更新参数时）
+        function stopWindSound() {
+            console.log('🌪️ 清理风声层...');
+            
+            // 停止所有振荡器
+            windOscillators.forEach(osc => {
+                try {
+                    osc.stop();
+                } catch (e) {
+                    // 忽略已停止的振荡器
+                }
+            });
+            
+            // 清空数组
+            windOscillators = [];
+            
+            // 停止所有风声层
+            windLayers.forEach(layer => {
+                try {
+                    if (layer.stop) {
+                        layer.stop();
+                    }
+                } catch (e) {
+                    // 忽略已停止的层
+                }
+            });
+            
+            // 清空数组
+            windLayers = [];
+            
+            // 重置主音量
+            if (windGain) {
+                windGain.gain.setValueAtTime(0, windAudioContext.currentTime);
+            }
+            
+            console.log('✅ 风声层已清理');
+        }
+        
+        // 设置风声音量
+        function setWindVolume(volume) {
+            windVolume = Math.max(0, Math.min(1, volume));
+            if (windGain) {
+                windGain.gain.setValueAtTime(windVolume, windAudioContext.currentTime);
+            }
+            console.log(`🌪️ 风声音量设置为: ${(windVolume * 100).toFixed(0)}%`);
+        }
+        
+        // 完全停止风声系统
+        function stopWindSystem() {
+            console.log('🌪️ 完全停止风声系统...');
+            isWindPlaying = false;
+            
+            // 清理所有风声层
+            stopWindSound();
+            
+            // 清除更新间隔
+            if (window.windUpdateInterval) {
+                clearInterval(window.windUpdateInterval);
+                window.windUpdateInterval = null;
+            }
+            
+            console.log('✅ 风声系统已完全停止');
+        }
+        
+        // 测试风声功能
+        function testWindSound() {
+            console.log('🧪 测试风声功能...');
+            
+            if (!windAudioContext) {
+                console.log('❌ 风声系统未初始化');
+                return;
+            }
+            
+            console.log('🔍 当前音频状态:', windAudioContext.state);
+            console.log('🔍 风声播放状态:', isWindPlaying);
+            
+            if (windAudioContext.state === 'suspended') {
+                windAudioContext.resume().then(() => {
+                    console.log('✅ 音频上下文已激活');
+                    startWindSound();
+                }).catch(err => {
+                    console.error('❌ 音频激活失败:', err);
+                });
+            } else if (windAudioContext.state === 'running') {
+                if (!isWindPlaying) {
+                    startWindSound();
+                } else {
+                    console.log('🌪️ 风声已在播放中');
+                }
+            }
+        }
+        
+        // 强制设置最大风声音量进行测试
+        function setMaxWindVolume() {
+            if (windGain) {
+                windGain.gain.setValueAtTime(0.8, windAudioContext.currentTime);
+                console.log('🌪️ 设置最大风声音量: 80%');
+            }
+        }
+        
+
+        
+
+        
+        // 上海天气信息缓存
+        let shanghaiWeather = {
+            clouds: 0,        // 云量 (0-100)
+            humidity: 0,      // 湿度 (0-100)
+            windSpeed: 0,     // 风速 (m/s)
+            temperature: 0,   // 温度 (°C)
+            description: '',  // 天气描述
+            lastUpdate: 0     // 最后更新时间
+        };
+        
+        // 获取上海智能模拟天气信息
+        function getShanghaiWeather() {
+            console.log('🌤️ 使用智能模拟上海天气系统...');
+            useSimulatedWeather();
+        }
+        
+        // 使用智能模拟上海天气数据
+        function useSimulatedWeather() {
+            const now = new Date();
+            const hour = now.getHours();
+            const month = now.getMonth(); // 0-11
+            const day = now.getDate();
+            
+            // 上海季节性天气特征
+            let seasonalFactor = 1;
+            let baseTemperature = 20;
+            
+            if (month >= 11 || month <= 1) {
+                // 冬季 (12月-2月)
+                seasonalFactor = 0.7;
+                baseTemperature = 8;
+            } else if (month >= 2 && month <= 4) {
+                // 春季 (3月-5月)
+                seasonalFactor = 1.2;
+                baseTemperature = 18;
+            } else if (month >= 5 && month <= 7) {
+                // 夏季 (6月-8月)
+                seasonalFactor = 1.5;
+                baseTemperature = 28;
+            } else {
+                // 秋季 (9月-11月)
+                seasonalFactor = 1.0;
+                baseTemperature = 22;
+            }
+            
+            // 模拟一天中的天气变化（更真实）
+            let clouds, humidity, windSpeed, temperature;
+            let weatherDescription = '';
+            
+            if (hour >= 6 && hour < 10) {
+                // 早晨：云量较少，湿度适中，微风
+                clouds = 15 + Math.random() * 25;
+                humidity = 65 + Math.random() * 20;
+                windSpeed = 1.5 + Math.random() * 2.5;
+                temperature = baseTemperature - 2 + Math.random() * 4;
+                weatherDescription = '早晨微风';
+            } else if (hour >= 10 && hour < 14) {
+                // 中午：云量增加，湿度适中，可能有风
+                clouds = 25 + Math.random() * 35;
+                humidity = 55 + Math.random() * 25;
+                windSpeed = 2.5 + Math.random() * 4;
+                temperature = baseTemperature + Math.random() * 6;
+                weatherDescription = '中午微风';
+            } else if (hour >= 14 && hour < 18) {
+                // 下午：云量较多，湿度适中，风较大
+                clouds = 40 + Math.random() * 40;
+                humidity = 50 + Math.random() * 30;
+                windSpeed = 3 + Math.random() * 5;
+                temperature = baseTemperature + 2 + Math.random() * 4;
+                weatherDescription = '下午有风';
+            } else if (hour >= 18 && hour < 22) {
+                // 傍晚：云量多，湿度增加，风渐小
+                clouds = 55 + Math.random() * 35;
+                humidity = 70 + Math.random() * 20;
+                windSpeed = 2 + Math.random() * 3;
+                temperature = baseTemperature - 1 + Math.random() * 3;
+                weatherDescription = '傍晚微风';
+            } else if (hour >= 22 || hour < 2) {
+                // 深夜：云量适中，湿度高，微风
+                clouds = 30 + Math.random() * 40;
+                humidity = 80 + Math.random() * 15;
+                windSpeed = 1 + Math.random() * 2;
+                temperature = baseTemperature - 3 + Math.random() * 3;
+                weatherDescription = '深夜微风';
+            } else {
+                // 凌晨：云量少，湿度高，微风
+                clouds = 20 + Math.random() * 30;
+                humidity = 85 + Math.random() * 10;
+                windSpeed = 1 + Math.random() * 2;
+                temperature = baseTemperature - 4 + Math.random() * 2;
+                weatherDescription = '凌晨微风';
+            }
+            
+            // 添加随机天气事件
+            const randomEvent = Math.random();
+            if (randomEvent < 0.1) {
+                // 10%概率出现特殊天气
+                if (month >= 5 && month <= 9) {
+                    // 夏季可能有雷阵雨
+                    clouds = Math.min(100, clouds + 30);
+                    humidity = Math.min(100, humidity + 15);
+                    windSpeed = Math.min(10, windSpeed + 3);
+                    weatherDescription = '雷阵雨天气';
+                } else if (month >= 11 || month <= 2) {
+                    // 冬季可能有小雪
+                    clouds = Math.min(100, clouds + 20);
+                    humidity = Math.min(100, humidity + 10);
+                    windSpeed = Math.min(8, windSpeed + 2);
+                    weatherDescription = '小雪天气';
+                }
+            }
+            
+            // 应用季节性调整
+            clouds = Math.round(clouds * seasonalFactor);
+            humidity = Math.round(humidity * seasonalFactor);
+            windSpeed = Math.round(windSpeed * seasonalFactor * 10) / 10;
+            temperature = Math.round((temperature * seasonalFactor) * 10) / 10;
+            
+            // 确保数值在合理范围内
+            clouds = Math.max(0, Math.min(100, clouds));
+            humidity = Math.max(30, Math.min(100, humidity));
+            windSpeed = Math.max(0.5, Math.min(12, windSpeed));
+            temperature = Math.max(-5, Math.min(40, temperature));
+            
+            shanghaiWeather = {
+                clouds: clouds,
+                humidity: humidity,
+                windSpeed: windSpeed,
+                temperature: temperature,
+                description: weatherDescription,
+                lastUpdate: Date.now(),
+                season: getSeasonName(month),
+                timeOfDay: getTimeOfDayName(hour)
+            };
+            
+            console.log(`🌤️ 智能模拟上海天气: ${shanghaiWeather.season} ${shanghaiWeather.timeOfDay} - ${weatherDescription}`);
+            console.log(`☁️ 云量: ${clouds}%, 湿度: ${humidity}%, 风速: ${windSpeed}m/s, 温度: ${temperature}°C`);
+            
+            // 根据模拟天气调整云朵系统
+            adjustCloudsByWeather();
+        }
+        
+        // 获取季节名称
+        function getSeasonName(month) {
+            if (month >= 11 || month <= 1) return '冬季';
+            if (month >= 2 && month <= 4) return '春季';
+            if (month >= 5 && month <= 7) return '夏季';
+            return '秋季';
+        }
+        
+        // 获取时间段名称
+        function getTimeOfDayName(hour) {
+            if (hour >= 6 && hour < 10) return '早晨';
+            if (hour >= 10 && hour < 14) return '中午';
+            if (hour >= 14 && hour < 18) return '下午';
+            if (hour >= 18 && hour < 22) return '傍晚';
+            if (hour >= 22 || hour < 2) return '深夜';
+            return '凌晨';
+        }
+        
+        // 微调天气参数，模拟真实天气的细微变化
+        function adjustWeatherSubtly() {
+            if (!shanghaiWeather.lastUpdate) return;
+            
+            // 微调云量 (±5%)
+            const cloudChange = (Math.random() - 0.5) * 10;
+            shanghaiWeather.clouds = Math.max(0, Math.min(100, shanghaiWeather.clouds + cloudChange));
+            
+            // 微调湿度 (±3%)
+            const humidityChange = (Math.random() - 0.5) * 6;
+            shanghaiWeather.humidity = Math.max(30, Math.min(100, shanghaiWeather.humidity + humidityChange));
+            
+            // 微调风速 (±0.5m/s)
+            const windChange = (Math.random() - 0.5) * 1;
+            shanghaiWeather.windSpeed = Math.max(0.5, Math.min(12, shanghaiWeather.windSpeed + windChange));
+            
+            // 微调温度 (±0.5°C)
+            const tempChange = (Math.random() - 0.5) * 1;
+            shanghaiWeather.temperature = Math.max(-5, Math.min(40, shanghaiWeather.temperature + tempChange));
+            
+            // 更新描述
+            shanghaiWeather.description = getUpdatedWeatherDescription();
+            shanghaiWeather.lastUpdate = Date.now();
+            
+            console.log(`🌤️ 天气微调完成: 云量=${shanghaiWeather.clouds.toFixed(1)}%, 湿度=${shanghaiWeather.humidity.toFixed(1)}%, 风速=${shanghaiWeather.windSpeed.toFixed(1)}m/s, 温度=${shanghaiWeather.temperature.toFixed(1)}°C`);
+            
+            // 根据微调后的天气调整云朵系统
+            adjustCloudsByWeather();
+            
+            // 同时更新页面背景颜色
+            adjustPageBackgroundColor();
+        }
+        
+        // 根据当前天气参数生成更新的描述
+        function getUpdatedWeatherDescription() {
+            const { clouds, humidity, windSpeed, temperature } = shanghaiWeather;
+            
+            let description = '';
+            
+            // 根据云量描述
+            if (clouds < 20) description += '晴朗';
+            else if (clouds < 40) description += '少云';
+            else if (clouds < 60) description += '多云';
+            else if (clouds < 80) description += '阴天';
+            else description += '浓云';
+            
+            // 根据风速描述
+            if (windSpeed < 2) description += '微风';
+            else if (windSpeed < 4) description += '轻风';
+            else if (windSpeed < 6) description += '中风';
+            else if (windSpeed < 8) description += '强风';
+            else description += '大风';
+            
+            // 根据湿度描述
+            if (humidity > 80) description += '潮湿';
+            else if (humidity < 40) description += '干燥';
+            
+            return description;
+        }
+        
+        // 根据天气调整页面底部背景颜色
+        function adjustPageBackgroundColor() {
+            const { clouds, humidity, windSpeed, temperature, season, timeOfDay } = shanghaiWeather;
+            
+            // 基于原来数字卡通蓝色的纯净蓝色调色板
+            const bluePalette = {
+                // 晴朗天气 - 明亮纯净的蓝色
+                sunny: {
+                    light: '#00BFFF',    // 深天蓝色 - 纯净明亮
+                    medium: '#1E90FF',   // 道奇蓝 - 经典数字蓝
+                    dark: '#0066CC'      // 深蓝色 - 纯净深邃
+                },
+                // 多云天气 - 中等纯净的蓝色
+                cloudy: {
+                    light: '#4169E1',    // 皇家蓝 - 纯净中等
+                    medium: '#0000CD',   // 中蓝色 - 经典数字蓝
+                    dark: '#000080'      // 海军蓝 - 纯净深沉
+                },
+                // 阴天天气 - 深沉纯净的蓝色
+                overcast: {
+                    light: '#191970',    // 午夜蓝 - 纯净深蓝
+                    medium: '#000066',   // 深蓝 - 纯净深邃
+                    dark: '#000033'      // 深蓝黑 - 纯净神秘
+                },
+                // 特殊天气 - 独特的纯净蓝色
+                special: {
+                    light: '#00CED1',    // 深青色 - 纯净青蓝
+                    medium: '#008B8B',   // 深青色 - 纯净青蓝
+                    dark: '#006666'      // 深青绿 - 纯净青绿
+                }
+            };
+            
+            let selectedPalette;
+            let intensity = 0.5; // 默认强度
+            
+            // 根据云量选择基础色调
+            if (clouds < 30) {
+                selectedPalette = bluePalette.sunny;
+                intensity = 0.3 + (clouds / 100) * 0.4; // 0.3-0.7
+            } else if (clouds < 70) {
+                selectedPalette = bluePalette.cloudy;
+                intensity = 0.4 + (clouds / 100) * 0.5; // 0.4-0.9
+            } else {
+                selectedPalette = bluePalette.overcast;
+                intensity = 0.6 + (clouds / 100) * 0.4; // 0.6-1.0
+            }
+            
+            // 根据湿度调整颜色选择
+            const humidityFactor = humidity / 100;
+            let colorVariant;
+            
+            if (humidityFactor < 0.4) {
+                colorVariant = 'light'; // 干燥时用较亮的蓝色
+            } else if (humidityFactor < 0.7) {
+                colorVariant = 'medium'; // 适中湿度用中等蓝色
+            } else {
+                colorVariant = 'dark'; // 潮湿时用较深的蓝色
+            }
+            
+            // 根据风速调整颜色选择
+            const windFactor = Math.min(windSpeed / 10, 1);
+            if (windFactor > 0.6) {
+                // 风速大时，选择更深的颜色
+                if (colorVariant === 'light') colorVariant = 'medium';
+                if (colorVariant === 'medium') colorVariant = 'dark';
+            }
+            
+            // 根据季节微调颜色
+            let seasonalAdjustment = 0;
+            if (season === '夏季') {
+                seasonalAdjustment = 10; // 夏季稍微偏亮
+            } else if (season === '冬季') {
+                seasonalAdjustment = -10; // 冬季稍微偏暗
+            }
+            
+            // 根据时间段调整颜色
+            let timeAdjustment = 0;
+            if (timeOfDay === '深夜' || timeOfDay === '凌晨') {
+                timeAdjustment = -15; // 夜晚更暗
+            } else if (timeOfDay === '早晨' || timeOfDay === '中午') {
+                timeAdjustment = 15; // 白天更亮
+            }
+            
+            // 获取最终颜色
+            const finalColor = selectedPalette[colorVariant];
+            
+            // 应用颜色到页面底部
+            applyBackgroundColor(finalColor, intensity, humidityFactor, windFactor, seasonalAdjustment, timeAdjustment);
+            
+            console.log(`🎨 页面背景颜色已调整: 云量=${clouds}%, 湿度=${humidity}%, 风速=${windSpeed}m/s, 季节=${season}, 时间=${timeOfDay}`);
+            console.log(`💙 选择的颜色: ${finalColor}, 变体: ${colorVariant}`);
+        }
+        
+        // 应用背景颜色到页面
+        function applyBackgroundColor(baseColor, intensity, humidityFactor, windFactor, seasonalAdjustment, timeAdjustment) {
+            // 创建CSS变量来动态调整颜色
+            const style = document.createElement('style');
+            style.id = 'dynamic-background-style';
+            
+            // 移除之前的样式
+            const existingStyle = document.getElementById('dynamic-background-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // 生成动态CSS - 使用纯色而不是渐变
+            const css = `
+                body {
+                    --weather-blue-base: ${baseColor};
+                    --weather-blue-intensity: ${intensity};
+                    --weather-blue-humidity: ${humidityFactor};
+                    --weather-blue-wind: ${windFactor};
+                    --weather-blue-season: ${seasonalAdjustment};
+                    --weather-blue-time: ${timeAdjustment};
+                    
+                    background-color: ${baseColor};
+                    transition: background-color 2s ease-in-out;
+                }
+                
+                .page-bottom, .exhibition-container {
+                    background-color: ${baseColor};
+                    transition: background-color 2s ease-in-out;
+                }
+                
+                /* 为页面底部添加一些微妙的层次感，但保持纯色 */
+                .page-bottom::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: ${baseColor};
+                    opacity: 0.95;
+                    z-index: -1;
+                }
+            `;
+            
+            style.textContent = css;
+            document.head.appendChild(style);
+            
+            console.log(`🎨 纯色背景应用完成: 基础色=${baseColor}, 强度=${intensity.toFixed(2)}, 湿度因子=${humidityFactor.toFixed(2)}, 风速因子=${windFactor.toFixed(2)}, 季节调整=${seasonalAdjustment}, 时间调整=${timeAdjustment}`);
+        }
+        
+        // 根据天气调整云朵系统
+        function adjustCloudsByWeather() {
+            if (!window.automataLeft || !window.automataRight) {
+                console.log('⏳ 云朵系统未就绪，等待初始化...');
+                return;
+            }
+            
+            console.log('☁️ 根据上海天气调整云朵系统...');
+            
+            // 根据云量调整云朵密度
+            const cloudDensity = shanghaiWeather.clouds / 100; // 0-1
+            
+            // 根据湿度调整云朵大小
+            const cloudSize = shanghaiWeather.humidity / 100; // 0-1
+            
+            // 根据风速调整云朵变化速度
+            const windIntensity = Math.min(shanghaiWeather.windSpeed / 10, 1); // 0-1
+            
+            // 调整左侧云朵
+            adjustCloudAutomata(window.automataLeft, cloudDensity, cloudSize, windIntensity);
+            
+            // 调整右侧云朵
+            adjustCloudAutomata(window.automataRight, cloudDensity, cloudSize, windIntensity);
+            
+            // 根据天气调整页面底部颜色
+            adjustPageBackgroundColor();
+            
+            console.log(`🌪️ 天气调整完成: 云量=${shanghaiWeather.clouds}%, 湿度=${shanghaiWeather.humidity}%, 风速=${shanghaiWeather.windSpeed}m/s`);
+        }
+        
+        // 调整单个云朵自动机
+        function adjustCloudAutomata(automata, density, size, windSpeed) {
+            if (!automata || !automata.gridData) return;
+            
+            const rows = automata.rows;
+            const cols = automata.cols;
+            
+            // 根据密度调整云朵数量
+            const targetClouds = Math.floor(density * rows * cols * 0.8);
+            let currentClouds = 0;
+            
+            // 计算当前云朵数量
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    if (automata.gridData[row][col] === 1) {
+                        currentClouds++;
+                    }
+                }
+            }
+            
+            // 根据风速调整云朵变化规则
+            if (windSpeed > 0.5) {
+                // 风速大时，云朵变化更快
+                automata.updateSpeed = Math.max(100, 500 - windSpeed * 400);
+            } else {
+                // 风速小时，云朵变化较慢
+                automata.updateSpeed = 500 + (1 - windSpeed) * 300;
+            }
+            
+            // 根据湿度调整云朵大小（通过调整邻居规则）
+            if (size > 0.7) {
+                // 湿度高时，云朵更容易聚集
+                automata.birthThreshold = Math.max(2, 4 - size * 2);
+                automata.survivalThreshold = Math.max(1, 3 - size * 1.5);
+            } else {
+                // 湿度低时，云朵更容易分散
+                automata.birthThreshold = 4;
+                automata.survivalThreshold = 3;
+            }
+            
+            console.log(`☁️ 云朵参数调整: 密度=${density.toFixed(2)}, 大小=${size.toFixed(2)}, 风速=${windSpeed.toFixed(2)}`);
+        }
+        
+        // 获取云朵信息（结合天气数据）
+        function getCloudInfo() {
+            let totalClouds = 0;
+            let totalCloudSize = 0;
+            
+            // 检查左侧云朵
+            if (window.automataLeft && window.automataLeft.gridData) {
+                for (let row = 0; row < window.automataLeft.rows; row++) {
+                    for (let col = 0; col < window.automataLeft.cols; col++) {
+                        if (window.automataLeft.gridData[row][col] === 1) {
+                            totalClouds++;
+                            totalCloudSize++;
+                        }
+                    }
+                }
+            }
+            
+            // 检查右侧云朵
+            if (window.automataRight && window.automataRight.gridData) {
+                for (let row = 0; row < window.automataRight.rows; row++) {
+                    for (let col = 0; col < window.automataRight.cols; col++) {
+                        if (window.automataRight.gridData[row][col] === 1) {
+                            totalClouds++;
+                            totalCloudSize++;
+                        }
+                    }
+                }
+            }
+            
+            const totalCells = (window.automataLeft ? window.automataLeft.rows * window.automataLeft.cols : 0) + 
+                              (window.automataRight ? window.automataRight.rows * window.automataRight.cols : 0);
+            
+            // 结合天气数据调整云朵信息
+            const weatherFactor = shanghaiWeather.clouds / 100;
+            const adjustedSize = totalCloudSize * (0.8 + weatherFactor * 0.4); // 天气影响云朵大小
+            
+            return {
+                count: totalClouds,
+                size: Math.round(adjustedSize),
+                ratio: totalCells > 0 ? adjustedSize / totalCells : 0,
+                weather: shanghaiWeather
+            };
+        }
+        
+
+        
+        // 创建真实自然风声
+        function createRealNaturalWind() {
+            if (!windAudioContext || windAudioContext.state !== 'running') {
+                console.log('❌ 音频上下文未就绪');
+                return;
+            }
+            
+            console.log('🌪️ 创建真实自然风声...');
+            
+            // 获取云朵信息
+            const cloudInfo = getCloudInfo();
+            console.log('☁️ 云朵信息:', cloudInfo);
+            
+            // 根据云朵情况调整风声参数
+            // 云越多，风越小；云越少，风越大
+            const cloudRatio = cloudInfo.ratio;
+            const windIntensity = Math.max(0.1, 1 - cloudRatio * 2);
+            
+            // 风声基础参数 - 真实风声的特点
+            const windVolume = 0.35 + windIntensity * 0.4; // 0.35-0.75，稍微大一点的音量
+            const windSpeed = 3 + windIntensity * 4; // 3-7秒变化周期，真实风的节奏
+            
+            console.log(`🌪️ 真实风声参数: 强度=${windIntensity.toFixed(2)}, 音量=${windVolume.toFixed(2)}`);
+            
+            // 清空之前的风声层
+            windLayers = [];
+            
+            // 创建平滑自然风声缓冲区
+            const windBuffer = createSmoothWindBuffer();
+            
+            // 主风声层 - 使用平滑风声采样
+            const mainWindSource = windAudioContext.createBufferSource();
+            const mainGain = windAudioContext.createGain();
+            const mainFilter = windAudioContext.createBiquadFilter();
+            const mainSmoothingFilter = windAudioContext.createBiquadFilter(); // 额外的平滑滤波器
+            
+            mainWindSource.buffer = windBuffer;
+            mainWindSource.loop = true;
+            
+            // 主风声滤波器 - 更平滑的频率特性
+            mainFilter.type = 'lowpass';
+            mainFilter.frequency.setValueAtTime(600 + windIntensity * 300, windAudioContext.currentTime); // 600-900Hz，更低的频率
+            mainFilter.Q.setValueAtTime(0.3, windAudioContext.currentTime); // 更宽的带宽，减少颗粒感
+            
+            // 额外的平滑滤波器 - 进一步减少高频颗粒
+            mainSmoothingFilter.type = 'lowpass';
+            mainSmoothingFilter.frequency.setValueAtTime(400 + windIntensity * 200, windAudioContext.currentTime); // 400-600Hz
+            mainSmoothingFilter.Q.setValueAtTime(0.2, windAudioContext.currentTime); // 非常宽的带宽
+            
+            // 主风声音量 - 更平滑的起伏
+            mainGain.gain.setValueAtTime(0, windAudioContext.currentTime);
+            mainGain.gain.linearRampToValueAtTime(windVolume * 0.6, windAudioContext.currentTime + 3);
+            mainGain.gain.setValueAtTime(windVolume * 0.6, windAudioContext.currentTime + 6);
+            
+            // 连接主风声 - 多层平滑处理
+            mainWindSource.connect(mainGain);
+            mainGain.connect(mainFilter);
+            mainFilter.connect(mainSmoothingFilter);
+            mainSmoothingFilter.connect(windGain);
+            
+            // 高频风声层 - 平滑的呼啸声
+            const highWindSource = windAudioContext.createBufferSource();
+            const highGain = windAudioContext.createGain();
+            const highFilter = windAudioContext.createBiquadFilter();
+            const highSmoothingFilter = windAudioContext.createBiquadFilter(); // 高频平滑滤波器
+            
+            highWindSource.buffer = windBuffer;
+            highWindSource.loop = true;
+            
+            // 高频滤波器 - 更平滑的呼啸声
+            highFilter.type = 'bandpass';
+            highFilter.frequency.setValueAtTime(1200 + windIntensity * 600, windAudioContext.currentTime); // 1200-1800Hz，降低频率
+            highFilter.Q.setValueAtTime(0.4, windAudioContext.currentTime); // 更宽的带宽，减少颗粒感
+            
+            // 高频平滑滤波器 - 进一步平滑高频
+            highSmoothingFilter.type = 'lowpass';
+            highSmoothingFilter.frequency.setValueAtTime(1000 + windIntensity * 400, windAudioContext.currentTime); // 1000-1400Hz
+            highSmoothingFilter.Q.setValueAtTime(0.25, windAudioContext.currentTime); // 非常宽的带宽
+            
+            // 高频音量 - 更平滑的协调
+            highGain.gain.setValueAtTime(0, windAudioContext.currentTime);
+            highGain.gain.linearRampToValueAtTime(windVolume * 0.3, windAudioContext.currentTime + 3.5);
+            highGain.gain.setValueAtTime(windVolume * 0.3, windAudioContext.currentTime + 6);
+            
+            // 连接高频风声 - 多层平滑处理
+            highWindSource.connect(highGain);
+            highGain.connect(highFilter);
+            highFilter.connect(highSmoothingFilter);
+            highSmoothingFilter.connect(windGain);
+            
+            // 启动所有风声层
+            mainWindSource.start();
+            highWindSource.start();
+            
+            // 保存引用
+            windLayers.push(mainWindSource, mainGain, mainFilter, mainSmoothingFilter, highWindSource, highGain, highFilter, highSmoothingFilter);
+            
+            // 添加真实风声的动态变化
+            addRealWindVariation(mainFilter, highFilter, mainGain, highGain, windSpeed, windIntensity);
+            
+            console.log('✅ 真实自然风声已创建');
+        }
+        
+
+        
+        // 创建平滑自然风声缓冲区
+        function createSmoothWindBuffer() {
+            const bufferLength = windAudioContext.sampleRate * 6; // 6秒的风声
+            const buffer = windAudioContext.createBuffer(1, bufferLength, windAudioContext.sampleRate);
+            const output = buffer.getChannelData(0);
+            
+            // 使用平滑的噪声生成，减少颗粒感
+            let lastSample = 0;
+            const smoothingFactor = 0.95; // 平滑因子，减少颗粒感
+            
+            for (let i = 0; i < bufferLength; i++) {
+                const t = i / windAudioContext.sampleRate;
+                
+                // 生成平滑的噪声 - 使用低通滤波减少高频颗粒
+                const rawNoise = (Math.random() - 0.5) * 0.4; // 增加噪声音量
+                const smoothedNoise = lastSample * smoothingFactor + rawNoise * (1 - smoothingFactor);
+                lastSample = smoothedNoise;
+                
+                // 添加多个频率的正弦波，模拟风的自然频率
+                const windFreq1 = Math.sin(t * 0.8) * 0.2;   // 慢速风 - 增加音量
+                const windFreq2 = Math.sin(t * 1.5) * 0.16;  // 中速风 - 增加音量
+                const windFreq3 = Math.sin(t * 2.3) * 0.12;  // 快速风 - 增加音量
+                const windFreq4 = Math.sin(t * 3.1) * 0.08;  // 微妙风 - 增加音量
+                
+                // 添加风的自然起伏 - 使用更平滑的包络
+                const windEnvelope = Math.sin(t * 0.2) * 0.15 + Math.sin(t * 0.4) * 0.1; // 增加包络音量
+                
+                // 组合所有元素，创造平滑的风声
+                output[i] = smoothedNoise + windFreq1 + windFreq2 + windFreq3 + windFreq4 + windEnvelope;
+                
+                // 应用额外的平滑处理
+                if (i > 0) {
+                    output[i] = output[i] * 0.7 + output[i-1] * 0.3;
+                }
+                
+                // 限制音量范围，避免过载 - 稍微提高上限
+                output[i] = Math.max(-0.7, Math.min(0.7, output[i]));
+            }
+            
+            return buffer;
+        }
+        
+        // 添加真实风声的动态变化
+        function addRealWindVariation(mainFilter, highFilter, mainGain, highGain, speed, intensity) {
+            const variationInterval = setInterval(() => {
+                if (!isWindPlaying || !windAudioContext) {
+                    clearInterval(variationInterval);
+                    return;
+                }
+                
+                const currentTime = windAudioContext.currentTime;
+                
+                // 根据云朵情况调整风声参数
+                const cloudInfo = getCloudInfo();
+                const cloudRatio = cloudInfo.ratio;
+                const windIntensity = Math.max(0.1, 1 - cloudRatio * 2);
+                
+                // 滤波器频率变化 - 模拟风的自然起伏
+                const mainFreq = mainFilter.frequency.value;
+                const newMainFreq = mainFreq * (0.85 + windIntensity * 0.3);
+                mainFilter.frequency.exponentialRampToValueAtTime(newMainFreq, currentTime + speed);
+                
+                const highFreq = highFilter.frequency.value;
+                const newHighFreq = highFreq * (0.8 + windIntensity * 0.4);
+                highFilter.frequency.exponentialRampToValueAtTime(newHighFreq, currentTime + speed);
+                
+                // 音量变化 - 根据云朵情况
+                const baseVolume = 0.2 + windIntensity * 0.3;
+                const volumeVariation = 0.05 + windIntensity * 0.15;
+                
+                // 主风声音量 - 自然的起伏
+                const mainVolume = baseVolume * (0.8 + Math.sin(currentTime * 0.2) * volumeVariation);
+                mainGain.gain.setValueAtTime(mainVolume, currentTime);
+                
+                // 高频风声音量 - 与主风声协调
+                const highVolume = baseVolume * 0.6 * (0.7 + Math.sin(currentTime * 0.2 + 0.5) * volumeVariation);
+                highGain.gain.setValueAtTime(highVolume, currentTime);
+                
+                // 动态调整主混音器音量
+                const masterVolume = windIntensity * 0.6;
+                windGain.gain.setValueAtTime(masterVolume, currentTime);
+                
+                console.log(`🌪️ 真实风声状态: 强度=${windIntensity.toFixed(2)}, 主音量=${mainVolume.toFixed(2)}, 高频音量=${highVolume.toFixed(2)}`);
+                
+            }, speed * 1000); // 根据风速调整变化频率
+        }
+        
+        // 根据云朵变化动态调整风声参数
+        function updateWindParameters(cloudInfo) {
+            if (!isWindPlaying || !windAudioContext || windLayers.length === 0) {
+                return;
+            }
+            
+            console.log('🌪️ 动态调整风声参数...');
+            
+            // 根据云朵情况和上海天气调整风声参数
+            const cloudRatio = cloudInfo.ratio;
+            const weather = cloudInfo.weather || shanghaiWeather;
+            
+            // 结合云朵和天气计算风强度
+            // 云越多，风越小；云越少，风越大
+            // 同时考虑上海实际风速
+            const cloudWindIntensity = Math.max(0.1, 1 - cloudRatio * 2);
+            const realWindIntensity = Math.min(weather.windSpeed / 10, 1); // 0-1
+            const windIntensity = (cloudWindIntensity + realWindIntensity) / 2; // 综合风强度
+            
+            // 风声基础参数 - 真实风声的特点
+            const windVolume = 0.35 + windIntensity * 0.4; // 0.35-0.75，稍微大一点的音量
+            const windSpeed = 3 + windIntensity * 4; // 3-7秒变化周期，真实风的节奏
+            
+            console.log(`🌪️ 风声参数调整: 云朵比例=${cloudRatio.toFixed(2)}, 风强度=${windIntensity.toFixed(2)}, 音量=${windVolume.toFixed(2)}`);
+            console.log(`🌤️ 上海天气: 云量=${weather.clouds}%, 风速=${weather.windSpeed}m/s, 温度=${weather.temperature}°C`);
+            
+            // 动态调整主混音器音量
+            const masterVolume = windIntensity * 0.8; // 增加主混音器音量
+            windGain.gain.setValueAtTime(masterVolume, windAudioContext.currentTime);
+            
+            // 调整滤波器参数
+            if (windLayers.length >= 8) {
+                const mainFilter = windLayers[2]; // 主滤波器
+                const highFilter = windLayers[6]; // 高频滤波器
+                const mainGain = windLayers[1]; // 主音量
+                const highGain = windLayers[5]; // 高频音量
+                
+                const currentTime = windAudioContext.currentTime;
+                
+                // 根据上海实际风速调整滤波器频率
+                const realWindFactor = realWindIntensity * 0.5; // 实际风速的影响因子
+                
+                // 调整主滤波器频率
+                const newMainFreq = 600 + windIntensity * 300 + realWindFactor * 200; // 600-1100Hz
+                mainFilter.frequency.exponentialRampToValueAtTime(newMainFreq, currentTime + 1);
+                
+                // 调整高频滤波器频率
+                const newHighFreq = 1200 + windIntensity * 600 + realWindFactor * 400; // 1200-2200Hz
+                highFilter.frequency.exponentialRampToValueAtTime(newHighFreq, currentTime + 1);
+                
+                // 调整主风声音量
+                const mainVolume = windVolume * 0.6;
+                mainGain.gain.setValueAtTime(mainVolume, currentTime);
+                
+                // 调整高频风声音量
+                const highVolume = windVolume * 0.3;
+                highGain.gain.setValueAtTime(highVolume, currentTime);
+                
+                console.log(`🌪️ 风声参数已调整: 主频率=${newMainFreq.toFixed(0)}Hz, 高频=${newHighFreq.toFixed(0)}Hz, 主音量=${mainVolume.toFixed(2)}, 高频音量=${highVolume.toFixed(2)}`);
+            }
+        }
+        
+
         
     </script>
 </body>

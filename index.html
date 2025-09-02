@@ -147,7 +147,7 @@
             border-radius: 2px !important;
             background: #00aaff !important;
             outline: none !important;
-            cursor: pointer !important;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="20" y="8" width="8" height="32" fill="rgba(255,255,255,0.9)" stroke="rgba(0,0,0,0.9)" stroke-width="2" rx="4"/><circle cx="24" cy="44" r="6" fill="rgba(255,255,255,0.9)" stroke="rgba(0,0,0,0.9)" stroke-width="2"/></svg>') 24 24 !important; /* 超大滑块光标 */
             -webkit-appearance: none !important;
             appearance: none !important;
             border: 1px solid #00aaff !important;
@@ -175,7 +175,7 @@
             height: 12px !important;
             border-radius: 50% !important;
             background: #ffffff !important;
-            cursor: pointer !important;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="20" y="8" width="8" height="32" fill="rgba(255,255,255,0.9)" stroke="rgba(0,0,0,0.9)" stroke-width="2" rx="4"/><circle cx="24" cy="44" r="6" fill="rgba(255,255,255,0.9)" stroke="rgba(0,0,0,0.9)" stroke-width="2"/></svg>') 24 24 !important; /* 超大滑块光标 */
             border: 2px solid #00aaff !important;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
             margin-top: -4px !important;
@@ -196,7 +196,7 @@
             height: 12px !important;
             border-radius: 50% !important;
             background: #ffffff !important;
-            cursor: pointer !important;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="20" y="8" width="8" height="32" fill="rgba(255,255,255,0.9)" stroke="rgba(0,0,0,0.9)" stroke-width="2" rx="4"/><circle cx="24" cy="44" r="6" fill="rgba(255,255,255,0.9)" stroke="rgba(0,0,0,0.9)" stroke-width="2"/></svg>') 24 24 !important; /* 超大滑块光标 */
             border: 2px solid #00aaff !important;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
         }
@@ -1551,12 +1551,109 @@
             }
             
             /* 数字签名响应式 - 大屏幕 */
-            .signature-container {
-                bottom: -70vh;
-                right: 3vw;
-                width: 16vw;
-                min-width: 160px;
+                    .signature-container {
+            bottom: -70vh;
+            right: 3vw;
+            width: 16vw;
+            min-width: 160px;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path d="M12,6 L12,32 L4,32 L4,40 L12,40 L12,48 L20,48 L20,40 L32,40 L32,32 L20,32 L20,6 Z" fill="rgba(255,255,255,0.95)" stroke="rgba(0,0,0,0.95)" stroke-width="3"/><circle cx="36" cy="36" r="6" fill="rgba(255,255,255,0.95)" stroke="rgba(0,0,0,0.95)" stroke-width="2"/><circle cx="48" cy="48" r="4" fill="rgba(0,150,255,0.9)" stroke="rgba(0,0,0,0.95)" stroke-width="1"/></svg>') 32 32 !important; /* 超大手指光标 */
+            transition: all 0.3s ease; /* 平滑过渡效果 */
+        }
+            
+            /* 数字签名悬停效果 - 持续高亮 */
+            .signature-container:hover {
+                transform: scale(1.05); /* 轻微放大 */
+                filter: brightness(1.3) !important; /* 悬停时增亮 */
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* 白色光晕 */
+                transition: all 0.3s ease; /* 平滑过渡效果 */
             }
+            
+                    /* 数字签名图片样式 */
+        .signature {
+            transition: all 0.3s ease; /* 平滑过渡效果 */
+        }
+        
+        .signature-container:hover .signature {
+            filter: brightness(1.2) contrast(1.1); /* 悬停时增亮和对比度 */
+        }
+        
+        /* ===== 全局光标放大系统 ===== */
+        
+        /* 保持原来的光标样式，但放大尺寸 */
+        /* 基础光标 - 放大版本 */
+        * {
+            cursor: default;
+        }
+        
+        /* 手型光标 - 放大版本 */
+        button, input[type="button"], input[type="submit"], input[type="reset"], 
+        a, .clickable, .signature-container, .volume-slider,
+        [onclick], [style*="cursor: pointer"], [class*="cursor-pointer"] {
+            cursor: pointer !important; /* 手型光标 */
+        }
+        
+        /* 文本光标 - 放大版本 */
+        input[type="text"], input[type="password"], input[type="email"], 
+        input[type="search"], textarea, [contenteditable="true"] {
+            cursor: text !important; /* 文本光标 */
+        }
+        
+        /* 拖拽光标 - 放大版本 */
+        [draggable="true"] {
+            cursor: move !important; /* 移动光标 */
+        }
+        
+        /* 调整光标 - 放大版本 */
+        .resize-handle, [style*="resize"] {
+            cursor: se-resize !important; /* 调整光标 */
+        }
+        
+        /* 帮助光标 - 放大版本 */
+        [title], [data-tooltip] {
+            cursor: help !important; /* 帮助光标 */
+        }
+        
+        /* 禁止光标 - 放大版本 */
+        [disabled], .disabled, .not-allowed {
+            cursor: not-allowed !important; /* 禁止光标 */
+        }
+        
+        /* 等待光标 - 放大版本 */
+        .loading, .wait, [style*="wait"] {
+            cursor: wait !important; /* 等待光标 */
+        }
+        
+        /* 光标尺寸放大 - 使用CSS transform */
+        * {
+            cursor: pointer; /* 默认手型光标 */
+        }
+        
+        /* 强制放大所有光标 */
+        * {
+            cursor: pointer !important; /* 强制手型光标 */
+        }
+        
+        /* 使用CSS放大光标尺寸 */
+        /* 注意：CSS无法直接改变光标大小，但可以通过以下方式优化 */
+        
+        /* 为不同元素设置合适的光标类型 */
+        .volume-slider {
+            cursor: pointer !important; /* 音量滑块手型光标 */
+        }
+        
+        .signature-container {
+            cursor: pointer !important; /* 数字签名手型光标 */
+        }
+        
+        /* 确保所有交互元素都有手型光标 */
+        .clickable, [onclick], button, a {
+            cursor: pointer !important;
+        }
+        
+        /* 确保输入框有文本光标 */
+        input, textarea {
+            cursor: text !important;
+        }
             
             .signature-lights {
                 top: -10vh;
@@ -3552,13 +3649,13 @@
             </div>
             
             <!-- 数字签名 -->
-            <div class="signature-container">
+            <div class="signature-container" id="signatureContainer">
                 <div class="signature-lights">
                     <div class="light-line"></div>
                     <div class="light-line"></div>
                     <div class="light-line"></div>
                 </div>
-                <img src="EziZhang sign.png" alt="Ezi.Zhang Signature" class="signature">
+                <img src="EziZhang sign.png" alt="Ezi.Zhang Signature" class="signature" id="signatureImage">
             </div>
             
 
@@ -4439,6 +4536,9 @@
         // 超大动态波点系统
         class DotSystem {
             constructor() {
+                // 设置Hello World播放状态标志 - 必须在最最开始设置
+                window.isPlayingHelloWorld = true; // 初始状态为静音
+                
                 this.container = document.querySelector('.animated-dots');
                 this.rightPanel = document.querySelector('.right-panel');
                 this.dots = [];
@@ -4895,6 +4995,11 @@
             
             // 创建柔和耐听的碰撞音效 - 基于波点颜色和音效模式
             playCollisionSound(dot1Color, dot2Color) {
+                // 检查是否正在播放Hello World
+                if (window.isPlayingHelloWorld) {
+                    return; // Hello World播放期间不播放任何音效
+                }
+                
                 if (!this.audioContext) return;
                 
                 // 防止音频过于频繁播放
@@ -5170,6 +5275,16 @@
             
             init() {
                 try {
+                    // 检查是否正在播放Hello World，如果是则不初始化音效
+                    if (window.isPlayingHelloWorld) {
+                        console.log('🔇 Hello World正在播放，分割线音效系统延迟初始化...');
+                        // 延迟初始化，等待Hello World播放完毕
+                        setTimeout(() => {
+                            this.init();
+                        }, 3000); // 延迟3秒初始化
+                        return;
+                    }
+                    
                     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
                     this.setupDividerEvents();
                     
@@ -5177,6 +5292,19 @@
                     setTimeout(() => {
                         this.initVolumeControl();
                     }, 100);
+                    
+                    // 监听音乐系统就绪事件
+                    window.addEventListener('musicSystemsReady', () => {
+                        console.log('🎵 分割线音效系统收到音乐就绪通知！');
+                        
+                        // 延迟启动管道音乐，确保Hello World完全播放完毕
+                        setTimeout(() => {
+                            if (!this.isMusicActive && !window.isPlayingHelloWorld) {
+                                console.log('🎵 Hello World播放完毕，自动启动管道音乐...');
+                                this.startPipesMusic();
+                            }
+                        }, 500); // 延迟0.5秒启动
+                    });
                     
                     console.log('🎵 分割线音效系统初始化成功');
                 } catch (error) {
@@ -5198,21 +5326,35 @@
                     if (group) {
                         // 鼠标进入分割线组
                         group.addEventListener('mouseenter', (e) => {
+                            // 双重检查：确保Hello World播放期间不播放音效
+                            if (window.isPlayingHelloWorld) {
+                                console.log('🔇 Hello World播放期间，分割线音效被阻止');
+                                return;
+                            }
                             this.playDividerSound('enter', e);
                         });
                         
                         // 鼠标离开分割线组
                         group.addEventListener('mouseleave', (e) => {
+                            if (window.isPlayingHelloWorld) {
+                                return;
+                            }
                             this.playDividerSound('leave', e);
                         });
                         
                         // 鼠标在分割线组内移动
                         group.addEventListener('mousemove', (e) => {
+                            if (window.isPlayingHelloWorld) {
+                                return;
+                            }
                             this.playDividerSound('move', e);
                         });
                         
                         // 鼠标点击分割线组
                         group.addEventListener('click', (e) => {
+                            if (window.isPlayingHelloWorld) {
+                                return;
+                            }
                             this.playDividerSound('click', e);
                         });
                     }
@@ -5220,6 +5362,11 @@
             }
             
             playDividerSound(action, event) {
+                // 检查是否正在播放Hello World
+                if (window.isPlayingHelloWorld) {
+                    return; // 静音期间不播放任何音效
+                }
+                
                 if (!this.audioContext) return;
                 
                 // 防抖：避免过于频繁的音效
@@ -5712,6 +5859,16 @@
                 // 简单赋格风格控制
                 this.fugueEntry = 0; // 声部进入顺序
                 
+                // 雪花噪音相关
+                this.snowNoiseVolume = 0.7; // 雪花噪音音量70%
+                this.lastSnowNoiseTime = 0; // 上次雪花噪音时间
+                this.snowNoiseDebounce = 500; // 雪花噪音防抖500ms
+                this.isSnowNoisePlaying = false; // 雪花噪音是否正在播放
+                this.snowNoiseInterval = null; // 雪花噪音持续播放定时器（已废弃）
+                this.snowNoiseIntervalTime = 100; // 雪花噪音播放间隔100ms（已废弃）
+                this.activeNoiseSources = []; // 活跃的噪音源数组
+                this.noiseMonitorInterval = null; // 噪音源监控定时器
+                
                 this.init();
             }
             
@@ -5766,7 +5923,16 @@
                 // 初始化管道音乐音量控制
                 this.initPipesMusicVolumeControl();
                 
-                console.log('✅ 管道屏保系统初始化完成');
+                // 初始化雪花噪音事件监听器
+                this.initSnowNoiseEvents();
+                
+                        // 初始化光标放大系统
+        this.initCursorEnlargement();
+        
+        // 初始化语音问候系统
+        this.initVoiceGreeting();
+        
+        console.log('✅ 管道屏保系统初始化完成');
             }
             
             // 初始化管道音乐音量控制
@@ -5788,11 +5954,399 @@
                         console.log(`🎵 管道音乐音量已调整为: ${(this.pipesMusicVolume * 100).toFixed(0)}%`);
                     });
                     
-                    console.log('✅ 管道音乐音量控制已初始化，滑块值:', pipesMusicVolumeSlider.value);
-                } else {
-                    console.error('❌ 找不到管道音乐音量滑块元素');
-                }
+                                    console.log('✅ 管道音乐音量控制已初始化，滑块值:', pipesMusicVolumeSlider.value);
+            } else {
+                console.error('❌ 找不到管道音乐音量滑块元素');
             }
+        }
+        
+        // 初始化雪花噪音事件监听器
+        initSnowNoiseEvents() {
+            const signatureContainer = document.getElementById('signatureContainer');
+            const signatureImage = document.getElementById('signatureImage');
+            
+            if (signatureContainer && signatureImage) {
+                // 为整个签名容器添加鼠标进入事件 - 开始持续播放
+                signatureContainer.addEventListener('mouseenter', (e) => {
+                    this.startContinuousSnowNoise();
+                });
+                
+                // 为签名图片添加鼠标进入事件 - 开始持续播放
+                signatureImage.addEventListener('mouseenter', (e) => {
+                    this.startContinuousSnowNoise();
+                });
+                
+                // 为整个签名容器添加鼠标离开事件 - 停止持续播放
+                signatureContainer.addEventListener('mouseleave', (e) => {
+                    this.stopContinuousSnowNoise();
+                });
+                
+                // 为签名图片添加鼠标离开事件 - 停止持续播放
+                signatureImage.addEventListener('mouseleave', (e) => {
+                    this.stopContinuousSnowNoise();
+                });
+                
+                // 为签名容器添加触摸事件（移动设备）
+                signatureContainer.addEventListener('touchstart', (e) => {
+                    this.startContinuousSnowNoise();
+                });
+                
+                signatureImage.addEventListener('touchstart', (e) => {
+                    this.startContinuousSnowNoise();
+                });
+                
+                signatureContainer.addEventListener('touchend', (e) => {
+                    this.stopContinuousSnowNoise();
+                });
+                
+                signatureImage.addEventListener('touchend', (e) => {
+                    this.stopContinuousSnowNoise();
+                });
+                
+                console.log('✅ 雪花噪音悬停持续播放事件监听器已初始化');
+            } else {
+                console.error('❌ 找不到数字签名元素');
+            }
+        }
+        
+        // 初始化光标放大系统
+        initCursorEnlargement() {
+            console.log('🔍 开始初始化光标放大系统...');
+            
+            // 使用原来的光标样式，但通过CSS放大
+            // 为所有可点击元素设置手型光标
+            const clickableElements = document.querySelectorAll('button, input[type="button"], input[type="submit"], input[type="reset"], a, .clickable, [onclick], .volume-slider');
+            clickableElements.forEach(element => {
+                element.style.cursor = 'pointer';
+                console.log(`🖱️ 设置手型光标: ${element.tagName}${element.className ? '.' + element.className : ''}`);
+            });
+            
+            // 为所有输入框设置文本光标
+            const textElements = document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], input[type="search"], textarea, [contenteditable="true"]');
+            textElements.forEach(element => {
+                element.style.cursor = 'text';
+                console.log(`📝 设置文本光标: ${element.tagName}${element.className ? '.' + element.className : ''}`);
+            });
+            
+            // 为数字签名设置手型光标
+            const signatureContainer = document.getElementById('signatureContainer');
+            if (signatureContainer) {
+                signatureContainer.style.cursor = 'pointer';
+                console.log('✍️ 设置数字签名手型光标');
+            }
+            
+            // 添加全局鼠标移动监听器，确保光标样式
+            document.addEventListener('mousemove', (e) => {
+                const target = e.target;
+                if (target && target.style && target.style.cursor) {
+                    // 光标样式已经设置，不需要重复设置
+                    return;
+                }
+                
+                // 根据元素类型设置光标
+                if (target.matches('button, input[type="button"], input[type="submit"], input[type="reset"], a, .clickable, [onclick], .volume-slider')) {
+                    target.style.cursor = 'pointer';
+                } else if (target.matches('input[type="text"], input[type="password"], input[type="email"], input[type="search"], textarea, [contenteditable="true"]')) {
+                    target.style.cursor = 'text';
+                } else {
+                    target.style.cursor = 'default';
+                }
+            });
+            
+            console.log(`✅ 光标样式系统初始化完成: ${clickableElements.length}个可点击元素, ${textElements.length}个文本元素`);
+            console.log('🖱️ 现在移动鼠标，应该能看到原来的光标样式了！');
+        }
+        
+        // 初始化语音问候系统 - 帝国时代风格！
+        initVoiceGreeting() {
+            console.log('🎮 开始初始化帝国时代风格语音问候系统...');
+            
+            // 延迟播放，确保页面完全加载
+            setTimeout(() => {
+                this.playAgeOfEmpiresGreeting();
+            }, 1000); // 延迟1秒播放
+        }
+        
+        // 帝国时代风格语音问候 - 游戏感十足！
+        playAgeOfEmpiresGreeting() {
+            console.log('🎮 开始播放帝国时代风格问候...');
+            
+            try {
+                // 设置全局标志 - 表示正在播放Hello World
+                window.isPlayingHelloWorld = true;
+                console.log('🔇 设置音乐静音标志，等待Hello World播放完毕...');
+                
+                // 创建音频上下文
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 创建主混音器
+                const masterGain = audioContext.createGain();
+                masterGain.connect(audioContext.destination);
+                masterGain.gain.setValueAtTime(0.6, audioContext.currentTime); // 主音量60%，更清晰
+                
+                // 创建混响效果 - 减少混响，让声音更清晰
+                const reverbGain = audioContext.createGain();
+                const reverbDelay = audioContext.createDelay(0.2); // 减少延迟时间
+                reverbGain.connect(reverbDelay);
+                reverbDelay.connect(masterGain);
+                reverbGain.gain.setValueAtTime(0.1, audioContext.currentTime); // 减少混响音量
+                
+                // 创建"Hello"音效 - 帝国时代风格
+                this.createHelloSound(audioContext, masterGain, reverbGain, 0);
+                
+                // 延迟播放"World"音效
+                setTimeout(() => {
+                    this.createWorldSound(audioContext, masterGain, reverbGain, 0.8);
+                }, 800);
+                
+                // 添加清晰的音效提示
+                setTimeout(() => {
+                    this.createClearPrompt(audioContext, masterGain);
+                }, 2000); // 2秒后播放提示音
+                
+                // 计算总播放时间并设置音乐恢复标志
+                const totalPlayTime = 2500; // 2.5秒后完全播放完毕
+                setTimeout(() => {
+                    window.isPlayingHelloWorld = false;
+                    console.log('🔊 Hello World播放完毕，恢复所有音乐播放！');
+                    
+                    // 通知所有音乐系统可以开始播放
+                    this.notifyMusicSystemsReady();
+                }, totalPlayTime);
+                
+                console.log('🎮 帝国时代风格问候开始播放！');
+                
+            } catch (error) {
+                console.error('❌ 帝国时代风格问候播放失败:', error);
+                // 出错时也要恢复音乐播放
+                window.isPlayingHelloWorld = false;
+            }
+        }
+        
+        // 创建"Hello"音效 - 帝国时代风格，但更清晰
+        createHelloSound(audioContext, masterGain, reverbGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"Hello"的每个音节
+            const helloNotes = [
+                { freq: 523.25, duration: 0.2, gain: 0.5 }, // C5 - "He"
+                { freq: 659.25, duration: 0.2, gain: 0.5 }, // E5 - "llo"
+            ];
+            
+            helloNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.25); // 每个音节间隔0.25秒
+                
+                // 主音调 - 使用帝国时代风格的音色
+                const mainOsc = audioContext.createOscillator();
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                
+                // 设置主音调 - 清晰可辨的音符
+                mainOsc.type = 'triangle'; // 三角波，更有游戏感
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 滤波器 - 让声音更清晰
+                mainFilter.type = 'lowpass';
+                mainFilter.frequency.setValueAtTime(note.freq * 2, noteTime);
+                mainFilter.Q.setValueAtTime(1.5, noteTime);
+                
+                // 音量包络 - 清晰的音符
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.02); // 快速攻击
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.05); // 保持音量
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration); // 快速衰减
+                
+                // 连接音频节点
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(reverbGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                
+                // 添加谐波 - 增加音效的丰富度
+                this.addHarmonics(audioContext, masterGain, reverbGain, noteTime, note.freq, note.gain * 0.3);
+            });
+            
+            console.log('🎵 播放"Hello"音效');
+        }
+        
+        // 创建"World"音效 - 帝国时代风格，但更清晰
+        createWorldSound(audioContext, masterGain, reverbGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建"World"的每个音节
+            const worldNotes = [
+                { freq: 659.25, duration: 0.25, gain: 0.6 }, // E5 - "Wor"
+                { freq: 523.25, duration: 0.25, gain: 0.6 }, // C5 - "ld"
+            ];
+            
+            worldNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.3); // 每个音节间隔0.3秒
+                
+                // 主音调 - 使用帝国时代风格的音色
+                const mainOsc = audioContext.createOscillator();
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                
+                // 设置主音调 - 清晰可辨的音符
+                mainOsc.type = 'square'; // 方波，更有电子游戏感
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 滤波器 - 让声音更清晰
+                mainFilter.type = 'lowpass';
+                mainFilter.frequency.setValueAtTime(note.freq * 2, noteTime);
+                mainFilter.Q.setValueAtTime(1.2, noteTime);
+                
+                // 音量包络 - 清晰的音符
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.02); // 快速攻击
+                mainGain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.05); // 保持音量
+                mainGain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration); // 快速衰减
+                
+                // 连接音频节点
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                mainGain.connect(reverbGain);
+                
+                // 播放音效
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                
+                // 添加谐波 - 增加音效的丰富度
+                this.addHarmonics(audioContext, masterGain, reverbGain, noteTime, note.freq, note.gain * 0.3);
+            });
+            
+            // 添加完成音效 - 帝国时代风格的"叮"声
+            setTimeout(() => {
+                this.createCompletionSound(audioContext, masterGain, reverbGain, 0.2);
+            }, 800);
+            
+            console.log('🎵 播放"World"音效');
+        }
+        
+        // 添加谐波 - 增加音效的丰富度
+        addHarmonics(audioContext, masterGain, reverbGain, startTime, baseFreq, volume) {
+            const harmonics = [
+                { freq: baseFreq * 2, gain: volume * 0.4, type: 'sine' },    // 2次谐波
+                { freq: baseFreq * 3, gain: volume * 0.2, type: 'triangle' }, // 3次谐波
+                { freq: baseFreq * 1.5, gain: volume * 0.3, type: 'sawtooth' } // 1.5次谐波
+            ];
+            
+            harmonics.forEach((harmonic, index) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                
+                osc.type = harmonic.type;
+                osc.frequency.setValueAtTime(harmonic.freq, startTime);
+                
+                // 滤波器
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(harmonic.freq * 1.5, startTime);
+                filter.Q.setValueAtTime(1.0, startTime);
+                
+                // 音量包络
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(harmonic.gain, startTime + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.5);
+                
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(masterGain);
+                gain.connect(reverbGain);
+                
+                osc.start(startTime);
+                osc.stop(startTime + 0.5);
+            });
+        }
+        
+        // 创建完成音效 - 帝国时代风格的"叮"声
+        createCompletionSound(audioContext, masterGain, reverbGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            // 创建清脆的"叮"声
+            const dingOsc = audioContext.createOscillator();
+            const dingGain = audioContext.createGain();
+            const dingFilter = audioContext.createBiquadFilter();
+            
+            // 设置"叮"声 - 高音调，清脆
+            dingOsc.type = 'sine';
+            dingOsc.frequency.setValueAtTime(1046.50, currentTime); // C6音符，高音
+            dingOsc.frequency.exponentialRampToValueAtTime(1318.51, currentTime + 0.1); // 滑到E6
+            
+            // 滤波器 - 让声音更清脆
+            dingFilter.type = 'highpass';
+            dingFilter.frequency.setValueAtTime(800, currentTime);
+            dingFilter.Q.setValueAtTime(3.0, currentTime);
+            
+            // 音量包络 - 快速攻击，快速衰减
+            dingGain.gain.setValueAtTime(0, currentTime);
+            dingGain.gain.linearRampToValueAtTime(0.5, currentTime + 0.01); // 极快攻击
+            dingGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.2); // 快速衰减
+            
+            // 连接音频节点
+            dingOsc.connect(dingFilter);
+            dingFilter.connect(dingGain);
+            dingGain.connect(masterGain);
+            dingGain.connect(reverbGain);
+            
+            // 播放音效
+            dingOsc.start(currentTime);
+            dingOsc.stop(currentTime + 0.2);
+        }
+        
+        // 创建清晰的音效提示 - 帮助理解"Hello World"
+        createClearPrompt(audioContext, masterGain) {
+            const currentTime = audioContext.currentTime;
+            
+            // 创建清晰的提示音效
+            const promptOsc = audioContext.createOscillator();
+            const promptGain = audioContext.createGain();
+            const promptFilter = audioContext.createBiquadFilter();
+            
+            // 设置提示音效 - 使用更清晰的音色
+            promptOsc.type = 'sine'; // 正弦波，最清晰
+            promptOsc.frequency.setValueAtTime(880, currentTime); // A5音符，高音清晰
+            
+            // 滤波器 - 让声音更清晰
+            promptFilter.type = 'bandpass';
+            promptFilter.frequency.setValueAtTime(880, currentTime);
+            promptFilter.Q.setValueAtTime(2.0, currentTime);
+            
+            // 音量包络 - 清晰的提示音
+            promptGain.gain.setValueAtTime(0, currentTime);
+            promptGain.gain.linearRampToValueAtTime(0.4, currentTime + 0.05); // 中等攻击
+            promptGain.gain.setValueAtTime(0.4, currentTime + 0.3); // 保持音量
+            promptGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.5); // 缓慢衰减
+            
+            // 连接音频节点
+            promptOsc.connect(promptFilter);
+            promptFilter.connect(promptGain);
+            promptGain.connect(masterGain);
+            
+            // 播放音效
+            promptOsc.start(currentTime);
+            promptOsc.stop(currentTime + 0.5);
+            
+            console.log('🔔 播放清晰提示音效');
+        }
+        
+        // 通知所有音乐系统可以开始播放
+        notifyMusicSystemsReady() {
+            console.log('🎵 通知所有音乐系统准备就绪...');
+            
+            // 触发自定义事件，通知其他系统
+            const musicReadyEvent = new CustomEvent('musicSystemsReady', {
+                detail: { timestamp: Date.now() }
+            });
+            window.dispatchEvent(musicReadyEvent);
+            
+            console.log('🎵 音乐系统就绪事件已触发！');
+        }
             
             updateGrid() {
                 // 强制容器显示以获取正确尺寸
@@ -5941,6 +6495,12 @@
             
             // 启动管道赋格配乐
             startPipesMusic() {
+                // 检查是否正在播放Hello World
+                if (window.isPlayingHelloWorld) {
+                    console.log('🔇 Hello World正在播放，等待播放完毕...');
+                    return;
+                }
+                
                 console.log('🎵 尝试启动管道赋格配乐...');
                 console.log('音频上下文状态:', this.audioContext ? this.audioContext.state : '未初始化');
                 console.log('当前音乐状态:', this.isMusicActive);
@@ -6976,6 +7536,271 @@
                 }
                 
                 console.log(`📺 电视白噪音完成: ${noiseCount}层噪音, 持续${duration.toFixed(2)}s`);
+            }
+            
+            // 开始持续播放雪花噪音
+            startContinuousSnowNoise() {
+                if (this.isSnowNoisePlaying) {
+                    console.log('🔊 雪花噪音已在播放中...');
+                    return;
+                }
+                
+                this.isSnowNoisePlaying = true;
+                
+                // 创建连续的雪花噪音流
+                this.createContinuousSnowNoise();
+                
+                console.log('🔊 雪花噪音持续播放已开始');
+            }
+            
+            // 停止持续播放雪花噪音
+            stopContinuousSnowNoise() {
+                if (!this.isSnowNoisePlaying) {
+                    return;
+                }
+                
+                this.isSnowNoisePlaying = false;
+                
+                // 清除监控定时器
+                if (this.noiseMonitorInterval) {
+                    clearInterval(this.noiseMonitorInterval);
+                    this.noiseMonitorInterval = null;
+                }
+                
+                // 停止所有活跃的噪音源
+                if (this.activeNoiseSources) {
+                    this.activeNoiseSources.forEach(noise => {
+                        try {
+                            // 淡出音量
+                            noise.gain.gain.setValueAtTime(noise.gain.gain.value, this.audioContext.currentTime);
+                            noise.gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.2);
+                            
+                            // 延迟停止噪音源
+                            setTimeout(() => {
+                                try {
+                                    noise.source.stop();
+                                } catch (e) {
+                                    console.log('🔊 噪音源已自然停止');
+                                }
+                            }, 200);
+                        } catch (e) {
+                            console.log('🔊 停止噪音源时出错:', e);
+                        }
+                    });
+                    
+                    this.activeNoiseSources = [];
+                }
+                
+                console.log('🔊 雪花噪音持续播放已停止');
+            }
+            
+            // 播放雪花噪音 - 带防抖控制（保留用于单次播放）
+            playSnowNoise() {
+                const now = Date.now();
+                
+                // 防抖控制 - 避免频繁触发
+                if (now - this.lastSnowNoiseTime < this.snowNoiseDebounce) {
+                    console.log('⏱️ 雪花噪音防抖中...');
+                    return;
+                }
+                
+                // 检查是否正在播放Hello World
+                if (window.isPlayingHelloWorld) {
+                    console.log('🔇 Hello World正在播放，雪花噪音静音');
+                    return;
+                }
+                
+                // 更新最后播放时间
+                this.lastSnowNoiseTime = now;
+                
+                // 播放雪花噪音
+                this.createSnowNoise();
+                
+                console.log('❄️ 雪花噪音已触发');
+            }
+            
+            // 创建连续的雪花噪音流 - 真正的连续白噪音
+            createContinuousSnowNoise() {
+                // 检查是否正在播放Hello World
+                if (window.isPlayingHelloWorld) {
+                    console.log('🔇 Hello World正在播放，连续雪花噪音静音');
+                    return;
+                }
+                
+                if (!this.audioContext) return;
+                
+                const currentTime = this.audioContext.currentTime;
+                
+                // 创建多个连续的噪音源，形成连续的噪音流
+                const noiseSources = [];
+                const noiseCount = 4; // 4个噪音源交替播放
+                
+                for (let i = 0; i < noiseCount; i++) {
+                    // 创建连续的噪音缓冲区 - 使用更长的缓冲区确保循环流畅
+                    const noiseBuffer = this.createWhiteNoiseBuffer(3.0); // 3秒的噪音
+                    const noiseSource = this.audioContext.createBufferSource();
+                    const noiseGain = this.audioContext.createGain();
+                    const noiseFilter = this.audioContext.createBiquadFilter();
+                    const noiseDelay = this.audioContext.createDelay(0.1);
+                    const noiseReverb = this.audioContext.createGain();
+                    
+                    // 设置噪音缓冲区
+                    noiseSource.buffer = noiseBuffer;
+                    
+                    // 噪音滤波器 - 模拟老式CRT显示器的频响特性
+                    noiseFilter.type = 'bandpass';
+                    // 不同频段，创造丰富的噪音层次
+                    const filterFreq = 150 + (i * 200) + Math.random() * 150; // 150-800Hz，分层频段
+                    noiseFilter.frequency.setValueAtTime(filterFreq, currentTime);
+                    noiseFilter.Q.setValueAtTime(0.6 + Math.random() * 0.4, currentTime); // 0.6-1.0
+                    
+                    // 噪音延迟 - 模拟CRT信号的反射
+                    noiseDelay.delayTime.setValueAtTime(0.05 + (i * 0.02), currentTime);
+                    
+                    // 噪音音量 - 分层音量，创造立体感，保持持续音量
+                    const noiseVolume = (0.2 + (i * 0.1) + Math.random() * 0.1) * this.pipesMusicVolume; // 0.2-0.6
+                    noiseGain.gain.setValueAtTime(0, currentTime);
+                    noiseGain.gain.linearRampToValueAtTime(noiseVolume, currentTime + 0.1);
+                    // 保持持续音量，不衰减
+                    noiseGain.gain.setValueAtTime(noiseVolume, currentTime + 2.8);
+                    
+                    // 连接噪音
+                    noiseSource.connect(noiseFilter);
+                    noiseFilter.connect(noiseGain);
+                    noiseGain.connect(this.masterGain);
+                    
+                    // 延迟路径 - 增加空间感
+                    noiseGain.connect(noiseDelay);
+                    noiseDelay.connect(noiseReverb);
+                    noiseReverb.gain.setValueAtTime(0.3, currentTime);
+                    noiseReverb.connect(this.masterGain);
+                    
+                    // 设置循环播放 - 确保真正循环
+                    noiseSource.loop = true;
+                    noiseSource.start(currentTime + (i * 0.1)); // 错开启动时间
+                    
+                    // 保存引用，用于停止
+                    noiseSources.push({
+                        source: noiseSource,
+                        gain: noiseGain,
+                        filter: noiseFilter,
+                        delay: noiseDelay,
+                        reverb: noiseReverb
+                    });
+                    
+                    console.log(`🔊 连续噪音源${i+1}: 频段${filterFreq.toFixed(0)}Hz, 音量${(noiseVolume * 100).toFixed(0)}%, 循环播放`);
+                }
+                
+                // 保存噪音源引用
+                this.activeNoiseSources = noiseSources;
+                
+                console.log(`🔊 连续雪花噪音流已创建: ${noiseCount}个噪音源, 循环播放`);
+                
+                // 添加调试信息，监控噪音源状态
+                this.monitorNoiseSources();
+            }
+            
+            // 监控噪音源状态，确保循环播放正常工作
+            monitorNoiseSources() {
+                if (!this.activeNoiseSources || this.activeNoiseSources.length === 0) return;
+                
+                // 每5秒检查一次噪音源状态
+                this.noiseMonitorInterval = setInterval(() => {
+                    if (!this.isSnowNoisePlaying) {
+                        clearInterval(this.noiseMonitorInterval);
+                        return;
+                    }
+                    
+                    console.log(`🔍 噪音源状态检查: ${this.activeNoiseSources.length}个噪音源活跃中`);
+                    
+                    // 检查每个噪音源的状态
+                    this.activeNoiseSources.forEach((noise, index) => {
+                        try {
+                            // 检查音量是否正常
+                            const currentGain = noise.gain.gain.value;
+                            if (currentGain < 0.01) {
+                                console.log(`⚠️ 噪音源${index + 1}音量过低: ${currentGain.toFixed(3)}`);
+                                // 重新设置音量
+                                noise.gain.gain.setValueAtTime(0.3 * this.pipesMusicVolume, this.audioContext.currentTime);
+                            }
+                        } catch (e) {
+                            console.log(`⚠️ 噪音源${index + 1}状态检查出错:`, e);
+                        }
+                    });
+                }, 5000);
+            }
+            
+            // 创建真正的白噪音 - 沙沙～的雪花屏幕效果
+            createSnowNoise() {
+                if (!this.audioContext) return;
+                
+                const currentTime = this.audioContext.currentTime;
+                
+                // 创建多层真正的白噪音 - 模拟老式电视的雪花屏幕
+                const noiseLayers = 6 + Math.floor(Math.random() * 4); // 6-9层
+                
+                for (let i = 0; i < noiseLayers; i++) {
+                    // 使用AudioBufferSourceNode创建真正的白噪音
+                    const noiseBuffer = this.createWhiteNoiseBuffer(0.8); // 0.8秒的白噪音
+                    const noiseSource = this.audioContext.createBufferSource();
+                    const noiseGain = this.audioContext.createGain();
+                    const noiseFilter = this.audioContext.createBiquadFilter();
+                    const noiseDelay = this.audioContext.createDelay(0.15);
+                    const noiseReverb = this.audioContext.createGain();
+                    
+                    // 设置白噪音缓冲区
+                    noiseSource.buffer = noiseBuffer;
+                    
+                    // 白噪音滤波器 - 模拟老式CRT显示器的频响特性
+                    noiseFilter.type = 'bandpass';
+                    // 随机频率范围 - 模拟雪花信号的不同频段
+                    const filterFreq = 200 + Math.random() * 800; // 200-1000Hz
+                    noiseFilter.frequency.setValueAtTime(filterFreq, currentTime);
+                    noiseFilter.Q.setValueAtTime(0.5 + Math.random() * 0.8, currentTime); // 0.5-1.3
+                    
+                    // 白噪音延迟 - 模拟CRT信号的反射
+                    noiseDelay.delayTime.setValueAtTime(0.05 + Math.random() * 0.1, currentTime);
+                    
+                    // 白噪音音量 - 模拟老式电视的雪花噪音强度
+                    const noiseVolume = (0.3 + Math.random() * 0.4) * this.pipesMusicVolume; // 0.3-0.7
+                    noiseGain.gain.setValueAtTime(0, currentTime);
+                    noiseGain.gain.linearRampToValueAtTime(noiseVolume, currentTime + 0.02);
+                    noiseGain.gain.exponentialRampToValueAtTime(0.01, currentTime + 0.6);
+                    
+                    // 连接白噪音
+                    noiseSource.connect(noiseFilter);
+                    noiseFilter.connect(noiseGain);
+                    noiseGain.connect(this.masterGain);
+                    
+                    // 延迟路径 - 增加空间感
+                    noiseGain.connect(noiseDelay);
+                    noiseDelay.connect(noiseReverb);
+                    noiseReverb.gain.setValueAtTime(0.4, currentTime);
+                    noiseReverb.connect(this.masterGain);
+                    
+                    noiseSource.start(currentTime);
+                    noiseSource.stop(currentTime + 0.8);
+                    
+                    console.log(`🔊 白噪音第${i+1}层: 频段${filterFreq.toFixed(0)}Hz, 音量${(noiseVolume * 100).toFixed(0)}%`);
+                }
+                
+                console.log(`🔊 雪花屏幕白噪音完成: ${noiseLayers}层噪音, 持续0.8s`);
+            }
+            
+            // 创建真正的白噪音缓冲区
+            createWhiteNoiseBuffer(duration) {
+                const sampleRate = this.audioContext.sampleRate;
+                const bufferSize = sampleRate * duration;
+                const buffer = this.audioContext.createBuffer(1, bufferSize, sampleRate);
+                const output = buffer.getChannelData(0);
+                
+                // 生成真正的随机白噪音
+                for (let i = 0; i < bufferSize; i++) {
+                    // 使用Math.random()生成-1到1之间的随机值
+                    output[i] = (Math.random() * 2 - 1) * 0.3; // 0.3的振幅，避免过响
+                }
+                
+                return buffer;
             }
             
             // 创建极简Bassline - 与极简Drums配合
