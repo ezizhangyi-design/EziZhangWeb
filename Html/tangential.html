@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Ezi.Zhang - Tangential Series</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
@@ -16,6 +19,7 @@
             color: white;
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
             overflow-x: hidden;
+            transition: background-color 2s ease-in-out;
         }
         
         .back-btn {
@@ -2009,6 +2013,173 @@
                 }, 2000);
             }, 1000);
         });
+
+        // ===== Tangential 天气背景同步系统 =====
+        
+        // 天气数据状态
+        let tangentialWeatherData = null;
+        let isTangentialWeatherActive = false;
+        
+        // 初始化 Tangential 全局天气客户端
+        function initTangentialWeatherClient() {
+            console.log('🌍 初始化 Tangential 全局天气客户端...');
+            
+            // 尝试从 localStorage 获取展览界面的天气数据
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    tangentialWeatherData = JSON.parse(storedWeather);
+                    console.log('📡 Tangential 从 localStorage 获取到展览界面天气数据:', tangentialWeatherData);
+                    
+                    // 检查数据是否过期（超过24小时）
+                    const now = Date.now();
+                    const dataAge = now - tangentialWeatherData.timestamp;
+                    if (dataAge < 24 * 60 * 60 * 1000) { // 24小时 = 86400000毫秒
+                        // 数据有效，立即应用背景颜色
+                        applyTangentialWeatherBackground(tangentialWeatherData);
+                        isTangentialWeatherActive = true;
+                    } else {
+                        console.log('⚠️ Tangential 天气数据已过期，等待展览界面更新...');
+                    }
+                } catch (error) {
+                    console.error('❌ Tangential 解析天气数据失败:', error);
+                }
+            }
+            
+            // 监听全局天气变化事件
+            window.addEventListener('globalWeatherChange', (event) => {
+                handleTangentialWeatherChange(event);
+            });
+            
+            // 监听 localStorage 变化
+            window.addEventListener('storage', (event) => {
+                handleTangentialStorageChange(event);
+            });
+            
+            // 启动定期检查 - 每小时检查一次，但只在早晨更新
+            setInterval(() => {
+                checkTangentialWeather();
+            }, 60 * 60 * 1000); // 每小时检查一次，但只在早晨更新
+            
+            console.log('✅ Tangential 全局天气客户端初始化完成');
+        }
+        
+        // 处理 Tangential 全局天气变化事件
+        function handleTangentialWeatherChange(event) {
+            const newWeatherData = event.detail;
+            console.log('📡 Tangential 收到展览界面天气变化事件:', newWeatherData);
+            
+            tangentialWeatherData = newWeatherData;
+            applyTangentialWeatherBackground(newWeatherData);
+            isTangentialWeatherActive = true;
+        }
+        
+        // 处理 Tangential localStorage 变化
+        function handleTangentialStorageChange(event) {
+            if (event.key === 'globalWeatherData') {
+                try {
+                    const newWeatherData = JSON.parse(event.newValue);
+                    console.log('📡 Tangential localStorage 天气数据已更新:', newWeatherData);
+                    
+                    tangentialWeatherData = newWeatherData;
+                    applyTangentialWeatherBackground(newWeatherData);
+                    isTangentialWeatherActive = true;
+                } catch (error) {
+                    console.error('❌ Tangential 解析更新的天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 定期检查 Tangential 全局天气数据
+        function checkTangentialWeather() {
+            const now = new Date();
+            const hour = now.getHours();
+            
+            // 只在北京时间早上6-8点之间检查天气更新（太阳升起时间）
+            if (hour >= 6 && hour < 8) {
+                const storedWeather = localStorage.getItem('globalWeatherData');
+                if (storedWeather) {
+                    try {
+                        const weatherData = JSON.parse(storedWeather);
+                        const currentTime = Date.now();
+                        const dataAge = currentTime - weatherData.timestamp;
+                        
+                        // 如果数据较新（24小时内）且与当前数据不同，则更新
+                        if (dataAge < 24 * 60 * 60 * 1000 && (!tangentialWeatherData || tangentialWeatherData.timestamp !== weatherData.timestamp)) {
+                            console.log('🌅 Tangential 早晨检查发现新的天气数据:', weatherData);
+                            tangentialWeatherData = weatherData;
+                            applyTangentialWeatherBackground(weatherData);
+                            isTangentialWeatherActive = true;
+                        }
+                    } catch (error) {
+                        console.error('❌ Tangential 定期检查天气数据失败:', error);
+                    }
+                }
+            }
+        }
+        
+        // 应用 Tangential 全局天气背景颜色
+        function applyTangentialWeatherBackground(weatherData) {
+            if (!weatherData || !weatherData.baseColor) {
+                console.log('⚠️ Tangential 天气数据无效，跳过背景更新');
+                return;
+            }
+            
+            console.log('🎨 Tangential 应用展览界面的天气背景颜色:', weatherData.baseColor);
+            
+            // 创建CSS变量来动态调整颜色
+            const style = document.createElement('style');
+            style.id = 'tangential-global-weather-style';
+            
+            // 移除之前的样式
+            const existingStyle = document.getElementById('tangential-global-weather-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // 生成动态CSS - 使用纯色而不是渐变
+            const css = `
+                html, body {
+                    --tangential-weather-blue-base: ${weatherData.baseColor};
+                    --tangential-weather-blue-intensity: ${weatherData.intensity};
+                    --tangential-weather-blue-humidity: ${weatherData.humidityFactor};
+                    --tangential-weather-blue-wind: ${weatherData.windFactor};
+                    --tangential-weather-blue-season: ${weatherData.seasonalAdjustment};
+                    --tangential-weather-blue-time: ${weatherData.timeAdjustment};
+                    
+                    background-color: ${weatherData.baseColor} !important;
+                    transition: background-color 2s ease-in-out;
+                }
+            `;
+            
+            style.textContent = css;
+            document.head.appendChild(style);
+            
+            // 强制刷新DOM，确保背景颜色立即生效，防止缓存问题
+            document.body.style.backgroundColor = weatherData.baseColor;
+            document.documentElement.style.backgroundColor = weatherData.baseColor;
+            
+            // 强制重绘，确保背景颜色立即显示
+            document.body.offsetHeight; // 触发重排
+            document.documentElement.offsetHeight; // 触发重排
+            
+            console.log(`🎨 Tangential 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)} (强制刷新)`);
+        }
+        
+        // 页面加载完成后初始化天气系统
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，开始初始化 Tangential 天气系统');
+            
+            try {
+                // 初始化全局天气客户端系统
+                initTangentialWeatherClient();
+                console.log('✅ Tangential 天气系统初始化完成');
+                
+            } catch (error) {
+                console.error('❌ Tangential 天气系统初始化失败:', error);
+            }
+        });
+
     </script>
 </body>
 </html> 

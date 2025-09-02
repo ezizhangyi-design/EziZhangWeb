@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Ezi.Zhang - The Signifer Relic Series</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
@@ -21,6 +24,7 @@
             -webkit-font-smoothing: none;
             -moz-osx-font-smoothing: none;
             text-rendering: optimizeSpeed;
+            transition: background-color 2s ease-in-out;
         }
         
         .back-btn {
@@ -2431,7 +2435,173 @@
         </div>
     </div>
 
-
-
+    <!-- 天气背景同步系统 -->
+    <script>
+        // ===== Signifer Relic Series 天气背景同步系统 =====
+        
+        // 天气数据状态
+        let signiferRelicWeatherData = null;
+        let isSigniferRelicWeatherActive = false;
+        
+        // 初始化 Signifer Relic Series 全局天气客户端
+        function initSigniferRelicWeatherClient() {
+            console.log('🌍 初始化 Signifer Relic Series 全局天气客户端...');
+            
+            // 尝试从 localStorage 获取展览界面的天气数据
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    signiferRelicWeatherData = JSON.parse(storedWeather);
+                    console.log('📡 Signifer Relic Series 从 localStorage 获取到展览界面天气数据:', signiferRelicWeatherData);
+                    
+                    // 检查数据是否过期（超过24小时）
+                    const now = Date.now();
+                    const dataAge = now - signiferRelicWeatherData.timestamp;
+                    if (dataAge < 24 * 60 * 60 * 1000) { // 24小时 = 86400000毫秒
+                        // 数据有效，立即应用背景颜色
+                        applySigniferRelicWeatherBackground(signiferRelicWeatherData);
+                        isSigniferRelicWeatherActive = true;
+                    } else {
+                        console.log('⚠️ Signifer Relic Series 天气数据已过期，等待展览界面更新...');
+                    }
+                } catch (error) {
+                    console.error('❌ Signifer Relic Series 解析天气数据失败:', error);
+                }
+            }
+            
+            // 监听全局天气变化事件
+            window.addEventListener('globalWeatherChange', (event) => {
+                handleSigniferRelicWeatherChange(event);
+            });
+            
+            // 监听 localStorage 变化
+            window.addEventListener('storage', (event) => {
+                handleSigniferRelicStorageChange(event);
+            });
+            
+            // 启动定期检查 - 每小时检查一次，但只在早晨更新
+            setInterval(() => {
+                checkSigniferRelicWeather();
+            }, 60 * 60 * 1000); // 每小时检查一次，但只在早晨更新
+            
+            console.log('✅ Signifer Relic Series 全局天气客户端初始化完成');
+        }
+        
+        // 处理 Signifer Relic Series 全局天气变化事件
+        function handleSigniferRelicWeatherChange(event) {
+            const newWeatherData = event.detail;
+            console.log('📡 Signifer Relic Series 收到展览界面天气变化事件:', newWeatherData);
+            
+            signiferRelicWeatherData = newWeatherData;
+            applySigniferRelicWeatherBackground(newWeatherData);
+            isSigniferRelicWeatherActive = true;
+        }
+        
+        // 处理 Signifer Relic Series localStorage 变化
+        function handleSigniferRelicStorageChange(event) {
+            if (event.key === 'globalWeatherData') {
+                try {
+                    const newWeatherData = JSON.parse(event.newValue);
+                    console.log('📡 Signifer Relic Series localStorage 天气数据已更新:', newWeatherData);
+                    
+                    signiferRelicWeatherData = newWeatherData;
+                    applySigniferRelicWeatherBackground(newWeatherData);
+                    isSigniferRelicWeatherActive = true;
+                } catch (error) {
+                    console.error('❌ Signifer Relic Series 解析更新的天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 定期检查 Signifer Relic Series 全局天气数据
+        function checkSigniferRelicWeather() {
+            const now = new Date();
+            const hour = now.getHours();
+            
+            // 只在北京时间早上6-8点之间检查天气更新（太阳升起时间）
+            if (hour >= 6 && hour < 8) {
+                const storedWeather = localStorage.getItem('globalWeatherData');
+                if (storedWeather) {
+                    try {
+                        const weatherData = JSON.parse(storedWeather);
+                        const currentTime = Date.now();
+                        const dataAge = currentTime - weatherData.timestamp;
+                        
+                        // 如果数据较新（24小时内）且与当前数据不同，则更新
+                        if (dataAge < 24 * 60 * 60 * 1000 && (!signiferRelicWeatherData || signiferRelicWeatherData.timestamp !== weatherData.timestamp)) {
+                            console.log('🌅 Signifer Relic Series 早晨检查发现新的天气数据:', weatherData);
+                            signiferRelicWeatherData = weatherData;
+                            applySigniferRelicWeatherBackground(weatherData);
+                            isSigniferRelicWeatherActive = true;
+                        }
+                    } catch (error) {
+                        console.error('❌ Signifer Relic Series 定期检查天气数据失败:', error);
+                    }
+                }
+            }
+        }
+        
+        // 应用 Signifer Relic Series 全局天气背景颜色
+        function applySigniferRelicWeatherBackground(weatherData) {
+            if (!weatherData || !weatherData.baseColor) {
+                console.log('⚠️ Signifer Relic Series 天气数据无效，跳过背景更新');
+                return;
+            }
+            
+            console.log('🎨 Signifer Relic Series 应用展览界面的天气背景颜色:', weatherData.baseColor);
+            
+            // 创建CSS变量来动态调整颜色
+            const style = document.createElement('style');
+            style.id = 'signifer-relic-global-weather-style';
+            
+            // 移除之前的样式
+            const existingStyle = document.getElementById('signifer-relic-global-weather-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // 生成动态CSS - 使用纯色而不是渐变
+            const css = `
+                html, body {
+                    --signifer-relic-weather-blue-base: ${weatherData.baseColor};
+                    --signifer-relic-weather-blue-intensity: ${weatherData.intensity};
+                    --signifer-relic-weather-blue-humidity: ${weatherData.humidityFactor};
+                    --signifer-relic-weather-blue-wind: ${weatherData.windFactor};
+                    --signifer-relic-weather-blue-season: ${weatherData.seasonalAdjustment};
+                    --signifer-relic-weather-blue-time: ${weatherData.timeAdjustment};
+                    
+                    background-color: ${weatherData.baseColor} !important;
+                    transition: background-color 2s ease-in-out;
+                }
+            `;
+            
+            style.textContent = css;
+            document.head.appendChild(style);
+            
+            // 强制刷新DOM，确保背景颜色立即生效，防止缓存问题
+            document.body.style.backgroundColor = weatherData.baseColor;
+            document.documentElement.style.backgroundColor = weatherData.baseColor;
+            
+            // 强制重绘，确保背景颜色立即显示
+            document.body.offsetHeight; // 触发重排
+            document.documentElement.offsetHeight; // 触发重排
+            
+            console.log(`🎨 Signifer Relic Series 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)} (强制刷新)`);
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，开始初始化 Signifer Relic Series 天气系统');
+            
+            try {
+                // 初始化全局天气客户端系统
+                initSigniferRelicWeatherClient();
+                console.log('✅ Signifer Relic Series 天气系统初始化完成');
+                
+            } catch (error) {
+                console.error('❌ Signifer Relic Series 天气系统初始化失败:', error);
+            }
+        });
+    </script>
 </body>
 </html>
