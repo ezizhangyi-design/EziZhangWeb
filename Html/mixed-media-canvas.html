@@ -2241,55 +2241,87 @@
             }
         }
         
-        // 创建混合媒体风格的音效
+        // 创建混合媒体风格的音效 - 丰富有序，层次清晰
         function createMixedMediaCanvasSound(audioContext, masterGain) {
             const currentTime = audioContext.currentTime;
             
-            // 创建"Mixed Media on Canvas"的音效 - 丰富饱满，层次分明
+            // 主旋律层 - "Mixed Media on Canvas" - 清晰明亮
             const canvasNotes = [
-                { freq: 523.25, duration: 0.2, gain: 0.6, type: 'sine' },      // C5 - "Mixed" (主旋律)
-                { freq: 659.25, duration: 0.2, gain: 0.6, type: 'triangle' },  // E5 - "Me" (主旋律)
-                { freq: 783.99, duration: 0.2, gain: 0.6, type: 'square' },    // G5 - "dia" (主旋律)
-                { freq: 880.00, duration: 0.15, gain: 0.5, type: 'sine' },     // A5 - "on" (主旋律)
-                { freq: 698.46, duration: 0.15, gain: 0.5, type: 'triangle' },  // F5 - "Can" (主旋律)
-                { freq: 587.33, duration: 0.15, gain: 0.5, type: 'square' },    // D5 - "vas" (主旋律)
+                { freq: 523.25, duration: 0.2, gain: 0.8, type: 'sine' },        // C5 - "Mixed" (明亮)
+                { freq: 659.25, duration: 0.2, gain: 0.8, type: 'triangle' },    // E5 - "Me" (温暖)
+                { freq: 783.99, duration: 0.2, gain: 0.8, type: 'square' },      // G5 - "dia" (丰富)
+                { freq: 880.00, duration: 0.18, gain: 0.7, type: 'sine' },       // A5 - "on" (明亮)
+                { freq: 698.46, duration: 0.18, gain: 0.7, type: 'triangle' },   // F5 - "Can" (温暖)
+                { freq: 587.33, duration: 0.18, gain: 0.7, type: 'square' },     // D5 - "vas" (丰富)
             ];
             
-            // 添加和声层 - 让音效更丰富
+            // 和声层 - 温和支撑，不干扰主旋律
             const harmonyNotes = [
-                { freq: 261.63, duration: 0.2, gain: 0.3, type: 'triangle' },   // C4 - 和声低音
-                { freq: 329.63, duration: 0.2, gain: 0.3, type: 'sine' },       // E4 - 和声中音
-                { freq: 392.00, duration: 0.2, gain: 0.3, type: 'triangle' },   // G4 - 和声中音
-                { freq: 440.00, duration: 0.15, gain: 0.25, type: 'sine' },     // A4 - 和声中音
-                { freq: 349.23, duration: 0.15, gain: 0.25, type: 'triangle' },  // F4 - 和声中音
-                { freq: 293.66, duration: 0.15, gain: 0.25, type: 'sine' },      // D4 - 和声中音
+                { freq: 261.63, duration: 0.2, gain: 0.3, type: 'triangle' },     // C4 - 和声低音
+                { freq: 329.63, duration: 0.2, gain: 0.3, type: 'sine' },         // E4 - 和声中音
+                { freq: 392.00, duration: 0.2, gain: 0.3, type: 'triangle' },     // G4 - 和声中音
+                { freq: 440.00, duration: 0.18, gain: 0.25, type: 'sine' },       // A4 - 和声中音
+                { freq: 349.23, duration: 0.18, gain: 0.25, type: 'triangle' },   // F4 - 和声中音
+                { freq: 293.66, duration: 0.18, gain: 0.25, type: 'sine' },       // D4 - 和声中音
             ];
             
-            // 添加低音支撑层 - 让音效更饱满
+            // 低音支撑层 - 稳重有力
             const bassNotes = [
-                { freq: 130.81, duration: 0.2, gain: 0.4, type: 'square' },      // C3 - 低音支撑
-                { freq: 164.81, duration: 0.2, gain: 0.4, type: 'square' },      // E3 - 低音支撑
-                { freq: 196.00, duration: 0.2, gain: 0.4, type: 'square' },      // G3 - 低音支撑
-                { freq: 220.00, duration: 0.15, gain: 0.35, type: 'square' },    // A3 - 低音支撑
-                { freq: 174.61, duration: 0.15, gain: 0.35, type: 'square' },    // F3 - 低音支撑
-                { freq: 146.83, duration: 0.15, gain: 0.35, type: 'square' },    // D3 - 低音支撑
+                { freq: 130.81, duration: 0.2, gain: 0.4, type: 'square' },       // C3 - 低音支撑
+                { freq: 164.81, duration: 0.2, gain: 0.4, type: 'square' },       // E3 - 低音支撑
+                { freq: 196.00, duration: 0.2, gain: 0.4, type: 'square' },       // G3 - 低音支撑
+                { freq: 220.00, duration: 0.18, gain: 0.35, type: 'square' },     // A3 - 低音支撑
+                { freq: 174.61, duration: 0.18, gain: 0.35, type: 'square' },     // F3 - 低音支撑
+                { freq: 146.83, duration: 0.18, gain: 0.35, type: 'square' },     // D3 - 低音支撑
             ];
             
-            // 播放主旋律
+            // 高音装饰层 - 轻盈点缀，增加亮度
+            const sparkleNotes = [
+                { freq: 1046.50, duration: 0.15, gain: 0.3, type: 'sine' },       // C6 - 高音装饰
+                { freq: 1318.51, duration: 0.15, gain: 0.3, type: 'triangle' },   // E6 - 高音装饰
+                { freq: 1567.98, duration: 0.15, gain: 0.3, type: 'square' },     // G6 - 高音装饰
+                { freq: 1760.00, duration: 0.12, gain: 0.25, type: 'sine' },      // A6 - 高音装饰
+                { freq: 1396.91, duration: 0.12, gain: 0.25, type: 'triangle' },  // F6 - 高音装饰
+                { freq: 1174.66, duration: 0.12, gain: 0.25, type: 'square' },    // D6 - 高音装饰
+            ];
+            
+            // 色彩点缀层 - 半音阶，增加丰富感但不混乱
+            const colorNotes = [
+                { freq: 415.30, duration: 0.15, gain: 0.2, type: 'sine' },        // Ab4 - 色彩点缀
+                { freq: 466.16, duration: 0.15, gain: 0.2, type: 'triangle' },    // Bb4 - 色彩点缀
+                { freq: 554.37, duration: 0.15, gain: 0.2, type: 'square' },      // C#5 - 色彩点缀
+                { freq: 622.25, duration: 0.12, gain: 0.18, type: 'sine' },       // D#5 - 色彩点缀
+                { freq: 739.99, duration: 0.12, gain: 0.18, type: 'triangle' },   // F#5 - 色彩点缀
+                { freq: 830.61, duration: 0.12, gain: 0.18, type: 'square' },     // Ab5 - 色彩点缀
+            ];
+            
+            // 播放主旋律层 - 最突出，最清晰
             canvasNotes.forEach((note, index) => {
                 const noteTime = currentTime + (index * 0.25);
                 createNote(audioContext, masterGain, note, noteTime);
             });
             
-            // 播放和声层
+            // 播放和声层 - 与主旋律同步，温和支撑
             harmonyNotes.forEach((note, index) => {
                 const noteTime = currentTime + (index * 0.25);
                 createNote(audioContext, masterGain, note, noteTime);
             });
             
-            // 播放低音支撑层
+            // 播放低音支撑层 - 与主旋律同步，稳重有力
             bassNotes.forEach((note, index) => {
                 const noteTime = currentTime + (index * 0.25);
+                createNote(audioContext, masterGain, note, noteTime);
+            });
+            
+            // 播放高音装饰层 - 稍微延迟，增加层次感
+            sparkleNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.25) + 0.08;
+                createNote(audioContext, masterGain, note, noteTime);
+            });
+            
+            // 播放色彩点缀层 - 更延迟，轻盈点缀
+            colorNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.25) + 0.15;
                 createNote(audioContext, masterGain, note, noteTime);
             });
         }

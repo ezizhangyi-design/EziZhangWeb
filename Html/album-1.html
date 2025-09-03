@@ -55,7 +55,7 @@
         
         .album-cover {
             position: absolute;
-            top: calc(50% + 100px);
+            top: calc(50% - 50px);
             left: 25%;
             transform: translate(-50%, -50%);
             width: 600px;
@@ -70,7 +70,7 @@
         
         .audio-player {
             position: absolute;
-            top: calc(50% + 100px);
+            top: calc(50% + 50px);
             left: 75%;
             transform: translate(-50%, -50%);
             width: 600px;
@@ -156,11 +156,31 @@
             color: #000;
             font-weight: bold;
         }
+        
+        /* 专辑描述样式 - 参考第三张专辑 */
+        .album-description {
+            position: absolute;
+            top: calc(50% + 330px);
+            left: 25%;
+            transform: translateX(-50%);
+            width: 600px;
+            color: white;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: left;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
     </style>
 </head>
 <body>
             <a href="../index.html" class="back-btn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
     <img src="../Album cover Sonification New Century Underwater Caves.jpg" alt="Album Cover" class="album-cover">
+    
+    <!-- 专辑文字描述 -->
+    <div class="album-description">
+        This is a soundtrack album created based on the visual artwork "New Century Underwater Cavern". As global warming gradually raises sea levels, the coming of a future water world will submerge human civilization remnants, which will dissolve into cables of various colors. Tens of thousands of humans will flow through these cables in the form of bytes, moving at the speed of light, blinking into the ocean floor to form caverns that emit shimmering lights. Apostle Seven is born...
+    </div>
     
     <div class="audio-player">
         <h3>TRACKS</h3>

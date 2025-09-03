@@ -250,17 +250,19 @@
             .square-shape {
                 width: 18px;
                 height: 18px;
+                background: #ff3333; /* 红色 */
             }
             
             .triangle-shape {
                 border-left: 9px solid transparent;
                 border-right: 9px solid transparent;
-                border-bottom: 16px solid #333;
+                border-bottom: 16px solid #3333ff; /* 蓝色 */
             }
             
             .circle-shape {
                 width: 18px;
                 height: 18px;
+                background: #33ff33; /* 绿色 */
             }
         }
         
@@ -279,25 +281,22 @@
             .square-shape {
                 width: 15px;
                 height: 15px;
+                background: #ff3333; /* 红色 */
             }
             
             .triangle-shape {
                 border-left: 7px solid transparent;
                 border-right: 7px solid transparent;
-                border-bottom: 14px solid #333;
+                border-bottom: 14px solid #3333ff; /* 蓝色 */
             }
             
             .circle-shape {
                 width: 15px;
                 height: 15px;
+                background: #33ff33; /* 绿色 */
             }
             
-            .current-sound-mode {
-                top: 8vh;
-                right: 60px;
-                font-size: 10px;
-                padding: 6px 12px;
-            }
+
         }
         
         .sound-mode-btn {
@@ -327,11 +326,11 @@
             box-shadow: 0 0 0 3px rgba(0, 65, 255, 0.3);
         }
         
-        /* 几何形状样式 */
+        /* 几何形状样式 - 红蓝绿三色 */
         .square-shape {
             width: 20px;
             height: 20px;
-            background: #333;
+            background: #ff3333; /* 红色 */
             border-radius: 2px;
         }
         
@@ -340,38 +339,17 @@
             height: 0;
             border-left: 10px solid transparent;
             border-right: 10px solid transparent;
-            border-bottom: 18px solid #333;
+            border-bottom: 18px solid #3333ff; /* 蓝色 */
         }
         
         .circle-shape {
             width: 20px;
             height: 20px;
-            background: #333;
+            background: #33ff33; /* 绿色 */
             border-radius: 50%;
         }
         
-        /* 当前音效模式显示样式 */
-        .current-sound-mode {
-            position: fixed;
-            top: 6vh; /* 位于按钮组下方 */
-            right: 120px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-family: 'VCR OSD Mono', monospace;
-            z-index: 10000;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-        
-        .current-sound-mode.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+
         
         /* 语言切换按钮样式 */
         .language-toggle {
@@ -3508,8 +3486,7 @@
         </button>
     </div>
     
-    <!-- 当前音效模式显示 -->
-    <div id="currentSoundMode" class="current-sound-mode">经典音效模式</div>
+
     
     <!-- 波点音效音量调节器 -->
     <div class="volume-control dots-volume-control">
@@ -4647,9 +4624,6 @@
                 
                 // 默认激活第一个按钮
                 document.getElementById('soundMode1').classList.add('active');
-                
-                // 初始化模式显示
-                this.updateSoundModeDisplay();
             }
             
             // 切换音效模式
@@ -4657,29 +4631,10 @@
                 this.currentSoundMode = mode;
                 console.log(`🎵 音效模式已切换为: ${this.getSoundModeName(mode)}`);
                 
-                // 更新模式名称显示
-                this.updateSoundModeDisplay();
+
             }
             
-            // 更新音效模式显示
-            updateSoundModeDisplay() {
-                const modeDisplay = document.getElementById('currentSoundMode');
-                if (modeDisplay) {
-                    const modeName = this.getSoundModeName(this.currentSoundMode);
-                    modeDisplay.textContent = `${modeName}音效模式`;
-                    
-                    // 显示动画效果
-                    modeDisplay.classList.remove('show');
-                    setTimeout(() => {
-                        modeDisplay.classList.add('show');
-                    }, 100);
-                    
-                    // 3秒后自动隐藏
-                    setTimeout(() => {
-                        modeDisplay.classList.remove('show');
-                    }, 3000);
-                }
-            }
+
             
             // 获取音效模式名称
             getSoundModeName(mode) {
@@ -4829,6 +4784,9 @@
                     console.log(`🎯 波点 ${index}: 颜色=${colorClass}, 大小=${size}, 位置=(${dotData.x}, ${dotData.y}), 速度=(${dotData.vx}, ${dotData.vy})`);
                 }
             }
+            
+            // 为波点添加点击事件
+
             
             checkCollisions() {
                 // 精确碰撞检测 - 使用更精确的圆形碰撞检测
