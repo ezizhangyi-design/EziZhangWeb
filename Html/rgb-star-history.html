@@ -2392,7 +2392,7 @@
                 // 创建主混音器
                 const masterGain = rgbStarHistoryAudioContext.createGain();
                 masterGain.connect(rgbStarHistoryAudioContext.destination);
-                masterGain.gain.setValueAtTime(0.4, rgbStarHistoryAudioContext.currentTime); // 主音量40%
+                masterGain.gain.setValueAtTime(0.5, rgbStarHistoryAudioContext.currentTime); // 主音量50% - 稍微响一点
                 
                 // 创建RGB星星历史风格的音效
                 createRgbStarHistorySound(rgbStarHistoryAudioContext, masterGain);
@@ -2405,7 +2405,7 @@
                     } else {
                         console.log('⚠️ 没有有效的天气数据，保持蓝色背景');
                     }
-                }, 2500); // 等待音效完全播放完毕
+                }, 3300); // 等待音效完全播放完毕（R.G.B.间隔0.6秒 + 其他音符间隔0.3秒，总时长 ≈ 3.0秒）
                 
                 isRgbStarHistoryGreetingPlayed = true;
                 console.log('🎨 R.G.B. Star History Series 开场音效开始播放！');
@@ -2419,16 +2419,29 @@
         function createRgbStarHistorySound(audioContext, masterGain) {
             const currentTime = audioContext.currentTime;
             
-            // 创建RGB星星历史风格的音效 - 星空感
+            // 创建"R.G.B. Star History Series"的音效 - 让R、G、B三个字母发音柔和但可识别
             const rgbNotes = [
-                { freq: 261.63, duration: 0.3, gain: 0.3, type: 'sine' },    // C4 - 红色基础音
-                { freq: 329.63, duration: 0.3, gain: 0.3, type: 'triangle' }, // E4 - 绿色中音
-                { freq: 392.00, duration: 0.4, gain: 0.4, type: 'square' },   // G4 - 蓝色高音
-                { freq: 329.63, duration: 0.3, gain: 0.3, type: 'sine' },     // E4 - 回落到中音
+                { freq: 349.23, duration: 0.8, gain: 0.6, type: 'sine' },        // F4 - "R" (柔和的中音)
+                { freq: 293.66, duration: 0.8, gain: 0.6, type: 'triangle' },    // D4 - "G" (柔和的中音)
+                { freq: 220.00, duration: 0.8, gain: 0.6, type: 'sine' },        // A3 - "B" (柔和的低音)
+                { freq: 220.00, duration: 0.2, gain: 0.3, type: 'sine' },        // A3 - "Star"
+                { freq: 246.94, duration: 0.2, gain: 0.3, type: 'triangle' },    // B3 - "His"
+                { freq: 220.00, duration: 0.2, gain: 0.3, type: 'sine' },        // A3 - "to"
+                { freq: 196.00, duration: 0.2, gain: 0.3, type: 'triangle' },    // G3 - "ry"
+                { freq: 174.61, duration: 0.25, gain: 0.35, type: 'square' },    // F3 - "Se"
+                { freq: 196.00, duration: 0.25, gain: 0.35, type: 'sine' },      // G3 - "ries"
             ];
             
             rgbNotes.forEach((note, index) => {
-                const noteTime = currentTime + (index * 0.4); // 每个音符间隔0.4秒
+                // R、G、B三个字母间隔适中，让发音自然
+                let noteTime;
+                if (index < 3) {
+                    // 前三个音符（R、G、B）间隔0.6秒，发音自然
+                    noteTime = currentTime + (index * 0.6);
+                } else {
+                    // 后面的音符间隔0.3秒
+                    noteTime = currentTime + (1.8 + (index - 3) * 0.3);
+                }
                 
                 // 创建振荡器
                 const osc = audioContext.createOscillator();
@@ -2438,7 +2451,7 @@
                 osc.type = note.type;
                 osc.frequency.setValueAtTime(note.freq, noteTime);
                 
-                // 音量包络
+                // 音量包络 - R、G、B三个字母音量适中
                 gain.gain.setValueAtTime(0, noteTime);
                 gain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.05);
                 gain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.1);

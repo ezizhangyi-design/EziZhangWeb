@@ -5839,6 +5839,48 @@
             }, 1000);
         });
         
+        // 添加页面可见性检测，解决从主界面点击进入时音效不播放的问题
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && !isRasterizeGreetingPlayed) {
+                console.log('👁️ 页面变为可见，检查是否需要播放音效...');
+                // 页面变为可见且音效未播放时，延迟播放音效
+                setTimeout(() => {
+                    if (!isRasterizeGreetingPlayed) {
+                        console.log('🎵 页面可见性变化，开始播放开场音效...');
+                        playRasterizeSeriesGreeting();
+                    }
+                }, 500);
+            }
+        });
+        
+        // 添加页面焦点检测，解决从主界面点击进入时音效不播放的问题
+        window.addEventListener('focus', () => {
+            if (!isRasterizeGreetingPlayed) {
+                console.log('🎯 页面获得焦点，检查是否需要播放音效...');
+                // 页面获得焦点且音效未播放时，延迟播放音效
+                setTimeout(() => {
+                    if (!isRasterizeGreetingPlayed) {
+                        console.log('🎵 页面获得焦点，开始播放开场音效...');
+                        playRasterizeSeriesGreeting();
+                    }
+                }, 500);
+            }
+        });
+        
+        // 添加页面加载完成检测，确保各种情况下都能播放音效
+        window.addEventListener('load', () => {
+            if (!isRasterizeGreetingPlayed) {
+                console.log('📄 页面完全加载完成，检查是否需要播放音效...');
+                // 页面完全加载且音效未播放时，延迟播放音效
+                setTimeout(() => {
+                    if (!isRasterizeGreetingPlayed) {
+                        console.log('🎵 页面完全加载，开始播放开场音效...');
+                        playRasterizeSeriesGreeting();
+                    }
+                }, 1000);
+            }
+        });
+        
         // 确保页面加载时滚动动画天气部分保持亮蓝色
         function ensureInitialRasterizeStripesColor() {
             console.log('🎨 确保滚动动画天气部分初始亮蓝色...');

@@ -2680,7 +2680,7 @@
         let windOscillators = [];
         let windLayers = []; // 风声层数组
         let isWindPlaying = false;
-        let windVolume = 0.65; // 基础风声音量，从0.5提升到0.65，增加30%
+        let windVolume = 0.9; // 基础风声音量，从0.8提升到0.9，增加13%
         
         // 初始化风声系统
         function initWindSoundSystem() {
@@ -3514,7 +3514,7 @@
             const windIntensity = Math.max(0.1, 1 - cloudRatio * 2);
             
             // 风声基础参数 - 真实风声的特点
-            const windVolume = 0.45 + windIntensity * 0.5; // 从0.35+0.4提升到0.45+0.5，0.45-0.95，更大的音量
+            const windVolume = 0.7 + windIntensity * 0.7; // 从0.6+0.6提升到0.7+0.7，0.7-1.4，更大的音量
             const windSpeed = 3 + windIntensity * 4; // 3-7秒变化周期，真实风的节奏
             
             console.log(`🌪️ 真实风声参数: 强度=${windIntensity.toFixed(2)}, 音量=${windVolume.toFixed(2)}`);
@@ -3667,8 +3667,8 @@
                 highFilter.frequency.exponentialRampToValueAtTime(newHighFreq, currentTime + speed);
                 
                 // 音量变化 - 根据云朵情况
-                const baseVolume = 0.25 + windIntensity * 0.4; // 从0.2+0.3提升到0.25+0.4，增加基础音量
-                const volumeVariation = 0.06 + windIntensity * 0.2; // 从0.05+0.15提升到0.06+0.2，增加变化幅度
+                const baseVolume = 0.45 + windIntensity * 0.6; // 从0.35+0.5提升到0.45+0.6，增加基础音量
+                const volumeVariation = 0.1 + windIntensity * 0.3; // 从0.08+0.25提升到0.1+0.3，增加变化幅度
                 
                 // 主风声音量 - 自然的起伏
                 const mainVolume = baseVolume * (0.8 + Math.sin(currentTime * 0.2) * volumeVariation);
@@ -3679,7 +3679,7 @@
                 highGain.gain.setValueAtTime(highVolume, currentTime);
                 
                 // 动态调整主混音器音量
-                const masterVolume = windIntensity * 0.75; // 从0.6提升到0.75，增加主混音器音量
+                const masterVolume = windIntensity * 1.0; // 从0.9提升到1.0，增加主混音器音量
                 windGain.gain.setValueAtTime(masterVolume, currentTime);
                 
                 console.log(`🌪️ 真实风声状态: 强度=${windIntensity.toFixed(2)}, 主音量=${mainVolume.toFixed(2)}, 高频音量=${highVolume.toFixed(2)}`);
@@ -3707,14 +3707,14 @@
             const windIntensity = (cloudWindIntensity + realWindIntensity) / 2; // 综合风强度
             
             // 风声基础参数 - 真实风声的特点
-            const windVolume = 0.45 + windIntensity * 0.5; // 从0.35+0.4提升到0.45+0.5，0.45-0.95，更大的音量
+            const windVolume = 0.7 + windIntensity * 0.7; // 从0.6+0.6提升到0.7+0.7，0.7-1.4，更大的音量
             const windSpeed = 3 + windIntensity * 4; // 3-7秒变化周期，真实风的节奏
             
             console.log(`🌪️ 风声参数调整: 云朵比例=${cloudRatio.toFixed(2)}, 风强度=${windIntensity.toFixed(2)}, 音量=${windVolume.toFixed(2)}`);
             console.log(`🌤️ 上海天气: 云量=${weather.clouds}%, 风速=${weather.windSpeed}m/s, 温度=${weather.temperature}°C`);
             
             // 动态调整主混音器音量
-            const masterVolume = windIntensity * 0.9; // 从0.8提升到0.9，增加主混音器音量
+            const masterVolume = windIntensity * 1.0; // 从0.9提升到1.0，增加主混音器音量
             windGain.gain.setValueAtTime(masterVolume, windAudioContext.currentTime);
             
             // 调整滤波器参数

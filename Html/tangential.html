@@ -2185,7 +2185,7 @@
                 // 创建主混音器
                 const masterGain = tangentialAudioContext.createGain();
                 masterGain.connect(tangentialAudioContext.destination);
-                masterGain.gain.setValueAtTime(0.4, tangentialAudioContext.currentTime); // 主音量40%
+                masterGain.gain.setValueAtTime(0.5, tangentialAudioContext.currentTime); // 主音量50% - 稍微响一点
                 
                 // 创建题外话风格的音效
                 createTangentialSound(tangentialAudioContext, masterGain);
@@ -2198,7 +2198,7 @@
                     } else {
                         console.log('⚠️ 没有有效的天气数据，保持蓝色背景');
                     }
-                }, 2500); // 等待音效完全播放完毕
+                }, 2000); // 等待音效完全播放完毕（3个音节 × 0.5秒间隔 + 总时长 ≈ 1.5秒）
                 
                 isTangentialGreetingPlayed = true;
                 console.log('🎨 Tangential 开场音效开始播放！');
@@ -2212,16 +2212,15 @@
         function createTangentialSound(audioContext, masterGain) {
             const currentTime = audioContext.currentTime;
             
-            // 创建题外话风格的音效 - 旁门左道感
+            // 创建"Tangential"的音效 - 让每个音节发音清楚
             const tangentialNotes = [
-                { freq: 196, duration: 0.3, gain: 0.3, type: 'sawtooth' },  // G3 - 基础音，锯齿波
-                { freq: 293, duration: 0.3, gain: 0.3, type: 'triangle' },  // D4 - 中音，三角波
-                { freq: 392, duration: 0.4, gain: 0.4, type: 'square' },    // G4 - 高音，方波
-                { freq: 293, duration: 0.3, gain: 0.3, type: 'sine' },      // D4 - 回落到中音，正弦波
+                { freq: 220.00, duration: 0.4, gain: 0.5, type: 'sine' },      // A3 - "Tan" (清晰发音)
+                { freq: 196.00, duration: 0.4, gain: 0.5, type: 'triangle' },  // G3 - "gen" (清晰发音)
+                { freq: 174.61, duration: 0.4, gain: 0.5, type: 'square' },    // F3 - "tial" (清晰发音)
             ];
             
             tangentialNotes.forEach((note, index) => {
-                const noteTime = currentTime + (index * 0.4); // 每个音符间隔0.4秒
+                const noteTime = currentTime + (index * 0.5); // 每个音节间隔0.5秒，发音清楚
                 
                 // 创建振荡器
                 const osc = audioContext.createOscillator();
