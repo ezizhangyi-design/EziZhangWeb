@@ -2199,17 +2199,104 @@
             console.log(`🎨 Mixed Media on Canvas 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)} (强制刷新)`);
         }
         
+        // ===== Mixed Media on Canvas 开场音效系统 =====
+        
+        // 开场音效变量
+        let mixedMediaCanvasAudioContext = null;
+        let isMixedMediaCanvasGreetingPlayed = false;
+        
+        // 播放 Mixed Media on Canvas 开场音效
+        function playMixedMediaCanvasGreeting() {
+            if (isMixedMediaCanvasGreetingPlayed) return; // 防止重复播放
+            
+            console.log('🎨 开始播放 Mixed Media on Canvas 开场音效...');
+            
+            try {
+                // 创建音频上下文
+                mixedMediaCanvasAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 创建主混音器
+                const masterGain = mixedMediaCanvasAudioContext.createGain();
+                masterGain.connect(mixedMediaCanvasAudioContext.destination);
+                masterGain.gain.setValueAtTime(0.4, mixedMediaCanvasAudioContext.currentTime); // 主音量40%
+                
+                // 创建混合媒体风格的音效
+                createMixedMediaCanvasSound(mixedMediaCanvasAudioContext, masterGain);
+                
+                // 音效结束后应用天气背景颜色
+                setTimeout(() => {
+                    console.log('🎨 音效播放完成，开始应用天气背景颜色...');
+                    if (mixedMediaCanvasWeatherData && isMixedMediaCanvasWeatherActive) {
+                        applyMixedMediaCanvasWeatherBackground(mixedMediaCanvasWeatherData);
+                    } else {
+                        console.log('⚠️ 没有有效的天气数据，保持蓝色背景');
+                    }
+                }, 2500); // 等待音效完全播放完毕
+                
+                isMixedMediaCanvasGreetingPlayed = true;
+                console.log('🎨 Mixed Media on Canvas 开场音效开始播放！');
+                
+            } catch (error) {
+                console.error('❌ Mixed Media on Canvas 开场音效播放失败:', error);
+            }
+        }
+        
+        // 创建混合媒体风格的音效
+        function createMixedMediaCanvasSound(audioContext, masterGain) {
+            const currentTime = audioContext.currentTime;
+            
+            // 创建混合媒体风格的音效 - 画布质感
+            const canvasNotes = [
+                { freq: 220, duration: 0.3, gain: 0.3, type: 'sine' },    // A3 - 基础音
+                { freq: 330, duration: 0.3, gain: 0.3, type: 'triangle' }, // E4 - 中音
+                { freq: 440, duration: 0.4, gain: 0.4, type: 'sine' },    // A4 - 高音
+                { freq: 330, duration: 0.3, gain: 0.3, type: 'triangle' }, // E4 - 回落到中音
+            ];
+            
+            canvasNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.4); // 每个音符间隔0.4秒
+                
+                // 创建振荡器
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                // 设置音调
+                osc.type = note.type;
+                osc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 音量包络
+                gain.gain.setValueAtTime(0, noteTime);
+                gain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.05);
+                gain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
+                
+                // 连接音频节点
+                osc.connect(gain);
+                gain.connect(masterGain);
+                
+                // 播放音效
+                osc.start(noteTime);
+                osc.stop(noteTime + note.duration);
+            });
+        }
+        
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('页面加载完成，开始初始化 Mixed Media on Canvas 天气系统');
+            console.log('页面加载完成，开始初始化 Mixed Media on Canvas 系统');
             
             try {
                 // 初始化全局天气客户端系统
                 initMixedMediaCanvasWeatherClient();
                 console.log('✅ Mixed Media on Canvas 天气系统初始化完成');
                 
+                // 延迟1秒后自动播放开场音效
+                setTimeout(() => {
+                    console.log('🎵 页面加载完成，自动播放开场音效...');
+                    playMixedMediaCanvasGreeting();
+                }, 1000);
+                
             } catch (error) {
-                console.error('❌ Mixed Media on Canvas 天气系统初始化失败:', error);
+                console.error('❌ Mixed Media on Canvas 系统初始化失败:', error);
             }
         });
     </script>

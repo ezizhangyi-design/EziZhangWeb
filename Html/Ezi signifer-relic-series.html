@@ -15,7 +15,7 @@
             min-height: 3800vh;
             margin: 0;
             padding: 0;
-            background: #0041ff;
+            background: #0041ff !important;
             color: white;
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
             overflow-x: hidden;
@@ -2458,8 +2458,8 @@
                     const now = Date.now();
                     const dataAge = now - signiferRelicWeatherData.timestamp;
                     if (dataAge < 24 * 60 * 60 * 1000) { // 24小时 = 86400000毫秒
-                        // 数据有效，立即应用背景颜色
-                        applySigniferRelicWeatherBackground(signiferRelicWeatherData);
+                        // 数据有效，但不立即应用背景颜色（等待音效结束后）
+                        console.log('📡 获取到有效的天气数据，等待音效结束后应用');
                         isSigniferRelicWeatherActive = true;
                     } else {
                         console.log('⚠️ Signifer Relic Series 天气数据已过期，等待展览界面更新...');
@@ -2493,7 +2493,7 @@
             console.log('📡 Signifer Relic Series 收到展览界面天气变化事件:', newWeatherData);
             
             signiferRelicWeatherData = newWeatherData;
-            applySigniferRelicWeatherBackground(newWeatherData);
+            // 不立即应用背景，等待音效结束后
             isSigniferRelicWeatherActive = true;
         }
         
@@ -2505,7 +2505,7 @@
                     console.log('📡 Signifer Relic Series localStorage 天气数据已更新:', newWeatherData);
                     
                     signiferRelicWeatherData = newWeatherData;
-                    applySigniferRelicWeatherBackground(newWeatherData);
+                    // 不立即应用背景，等待音效结束后
                     isSigniferRelicWeatherActive = true;
                 } catch (error) {
                     console.error('❌ Signifer Relic Series 解析更新的天气数据失败:', error);
@@ -2531,7 +2531,7 @@
                         if (dataAge < 24 * 60 * 60 * 1000 && (!signiferRelicWeatherData || signiferRelicWeatherData.timestamp !== weatherData.timestamp)) {
                             console.log('🌅 Signifer Relic Series 早晨检查发现新的天气数据:', weatherData);
                             signiferRelicWeatherData = weatherData;
-                            applySigniferRelicWeatherBackground(weatherData);
+                            // 不立即应用背景，等待音效结束后
                             isSigniferRelicWeatherActive = true;
                         }
                     } catch (error) {
@@ -2549,6 +2549,13 @@
             }
             
             console.log('🎨 Signifer Relic Series 应用展览界面的天气背景颜色:', weatherData.baseColor);
+            
+            // 移除初始背景样式，允许渐变
+            const initialStyle = document.getElementById('signifer-relic-initial-background-style');
+            if (initialStyle) {
+                initialStyle.remove();
+                console.log('🎨 已移除初始背景样式，开始天气背景渐变');
+            }
             
             // 创建CSS变量来动态调整颜色
             const style = document.createElement('style');
@@ -2578,30 +2585,138 @@
             style.textContent = css;
             document.head.appendChild(style);
             
-            // 强制刷新DOM，确保背景颜色立即生效，防止缓存问题
-            document.body.style.backgroundColor = weatherData.baseColor;
-            document.documentElement.style.backgroundColor = weatherData.baseColor;
-            
-            // 强制重绘，确保背景颜色立即显示
-            document.body.offsetHeight; // 触发重排
-            document.documentElement.offsetHeight; // 触发重排
-            
-            console.log(`🎨 Signifer Relic Series 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)} (强制刷新)`);
+            // 使用CSS transition实现平滑渐变，而不是强制刷新
+            console.log(`🎨 Signifer Relic Series 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)} (平滑渐变)`);
         }
         
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('页面加载完成，开始初始化 Signifer Relic Series 天气系统');
+        // ===== Signifer Relic Series 开场音效系统 =====
+        
+        // 开场音效变量
+        let signiferRelicAudioContext = null;
+        let isSigniferRelicGreetingPlayed = false;
+        
+        // 播放 Signifer Relic Series 开场音效
+        function playSigniferRelicGreeting() {
+            if (isSigniferRelicGreetingPlayed) return; // 防止重复播放
+            
+            console.log('🎨 开始播放 Signifer Relic Series 开场音效...');
             
             try {
+                // 创建音频上下文
+                signiferRelicAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 创建主混音器
+                const masterGain = signiferRelicAudioContext.createGain();
+                masterGain.connect(signiferRelicAudioContext.destination);
+                masterGain.gain.setValueAtTime(0.6, signiferRelicAudioContext.currentTime); // 主音量60% - 稍微响一点
+                
+                // 创建遗迹系列的音效
+                createSigniferRelicSound(signiferRelicAudioContext, masterGain);
+                
+                // 音效结束后应用天气背景颜色
+                setTimeout(() => {
+                    console.log('🎨 音效播放完成，开始应用天气背景颜色...');
+                    if (signiferRelicWeatherData && isSigniferRelicWeatherActive) {
+                        applySigniferRelicWeatherBackground(signiferRelicWeatherData);
+                    } else {
+                        console.log('⚠️ 没有有效的天气数据，保持蓝色背景');
+                    }
+                }, 3000); // 等待音效完全播放完毕（8个音符 × 0.3秒间隔 + 总时长 ≈ 2.9秒）
+                
+                isSigniferRelicGreetingPlayed = true;
+                console.log('🎨 Signifer Relic Series 开场音效开始播放！');
+                
+            } catch (error) {
+                console.error('❌ Signifer Relic Series 开场音效播放失败:', error);
+            }
+        }
+        
+        // 创建遗迹系列的音效
+        function createSigniferRelicSound(audioContext, masterGain) {
+            const currentTime = audioContext.currentTime;
+            
+            // 创建"The Signifer Relic Series"的音效 - 古老神秘感
+            const signiferRelicNotes = [
+                { freq: 196.00, duration: 0.25, gain: 0.35, type: 'sine' },     // G3 - "The"
+                { freq: 220.00, duration: 0.25, gain: 0.35, type: 'triangle' }, // A3 - "Si"
+                { freq: 246.94, duration: 0.25, gain: 0.35, type: 'sine' },     // B3 - "gni"
+                { freq: 220.00, duration: 0.25, gain: 0.35, type: 'triangle' }, // A3 - "fer"
+                { freq: 174.61, duration: 0.3, gain: 0.4, type: 'square' },     // F3 - "Re"
+                { freq: 196.00, duration: 0.3, gain: 0.4, type: 'sine' },       // G3 - "lic"
+                { freq: 220.00, duration: 0.25, gain: 0.35, type: 'triangle' }, // A3 - "Se"
+                { freq: 246.94, duration: 0.25, gain: 0.35, type: 'sine' },     // B3 - "ries"
+            ];
+            
+            signiferRelicNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.3); // 每个音符间隔0.3秒，节奏更紧凑
+                
+                // 创建振荡器
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                // 设置音调
+                osc.type = note.type;
+                osc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 音量包络
+                gain.gain.setValueAtTime(0, noteTime);
+                gain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.05);
+                gain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
+                
+                // 连接音频节点
+                osc.connect(gain);
+                gain.connect(masterGain);
+                
+                // 播放音效
+                osc.start(noteTime);
+                osc.stop(noteTime + note.duration);
+            });
+        }
+        
+        // 页面加载完成后初始化系统
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，开始初始化 Signifer Relic Series 系统');
+            
+            try {
+                // 确保初始背景为亮蓝色
+                ensureInitialSigniferRelicBackground();
+                
                 // 初始化全局天气客户端系统
                 initSigniferRelicWeatherClient();
                 console.log('✅ Signifer Relic Series 天气系统初始化完成');
                 
+                // 延迟1秒后自动播放开场音效
+                setTimeout(() => {
+                    console.log('🎵 页面加载完成，自动播放开场音效...');
+                    playSigniferRelicGreeting();
+                }, 1000);
+                
             } catch (error) {
-                console.error('❌ Signifer Relic Series 天气系统初始化失败:', error);
+                console.error('❌ Signifer Relic Series 系统初始化失败:', error);
             }
         });
+        
+        // 确保页面加载时背景为亮蓝色
+        function ensureInitialSigniferRelicBackground() {
+            console.log('🎨 确保 Signifer Relic Series 初始背景为亮蓝色...');
+            
+            // 强制设置背景为亮蓝色
+            document.body.style.backgroundColor = '#0041ff';
+            document.documentElement.style.backgroundColor = '#0041ff';
+            
+            // 添加CSS样式确保亮蓝色不被覆盖
+            const style = document.createElement('style');
+            style.id = 'signifer-relic-initial-background-style';
+            style.textContent = `
+                html, body {
+                    background-color: #0041ff !important;
+                    transition: background-color 2s ease-in-out;
+                }
+            `;
+            document.head.appendChild(style);
+            console.log('🎨 已添加CSS样式确保初始背景为亮蓝色');
+        }
     </script>
 </body>
 </html>

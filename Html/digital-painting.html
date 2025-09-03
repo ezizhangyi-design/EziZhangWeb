@@ -640,16 +640,16 @@
             style.textContent = css;
             document.head.appendChild(style);
             
-                    // 强制刷新DOM，确保背景颜色立即生效，防止缓存问题
-        document.body.style.backgroundColor = weatherData.baseColor;
-        document.documentElement.style.backgroundColor = weatherData.baseColor;
-        
-        // 强制重绘，确保背景颜色立即显示
-        document.body.offsetHeight; // 触发重排
-        document.documentElement.offsetHeight; // 触发重排
-        
-        console.log(`🎨 Digital Painting 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)} (强制刷新)`);
-    }
+            // 强制刷新DOM，确保背景颜色立即生效，防止缓存问题
+            document.body.style.backgroundColor = weatherData.baseColor;
+            document.documentElement.style.backgroundColor = weatherData.baseColor;
+            
+            // 强制重绘，确保背景颜色立即显示
+            document.body.offsetHeight; // 触发重排
+            document.documentElement.offsetHeight; // 触发重排
+            
+            console.log(`🎨 Digital Painting 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)} (强制刷新)`);
+        }
     
 
     
@@ -722,22 +722,44 @@
                     createDigitalPaintingArtEffectSound(digitalPaintingAudioContext, masterGain, effectGain, effectFilter);
                 }, 1600); // 修复时间单位，应该是1600ms
                 
-                // 音效结束后应用天气背景颜色并启动沙丘背景音乐
+                // 音效结束后立即应用天气背景颜色并启动沙丘背景音乐
                 setTimeout(() => {
-                    console.log('🎨 音效播放完成，开始应用天气背景颜色...');
+                    console.log('🎨 音效播放完成，立即应用天气背景颜色...');
+                    
+                    // 立即尝试应用天气背景
                     if (digitalPaintingWeatherData && isDigitalPaintingWeatherActive) {
+                        console.log('🌤️ 使用已缓存的天气数据应用背景');
                         applyDigitalPaintingWeatherBackground(digitalPaintingWeatherData);
                     } else {
-                        console.log('⚠️ 没有有效的天气数据，保持亮蓝色背景');
+                        console.log('🌤️ 尝试从localStorage获取最新天气数据...');
+                        // 尝试从localStorage获取最新天气数据
+                        const storedWeather = localStorage.getItem('globalWeatherData');
+                        if (storedWeather) {
+                            try {
+                                const weatherData = JSON.parse(storedWeather);
+                                if (weatherData && weatherData.baseColor) {
+                                    console.log('🌤️ 从localStorage获取到最新天气数据，应用背景:', weatherData.baseColor);
+                                    digitalPaintingWeatherData = weatherData;
+                                    isDigitalPaintingWeatherActive = true;
+                                    applyDigitalPaintingWeatherBackground(weatherData);
+                                } else {
+                                    console.log('⚠️ localStorage中的天气数据无效，保持亮蓝色背景');
+                                }
+                            } catch (error) {
+                                console.error('❌ 解析localStorage天气数据失败:', error);
+                            }
+                        } else {
+                            console.log('⚠️ 没有找到任何天气数据，保持亮蓝色背景');
+                        }
                     }
                     
                     // 启动沙丘风格背景音乐
                     setTimeout(() => {
                         console.log('🏜️ 准备启动沙丘背景音乐...');
                         startDuneBackgroundMusic();
-                    }, 1000); // 天气背景应用后1秒启动背景音乐
+                    }, 500); // 天气背景应用后0.5秒启动背景音乐
                     
-                }, 3000); // 等待音效完全播放完毕，与展览界面保持同步
+                }, 2500); // 减少等待时间，更快应用天气背景
                 
                 isDigitalPaintingGreetingPlayed = true;
                 console.log('🎨 Digital Painting 全新特别音效开始播放！');
@@ -1780,14 +1802,20 @@
                 const startBtn = document.getElementById('startBackgroundMusic');
                 if (startBtn) startBtn.style.display = 'inline-block';
                 
+                // 延迟1秒后自动播放开场音效
+                setTimeout(() => {
+                    console.log('🎵 页面加载完成，自动播放开场音效...');
+                    playDigitalPaintingGreeting();
+                }, 1000);
+                
             } catch (error) {
                 console.error('❌ 初始化失败:', error);
             }
         });
         
-        // 添加页面点击事件来激活音频上下文
+        // 保留点击事件作为备用方案
         document.addEventListener('click', function() {
-            if (!digitalPaintingAudioContext) {
+            if (!digitalPaintingAudioContext && !isDigitalPaintingGreetingPlayed) {
                 console.log('🎵 页面被点击，准备播放开场音效...');
                 
                 // 延迟一点时间再播放，确保点击事件处理完成

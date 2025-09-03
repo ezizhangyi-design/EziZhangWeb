@@ -30,6 +30,8 @@
             left: 0;
             right: 0;
             box-sizing: border-box;
+            background-color: #000000 !important; /* 初始黑色背景 */
+            transition: background-color 3s ease-in-out !important; /* 平滑渐变效果 */
         }
         
         /* ===== 视觉内容保护系统 ===== */
@@ -6082,8 +6084,8 @@
                     const now = Date.now();
                     const dataAge = now - this.mainPageWeatherData.timestamp;
                     if (dataAge < 1800000) { // 30分钟 = 1800000毫秒
-                        // 数据有效，立即应用背景颜色
-                        this.applyMainPageWeatherBackground(this.mainPageWeatherData);
+                        // 数据有效，但不立即应用背景颜色（等待音效结束后）
+                        console.log('📡 主页面获取到有效的天气数据，等待音效结束后应用');
                         this.isMainPageWeatherActive = true;
                     } else {
                         console.log('⚠️ 主页面天气数据已过期，等待展览界面更新...');
@@ -6117,7 +6119,7 @@
             console.log('📡 主页面收到展览界面天气变化事件:', newWeatherData);
             
             this.mainPageWeatherData = newWeatherData;
-            this.applyMainPageWeatherBackground(newWeatherData);
+            // 不立即应用背景，等待音效结束后
             this.isMainPageWeatherActive = true;
         }
         
@@ -6129,7 +6131,7 @@
                     console.log('📡 主页面 localStorage 天气数据已更新:', newWeatherData);
                     
                     this.mainPageWeatherData = newWeatherData;
-                    this.applyMainPageWeatherBackground(newWeatherData);
+                    // 不立即应用背景，等待音效结束后
                     this.isMainPageWeatherActive = true;
                 } catch (error) {
                     console.error('❌ 主页面解析更新的天气数据失败:', error);
@@ -6155,7 +6157,7 @@
                         if (dataAge < 24 * 60 * 60 * 1000 && (!this.mainPageWeatherData || this.mainPageWeatherData.timestamp !== weatherData.timestamp)) {
                             console.log('🌅 主页面早晨检查发现新的天气数据:', weatherData);
                             this.mainPageWeatherData = weatherData;
-                            this.applyMainPageWeatherBackground(weatherData);
+                            // 不立即应用背景，等待音效结束后
                             this.isMainPageWeatherActive = true;
                         }
                     } catch (error) {
@@ -6169,6 +6171,14 @@
         applyMainPageWeatherBackground(weatherData) {
             if (!weatherData || !weatherData.baseColor) {
                 console.log('⚠️ 主页面天气数据无效，跳过背景更新');
+                return;
+            }
+            
+            // 检查是否应该应用天气背景（只有在音效结束后才允许）
+            if (!window.openingSoundPlayed) {
+                console.log('🎵 开场音效还未播放完毕，暂不应用天气背景，保持黑色背景');
+                // 将天气数据存储起来，等音效结束后再应用
+                window.pendingWeatherData = weatherData;
                 return;
             }
             
@@ -6217,8 +6227,8 @@
             document.head.appendChild(style);
             
             // 强制刷新DOM，确保背景颜色立即生效，防止缓存问题
-            document.body.style.backgroundColor = weatherData.baseColor;
-            document.documentElement.style.backgroundColor = weatherData.baseColor;
+            document.body.style.setProperty('background-color', weatherData.baseColor, 'important');
+            document.documentElement.style.setProperty('background-color', weatherData.baseColor, 'important');
             
             // 强制重绘，确保背景颜色立即显示
             document.body.offsetHeight; // 触发重排
@@ -10756,6 +10766,93 @@
             }
         }
         
+        // 立即设置黑色背景（不等待DOM加载）
+        (function() {
+            console.log('🔍 立即执行函数开始执行...');
+            
+            // 强制清除任何可能存在的天气背景数据
+            localStorage.removeItem('tempWeatherData');
+            
+            // 在脚本执行的最开始就设置黑色背景
+            if (document.documentElement) {
+                console.log('✅ documentElement存在，设置黑色背景');
+                document.documentElement.style.setProperty('background-color', '#000000', 'important');
+                document.documentElement.style.setProperty('background', '#000000', 'important');
+                document.documentElement.style.setProperty('background-image', 'none', 'important');
+                document.documentElement.style.setProperty('background-gradient', 'none', 'important');
+            } else {
+                console.log('⚠️ documentElement不存在');
+            }
+            
+            if (document.body) {
+                console.log('✅ body存在，设置黑色背景');
+                document.body.style.setProperty('background-color', '#000000', 'important');
+                document.body.style.setProperty('background', '#000000', 'important');
+                document.body.style.setProperty('background-image', 'none', 'important');
+                document.body.style.setProperty('background-gradient', 'none', 'important');
+            } else {
+                console.log('⚠️ body不存在');
+            }
+            
+            // 如果DOM还没准备好，等待一下再设置
+            if (!document.body) {
+                console.log('⏳ DOM还没准备好，等待DOMContentLoaded...');
+                document.addEventListener('DOMContentLoaded', function() {
+                    console.log('🎯 DOMContentLoaded触发，再次设置黑色背景');
+                    document.documentElement.style.setProperty('background-color', '#000000', 'important');
+                    document.documentElement.style.setProperty('background', '#000000', 'important');
+                    document.documentElement.style.setProperty('background-image', 'none', 'important');
+                    document.documentElement.style.setProperty('background-gradient', 'none', 'important');
+                    document.body.style.setProperty('background-color', '#000000', 'important');
+                    document.body.style.setProperty('background', '#000000', 'important');
+                    document.body.style.setProperty('background-image', 'none', 'important');
+                    document.body.style.setProperty('background-gradient', 'none', 'important');
+                });
+            }
+            
+            // 额外保障：使用setTimeout确保在下一个事件循环中设置
+            setTimeout(() => {
+                console.log('⏰ setTimeout延迟设置黑色背景');
+                if (document.documentElement) {
+                    document.documentElement.style.setProperty('background-color', '#000000', 'important');
+                    document.documentElement.style.setProperty('background', '#000000', 'important');
+                    document.documentElement.style.setProperty('background-image', 'none', 'important');
+                    document.documentElement.style.setProperty('background-gradient', 'none', 'important');
+                }
+                if (document.body) {
+                    document.body.style.setProperty('background-color', '#000000', 'important');
+                    document.body.style.setProperty('background', '#000000', 'important');
+                    document.body.style.setProperty('background-image', 'none', 'important');
+                    document.body.style.setProperty('background-gradient', 'none', 'important');
+                }
+            }, 0);
+            
+            // 更强力的保障：持续设置黑色背景，并阻止其他代码修改
+            const blackBackgroundInterval = setInterval(() => {
+                // 如果音效已经播放完毕，停止强制设置黑色背景
+                if (window.openingSoundPlayed) {
+                    console.log('🎵 音效播放完毕，停止强制设置黑色背景');
+                    clearInterval(blackBackgroundInterval);
+                    return;
+                }
+                
+                if (document.documentElement && document.documentElement.style.backgroundColor !== '#000000') {
+                    console.log('🔄 持续保障：重新设置documentElement黑色背景');
+                    document.documentElement.style.setProperty('background-color', '#000000', 'important');
+                    document.documentElement.style.setProperty('background', '#000000', 'important');
+                    document.documentElement.style.setProperty('background-image', 'none', 'important');
+                    document.documentElement.style.setProperty('background-gradient', 'none', 'important');
+                }
+                if (document.body && document.body.style.backgroundColor !== '#000000') {
+                    console.log('🔄 持续保障：重新设置body黑色背景');
+                    document.body.style.setProperty('background-color', '#000000', 'important');
+                    document.body.style.setProperty('background', '#000000', 'important');
+                    document.body.style.setProperty('background-image', 'none', 'important');
+                    document.body.style.setProperty('background-gradient', 'none', 'important');
+                }
+            }, 50); // 更频繁的检查
+        })();
+        
         // 绑定语言切换事件
         document.addEventListener('DOMContentLoaded', () => {
             const languageToggle = document.getElementById('languageToggle');
@@ -10767,8 +10864,275 @@
             // 检查字体加载
             checkFontLoading();
             
-
+            // 初始化开场音效状态
+            window.openingSoundPlayed = false;
+            window.pendingWeatherData = null;
+            console.log('🎬 初始化开场音效状态:', { openingSoundPlayed: window.openingSoundPlayed, pendingWeatherData: window.pendingWeatherData });
+            
+            // 确保从黑色背景开始
+            resetToBlackBackground();
+            
+            // 额外保护：延迟启动开场序列，确保黑色背景完全设置
+            setTimeout(() => {
+                console.log('🛡️ 延迟启动开场序列，确保黑色背景稳定...');
+                resetToBlackBackground(); // 再次确认黑色背景
+                startOpeningSequence();
+            }, 100);
         });
+        
+        // 页面显示时（从其他页面返回）也重置背景
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                console.log('🔄 页面重新显示，重置为黑色背景...');
+                resetToBlackBackground();
+                // 如果还没有播放过开场音效，重新开始
+                if (!window.openingSoundPlayed) {
+                    setTimeout(() => {
+                        startOpeningSequence();
+                    }, 500);
+                }
+            }
+        });
+        
+        // ===== 开场音效和天气背景渐变系统 =====
+        
+        // 重置为黑色背景
+        function resetToBlackBackground() {
+            console.log('⚫ 重置为黑色背景...');
+            console.log('🔍 当前body背景色:', document.body.style.backgroundColor);
+            console.log('🔍 当前html背景色:', document.documentElement.style.backgroundColor);
+            
+            // 强制设置黑色背景，使用!important确保优先级
+            document.body.style.setProperty('background-color', '#000000', 'important');
+            document.body.style.setProperty('background', '#000000', 'important');
+            document.body.style.setProperty('background-image', 'none', 'important');
+            document.body.style.setProperty('background-gradient', 'none', 'important');
+            document.documentElement.style.setProperty('background-color', '#000000', 'important');
+            document.documentElement.style.setProperty('background', '#000000', 'important');
+            document.documentElement.style.setProperty('background-image', 'none', 'important');
+            document.documentElement.style.setProperty('background-gradient', 'none', 'important');
+            
+            console.log('✅ 设置后body背景色:', document.body.style.backgroundColor);
+            console.log('✅ 设置后html背景色:', document.documentElement.style.backgroundColor);
+            
+            // 重置播放状态
+            window.openingSoundPlayed = false;
+        }
+        
+        // 开场音效播放
+        function startOpeningSequence() {
+            console.log('🎬 开始主界面开场序列...');
+            
+            // 延迟1秒后开始播放开场音效
+            setTimeout(() => {
+                playOpeningSound();
+            }, 1000);
+        }
+        
+        // 播放开场音效
+        function playOpeningSound() {
+            // 防止重复播放
+            if (window.openingSoundPlayed) {
+                console.log('🎵 开场音效已经播放过，跳过...');
+                return;
+            }
+            
+            console.log('🎵 播放开场音效...');
+            
+            try {
+                // 标记音效正在播放（此时还不能应用天气背景）
+                window.openingSoundPlayed = false;
+                console.log('🎵 音效播放状态设置为false');
+                
+                // 创建音频上下文
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 创建主混音器
+                const masterGain = audioContext.createGain();
+                masterGain.connect(audioContext.destination);
+                masterGain.gain.setValueAtTime(0.5, audioContext.currentTime); // 主音量50%
+                
+                // 创建开场音效 - 帝国时代风格
+                createOpeningSound(audioContext, masterGain);
+                
+                console.log('🎵 开场音效开始播放！');
+                console.log('⏰ 设置1.2秒后开始背景渐变...');
+                
+                // 音效播放完毕后开始天气背景渐变
+                setTimeout(() => {
+                    console.log('⏰ 0.2秒定时器触发！');
+                    // 标记音效播放完毕，现在可以应用天气背景了
+                    window.openingSoundPlayed = true;
+                    console.log('🎵 音效播放状态设置为true');
+                    console.log('🌤️ 开始调用startWeatherBackgroundTransition...');
+                    startWeatherBackgroundTransition();
+                }, 200); // 0.2秒后开始渐变（音效总时长1.0秒，留0.2秒缓冲）
+                
+            } catch (error) {
+                console.error('❌ 开场音效播放失败:', error);
+                // 出错时也要开始天气背景渐变
+                setTimeout(() => {
+                    console.log('⏰ 错误处理定时器触发！');
+                    window.openingSoundPlayed = true;
+                    console.log('🎵 错误处理：音效播放状态设置为true');
+                    startWeatherBackgroundTransition();
+                }, 200);
+            }
+        }
+        
+        // 创建开场音效
+        function createOpeningSound(audioContext, masterGain) {
+            const currentTime = audioContext.currentTime;
+            
+            // 创建开场音效 - 帝国时代风格的"Hello World"
+            const helloNotes = [
+                { freq: 523.25, duration: 0.3, gain: 0.4, type: 'triangle' }, // C5 - "He"
+                { freq: 659.25, duration: 0.3, gain: 0.4, type: 'triangle' }, // E5 - "llo"
+                { freq: 659.25, duration: 0.4, gain: 0.5, type: 'square' }   // E5 - "Wor" - 结尾，去掉"ld"
+            ];
+            
+            helloNotes.forEach((note, index) => {
+                const noteTime = currentTime + (index * 0.4); // 每个音符间隔0.4秒
+                
+                // 创建振荡器
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                // 设置音调
+                osc.type = note.type;
+                osc.frequency.setValueAtTime(note.freq, noteTime);
+                
+                // 音量包络
+                gain.gain.setValueAtTime(0, noteTime);
+                gain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.05);
+                gain.gain.setValueAtTime(note.gain, noteTime + note.duration - 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
+                
+                // 连接音频节点
+                osc.connect(gain);
+                gain.connect(masterGain);
+                
+                // 播放音效
+                osc.start(noteTime);
+                osc.stop(noteTime + note.duration);
+            });
+        }
+        
+        // 开始天气背景渐变
+        function startWeatherBackgroundTransition() {
+            console.log('🌤️ 开始天气背景渐变...');
+            console.log('🔍 当前状态检查:');
+            console.log('  - window.openingSoundPlayed:', window.openingSoundPlayed);
+            console.log('  - window.pendingWeatherData:', window.pendingWeatherData);
+            console.log('  - 当前body背景色:', document.body.style.backgroundColor);
+            console.log('  - 当前html背景色:', document.documentElement.style.backgroundColor);
+            
+            // 首先检查是否有待应用的天气数据
+            if (window.pendingWeatherData && window.pendingWeatherData.baseColor) {
+                console.log('🌤️ 使用待应用的天气数据:', window.pendingWeatherData.baseColor);
+                
+                // 使用JavaScript动画实现平滑渐变
+                animateBackgroundTransition('#000000', window.pendingWeatherData.baseColor, 1500);
+                
+                console.log('✅ 天气背景渐变开始！');
+                return;
+            }
+            
+            // 如果没有待应用的数据，尝试从localStorage获取
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            console.log('🔍 localStorage检查:');
+            console.log('  - globalWeatherData:', storedWeather);
+            
+            if (storedWeather) {
+                try {
+                    const weatherData = JSON.parse(storedWeather);
+                    if (weatherData && weatherData.baseColor) {
+                        console.log('🌤️ 找到天气数据，开始渐变到:', weatherData.baseColor);
+                        
+                        // 使用JavaScript动画实现平滑渐变
+                        animateBackgroundTransition('#000000', weatherData.baseColor, 1500);
+                        
+                        console.log('✅ 天气背景渐变开始！');
+                    } else {
+                        console.log('⚠️ 天气数据无效，使用默认蓝色背景');
+                        applyDefaultBackground();
+                    }
+                } catch (error) {
+                    console.error('❌ 解析天气数据失败:', error);
+                    applyDefaultBackground();
+                }
+            } else {
+                console.log('🌤️ 没有找到天气数据，使用默认蓝色背景');
+                applyDefaultBackground();
+            }
+        }
+        
+        // 应用默认背景颜色
+        function applyDefaultBackground() {
+            const defaultColor = '#0041ff';
+            console.log('🎨 应用默认蓝色背景:', defaultColor);
+            console.log('🔍 应用前状态:');
+            console.log('  - body背景色:', document.body.style.backgroundColor);
+            console.log('  - html背景色:', document.documentElement.style.backgroundColor);
+            
+            // 使用JavaScript动画实现平滑渐变，因为CSS transition可能被覆盖
+            animateBackgroundTransition('#000000', defaultColor, 1500);
+            
+            console.log('✅ 默认蓝色背景渐变开始！');
+        }
+        
+        // JavaScript动画渐变函数
+        function animateBackgroundTransition(fromColor, toColor, duration) {
+            console.log('🎬 开始JavaScript背景渐变动画:', { fromColor, toColor, duration });
+            
+            const startTime = Date.now();
+            const fromRGB = hexToRgb(fromColor);
+            const toRGB = hexToRgb(toColor);
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // 使用easeInOut缓动函数
+                const easeProgress = progress < 0.5 
+                    ? 2 * progress * progress 
+                    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+                
+                const currentRGB = {
+                    r: Math.round(fromRGB.r + (toRGB.r - fromRGB.r) * easeProgress),
+                    g: Math.round(fromRGB.g + (toRGB.g - fromRGB.g) * easeProgress),
+                    b: Math.round(fromRGB.b + (toRGB.b - fromRGB.b) * easeProgress)
+                };
+                
+                const currentColor = `rgb(${currentRGB.r}, ${currentRGB.g}, ${currentRGB.b})`;
+                
+                // 应用当前颜色
+                document.body.style.setProperty('background-color', currentColor, 'important');
+                document.documentElement.style.setProperty('background-color', currentColor, 'important');
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    console.log('✅ JavaScript背景渐变动画完成！');
+                    console.log('  - 最终body背景色:', document.body.style.backgroundColor);
+                    console.log('  - 最终html背景色:', document.documentElement.style.backgroundColor);
+                }
+            }
+            
+            animate();
+        }
+        
+        // 辅助函数：将十六进制颜色转换为RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : { r: 0, g: 0, b: 0 };
+        }
+        
+
     </script>
 </body>
 </html>

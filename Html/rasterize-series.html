@@ -5826,7 +5826,53 @@
             
             // 初始化语言设置
             initLanguage();
+            
+            // 确保滚动动画天气部分初始为亮蓝色
+            ensureInitialRasterizeStripesColor();
+            
+            // 初始化全局天气客户端
+            initGlobalWeatherClient();
+            
+            // 延迟播放开场音效
+            setTimeout(() => {
+                playRasterizeSeriesGreeting();
+            }, 1000);
         });
+        
+        // 确保页面加载时滚动动画天气部分保持亮蓝色
+        function ensureInitialRasterizeStripesColor() {
+            console.log('🎨 确保滚动动画天气部分初始亮蓝色...');
+            
+            // 强制设置滚动动画天气部分为亮蓝色
+            const rasterizeStripes = document.querySelectorAll('.rasterize-stripes');
+            rasterizeStripes.forEach(stripe => {
+                stripe.style.background = `repeating-linear-gradient(
+                    to bottom,
+                    #0041ff 0px,
+                    #0041ff 3px,
+                    #0041ff 3px,
+                    #0041ff 20px
+                )`;
+                console.log('🎨 已设置滚动动画天气部分为亮蓝色');
+            });
+            
+            // 添加CSS样式确保亮蓝色不被覆盖
+            const style = document.createElement('style');
+            style.id = 'rasterize-initial-stripes-style';
+            style.textContent = `
+                .rasterize-stripes {
+                    background: repeating-linear-gradient(
+                        to bottom,
+                        #0041ff 0px,
+                        #0041ff 3px,
+                        #0041ff 3px,
+                        #0041ff 20px
+                    ) !important;
+                }
+            `;
+            document.head.appendChild(style);
+            console.log('🎨 已添加CSS样式确保滚动动画天气部分保持亮蓝色');
+        }
 
         // ===== Rasterize Series 全局天气客户端系统 =====
         // 全局天气数据
@@ -5848,8 +5894,8 @@
                     const now = Date.now();
                     const dataAge = now - globalWeatherData.timestamp;
                     if (dataAge < 1800000) { // 30分钟 = 1800000毫秒
-                        // 数据有效，立即应用背景颜色
-                        applyGlobalWeatherBackground(globalWeatherData);
+                        // 数据有效，但不立即应用背景颜色（等待音效结束后）
+                        console.log('📡 获取到有效的天气数据，等待音效结束后应用');
                         isWeatherClientActive = true;
                     } else {
                         console.log('⚠️ 天气数据已过期，等待展览界面更新...');
@@ -5877,7 +5923,7 @@
             console.log('📡 收到展览界面天气变化事件:', newWeatherData);
             
             globalWeatherData = newWeatherData;
-            applyGlobalWeatherBackground(newWeatherData);
+            // 不立即应用背景，等待音效结束后
             isWeatherClientActive = true;
         }
         
@@ -5889,7 +5935,7 @@
                     console.log('📡 localStorage 天气数据已更新:', newWeatherData);
                     
                     globalWeatherData = newWeatherData;
-                    applyGlobalWeatherBackground(newWeatherData);
+                    // 不立即应用背景，等待音效结束后
                     isWeatherClientActive = true;
                 } catch (error) {
                     console.error('❌ 解析更新的天气数据失败:', error);
@@ -5910,7 +5956,7 @@
                     if (dataAge < 900000 && (!globalWeatherData || globalWeatherData.timestamp !== weatherData.timestamp)) {
                         console.log('📡 定期检查发现新的天气数据:', weatherData);
                         globalWeatherData = weatherData;
-                        applyGlobalWeatherBackground(weatherData);
+                        // 不立即应用背景，等待音效结束后
                         isWeatherClientActive = true;
                     }
                 } catch (error) {
@@ -5975,6 +6021,7 @@
                         ${weatherData.baseColor} 3px,
                         ${weatherData.baseColor} 20px
                     ) !important;
+                    transition: background 1.5s ease-in-out !important;
                 }
             `;
             
@@ -5982,6 +6029,72 @@
             document.head.appendChild(style);
             
             console.log(`🎨 Rasterize Series 已同步展览界面天气背景: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)}`);
+            console.log(`🎨 滚动动画深蓝色部分已更新为天气颜色: ${weatherData.baseColor}`);
+        }
+        
+        // 延迟应用天气背景（等音效结束后）
+        function applyDelayedWeatherBackground(weatherData) {
+            if (!weatherData || !weatherData.baseColor) {
+                console.log('⚠️ 天气数据无效，跳过延迟背景更新');
+                return;
+            }
+            
+            console.log('🎨 延迟应用展览界面的天气背景颜色:', weatherData.baseColor);
+            
+            // 创建CSS变量来动态调整颜色
+            const style = document.createElement('style');
+            style.id = 'rasterize-delayed-weather-style';
+            
+            // 移除之前的样式
+            const existingStyle = document.getElementById('rasterize-delayed-weather-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // 生成动态CSS - 使用纯色而不是渐变
+            const css = `
+                body {
+                    --global-weather-blue-base: ${weatherData.baseColor};
+                    --global-weather-blue-intensity: ${weatherData.intensity};
+                    --global-weather-blue-humidity: ${weatherData.humidityFactor};
+                    --global-weather-blue-wind: ${weatherData.windFactor};
+                    --global-weather-blue-season: ${weatherData.seasonalAdjustment};
+                    --global-weather-blue-time: ${weatherData.timeAdjustment};
+                    
+                    background-color: ${weatherData.baseColor};
+                    transition: background-color 2s ease-in-out;
+                }
+                
+                /* 为页面添加一些微妙的层次感，但保持纯色 */
+                body::before {
+                    content: '';
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: ${weatherData.baseColor};
+                    opacity: 0.98;
+                    z-index: -1;
+                    pointer-events: none;
+                }
+                
+                /* 动态调整滚动动画的深蓝色部分 - 动画完成后才应用 */
+                .rasterize-stripes {
+                    background: repeating-linear-gradient(
+                        to bottom,
+                        #0041ff 0px,
+                        #0041ff 3px,
+                        ${weatherData.baseColor} 3px,
+                        ${weatherData.baseColor} 20px
+                    ) !important;
+                }
+            `;
+            
+            style.textContent = css;
+            document.head.appendChild(style);
+            
+            console.log(`🎨 Rasterize Series 延迟应用天气背景完成: 基础色=${weatherData.baseColor}, 强度=${weatherData.intensity.toFixed(2)}`);
             console.log(`🎨 滚动动画深蓝色部分已更新为天气颜色: ${weatherData.baseColor}`);
         }
         
@@ -6028,6 +6141,13 @@
                 setTimeout(() => {
                     createRasterizeEffectSound(rasterizeAudioContext, masterGain);
                 }, 1.6); // 折中调整：从2.0秒缩短到1.6秒
+                
+                // 音效播放完毕后开始背景渐变
+                setTimeout(() => {
+                    console.log('🎨 开场音效播放完毕，开始背景渐变...');
+                    console.log('⏰ 2.0秒定时器触发！');
+                    startRasterizeBackgroundTransition();
+                }, 2000); // 2.0秒后开始背景渐变（音效总时长约1.6秒，留0.4秒缓冲）
                 
                 isRasterizeGreetingPlayed = true;
                 console.log('🎨 Rasterize Series 开场音效开始播放！');
@@ -6327,6 +6447,156 @@
             formantOsc.stop(noteTime + 0.15);
         }
 
+        // ===== Rasterize Series 天气背景渐变系统 =====
+        
+        // 开始背景渐变
+        function startRasterizeBackgroundTransition() {
+            console.log('🌤️ 开始Rasterize Series背景渐变...');
+            
+            // 尝试获取展览界面的天气数据
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            
+            if (storedWeather) {
+                try {
+                    const weatherData = JSON.parse(storedWeather);
+                    if (weatherData && weatherData.baseColor) {
+                        console.log('🌤️ 找到天气数据，开始渐变到:', weatherData.baseColor);
+                        
+                        // 使用JavaScript动画实现滚动动画天气部分的平滑渐变
+                        animateRasterizeStripesTransition('#0041ff', weatherData.baseColor, 1500);
+                        
+                        console.log('✅ 滚动动画天气部分渐变开始！');
+                    } else {
+                        console.log('⚠️ 天气数据无效，保持亮蓝色背景');
+                    }
+                } catch (error) {
+                    console.error('❌ 解析天气数据失败:', error);
+                }
+            } else {
+                console.log('🌤️ 没有找到天气数据，保持亮蓝色背景');
+            }
+        }
+        
+        // JavaScript动画渐变滚动动画天气部分
+        function animateRasterizeStripesTransition(fromColor, toColor, duration) {
+            console.log('🎬 开始滚动动画天气部分渐变动画:', { fromColor, toColor, duration });
+            
+            // 移除初始CSS样式，避免冲突
+            const initialStyle = document.getElementById('rasterize-initial-stripes-style');
+            if (initialStyle) {
+                initialStyle.remove();
+                console.log('🎨 已移除初始CSS样式，开始动画渐变');
+            }
+            
+            const startTime = Date.now();
+            const fromRGB = hexToRgb(fromColor);
+            const toRGB = hexToRgb(toColor);
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // 使用easeInOut缓动函数
+                const easeProgress = progress < 0.5 
+                    ? 2 * progress * progress 
+                    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+                
+                const currentRGB = {
+                    r: Math.round(fromRGB.r + (toRGB.r - fromRGB.r) * easeProgress),
+                    g: Math.round(fromRGB.g + (toRGB.g - fromRGB.g) * easeProgress),
+                    b: Math.round(fromRGB.b + (toRGB.b - fromRGB.b) * easeProgress)
+                };
+                
+                const currentColor = `rgb(${currentRGB.r}, ${currentRGB.g}, ${currentRGB.b})`;
+                
+                // 应用当前颜色到滚动动画的天气部分
+                const rasterizeStripes = document.querySelectorAll('.rasterize-stripes');
+                rasterizeStripes.forEach(stripe => {
+                    stripe.style.background = `repeating-linear-gradient(
+                        to bottom,
+                        #0041ff 0px,
+                        #0041ff 3px,
+                        ${currentColor} 3px,
+                        ${currentColor} 20px
+                    )`;
+                });
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    console.log('✅ 滚动动画天气部分渐变动画完成！');
+                    console.log('  - 最终天气颜色:', currentColor);
+                    
+                    // 动画完成后，应用完整的天气背景
+                    const storedWeather = localStorage.getItem('globalWeatherData');
+                    if (storedWeather) {
+                        try {
+                            const weatherData = JSON.parse(storedWeather);
+                            if (weatherData && weatherData.baseColor) {
+                                applyDelayedWeatherBackground(weatherData);
+                            }
+                        } catch (error) {
+                            console.error('❌ 应用最终天气背景失败:', error);
+                        }
+                    }
+                }
+            }
+            
+            animate();
+        }
+        
+        // JavaScript动画渐变函数
+        function animateRasterizeBackgroundTransition(fromColor, toColor, duration) {
+            console.log('🎬 开始Rasterize Series背景渐变动画:', { fromColor, toColor, duration });
+            
+            const startTime = Date.now();
+            const fromRGB = hexToRgb(fromColor);
+            const toRGB = hexToRgb(toColor);
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // 使用easeInOut缓动函数
+                const easeProgress = progress < 0.5 
+                    ? 2 * progress * progress 
+                    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+                
+                const currentRGB = {
+                    r: Math.round(fromRGB.r + (toRGB.r - fromRGB.r) * easeProgress),
+                    g: Math.round(fromRGB.g + (toRGB.g - fromRGB.g) * easeProgress),
+                    b: Math.round(fromRGB.b + (toRGB.b - fromRGB.b) * easeProgress)
+                };
+                
+                const currentColor = `rgb(${currentRGB.r}, ${currentRGB.g}, ${currentRGB.b})`;
+                
+                // 应用当前颜色到html和body
+                document.body.style.setProperty('background-color', currentColor, 'important');
+                document.documentElement.style.setProperty('background-color', currentColor, 'important');
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    console.log('✅ Rasterize Series背景渐变动画完成！');
+                    console.log('  - 最终背景色:', currentColor);
+                }
+            }
+            
+            animate();
+        }
+        
+        // 辅助函数：将十六进制颜色转换为RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : { r: 0, g: 0, b: 0 };
+        }
+        
+
+        
         window.addEventListener('load', function() {
             // 初始化全局天气客户端系统
             initGlobalWeatherClient();
