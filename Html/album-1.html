@@ -56,7 +56,7 @@
         
         .album-cover {
             position: absolute;
-            top: calc(50% - 50px);
+            top: calc(50% + 20px);
             left: 25%;
             transform: translate(-50%, -50%);
             width: 600px;
@@ -67,12 +67,12 @@
                 0 0 0 1px #000,
                 inset 1px 1px 0 #fff,
                 inset -1px -1px 0 #404040;
-            z-index: 1000;
+            z-index: 10;
         }
         
         .audio-player {
             position: absolute;
-            top: calc(50% + 50px);
+            top: calc(50% + 130px);
             left: 75%;
             transform: translate(-50%, -50%);
             width: 600px;
@@ -248,48 +248,83 @@
             transform: translateX(-50%) scale(1);
         }
         
-        /* 盲文文本样式 - 填满背景的视觉元素 */
+        /* 盲文背景样式 */
         .braille-text {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            color: #ffff00;
-            font-size: 32px;
-            line-height: 2;
-            text-align: center;
-            font-weight: normal;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            opacity: 0.5;
-            letter-spacing: 8px;
-            font-family: "Courier New", monospace;
-            z-index: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 20px;
+            z-index: 1;
+            pointer-events: none;
+            overflow: visible;
+        }
+        
+        /* 盲文点阵系统 */
+        .braille-char {
+            position: absolute;
             pointer-events: none;
         }
         
-        /* 星星点亮动画 */
-        .star-symbol {
-            opacity: 0;
-            transition: all 0.8s ease-in-out;
-            animation: starTwinkle 3s infinite;
+        .braille-dot {
+            border-radius: 50%;
+            transition: opacity 0.3s ease;
+            box-sizing: border-box;
         }
         
-        .star-symbol.lit {
-            opacity: 1;
-            color: #ffff00;
-            text-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00, 0 0 30px #ffff00;
+        .braille-dot.active {
+            opacity: 1 !important;
+            background: #ffffff !important;
+            box-shadow: 
+                0 0 40px #ffffff,
+                0 0 80px #ffffff,
+                0 0 120px #ffffff,
+                0 0 160px rgba(255, 255, 255, 1),
+                0 0 200px rgba(255, 255, 255, 1),
+                0 0 240px rgba(255, 255, 255, 1),
+                0 0 320px rgba(255, 255, 255, 0.9),
+                0 0 400px rgba(255, 255, 255, 0.8),
+                0 0 480px rgba(255, 255, 255, 0.7),
+                0 0 600px rgba(255, 255, 255, 0.6),
+                0 0 800px rgba(255, 255, 255, 0.4);
+            filter: brightness(8.0) contrast(8.0) saturate(4.0);
+            animation: glow 4s ease-in-out infinite alternate;
         }
         
-        @keyframes starTwinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+        @keyframes glow {
+            0% {
+                box-shadow: 
+                    0 0 40px #ffffff,
+                    0 0 80px #ffffff,
+                    0 0 120px #ffffff,
+                    0 0 160px rgba(255, 255, 255, 1),
+                    0 0 200px rgba(255, 255, 255, 1),
+                    0 0 240px rgba(255, 255, 255, 1),
+                    0 0 320px rgba(255, 255, 255, 0.9),
+                    0 0 400px rgba(255, 255, 255, 0.8),
+                    0 0 480px rgba(255, 255, 255, 0.7),
+                    0 0 600px rgba(255, 255, 255, 0.6),
+                    0 0 800px rgba(255, 255, 255, 0.4);
+            }
+            100% {
+                box-shadow: 
+                    0 0 60px #ffffff,
+                    0 0 120px #ffffff,
+                    0 0 180px #ffffff,
+                    0 0 240px rgba(255, 255, 255, 1),
+                    0 0 320px rgba(255, 255, 255, 1),
+                    0 0 400px rgba(255, 255, 255, 1),
+                    0 0 480px rgba(255, 255, 255, 1),
+                    0 0 600px rgba(255, 255, 255, 0.9),
+                    0 0 720px rgba(255, 255, 255, 0.8),
+                    0 0 880px rgba(255, 255, 255, 0.6),
+                    0 0 1200px rgba(255, 255, 255, 0.4);
+            }
         }
+        
+
+        
+
         
 
     </style>
@@ -303,13 +338,9 @@
         This is a soundtrack album created based on the visual artwork "New Century Underwater Cavern". As global warming gradually raises sea levels, the coming of a future water world will submerge human civilization remnants, which will dissolve into cables of various colors. Tens of thousands of humans will flow through these cables in the form of bytes, moving at the speed of light, blinking into the ocean floor to form caverns that emit shimmering lights. Apostle Seven is born...
     </div>
     
-    <!-- 盲文版本 - 填满背景的视觉元素 -->
-    <div class="braille-text">
-        ⠠⠞⠓⠊⠎ ⠊⠎ ⠁ ⠎⠕⠥⠝⠙⠞⠗⠁⠉⠅ ⠁⠇⠃⠥⠍ ⠉⠗⠑⠁⠞⠑⠙ ⠃⠁⠎⠑⠙ ⠕⠝ ⠞⠓⠑ ⠧⠊⠎⠥⠁⠇ ⠁⠗⠞⠺⠕⠗⠅ ⠦⠝⠑⠺ ⠉⠑⠝⠞⠥⠗⠽ ⠥⠝⠙⠑⠗⠺⠁⠞⠑⠗ ⠉⠁⠧⠑⠗⠝⠦ ⠠⠁⠎ ⠛⠇⠕⠃⠁⠇ ⠺⠁⠗⠍⠊⠝⠛ ⠛⠗⠁⠙⠥⠁⠇⠇⠽ ⠗⠁⠊⠎⠑⠎ ⠎⠑⠁ ⠇⠑⠧⠑⠇⠎⠂ ⠞⠓⠑ ⠉⠕⠍⠊⠝⠛ ⠕⠋ ⠁ ⠋⠥⠞⠥⠗⠑ ⠺⠁⠞⠑⠗ ⠺⠕⠗⠇⠙ ⠺⠊⠇⠇ ⠎⠥⠃⠍⠑⠗⠛⠑ ⠓⠥⠍⠁⠝ ⠉⠊⠧⠊⠇⠊⠵⠁⠞⠊⠕⠝ ⠗⠑⠍⠝⠁⠝⠞⠎⠂ ⠺⠓⠊⠉⠓ ⠺⠊⠇⠇ ⠙⠊⠎⠎⠕⠇⠧⠑ ⠊⠝⠞⠕ ⠉⠁⠃⠇⠑⠎ ⠕⠋ ⠧⠁⠗⠊⠕⠥⠎ ⠉⠕⠇⠕⠗⠎ ⠠⠞⠑⠝⠎ ⠕⠋ ⠞⠓⠥⠎⠁⠝⠙⠎ ⠕⠋ ⠓⠥⠍⠁⠝⠎ ⠺⠊⠇⠇ ⠋⠇⠕⠺ ⠞⠓⠗⠕⠥⠛⠓ ⠞⠓⠑⠎⠑ ⠉⠁⠃⠇⠑⠎ ⠊⠝ ⠞⠓⠑ ⠋⠕⠗⠍ ⠕⠋ ⠃⠽⠞⠑⠎⠂ ⠍⠕⠧⠊⠝⠛ ⠁⠞ ⠞⠓⠑ ⠎⠏⠑⠑⠙ ⠕⠋ ⠇⠊⠛⠓⠞⠂ ⠃⠇⠊⠝⠅⠊⠝⠛ ⠊⠝⠞⠕ ⠞⠓⠑ ⠕⠉⠑⠁⠝ ⠋⠇⠕⠕⠗ ⠞⠕ ⠋⠕⠗⠍ ⠉⠁⠧⠑⠗⠝⠎ ⠞⠓⠁⠞ ⠑⠍⠊⠞ ⠎⠓⠊⠍⠍⠑⠗⠊⠝⠛ ⠇⠊⠛⠓⠞⠎ ⠠⠁⠏⠕⠎⠞⠇⠑ ⠎⠑⠧⠑⠝ ⠊⠎ ⠃⠕⠗⠝⠂⠄⠄⠄
-        ⠠⠞⠓⠊⠎ ⠊⠎ ⠁ ⠎⠕⠥⠝⠙⠞⠗⠁⠉⠅ ⠁⠇⠃⠥⠍ ⠉⠗⠑⠁⠞⠑⠙ ⠃⠁⠎⠑⠙ ⠕⠝ ⠞⠓⠑ ⠧⠊⠎⠥⠁⠇ ⠁⠗⠞⠺⠕⠗⠅ ⠦⠝⠑⠺ ⠉⠑⠝⠞⠥⠗⠽ ⠥⠝⠙⠑⠗⠺⠁⠞⠑⠗ ⠉⠁⠧⠑⠗⠝⠦ ⠠⠁⠎ ⠛⠇⠕⠃⠁⠇ ⠺⠁⠗⠍⠊⠝⠛ ⠛⠗⠁⠙⠥⠁⠇⠇⠽ ⠗⠁⠊⠎⠑⠎ ⠎⠑⠁ ⠇⠑⠧⠑⠇⠎⠂ ⠞⠓⠑ ⠉⠕⠍⠊⠝⠛ ⠕⠋ ⠁ ⠋⠥⠞⠥⠗⠑ ⠺⠁⠞⠑⠗ ⠺⠕⠗⠇⠙ ⠺⠊⠇⠇ ⠎⠥⠃⠍⠑⠗⠛⠑ ⠓⠥⠍⠁⠝ ⠉⠊⠧⠊⠇⠊⠵⠁⠞⠊⠕⠝ ⠗⠑⠍⠝⠁⠝⠞⠎⠂ ⠺⠓⠊⠉⠓ ⠺⠊⠇⠇ ⠙⠊⠎⠎⠕⠇⠧⠑ ⠊⠝⠞⠕ ⠉⠁⠃⠇⠎ ⠕⠋ ⠧⠁⠗⠊⠕⠥⠎ ⠉⠕⠇⠕⠗⠎ ⠠⠞⠑⠝⠎ ⠕⠋ ⠞⠓⠥⠎⠁⠝⠙⠎ ⠕⠋ ⠓⠥⠍⠁⠝⠎ ⠺⠊⠇⠇ ⠋⠇⠕⠺ ⠞⠓⠗⠕⠥⠛⠓ ⠞⠓⠑⠎⠑ ⠉⠁⠃⠇⠎ ⠊⠝ ⠞⠓⠑ ⠋⠕⠗⠍ ⠕⠋ ⠃⠽⠞⠑⠎⠂ ⠍⠕⠧⠊⠝⠛ ⠁⠞ ⠞⠓⠑ ⠎⠏⠑⠑⠙ ⠕⠋ ⠇⠊⠛⠓⠞⠂ ⠃⠇⠊⠝⠅⠊⠝⠛ ⠊⠝⠞⠕ ⠞⠓⠑ ⠕⠉⠑⠁⠝ ⠋⠇⠕⠕⠗ ⠞⠕ ⠋⠕⠗⠍ ⠉⠁⠧⠑⠗⠝⠎ ⠞⠓⠁⠞ ⠑⠍⠊⠞ ⠎⠓⠊⠍⠍⠑⠗⠊⠝⠛ ⠇⠊⠛⠓⠞⠎ ⠠⠁⠏⠕⠎⠞⠇⠑ ⠎⠑⠧⠑⠝ ⠊⠎ ⠃⠕⠗⠝⠂⠄⠄⠄
-        ⠠⠞⠓⠊⠎ ⠊⠎ ⠁ ⠎⠕⠥⠝⠙⠞⠗⠁⠉⠅ ⠁⠇⠃⠥⠍ ⠉⠗⠑⠁⠞⠑⠙ ⠃⠁⠎⠑⠙ ⠕⠝ ⠞⠓⠑ ⠧⠊⠎⠥⠁⠇ ⠁⠗⠞⠺⠕⠗⠅ ⠦⠝⠑⠺ ⠉⠑⠝⠞⠥⠗⠽ ⠥⠝⠙⠑⠗⠺⠁⠞⠑⠗ ⠉⠁⠧⠑⠗⠝⠦ ⠠⠁⠎ ⠛⠇⠕⠃⠁⠇ ⠺⠁⠗⠍⠊⠝⠛ ⠛⠗⠁⠙⠥⠁⠇⠇⠽ ⠗⠁⠊⠎⠑⠎ ⠎⠑⠁ ⠇⠑⠧⠑⠇⠎⠂ ⠞⠓⠑ ⠉⠕⠍⠊⠝⠛ ⠕⠋ ⠁ ⠋⠥⠞⠥⠗⠑ ⠺⠁⠞⠑⠗ ⠺⠕⠗⠙ ⠺⠊⠇⠇ ⠎⠥⠃⠍⠑⠗⠛⠑ ⠓⠥⠍⠁⠝ ⠉⠊⠧⠊⠇⠊⠵⠁⠞⠊⠕⠝ ⠗⠑⠍⠝⠁⠝⠞⠎⠂ ⠺⠓⠊⠉⠓ ⠺⠊⠇⠇ ⠙⠊⠎⠎⠕⠇⠧⠑ ⠊⠝⠞⠕ ⠉⠁⠃⠇⠎ ⠕⠋ ⠧⠁⠗⠊⠕⠥⠎ ⠉⠕⠇⠕⠗⠎ ⠠⠞⠑⠝⠎ ⠕⠋ ⠞⠓⠥⠎⠁⠝⠙⠎ ⠕⠋ ⠓⠥⠍⠁⠝⠎ ⠺⠊⠇⠇ ⠋⠇⠕⠺ ⠞⠓⠗⠕⠥⠛⠓ ⠞⠓⠑⠎⠑ ⠉⠁⠃⠇⠎ ⠊⠝ ⠞⠓⠑ ⠋⠕⠗⠍ ⠕⠋ ⠃⠽⠞⠑⠎⠂ ⠍⠕⠧⠊⠝⠛ ⠁⠞ ⠞⠓⠑ ⠎⠏⠑⠑⠙ ⠕⠋ ⠇⠊⠛⠓⠞⠂ ⠃⠇⠊⠝⠅⠊⠝⠛ ⠊⠝⠞⠕ ⠞⠓⠑ ⠕⠉⠑⠁⠝ ⠋⠇⠕⠕⠗ ⠞⠕ ⠋⠕⠗⠍ ⠉⠁⠧⠑⠗⠝⠎ ⠞⠓⠁⠞ ⠑⠍⠊⠞ ⠎⠓⠊⠍⠍⠑⠗⠊⠝⠛ ⠇⠊⠛⠓⠞⠎ ⠠⠁⠏⠕⠎⠞⠇⠑ ⠎⠑⠧⠑⠝ ⠊⠎ ⠃⠕⠗⠝⠂⠄⠄⠄
-        ⠠⠞⠓⠊⠎ ⠊⠎ ⠁ ⠎⠕⠥⠝⠙⠞⠗⠁⠉⠅ ⠁⠇⠃⠥⠍ ⠉⠗⠑⠁⠞⠑⠙ ⠃⠁⠎⠑⠙ ⠕⠝ ⠞⠓⠑ ⠧⠊⠎⠥⠁⠇ ⠁⠗⠞⠺⠕⠗⠅ ⠦⠝⠑⠺ ⠉⠑⠝⠞⠥⠗⠽ ⠥⠝⠙⠑⠗⠺⠁⠞⠑⠗ ⠉⠁⠧⠑⠗⠝⠦ ⠠⠁⠎ ⠛⠇⠕⠃⠁⠇ ⠺⠁⠗⠍⠊⠝⠛ ⠛⠗⠁⠙⠥⠁⠇⠇⠽ ⠗⠁⠊⠎⠑⠎ ⠎⠑⠁ ⠇⠑⠧⠑⠇⠎⠂ ⠞⠓⠑ ⠉⠕⠍⠊⠝⠛ ⠕⠋ ⠁ ⠋⠥⠞⠥⠗⠑ ⠺⠁⠞⠑⠗ ⠺⠕⠗⠙ ⠺⠊⠇⠇ ⠎⠥⠃⠍⠑⠗⠛⠑ ⠓⠥⠍⠁⠝ ⠉⠊⠧⠊⠇⠊⠵⠁⠞⠊⠕⠝ ⠗⠑⠍⠝⠁⠝⠞⠎⠂ ⠺⠓⠊⠉⠓ ⠺⠊⠇⠇ ⠙⠊⠎⠎⠕⠇⠧⠑ ⠊⠝⠞⠕ ⠉⠁⠃⠇⠎ ⠕⠋ ⠧⠁⠗⠊⠕⠥⠎ ⠉⠕⠇⠕⠗⠎ ⠠⠞⠑⠝⠎ ⠕⠋ ⠞⠓⠥⠎⠁⠝⠙⠎ ⠕⠋ ⠓⠥⠍⠁⠝⠎ ⠺⠊⠇⠇ ⠋⠇⠕⠺ ⠞⠓⠗⠕⠥⠛⠓ ⠞⠓⠑⠎⠑ ⠉⠁⠃⠇⠎ ⠊⠝ ⠞⠓⠑ ⠋⠕⠗⠍ ⠕⠋ ⠃⠽⠞⠑⠎⠂ ⠍⠕⠧⠊⠝⠛ ⠁⠞ ⠞⠓⠑ ⠎⠏⠑⠑⠙ ⠕⠋ ⠇⠊⠛⠓⠞⠂ ⠃⠇⠊⠝⠅⠊⠝⠛ ⠊⠝⠞⠕ ⠞⠓⠑ ⠕⠉⠑⠁⠝ ⠋⠇⠕⠕⠗ ⠞⠕ ⠋⠕⠗⠍ ⠉⠁⠧⠑⠗⠝⠎ ⠞⠓⠁⠞ ⠑⠍⠊⠞ ⠎⠓⠊⠍⠍⠑⠗⠊⠝⠛ ⠇⠊⠛⠓⠞⠎ ⠠⠁⠏⠕⠎⠞⠇⠑ ⠎⠑⠧⠑⠝ ⠊⠎ ⠃⠕⠗⠝⠂⠄⠄⠄
-        ⠠⠞⠓⠊⠎ ⠊⠎ ⠁ ⠎⠕⠥⠝⠙⠞⠗⠁⠉⠅ ⠁⠇⠃⠥⠍ ⠉⠗⠑⠁⠞⠑⠙ ⠃⠁⠎⠑⠙ ⠕⠝ ⠞⠓⠑ ⠧⠊⠎⠥⠁⠇ ⠁⠗⠞⠺⠕⠗⠅ ⠦⠝⠑⠺ ⠉⠑⠝⠞⠥⠗⠽ ⠥⠝⠙⠑⠗⠺⠁⠞⠑⠗ ⠉⠁⠧⠑⠗⠝⠦ ⠠⠁⠎ ⠛⠇⠕⠃⠁⠇ ⠺⠁⠗⠍⠊⠝⠛ ⠛⠗⠁⠙⠥⠁⠇⠇⠽ ⠗⠁⠊⠎⠑⠎ ⠎⠑⠁ ⠇⠑⠧⠑⠇⠎⠂ ⠞⠓⠑ ⠉⠕⠍⠊⠝⠛ ⠕⠋ ⠁ ⠋⠥⠞⠥⠗⠑ ⠺⠁⠞⠑⠗ ⠺⠕⠗⠙ ⠺⠊⠇⠇ ⠎⠥⠃⠍⠑⠗⠛⠑ ⠓⠥⠍⠁⠝ ⠉⠊⠧⠊⠇⠊⠵⠁⠞⠊⠕⠝ ⠗⠑⠍⠝⠁⠝⠞⠎⠂ ⠺⠓⠊⠉⠓ ⠺⠊⠇⠇ ⠙⠊⠎⠎⠕⠇⠧⠑ ⠊⠝⠞⠕ ⠉⠁⠃⠇⠎ ⠕⠋ ⠧⠁⠗⠊⠕⠥⠎ ⠉⠕⠇⠕⠗⠎ ⠠⠞⠑⠝⠎ ⠕⠋ ⠞⠓⠥⠎⠁⠝⠙⠎ ⠕⠋ ⠓⠥⠍⠁⠝⠎ ⠺⠊⠇⠇ ⠋⠇⠕⠺ ⠞⠓⠗⠕⠥⠛⠓ ⠞⠓⠑⠎⠑ ⠉⠁⠃⠇⠎ ⠊⠝ ⠞⠓⠑ ⠋⠕⠗⠍ ⠕⠋ ⠃⠽⠞⠑⠎⠂ ⠍⠕⠧⠊⠝⠛ ⠁⠞ ⠞⠓⠑ ⠎⠏⠑⠑⠙ ⠕⠋ ⠇⠊⠛⠓⠞⠂ ⠃⠇⠊⠝⠅⠊⠝⠛ ⠊⠝⠞⠕ ⠞⠓⠑ ⠕⠉⠑⠁⠝ ⠋⠇⠕⠕⠗ ⠞⠕ ⠋⠕⠗⠍ ⠉⠁⠧⠑⠗⠝⠎ ⠞⠓⠁⠞ ⠑⠍⠊⠞ ⠎⠓⠊⠍⠍⠑⠗⠊⠝⠛ ⠇⠊⠛⠓⠞⠎ ⠠⠁⠏⠕⠎⠞⠇⠑ ⠎⠑⠧⠑⠝ ⠊⠎ ⠃⠕⠗⠝⠂⠄⠄⠄
+    <!-- 盲文背景 -->
+    <div class="braille-text" id="starField">
+        <!-- 盲文点阵将通过JavaScript动态生成 -->
     </div>
     
     <div class="audio-player" id="audioPlayer">
@@ -425,6 +456,9 @@
             
             // 启动专辑文案清晰化动画
             startAlbumDescriptionClarificationAnimation();
+            
+            // 创建星星背景
+            createStarField();
         });
         
         // 页面可见性变化时检查天气
@@ -716,6 +750,280 @@
                     console.log('✅ 专辑文案清晰化动画完成！');
                 }, 5000);
             }, 3000);
+        }
+        
+        // 盲文背景系统
+        function createStarField() {
+            console.log('🌟 开始创建Sonification盲文背景...');
+            
+            const starField = document.getElementById('starField');
+            if (!starField) {
+                console.error('❌ 找不到盲文容器 starField');
+                return;
+            }
+            
+            console.log('✅ 找到盲文容器，开始创建盲文点...');
+            
+            // 清空现有内容
+            starField.innerHTML = '';
+            
+            // 专辑描述文案（使用原始简短版本）
+            const text = "This is a soundtrack album created based on the visual artwork \"New Century Underwater Cavern\". As global warming gradually raises sea levels, the coming of a future water world will submerge human civilization remnants, which will dissolve into cables of various colors. Tens of thousands of humans will flow through these cables in the form of bytes, moving at the speed of light, blinking into the ocean floor to form caverns that emit shimmering lights. Apostle Seven is born...";
+            
+            // 转换为盲文点阵
+            createBrailleText(starField, text);
+            
+            // 在专辑封面和track之间添加盲文点
+            addBrailleBetweenCoverAndTrack(starField);
+            
+            // 启动随机亮起动画
+            setTimeout(() => {
+                startRandomLighting();
+            }, 1000); // 延迟1秒启动动画
+            
+            // 添加调试信息
+            console.log('🔍 盲文转换完成');
+            console.log('📝 原文长度:', text.length);
+            console.log('🔤 单词数量:', text.toLowerCase().split(' ').length);
+            console.log('📊 盲文字符映射表:', Object.keys(brailleMap).length, '个字符');
+            console.log('🎯 盲文容器子元素数量:', starField.children.length);
+        }
+        
+        // 盲文字符映射表
+        const brailleMap = {
+            'a': [1,0,0,0,0,0], 'b': [1,1,0,0,0,0], 'c': [1,0,0,1,0,0], 'd': [1,0,0,1,1,0],
+            'e': [1,0,0,0,0,1], 'f': [1,1,0,1,0,0], 'g': [1,1,0,1,1,0], 'h': [1,1,0,0,0,1],
+            'i': [0,1,0,1,0,0], 'j': [0,1,0,1,1,0], 'k': [1,0,1,0,0,0], 'l': [1,1,1,0,0,0],
+            'm': [1,0,1,1,0,0], 'n': [1,0,1,1,1,0], 'o': [1,0,1,0,0,1], 'p': [1,1,1,1,0,0],
+            'q': [1,1,1,1,1,0], 'r': [1,1,1,0,0,1], 's': [0,1,1,1,0,0], 't': [0,1,1,1,1,0],
+            'u': [1,0,1,0,1,0], 'v': [1,1,1,0,1,0], 'w': [0,1,0,1,1,1], 'x': [1,0,1,1,0,1],
+            'y': [1,1,1,1,0,1], 'z': [1,0,1,0,1,1], ' ': [0,0,0,0,0,0], '.': [0,0,0,0,0,1],
+            ',': [0,0,0,0,1,0], '!': [0,0,0,0,1,1], '?': [0,0,0,0,1,0], '"': [0,0,0,0,1,1],
+            "'": [0,0,0,0,0,1], '-': [0,0,0,0,0,1], '0': [0,1,0,1,1,1], '1': [1,0,0,0,0,0],
+            '2': [1,1,0,0,0,0], '3': [1,0,0,1,0,0], '4': [1,0,0,1,1,0], '5': [1,0,0,0,0,1],
+            '6': [1,1,0,1,0,0], '7': [1,1,0,1,1,0], '8': [1,1,0,0,0,1], '9': [0,1,0,1,0,0]
+        };
+        
+        // 创建盲文点阵
+        function createBrailleText(container, text) {
+            console.log('📝 开始创建基于文案的盲文点阵...');
+            
+            const words = text.toLowerCase().split(' ');
+            let currentX = 4; // 起始X位置 - 向右移动一点
+            let currentY = 5; // 起始Y位置 - 向下移动一点
+            const charWidth = 1.5; // 盲文字符宽度 - 稍微增加间隔
+            const charHeight = 2.5; // 盲文字符高度 - 相应调整
+            const lineHeight = 3.2; // 行高 - 稍微增加间隔
+            const wordSpacing = 2.2; // 词间距 - 稍微增加间隔
+            
+            words.forEach((word, wordIndex) => {
+                // 检查是否需要换行
+                if (currentX + word.length * charWidth > 95) {
+                    currentX = 4; // 换行时也向右移动一点
+                    currentY += lineHeight;
+                }
+                
+                // 限制顶部盲文的行数，避免与专辑封面重叠
+                if (currentY > 25) {
+                    // 如果超过25%，停止添加更多盲文，让空白空间的盲文发挥作用
+                    return;
+                }
+                
+                // 检查是否会被track或专辑封面遮挡，如果会则跳过这个单词
+                if ((currentX >= 60 && currentX <= 90 && currentY >= 50 + 130 - 300 && currentY <= 50 + 130 + 300) ||
+                    (currentX >= 10 && currentX <= 40 && currentY >= 50 + 20 - 300 && currentY <= 50 + 20 + 300)) {
+                    // 如果当前位置会被track或专辑封面遮挡，移动到下一行
+                    currentX = 2;
+                    currentY += lineHeight;
+                }
+                
+                // 创建单词的盲文字符
+                word.split('').forEach((char, charIndex) => {
+                    const braillePattern = brailleMap[char] || brailleMap[' '];
+                    
+                    // 创建盲文字符容器
+                    const brailleChar = document.createElement('div');
+                    brailleChar.className = 'braille-char';
+                    brailleChar.style.cssText = `
+                        position: absolute;
+                        left: ${currentX + charIndex * charWidth}%;
+                        top: ${currentY}%;
+                        width: ${charWidth * 0.9}%;
+                        height: ${charHeight * 0.9}%; // 使用标准盲文比例
+                        position: relative;
+                    `;
+                    
+                    // 创建6个点 - 使用绝对定位确保正确排列
+                    // 盲文6点制标准顺序：
+                    // 1 4  (左上 右上)
+                    // 2 5  (左中 右中)  
+                    // 3 6  (左下 右下)
+                    const dotPositions = [
+                        { left: '0%', top: '0%' },     // 点1 - 左上
+                        { left: '0%', top: '33.33%' }, // 点2 - 左中
+                        { left: '0%', top: '66.66%' }, // 点3 - 左下
+                        { left: '50%', top: '0%' },    // 点4 - 右上
+                        { left: '50%', top: '33.33%' }, // 点5 - 右中
+                        { left: '50%', top: '66.66%' }  // 点6 - 右下
+                    ];
+                    
+                    for (let i = 0; i < 6; i++) {
+                        const dot = document.createElement('div');
+                        dot.className = 'braille-dot';
+                        dot.style.cssText = `
+                            position: absolute;
+                            left: ${dotPositions[i].left};
+                            top: ${dotPositions[i].top};
+                            width: 4px;
+                            height: 4px;
+                            background: ${braillePattern[i] ? '#999999' : 'transparent'};
+                            border-radius: 50%;
+                            opacity: ${braillePattern[i] ? '0.8' : '0'};
+                            transform: translate(-50%, -50%);
+                            box-sizing: border-box;
+                            aspect-ratio: 1;
+                            min-width: 4px;
+                            min-height: 4px;
+                            max-width: 4px;
+                            max-height: 4px;
+                        `;
+                        brailleChar.appendChild(dot);
+                    }
+                    
+                    container.appendChild(brailleChar);
+                });
+                
+                // 添加词间距
+                currentX += word.length * charWidth + wordSpacing;
+            });
+            
+            console.log('✅ 基于文案的盲文点阵创建完成');
+            console.log('📊 总字符数:', text.length);
+            console.log('📊 总单词数:', words.length);
+            console.log('📊 盲文字符容器数:', container.children.length);
+        }
+        
+        // 在专辑封面和track之间添加盲文点
+        function addBrailleBetweenCoverAndTrack(container) {
+            console.log('🎯 在专辑封面和track之间添加盲文点...');
+            
+            // 专辑封面位置：top: calc(50% + 20px), left: 25%, width: 600px, height: 600px
+            // audio-player位置：top: calc(50% + 130px), left: 75%, width: 600px
+            // 在它们之间的空隙添加盲文点
+            
+            // 计算空隙区域 - 扩大空隙范围
+            const coverBottom = 50 + 20 + 200; // 封面底部位置（50% + 20px + 200px，减少封面高度）
+            const trackTop = 50 + 130 - 200; // track顶部位置（50% + 130px - 200px，减少track高度）
+            const gapStart = Math.min(coverBottom, trackTop) - 5; // 向上扩展5%
+            const gapEnd = Math.max(coverBottom, trackTop) + 5; // 向下扩展5%
+            
+            // 在空隙区域添加盲文点，避免被track遮挡
+            for (let i = 0; i < 60; i++) {
+                // 在封面和track之间的空隙区域分布，避开track区域
+                let randomX, randomY;
+                
+                // 确保盲文点不被track遮挡
+                do {
+                    randomX = 10 + Math.random() * 80; // 10%-90% 的X位置
+                    randomY = gapStart + Math.random() * (gapEnd - gapStart); // 空隙区域的Y位置
+                } while (
+                    // 避开track区域：track在75%位置，宽度600px
+                    (randomX >= 60 && randomX <= 90 && randomY >= 50 + 130 - 300 && randomY <= 50 + 130 + 300)
+                );
+                
+                const brailleChar = document.createElement('div');
+                brailleChar.className = 'braille-char';
+                brailleChar.style.cssText = `
+                    position: absolute;
+                    left: ${randomX}%;
+                    top: ${randomY}%;
+                    width: 20px;
+                    height: 30px;
+                `;
+                
+                // 创建6个随机点
+                const dotPositions = [
+                    { left: '2px', top: '2px' },   // 点1
+                    { left: '12px', top: '2px' },  // 点2
+                    { left: '2px', top: '12px' },  // 点3
+                    { left: '12px', top: '12px' }, // 点4
+                    { left: '2px', top: '22px' },  // 点5
+                    { left: '12px', top: '22px' }  // 点6
+                ];
+                
+                for (let j = 0; j < 6; j++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'braille-dot';
+                    // 随机决定是否显示这个点
+                    const shouldShow = Math.random() > 0.4; // 60%显示概率
+                    dot.style.cssText = `
+                        position: absolute;
+                        left: ${dotPositions[j].left};
+                        top: ${dotPositions[j].top};
+                        width: 4px;
+                        height: 4px;
+                        background: ${shouldShow ? '#999999' : 'transparent'};
+                        border-radius: 50%;
+                        opacity: ${shouldShow ? '0.8' : '0'};
+                        box-sizing: border-box;
+                        aspect-ratio: 1;
+                        min-width: 4px;
+                        min-height: 4px;
+                        max-width: 4px;
+                        max-height: 4px;
+                    `;
+                    brailleChar.appendChild(dot);
+                }
+                
+                container.appendChild(brailleChar);
+            }
+            
+            console.log('✅ 专辑封面和track之间的盲文点添加完成，共60个盲文字符');
+        }
+        
+        // 盲文风格符号创建完成
+        function startSymbolLighting() {
+            console.log('✅ 盲文风格符号创建完成');
+            
+            // 开始随机亮起动画
+            startRandomLighting();
+        }
+        
+        
+        // 随机发光动画
+        function startRandomLighting() {
+            const dots = document.querySelectorAll('.braille-dot');
+            if (dots.length === 0) return;
+            
+            console.log('🎬 开始盲文点随机发光动画，共', dots.length, '个点');
+            
+            // 首先让所有盲文点都显示出来（不透明）
+            dots.forEach(dot => {
+                dot.style.opacity = '0.8'; // 提高基础亮度
+            });
+            
+            setInterval(() => {
+                // 随机选择一些点进行发光效果
+                const randomCount = Math.floor(Math.random() * 8) + 3; // 3-10个点
+                const shuffledDots = Array.from(dots).sort(() => Math.random() - 0.5);
+                
+                // 随机选中的点发光
+                for (let i = 0; i < randomCount; i++) {
+                    if (shuffledDots[i]) {
+                        shuffledDots[i].style.opacity = '1';
+                        shuffledDots[i].classList.add('active');
+                        
+                        // 每个点至少发光3秒
+                        setTimeout(() => {
+                            shuffledDots[i].style.opacity = '0.8';
+                            shuffledDots[i].classList.remove('active');
+                        }, 3000);
+                    }
+                }
+                
+                console.log('✨ 随机发光了', randomCount, '个盲文点');
+                
+            }, 2000); // 每2秒更新一次发光效果
         }
         
 

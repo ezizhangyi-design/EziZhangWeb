@@ -227,7 +227,6 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             
             /* 初始状态：纯白色马赛克异形 */
-            background: #ffffff;
             color: transparent;
             filter: blur(0px) brightness(1) contrast(1);
             opacity: 1;
@@ -268,11 +267,96 @@
             transform: translateX(-50%) scale(1);
         }
         
+        /* 盲文背景样式 */
+        .braille-text {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .braille-char {
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        .braille-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #999999;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            aspect-ratio: 1;
+            min-width: 4px;
+            min-height: 4px;
+            max-width: 4px;
+            max-height: 4px;
+        }
+        
+        .braille-dot.active {
+            opacity: 1 !important;
+            background: #ffffff !important;
+            box-shadow: 
+                0 0 40px #ffffff,
+                0 0 80px #ffffff,
+                0 0 120px #ffffff,
+                0 0 160px rgba(255, 255, 255, 1),
+                0 0 200px rgba(255, 255, 255, 1),
+                0 0 240px rgba(255, 255, 255, 1),
+                0 0 320px rgba(255, 255, 255, 0.9),
+                0 0 400px rgba(255, 255, 255, 0.8),
+                0 0 480px rgba(255, 255, 255, 0.7),
+                0 0 600px rgba(255, 255, 255, 0.6),
+                0 0 800px rgba(255, 255, 255, 0.4);
+            filter: brightness(8.0) contrast(8.0) saturate(4.0);
+            animation: glow 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% {
+                box-shadow: 
+                    0 0 40px #ffffff,
+                    0 0 80px #ffffff,
+                    0 0 120px #ffffff,
+                    0 0 160px rgba(255, 255, 255, 1),
+                    0 0 200px rgba(255, 255, 255, 1),
+                    0 0 240px rgba(255, 255, 255, 1),
+                    0 0 320px rgba(255, 255, 255, 0.9),
+                    0 0 400px rgba(255, 255, 255, 0.8),
+                    0 0 480px rgba(255, 255, 255, 0.7),
+                    0 0 600px rgba(255, 255, 255, 0.6),
+                    0 0 800px rgba(255, 255, 255, 0.4);
+            }
+            100% {
+                box-shadow: 
+                    0 0 60px #ffffff,
+                    0 0 120px #ffffff,
+                    0 0 180px #ffffff,
+                    0 0 240px rgba(255, 255, 255, 1),
+                    0 0 320px rgba(255, 255, 255, 1),
+                    0 0 400px rgba(255, 255, 255, 1),
+                    0 0 480px rgba(255, 255, 255, 1),
+                    0 0 600px rgba(255, 255, 255, 0.9),
+                    0 0 720px rgba(255, 255, 255, 0.8),
+                    0 0 880px rgba(255, 255, 255, 0.6),
+                    0 0 1200px rgba(255, 255, 255, 0.4);
+            }
+        }
+        
 
     </style>
 </head>
 <body>
             <a href="../index.html" class="back-btn" id="backBtn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
+    
+    <!-- 盲文背景 -->
+    <div id="starField" class="braille-text"></div>
     
 
     
@@ -315,6 +399,9 @@
             
             // 启动专辑文案清晰化动画
             startAlbumDescriptionClarificationAnimation();
+            
+            // 创建盲文背景
+            createStarField();
         });
         
         // 页面可见性变化时检查天气
@@ -587,6 +674,183 @@
                     console.log('✅ 专辑文案清晰化动画完成！');
                 }, 5000);
             }, 3000);
+        }
+        
+        // 盲文字符映射
+        const brailleMap = {
+            'a': [1, 0, 0, 0, 0, 0], 'b': [1, 1, 0, 0, 0, 0], 'c': [1, 0, 0, 1, 0, 0],
+            'd': [1, 0, 0, 1, 1, 0], 'e': [1, 0, 0, 0, 1, 0], 'f': [1, 1, 0, 1, 0, 0],
+            'g': [1, 1, 0, 1, 1, 0], 'h': [1, 1, 0, 0, 1, 0], 'i': [0, 1, 0, 1, 0, 0],
+            'j': [0, 1, 0, 1, 1, 0], 'k': [1, 0, 1, 0, 0, 0], 'l': [1, 1, 1, 0, 0, 0],
+            'm': [1, 0, 1, 1, 0, 0], 'n': [1, 0, 1, 1, 1, 0], 'o': [1, 0, 1, 0, 1, 0],
+            'p': [1, 1, 1, 1, 0, 0], 'q': [1, 1, 1, 1, 1, 0], 'r': [1, 1, 1, 0, 1, 0],
+            's': [0, 1, 1, 1, 0, 0], 't': [0, 1, 1, 1, 1, 0], 'u': [1, 0, 1, 0, 0, 1],
+            'v': [1, 1, 1, 0, 0, 1], 'w': [0, 1, 0, 1, 1, 1], 'x': [1, 0, 1, 1, 0, 1],
+            'y': [1, 0, 1, 1, 1, 1], 'z': [1, 0, 1, 0, 1, 1],
+            ' ': [0, 0, 0, 0, 0, 0], '.': [0, 0, 1, 0, 1, 1], ',': [0, 0, 1, 0, 0, 0],
+            '!': [0, 0, 1, 0, 1, 0], '?': [0, 0, 1, 1, 0, 1], '-': [0, 0, 0, 0, 0, 1],
+            '0': [0, 1, 0, 1, 1, 0], '1': [1, 0, 0, 0, 0, 0], '2': [1, 1, 0, 0, 0, 0],
+            '3': [1, 0, 0, 1, 0, 0], '4': [1, 0, 0, 1, 1, 0], '5': [1, 0, 0, 0, 1, 0],
+            '6': [1, 1, 0, 1, 0, 0], '7': [1, 1, 0, 1, 1, 0], '8': [1, 1, 0, 0, 1, 0],
+            '9': [0, 1, 0, 1, 0, 0]
+        };
+        
+        // 创建盲文背景
+        function createStarField() {
+            console.log('🌟 开始创建PRINTSHIFT盲文背景...');
+            
+            const container = document.getElementById('starField');
+            if (!container) {
+                console.error('❌ 找不到盲文容器');
+                return;
+            }
+            
+            // PRINTSHIFT专辑的文案内容
+            const text = "E found an ancient printer in the ruins. Powered by the last remaining electricity, it was reactivated. As the printer started up, an ancient and mysterious force was awakened. The creaking sound seemed to struggle as it tried to reconstruct the lost world... Just Print the shit. The mechanical sounds echo through the digital void, creating a bridge between past and present. Each click and whir tells a story of forgotten technology, resurrected in the modern age.";
+            
+            // 创建盲文文本
+            createBrailleText(container, text);
+            
+            // 添加随机盲文点填充右侧
+            addRandomBrailleDots(container);
+            
+            // 启动随机发光动画
+            startRandomLighting();
+            
+            console.log('✅ PRINTSHIFT盲文背景创建完成！');
+        }
+        
+        // 创建盲文文本
+        function createBrailleText(container, text) {
+            const charWidth = 24;
+            const charHeight = 32;
+            const lineHeight = 40;
+            const wordSpacing = 16;
+            
+            let currentX = 20;
+            let currentY = 20;
+            const maxWidth = window.innerWidth - 40;
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i].toLowerCase();
+                
+                if (char === '\n') {
+                    currentX = 20;
+                    currentY += lineHeight;
+                    continue;
+                }
+                
+                if (char === ' ') {
+                    currentX += wordSpacing;
+                    continue;
+                }
+                
+                const braillePattern = brailleMap[char] || brailleMap[' '];
+                
+                // 创建盲文字符容器
+                const brailleChar = document.createElement('div');
+                brailleChar.className = 'braille-char';
+                brailleChar.style.left = currentX + 'px';
+                brailleChar.style.top = currentY + 'px';
+                brailleChar.style.width = charWidth + 'px';
+                brailleChar.style.height = charHeight + 'px';
+                
+                // 创建6个点的盲文
+                const dotPositions = [
+                    { x: 2, y: 2 },   // 点1
+                    { x: 12, y: 2 },  // 点2
+                    { x: 2, y: 12 },  // 点3
+                    { x: 12, y: 12 }, // 点4
+                    { x: 2, y: 22 },  // 点5
+                    { x: 12, y: 22 }  // 点6
+                ];
+                
+                for (let j = 0; j < 6; j++) {
+                    if (braillePattern[j] === 1) {
+                        const dot = document.createElement('div');
+                        dot.className = 'braille-dot';
+                        dot.style.left = dotPositions[j].x + 'px';
+                        dot.style.top = dotPositions[j].y + 'px';
+                        dot.style.cssText += `
+                            width: 4px;
+                            height: 4px;
+                            background: #999999;
+                            opacity: 0.8;
+                        `;
+                        brailleChar.appendChild(dot);
+                    }
+                }
+                
+                container.appendChild(brailleChar);
+                
+                currentX += charWidth;
+                if (currentX > maxWidth - charWidth) {
+                    currentX = 20;
+                    currentY += lineHeight;
+                }
+            }
+        }
+        
+        // 添加随机盲文点填充右侧
+        function addRandomBrailleDots(container) {
+            const rightStartX = window.innerWidth * 0.6;
+            const rightEndX = window.innerWidth - 20;
+            const rightStartY = 20;
+            const rightEndY = window.innerHeight - 20;
+            
+            for (let x = rightStartX; x < rightEndX; x += 30) {
+                for (let y = rightStartY; y < rightEndY; y += 30) {
+                    if (Math.random() < 0.3) {
+                        const dot = document.createElement('div');
+                        dot.className = 'braille-dot';
+                        dot.style.left = x + 'px';
+                        dot.style.top = y + 'px';
+                        dot.style.cssText += `
+                            width: 4px;
+                            height: 4px;
+                            background: #999999;
+                            opacity: 0.8;
+                        `;
+                        container.appendChild(dot);
+                    }
+                }
+            }
+        }
+        
+        // 随机发光动画
+        function startRandomLighting() {
+            const dots = document.querySelectorAll('.braille-dot');
+            if (dots.length === 0) return;
+            
+            console.log('🎬 开始PRINTSHIFT盲文点随机发光动画，共', dots.length, '个点');
+            
+            // 首先让所有盲文点都显示出来（不透明）
+            dots.forEach(dot => {
+                dot.style.opacity = '0.8'; // 提高基础亮度
+            });
+            
+            setInterval(() => {
+                // 随机选择一些点进行发光效果
+                const randomCount = Math.floor(Math.random() * 8) + 3; // 3-10个点
+                const shuffledDots = Array.from(dots).sort(() => Math.random() - 0.5);
+                
+                // 随机选中的点发光
+                for (let i = 0; i < randomCount; i++) {
+                    if (shuffledDots[i]) {
+                        shuffledDots[i].style.opacity = '1';
+                        shuffledDots[i].classList.add('active');
+                        
+                        // 每个点至少发光3秒
+                        setTimeout(() => {
+                            shuffledDots[i].style.opacity = '0.8';
+                            shuffledDots[i].classList.remove('active');
+                        }, 3000);
+                    }
+                }
+                
+                console.log('✨ 随机发光了', randomCount, '个盲文点');
+                
+            }, 2000); // 每2秒更新一次发光效果
         }
         
 
