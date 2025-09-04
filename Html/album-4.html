@@ -27,7 +27,8 @@
             text-rendering: optimizeSpeed;
             margin: 0;
             padding: 0;
-            min-height: 100vh;
+            min-height: 150vh;
+            transition: background-color 2s ease-in-out;
         }
 
         .back-btn {
@@ -78,6 +79,7 @@
             border: 2px outset #c0c0c0;
             border-radius: 0;
             padding: 30px;
+            padding-bottom: 50px;
             box-shadow: 
                 0 0 0 1px #000,
                 inset 1px 1px 0 #fff,
@@ -125,36 +127,90 @@
         }
         
         .track audio {
-            width: 100%;
-            height: 50px;
-            border-radius: 0;
-            background: #c0c0c0;
+            display: none; /* 隐藏原生音频控件 */
         }
         
-        .track audio::-webkit-media-controls-panel {
+        /* 自定义播放按钮容器 */
+        .custom-audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
             background: #c0c0c0;
             border: 2px inset #c0c0c0;
+            border-radius: 0;
         }
         
-        .track audio::-webkit-media-controls-play-button {
+        /* 播放/暂停按钮 */
+        .play-pause-btn {
+            width: 40px;
+            height: 40px;
             background: #c0c0c0;
             border: 2px outset #c0c0c0;
             border-radius: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #000;
+            transition: all 0.1s ease;
         }
         
-        .track audio::-webkit-media-controls-play-button:hover {
+        .play-pause-btn:hover {
             border: 2px inset #c0c0c0;
+            background: #e0e0e0;
         }
         
-        .track audio::-webkit-media-controls-timeline {
+        .play-pause-btn:active {
+            border: 2px inset #c0c0c0;
+            background: #a0a0a0;
+        }
+        
+        /* 进度条容器 */
+        .progress-container {
+            flex: 1;
+            height: 20px;
             background: #fff;
             border: 2px inset #fff;
+            border-radius: 0;
+            position: relative;
+            cursor: pointer;
         }
         
-        .track audio::-webkit-media-controls-current-time-display,
-        .track audio::-webkit-media-controls-time-remaining-display {
+        /* 进度条 */
+        .progress-bar {
+            height: 100%;
+            background: #404040;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        
+        /* 时间显示 */
+        .time-display {
+            font-size: 14px;
             color: #000;
             font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        /* 音量控制 */
+        .volume-control {
+            width: 80px;
+            height: 20px;
+            background: #fff;
+            border: 2px inset #fff;
+            border-radius: 0;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .volume-bar {
+            height: 100%;
+            background: #404040;
+            width: 70%;
+            transition: width 0.1s ease;
         }
         
         .album-description {
@@ -169,22 +225,383 @@
             text-align: left;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            
+            /* 初始状态：多个小白色方格子组成的流浪者足迹异形 */
+            background-image: 
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
+                linear-gradient(90deg, #ffffff 0%, #ffffff 100%);
+            background-size: 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px;
+            background-position: 15% 20%, 35% 15%, 55% 25%, 75% 10%, 95% 20%, 25% 40%, 45% 35%, 65% 45%, 85% 30%, 30% 60%, 50% 55%, 70% 65%, 90% 50%, 35% 80%, 55% 75%, 75% 85%, 95% 70%;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            color: transparent;
+            filter: blur(0px) brightness(1) contrast(1);
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        /* 清晰状态 */
+        .album-description.clear {
+            background-image: none;
+            color: white;
+            filter: blur(0px) brightness(1) contrast(1);
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+        
+        /* 底部空白区域 */
+        .bottom-spacer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: transparent;
         }
     </style>
 </head>
 <body>
-            <a href="../index.html" class="back-btn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
-    <img src="../Album Wandering Object 封面02.jpg" alt="Album Cover" class="album-cover">
+            <a href="../index.html" class="back-btn" id="backBtn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
+    <img src="../Album Wandering Object 封面02.jpg" alt="Album Cover" class="album-cover" id="albumCover">
     
-    <div class="audio-player">
-        <h3>TRACKS</h3>
+    <div class="album-description" id="albumDescription">
+        E drifted away from the original trajectory and<br>
+        entered an unfamiliar realm.<br>
+        <br>
+        Ezi.Zhang<br>
+        <br>
+        The rippling water of Su Causeway, the rocky layers of Baoshi Mountain,<br>
+        the shaded paths of the Botanical Garden, and the misty depths of Yanxia Cave—<br>
+        all these landscapes seemed like interfaces where reality and illusion intertwined.<br>
+        Immersed in them, E felt the boundaries of self becoming blurred,<br>
+        his consciousness drifting across multiple dimensions of geography and perception.<br>
+        He tried to grasp onto a familiar coordinate, only to realize<br>
+        that he had already become a wandering object...
+    </div>
+    
+    <div class="audio-player" id="audioPlayer">
+        <h3 id="tracksTitle">TRACKS</h3>
         <div class="track">
             <div class="track-title">1. Wandering Object</div>
-            <audio controls>
+            <audio id="audio1" preload="metadata">
                 <source src="../Album Wandering oBJECT.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
             </audio>
+            <div class="custom-audio-controls">
+                <button class="play-pause-btn" onclick="togglePlayPause('audio1', this)">▶</button>
+                <div class="progress-container" onclick="seekTo(event, 'audio1')">
+                    <div class="progress-bar" id="progress1"></div>
+                </div>
+                <div class="time-display" id="time1">0:00 / 0:00</div>
+                <div class="volume-control" onclick="adjustVolume(event, 'audio1')">
+                    <div class="volume-bar" id="volume1"></div>
+                </div>
+            </div>
         </div>
     </div>
+    
+    <!-- 底部空白区域 -->
+    <div class="bottom-spacer"></div>
+    
+    <script>
+        // 天气客户端系统
+        let weatherTransitionStarted = false;
+        
+        // 初始化所有音频控件
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAudioControls();
+            initAlbumWeatherClient();
+            
+            // 启动专辑文案清晰化动画
+            startAlbumDescriptionClarificationAnimation();
+        });
+        
+        // 页面可见性变化时检查天气
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && !weatherTransitionStarted) {
+                setTimeout(() => {
+                    checkAlbumWeather();
+                }, 500);
+            }
+        });
+        
+        // 页面获得焦点时检查天气
+        window.addEventListener('focus', function() {
+            if (!weatherTransitionStarted) {
+                setTimeout(() => {
+                    checkAlbumWeather();
+                }, 500);
+            }
+        });
+        
+        // 页面加载完成时检查天气
+        window.addEventListener('load', function() {
+            if (!weatherTransitionStarted) {
+                setTimeout(() => {
+                    checkAlbumWeather();
+                }, 500);
+            }
+        });
+        
+        // 初始化音频控件
+        function initializeAudioControls() {
+            const audio = document.getElementById('audio1');
+            if (audio) {
+                // 设置音频加载完成后的回调
+                audio.addEventListener('loadedmetadata', function() {
+                    updateTimeDisplay('time1', 0, audio.duration);
+                });
+                
+                // 设置播放进度更新
+                audio.addEventListener('timeupdate', function() {
+                    updateProgress('progress1', audio.currentTime, audio.duration);
+                    updateTimeDisplay('time1', audio.currentTime, audio.duration);
+                });
+                
+                // 设置播放结束后的回调
+                audio.addEventListener('ended', function() {
+                    const btn = this.parentElement.querySelector('.play-pause-btn');
+                    if (btn) btn.textContent = '▶';
+                });
+            }
+        }
+        
+        // 播放/暂停切换
+        function togglePlayPause(audioId, button) {
+            const audio = document.getElementById(audioId);
+            if (!audio) return;
+            
+            if (audio.paused) {
+                audio.play();
+                button.textContent = '⏸';
+            } else {
+                audio.pause();
+                button.textContent = '▶';
+            }
+        }
+        
+        // 更新进度条
+        function updateProgress(progressId, currentTime, duration) {
+            const progressBar = document.getElementById(progressId);
+            if (progressBar && duration > 0) {
+                const progress = (currentTime / duration) * 100;
+                progressBar.style.width = progress + '%';
+            }
+        }
+        
+        // 更新时间显示
+        function updateTimeDisplay(timeId, currentTime, duration) {
+            const timeDisplay = document.getElementById(timeId);
+            if (timeDisplay) {
+                const current = formatTime(currentTime);
+                const total = formatTime(duration);
+                timeDisplay.textContent = `${current} / ${total}`;
+            }
+        }
+        
+        // 格式化时间
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        // 跳转到指定位置
+        function seekTo(event, audioId) {
+            const audio = document.getElementById(audioId);
+            if (!audio) return;
+            
+            const progressContainer = event.currentTarget;
+            const rect = progressContainer.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const width = rect.width;
+            const seekTime = (clickX / width) * audio.duration;
+            
+            audio.currentTime = seekTime;
+        }
+        
+        // 调整音量
+        function adjustVolume(event, audioId) {
+            const audio = document.getElementById(audioId);
+            if (!audio) return;
+            
+            const volumeContainer = event.currentTarget;
+            const rect = volumeContainer.getBoundingClientRect();
+            const width = rect.width;
+            const clickX = event.clientX - rect.left;
+            const volume = Math.max(0, Math.min(1, clickX / width));
+            
+            audio.volume = volume;
+            
+            // 更新音量条显示
+            const volumeBar = volumeContainer.querySelector('.volume-bar');
+            if (volumeBar) {
+                volumeBar.style.width = (volume * 100) + '%';
+            }
+        }
+        
+        // 初始化专辑页面天气客户端
+        function initAlbumWeatherClient() {
+            console.log('🌤️ 专辑页面天气客户端初始化...');
+            
+            // 监听全局天气变化事件
+            window.addEventListener('globalWeatherChange', function(event) {
+                handleAlbumWeatherChange(event.detail);
+            });
+            
+            // 监听localStorage变化
+            window.addEventListener('storage', function(event) {
+                if (event.key === 'globalWeatherData') {
+                    try {
+                        const weatherData = JSON.parse(event.newValue);
+                        if (weatherData && weatherData.baseColor) {
+                            handleAlbumWeatherChange(weatherData);
+                        }
+                    } catch (error) {
+                        console.error('❌ 解析天气数据失败:', error);
+                    }
+                }
+            });
+            
+            // 初始检查天气
+            checkAlbumWeather();
+        }
+        
+        // 处理天气变化
+        function handleAlbumWeatherChange(weatherData) {
+            if (weatherTransitionStarted) {
+                console.log('⏳ 天气渐变已开始，跳过重复请求');
+                return;
+            }
+            
+            console.log('🌤️ 专辑页面接收到天气变化:', weatherData.baseColor);
+            
+            if (weatherData.baseColor) {
+                startAlbumBackgroundTransition(weatherData.baseColor);
+            }
+        }
+        
+        // 检查天气数据
+        function checkAlbumWeather() {
+            if (weatherTransitionStarted) return;
+            
+            console.log('🔍 检查专辑页面天气数据...');
+            
+            const storedWeather = localStorage.getItem('globalWeatherData');
+            if (storedWeather) {
+                try {
+                    const weatherData = JSON.parse(storedWeather);
+                    if (weatherData && weatherData.baseColor) {
+                        console.log('🌤️ 找到天气数据，开始渐变到:', weatherData.baseColor);
+                        startAlbumBackgroundTransition(weatherData.baseColor);
+                    }
+                } catch (error) {
+                    console.error('❌ 解析天气数据失败:', error);
+                }
+            } else {
+                console.log('🌤️ 没有找到天气数据，保持亮蓝色背景');
+            }
+        }
+        
+        // 开始背景渐变
+        function startAlbumBackgroundTransition(targetColor) {
+            if (weatherTransitionStarted) return;
+            
+            weatherTransitionStarted = true;
+            console.log('🎬 开始专辑页面背景渐变:', targetColor);
+            
+            // 使用JavaScript动画实现渐变
+            animateAlbumBackgroundTransition('#0041ff', targetColor, 2000);
+        }
+        
+        // 背景渐变动画
+        function animateAlbumBackgroundTransition(fromColor, toColor, duration) {
+            console.log('🎬 开始JavaScript背景渐变动画:', { fromColor, toColor, duration });
+            
+            const startTime = Date.now();
+            const fromRGB = hexToRgb(fromColor);
+            const toRGB = hexToRgb(toColor);
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // 使用缓动函数
+                const easeProgress = progress < 0.5 ? 
+                    2 * progress * progress : 
+                    1 - Math.pow(-2 * progress + 2, 2) / 2;
+                
+                const currentRGB = {
+                    r: Math.round(fromRGB.r + (toRGB.r - fromRGB.r) * easeProgress),
+                    g: Math.round(fromRGB.g + (toRGB.g - fromRGB.g) * easeProgress),
+                    b: Math.round(fromRGB.b + (toRGB.b - fromRGB.b) * easeProgress)
+                };
+                
+                const currentColor = `rgb(${currentRGB.r}, ${currentRGB.g}, ${currentRGB.b})`;
+                
+                // 应用背景色
+                document.body.style.backgroundColor = currentColor;
+                document.documentElement.style.backgroundColor = currentColor;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    console.log('✅ 专辑页面背景渐变动画完成！');
+                    console.log('  - 最终body背景色:', document.body.style.backgroundColor);
+                    console.log('  - 最终html背景色:', document.documentElement.style.backgroundColor);
+                }
+            }
+            
+            animate();
+        }
+        
+        // 十六进制颜色转RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : { r: 0, g: 65, b: 255 };
+        }
+        
+        // 专辑文案清晰化动画
+        function startAlbumDescriptionClarificationAnimation() {
+            console.log('📝 开始专辑文案清晰化动画...');
+            
+            const descriptionElement = document.getElementById('albumDescription');
+            if (!descriptionElement) {
+                console.error('❌ 找不到专辑文案元素');
+                return;
+            }
+            
+            // 延迟3秒后开始动画，让马赛克异形停留2秒
+            setTimeout(() => {
+                console.log('🎬 触发专辑文案清晰化动画');
+                descriptionElement.classList.add('clear');
+                
+                // 动画完成后记录日志
+                setTimeout(() => {
+                    console.log('✅ 专辑文案清晰化动画完成！');
+                }, 5000);
+            }, 3000);
+        }
+    </script>
 </body>
 </html> 
