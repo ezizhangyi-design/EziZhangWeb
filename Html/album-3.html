@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <script src="../weather-system.js"></script>
+    <script src="../weather-client.js"></script>
     <style>
         * {
             margin: 0;
@@ -302,52 +304,21 @@
         .braille-dot.active {
             opacity: 1 !important;
             background: #ffffff !important;
+            /* 增强发光效果，使其更亮 */
             box-shadow: 
-                0 0 40px #ffffff,
-                0 0 80px #ffffff,
-                0 0 120px #ffffff,
-                0 0 160px rgba(255, 255, 255, 1),
-                0 0 200px rgba(255, 255, 255, 1),
-                0 0 240px rgba(255, 255, 255, 1),
-                0 0 320px rgba(255, 255, 255, 0.9),
-                0 0 400px rgba(255, 255, 255, 0.8),
-                0 0 480px rgba(255, 255, 255, 0.7),
-                0 0 600px rgba(255, 255, 255, 0.6),
-                0 0 800px rgba(255, 255, 255, 0.4);
-            filter: brightness(8.0) contrast(8.0) saturate(4.0);
-            animation: glow 4s ease-in-out infinite alternate;
+                0 0 30px rgba(255, 255, 255, 1.0),
+                0 0 60px rgba(255, 255, 255, 1.0),
+                0 0 120px rgba(255, 255, 255, 0.8),
+                0 0 180px rgba(255, 255, 255, 0.6),
+                0 0 250px rgba(255, 255, 255, 0.4);
+            /* 增强滤镜效果 */
+            filter: brightness(5.0) contrast(3.0);
+            /* 优化：使用transform代替复杂动画 */
+            transform: scale(1.2);
+            transition: all 0.3s ease;
         }
         
-        @keyframes glow {
-            0% {
-                box-shadow: 
-                    0 0 40px #ffffff,
-                    0 0 80px #ffffff,
-                    0 0 120px #ffffff,
-                    0 0 160px rgba(255, 255, 255, 1),
-                    0 0 200px rgba(255, 255, 255, 1),
-                    0 0 240px rgba(255, 255, 255, 1),
-                    0 0 320px rgba(255, 255, 255, 0.9),
-                    0 0 400px rgba(255, 255, 255, 0.8),
-                    0 0 480px rgba(255, 255, 255, 0.7),
-                    0 0 600px rgba(255, 255, 255, 0.6),
-                    0 0 800px rgba(255, 255, 255, 0.4);
-            }
-            100% {
-                box-shadow: 
-                    0 0 60px #ffffff,
-                    0 0 120px #ffffff,
-                    0 0 180px #ffffff,
-                    0 0 240px rgba(255, 255, 255, 1),
-                    0 0 320px rgba(255, 255, 255, 1),
-                    0 0 400px rgba(255, 255, 255, 1),
-                    0 0 480px rgba(255, 255, 255, 1),
-                    0 0 600px rgba(255, 255, 255, 0.9),
-                    0 0 720px rgba(255, 255, 255, 0.8),
-                    0 0 880px rgba(255, 255, 255, 0.6),
-                    0 0 1200px rgba(255, 255, 255, 0.4);
-            }
-        }
+        /* 移除复杂的keyframes动画，使用简单的CSS transition */
         
 
     </style>
@@ -404,12 +375,23 @@
             createStarField();
         });
         
-        // 页面可见性变化时检查天气
+        // 页面可见性变化时检查天气和动画
         document.addEventListener('visibilitychange', function() {
             if (!document.hidden && !weatherTransitionStarted) {
                 setTimeout(() => {
                     checkAlbumWeather();
                 }, 500);
+            }
+            
+            // 优化：页面不可见时暂停盲文动画
+            if (document.hidden) {
+                if (brailleAnimationSystem) {
+                    brailleAnimationSystem.stop();
+                }
+            } else {
+                if (brailleAnimationSystem && brailleAnimationSystem.dots.length > 0) {
+                    brailleAnimationSystem.startAnimation();
+                }
             }
         });
         
@@ -817,40 +799,87 @@
             }
         }
         
+        // 优化的随机发光动画系统
+        let brailleAnimationSystem = {
+            dots: [],
+            activeDots: new Set(),
+            animationId: null,
+            lastUpdate: 0,
+            updateInterval: 2000, // 2秒更新一次
+            
+            init() {
+                this.dots = Array.from(document.querySelectorAll('.braille-dot'));
+                if (this.dots.length === 0) return;
+                
+                console.log('🎬 开始优化的PRINTSHIFT盲文点随机发光动画，共', this.dots.length, '个点');
+                
+                // 预设置所有点的基础状态
+                this.dots.forEach(dot => {
+                    dot.style.opacity = '0.8';
+                    dot.style.willChange = 'opacity, box-shadow, filter'; // 优化渲染性能
+                });
+                
+                this.startAnimation();
+            },
+            
+            startAnimation() {
+                const animate = (currentTime) => {
+                    if (currentTime - this.lastUpdate >= this.updateInterval) {
+                        this.updateGlowingDots();
+                        this.lastUpdate = currentTime;
+                    }
+                    this.animationId = requestAnimationFrame(animate);
+                };
+                this.animationId = requestAnimationFrame(animate);
+            },
+            
+            updateGlowingDots() {
+                // 清理过期的发光点
+                this.activeDots.forEach(dot => {
+                    if (dot.endTime && Date.now() > dot.endTime) {
+                        dot.element.style.opacity = '0.8';
+                        dot.element.classList.remove('active');
+                        this.activeDots.delete(dot);
+                    }
+                });
+                
+                // 添加新的发光点
+                const randomCount = Math.floor(Math.random() * 8) + 3; // 3-10个点
+                const availableDots = this.dots.filter(dot => 
+                    !Array.from(this.activeDots).some(active => active.element === dot)
+                );
+                
+                if (availableDots.length > 0) {
+                    const shuffledDots = availableDots.sort(() => Math.random() - 0.5);
+                    const dotsToLight = shuffledDots.slice(0, Math.min(randomCount, availableDots.length));
+                    
+                    dotsToLight.forEach(dot => {
+                        dot.style.opacity = '1';
+                        dot.classList.add('active');
+                        
+                        // 记录发光结束时间
+                        this.activeDots.add({
+                            element: dot,
+                            endTime: Date.now() + 3000 // 3秒后结束
+                        });
+                    });
+                    
+                    console.log('✨ 随机发光了', dotsToLight.length, '个盲文点');
+                }
+            },
+            
+            stop() {
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
+                }
+                this.activeDots.clear();
+            }
+        };
+        
         // 随机发光动画
         function startRandomLighting() {
-            const dots = document.querySelectorAll('.braille-dot');
-            if (dots.length === 0) return;
-            
-            console.log('🎬 开始PRINTSHIFT盲文点随机发光动画，共', dots.length, '个点');
-            
-            // 首先让所有盲文点都显示出来（不透明）
-            dots.forEach(dot => {
-                dot.style.opacity = '0.8'; // 提高基础亮度
-            });
-            
-            setInterval(() => {
-                // 随机选择一些点进行发光效果
-                const randomCount = Math.floor(Math.random() * 8) + 3; // 3-10个点
-                const shuffledDots = Array.from(dots).sort(() => Math.random() - 0.5);
-                
-                // 随机选中的点发光
-                for (let i = 0; i < randomCount; i++) {
-                    if (shuffledDots[i]) {
-                        shuffledDots[i].style.opacity = '1';
-                        shuffledDots[i].classList.add('active');
-                        
-                        // 每个点至少发光3秒
-                        setTimeout(() => {
-                            shuffledDots[i].style.opacity = '0.8';
-                            shuffledDots[i].classList.remove('active');
-                        }, 3000);
-                    }
-                }
-                
-                console.log('✨ 随机发光了', randomCount, '个盲文点');
-                
-            }, 2000); // 每2秒更新一次发光效果
+            brailleAnimationSystem.init();
         }
         
 

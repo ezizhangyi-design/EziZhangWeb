@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <script src="../weather-system.js"></script>
+    <script src="../weather-client.js"></script>
     <style>
         * {
             margin: 0;
@@ -225,44 +227,58 @@
             text-align: left;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            
-            /* 初始状态：多个小白色方格子组成的流浪者足迹异形 */
-            background-image: 
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%),
-                linear-gradient(90deg, #ffffff 0%, #ffffff 100%);
-            background-size: 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px, 15px 15px;
-            background-position: 15% 20%, 35% 15%, 55% 25%, 75% 10%, 95% 20%, 25% 40%, 45% 35%, 65% 45%, 85% 30%, 30% 60%, 50% 55%, 70% 65%, 90% 50%, 35% 80%, 55% 75%, 75% 85%, 95% 70%;
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            color: transparent;
-            filter: blur(0px) brightness(1) contrast(1);
-            opacity: 1;
-            transform: translateX(-50%) scale(1);
-            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1000;
         }
         
-        /* 清晰状态 */
-        .album-description.clear {
-            background-image: none;
-            color: white;
-            filter: blur(0px) brightness(1) contrast(1);
-            opacity: 1;
-            transform: translateX(-50%) scale(1);
+        /* 盲文背景样式 */
+        .braille-text {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            background: transparent;
+        }
+        
+        .braille-char {
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        .braille-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #999999;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            aspect-ratio: 1;
+            min-width: 4px;
+            min-height: 4px;
+            max-width: 4px;
+            max-height: 4px;
+            opacity: 0.8;
+        }
+        
+        .braille-dot.active {
+            opacity: 1 !important;
+            background: #ffffff !important;
+            /* 增强发光效果，使其更亮 */
+            box-shadow: 
+                0 0 30px rgba(255, 255, 255, 1.0),
+                0 0 60px rgba(255, 255, 255, 1.0),
+                0 0 120px rgba(255, 255, 255, 0.8),
+                0 0 180px rgba(255, 255, 255, 0.6),
+                0 0 250px rgba(255, 255, 255, 0.4);
+            /* 增强滤镜效果 */
+            filter: brightness(5.0) contrast(3.0);
+            /* 优化：使用transform代替复杂动画 */
+            transform: scale(1.2);
+            transition: all 0.3s ease;
         }
         
         /* 底部空白区域 */
@@ -278,6 +294,12 @@
 </head>
 <body>
             <a href="../index.html" class="back-btn" id="backBtn" onclick="this.href='../index.html?v=' + Date.now(); return true;">Back</a>
+    
+    <!-- 盲文背景 -->
+    <div id="starField" class="braille-text">
+        <!-- 盲文点阵将通过JavaScript动态生成 -->
+    </div>
+    
     <img src="../Album Wandering Object 封面02.jpg" alt="Album Cover" class="album-cover" id="albumCover">
     
     <div class="album-description" id="albumDescription">
@@ -329,14 +351,28 @@
             
             // 启动专辑文案清晰化动画
             startAlbumDescriptionClarificationAnimation();
+            
+            // 创建盲文背景
+            createStarField();
         });
         
-        // 页面可见性变化时检查天气
+        // 页面可见性变化时检查天气和动画
         document.addEventListener('visibilitychange', function() {
             if (!document.hidden && !weatherTransitionStarted) {
                 setTimeout(() => {
                     checkAlbumWeather();
                 }, 500);
+            }
+            
+            // 优化：页面不可见时暂停盲文动画
+            if (document.hidden) {
+                if (brailleAnimationSystem) {
+                    brailleAnimationSystem.stop();
+                }
+            } else {
+                if (brailleAnimationSystem && brailleAnimationSystem.dots.length > 0) {
+                    brailleAnimationSystem.startAnimation();
+                }
             }
         });
         
@@ -601,6 +637,269 @@
                     console.log('✅ 专辑文案清晰化动画完成！');
                 }, 5000);
             }, 3000);
+        }
+        
+        // 盲文字符映射表
+        const brailleMap = {
+            'a': [1, 0, 0, 0, 0, 0], 'b': [1, 1, 0, 0, 0, 0], 'c': [1, 0, 0, 1, 0, 0],
+            'd': [1, 0, 0, 1, 1, 0], 'e': [1, 0, 0, 0, 1, 0], 'f': [1, 1, 0, 1, 0, 0],
+            'g': [1, 1, 0, 1, 1, 0], 'h': [1, 1, 0, 0, 1, 0], 'i': [0, 1, 0, 1, 0, 0],
+            'j': [0, 1, 0, 1, 1, 0], 'k': [1, 0, 1, 0, 0, 0], 'l': [1, 1, 1, 0, 0, 0],
+            'm': [1, 0, 1, 1, 0, 0], 'n': [1, 0, 1, 1, 1, 0], 'o': [1, 0, 1, 0, 1, 0],
+            'p': [1, 1, 1, 1, 0, 0], 'q': [1, 1, 1, 1, 1, 0], 'r': [1, 1, 1, 0, 1, 0],
+            's': [0, 1, 1, 1, 0, 0], 't': [0, 1, 1, 1, 1, 0], 'u': [1, 0, 1, 0, 0, 1],
+            'v': [1, 1, 1, 0, 0, 1], 'w': [0, 1, 0, 1, 1, 1], 'x': [1, 0, 1, 1, 0, 1],
+            'y': [1, 0, 1, 1, 1, 1], 'z': [1, 0, 1, 0, 1, 1],
+            ' ': [0, 0, 0, 0, 0, 0], '.': [0, 0, 1, 0, 1, 1], ',': [0, 0, 1, 0, 0, 0],
+            '!': [0, 0, 1, 0, 1, 0], '?': [0, 0, 1, 1, 0, 1], '-': [0, 0, 0, 0, 0, 1]
+        };
+        
+        // 创建盲文背景
+        function createStarField() {
+            console.log('🌟 开始创建Wandering Object盲文背景...');
+            
+            const container = document.getElementById('starField');
+            if (!container) {
+                console.error('❌ 找不到盲文容器');
+                return;
+            }
+            
+            // Wandering Object专辑的文案内容
+            const text = "E drifted away from the original trajectory and entered an unfamiliar realm Ezi Zhang The rippling water of Su Causeway the rocky layers of Baoshi Mountain the shaded paths of the Botanical Garden and the misty depths of Yanxia Cave all these landscapes seemed like interfaces where reality and illusion intertwined Immersed in them E felt the boundaries of self becoming blurred his consciousness drifting across multiple dimensions of geography and perception He tried to grasp onto a familiar coordinate only to realize that he had already become a wandering object";
+            
+            // 创建随机分布的盲文文本
+            createRandomBrailleText(container, text);
+            
+            // 启动随机发光动画
+            startRandomLighting();
+            
+            console.log('✅ Wandering Object盲文背景创建完成！');
+        }
+        
+        // 创建随机分布的盲文文本
+        function createRandomBrailleText(container, text) {
+            const words = text.toLowerCase().split(' ');
+            let dotCount = 0;
+            
+            // 创建多个随机分布的盲文区域，集中在页面右侧，增加覆盖范围
+            const regions = [
+                { x: 50, y: 8, width: 45, height: 45 },    // 右上角（向下平移3%）
+                { x: 50, y: 53, width: 45, height: 45 },   // 右下角（向下平移3%）
+                { x: 40, y: 28, width: 55, height: 35 },   // 右侧中心区域（向下平移3%）
+                { x: 65, y: 18, width: 30, height: 30 },   // 右上小区域（向下平移3%）
+                { x: 65, y: 63, width: 30, height: 30 },   // 右下小区域（向下平移3%）
+                { x: 45, y: 83, width: 50, height: 18 },   // 底部右侧区域（向下平移3%）
+                { x: 50, y: 43, width: 45, height: 25 },   // 右侧中部区域（向下平移3%）
+                { x: 55, y: 13, width: 40, height: 20 },   // 新增：右上中部（向下平移3%）
+                { x: 55, y: 73, width: 40, height: 20 }    // 新增：右下中部（向下平移3%）
+            ];
+            
+            // 智能分配文本到各个区域，确保所有文本都被使用
+            let wordIndex = 0;
+            regions.forEach((region, regionIndex) => {
+                // 为每个区域分配更多的文字内容，使用循环分配
+                const wordsPerRegion = Math.ceil(words.length / regions.length);
+                const regionWords = [];
+                
+                for (let i = 0; i < wordsPerRegion && wordIndex < words.length; i++) {
+                    regionWords.push(words[wordIndex]);
+                    wordIndex++;
+                }
+                
+                let currentX = region.x;
+                let currentY = region.y;
+                
+                // 增加疏密变化：不同区域使用不同的间距
+                const densityVariations = [
+                    { charWidth: 0.6, charHeight: 1.2, lineHeight: 1.5, wordSpacing: 0.8 }, // 密集区域
+                    { charWidth: 0.8, charHeight: 1.5, lineHeight: 1.8, wordSpacing: 1.0 }, // 正常区域
+                    { charWidth: 1.0, charHeight: 1.8, lineHeight: 2.2, wordSpacing: 1.3 }, // 稀疏区域
+                    { charWidth: 0.7, charHeight: 1.3, lineHeight: 1.6, wordSpacing: 0.9 }, // 中等密集
+                    { charWidth: 0.9, charHeight: 1.6, lineHeight: 2.0, wordSpacing: 1.2 }  // 中等稀疏
+                ];
+                
+                const density = densityVariations[regionIndex % densityVariations.length];
+                const { charWidth, charHeight, lineHeight, wordSpacing } = density;
+                
+                regionWords.forEach((word, wordIndex) => {
+                    // 随机跳过一些单词，增加疏密变化
+                    if (Math.random() < 0.15) { // 15%概率跳过单词
+                        currentX += word.length * charWidth + wordSpacing;
+                        return;
+                    }
+                    
+                    // 检查是否需要换行
+                    if (currentX + word.length * charWidth > region.x + region.width) {
+                        currentX = region.x;
+                        currentY += lineHeight;
+                        
+                        // 随机跳过一些行，增加疏密变化
+                        if (Math.random() < 0.1) { // 10%概率跳过行
+                            currentY += lineHeight;
+                        }
+                    }
+                    
+                    // 检查是否超出区域，如果超出则继续到下一个区域
+                    if (currentY > region.y + region.height) {
+                        return;
+                    }
+                    
+                    // 创建单词的盲文字符
+                    word.split('').forEach((char, charIndex) => {
+                        // 随机跳过一些字符，增加疏密变化
+                        if (Math.random() < 0.08) { // 8%概率跳过字符
+                            currentX += charWidth;
+                            return;
+                        }
+                        
+                        const braillePattern = brailleMap[char] || brailleMap[' '];
+                        
+                        // 添加随机位置偏移，增加自然感
+                        const randomOffsetX = (Math.random() - 0.5) * 0.3; // ±0.15%
+                        const randomOffsetY = (Math.random() - 0.5) * 0.2; // ±0.1%
+                        
+                        // 创建盲文字符容器
+                        const brailleChar = document.createElement('div');
+                        brailleChar.className = 'braille-char';
+                        brailleChar.style.cssText = `
+                            position: absolute;
+                            left: ${currentX + randomOffsetX}%;
+                            top: ${currentY + randomOffsetY}%;
+                            width: ${charWidth}%;
+                            height: ${charHeight}%;
+                        `;
+                        
+                        // 创建6个点
+                        const dotPositions = [
+                            { left: '0%', top: '0%' },     // 点1 - 左上
+                            { left: '0%', top: '33.33%' }, // 点2 - 左中
+                            { left: '0%', top: '66.66%' }, // 点3 - 左下
+                            { left: '50%', top: '0%' },    // 点4 - 右上
+                            { left: '50%', top: '33.33%' }, // 点5 - 右中
+                            { left: '50%', top: '66.66%' }  // 点6 - 右下
+                        ];
+                        
+                        for (let i = 0; i < 6; i++) {
+                            const dot = document.createElement('div');
+                            dot.className = 'braille-dot';
+                            dot.style.cssText = `
+                                position: absolute;
+                                left: ${dotPositions[i].left};
+                                top: ${dotPositions[i].top};
+                                width: 4px;
+                                height: 4px;
+                                background: ${braillePattern[i] ? '#999999' : 'transparent'};
+                                border-radius: 50%;
+                                opacity: ${braillePattern[i] ? '0.8' : '0'};
+                                transform: translate(-50%, -50%);
+                                box-sizing: border-box;
+                                aspect-ratio: 1;
+                                min-width: 4px;
+                                min-height: 4px;
+                                max-width: 4px;
+                                max-height: 4px;
+                            `;
+                            brailleChar.appendChild(dot);
+                        }
+                        
+                        container.appendChild(brailleChar);
+                        dotCount++;
+                        
+                        // 添加字符间距，增加随机变化
+                        const randomCharSpacing = charWidth + (Math.random() - 0.5) * 0.2; // ±0.1%
+                        currentX += randomCharSpacing;
+                    });
+                    
+                    // 添加词间距，增加随机变化
+                    const randomWordSpacing = wordSpacing + (Math.random() - 0.5) * 0.4; // ±0.2%
+                    currentX += randomWordSpacing;
+                });
+            });
+            
+            console.log('📊 创建了', dotCount, '个盲文字符');
+        }
+        
+        // 优化的随机发光动画系统
+        let brailleAnimationSystem = {
+            dots: [],
+            activeDots: new Set(),
+            animationId: null,
+            lastUpdate: 0,
+            updateInterval: 2000, // 2秒更新一次
+            
+            init() {
+                this.dots = Array.from(document.querySelectorAll('.braille-dot'));
+                if (this.dots.length === 0) return;
+                
+                console.log('🎬 开始优化的Wandering Object盲文点随机发光动画，共', this.dots.length, '个点');
+                
+                // 预设置所有点的基础状态
+                this.dots.forEach(dot => {
+                    dot.style.opacity = '0.8';
+                    dot.style.willChange = 'opacity, box-shadow, filter'; // 优化渲染性能
+                });
+                
+                this.startAnimation();
+            },
+            
+            startAnimation() {
+                const animate = (currentTime) => {
+                    if (currentTime - this.lastUpdate >= this.updateInterval) {
+                        this.updateGlowingDots();
+                        this.lastUpdate = currentTime;
+                    }
+                    this.animationId = requestAnimationFrame(animate);
+                };
+                this.animationId = requestAnimationFrame(animate);
+            },
+            
+            updateGlowingDots() {
+                // 清理过期的发光点
+                this.activeDots.forEach(dot => {
+                    if (dot.endTime && Date.now() > dot.endTime) {
+                        dot.element.style.opacity = '0.8';
+                        dot.element.classList.remove('active');
+                        this.activeDots.delete(dot);
+                    }
+                });
+                
+                // 添加新的发光点
+                const randomCount = Math.floor(Math.random() * 8) + 3; // 3-10个点
+                const availableDots = this.dots.filter(dot => 
+                    !Array.from(this.activeDots).some(active => active.element === dot)
+                );
+                
+                if (availableDots.length > 0) {
+                    const shuffledDots = availableDots.sort(() => Math.random() - 0.5);
+                    const dotsToLight = shuffledDots.slice(0, Math.min(randomCount, availableDots.length));
+                    
+                    dotsToLight.forEach(dot => {
+                        dot.style.opacity = '1';
+                        dot.classList.add('active');
+                        
+                        // 记录发光结束时间
+                        this.activeDots.add({
+                            element: dot,
+                            endTime: Date.now() + 3000 // 3秒后结束
+                        });
+                    });
+                    
+                    console.log('✨ 随机发光了', dotsToLight.length, '个盲文点');
+                }
+            },
+            
+            stop() {
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
+                }
+                this.activeDots.clear();
+            }
+        };
+        
+        // 随机发光动画
+        function startRandomLighting() {
+            brailleAnimationSystem.init();
         }
     </script>
 </body>

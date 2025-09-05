@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=VT323:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
+    <script src="weather-system.js"></script>
+    <script src="weather-client.js"></script>
     <style>
         html, body {
             height: 100%;
@@ -30,8 +32,8 @@
             left: 0;
             right: 0;
             box-sizing: border-box;
-            background-color: #000000 !important; /* 初始黑色背景 */
-            transition: background-color 3s ease-in-out !important; /* 平滑渐变效果 */
+            background-color: #0080FF; /* 亮蓝色背景，会过渡到天气背景色 */
+            /* 移除过渡效果，避免与天气系统冲突 */
         }
         
         /* ===== 视觉内容保护系统 ===== */
@@ -10976,119 +10978,19 @@
             });
         }
         
-        // 开始天气背景渐变
+        // 天气系统已通过weather-client.js统一管理
+        // 移除了独立的天气背景渐变代码，避免冲突
         function startWeatherBackgroundTransition() {
-            console.log('🌤️ 开始天气背景渐变...');
-            console.log('🔍 当前状态检查:');
-            console.log('  - window.openingSoundPlayed:', window.openingSoundPlayed);
-            console.log('  - window.pendingWeatherData:', window.pendingWeatherData);
-            console.log('  - 当前body背景色:', document.body.style.backgroundColor);
-            console.log('  - 当前html背景色:', document.documentElement.style.backgroundColor);
-            
-            // 首先检查是否有待应用的天气数据
-            if (window.pendingWeatherData && window.pendingWeatherData.baseColor) {
-                console.log('🌤️ 使用待应用的天气数据:', window.pendingWeatherData.baseColor);
-                
-                // 使用JavaScript动画实现平滑渐变
-                animateBackgroundTransition('#000000', window.pendingWeatherData.baseColor, 1500);
-                
-                console.log('✅ 天气背景渐变开始！');
-                return;
-            }
-            
-            // 如果没有待应用的数据，尝试从localStorage获取
-            const storedWeather = localStorage.getItem('globalWeatherData');
-            console.log('🔍 localStorage检查:');
-            console.log('  - globalWeatherData:', storedWeather);
-            
-            if (storedWeather) {
-                try {
-                    const weatherData = JSON.parse(storedWeather);
-                    if (weatherData && weatherData.baseColor) {
-                        console.log('🌤️ 找到天气数据，开始渐变到:', weatherData.baseColor);
-                        
-                        // 使用JavaScript动画实现平滑渐变
-                        animateBackgroundTransition('#000000', weatherData.baseColor, 1500);
-                        
-                        console.log('✅ 天气背景渐变开始！');
-                    } else {
-                        console.log('⚠️ 天气数据无效，使用默认蓝色背景');
-                        applyDefaultBackground();
-                    }
-                } catch (error) {
-                    console.error('❌ 解析天气数据失败:', error);
-                    applyDefaultBackground();
-                }
-            } else {
-                console.log('🌤️ 没有找到天气数据，使用默认蓝色背景');
-                applyDefaultBackground();
-            }
+            // 天气系统已通过weather-client.js统一管理
+            console.log('🌤️ 天气系统已统一管理，跳过独立天气处理');
         }
         
-        // 应用默认背景颜色
+        // 天气相关函数已移除，统一由weather-client.js管理
         function applyDefaultBackground() {
-            const defaultColor = '#0041ff';
-            console.log('🎨 应用默认蓝色背景:', defaultColor);
-            console.log('🔍 应用前状态:');
-            console.log('  - body背景色:', document.body.style.backgroundColor);
-            console.log('  - html背景色:', document.documentElement.style.backgroundColor);
-            
-            // 使用JavaScript动画实现平滑渐变，因为CSS transition可能被覆盖
-            animateBackgroundTransition('#000000', defaultColor, 1500);
-            
-            console.log('✅ 默认蓝色背景渐变开始！');
+            console.log('🌤️ 天气系统已统一管理，跳过独立天气处理');
         }
         
-        // JavaScript动画渐变函数
-        function animateBackgroundTransition(fromColor, toColor, duration) {
-            console.log('🎬 开始JavaScript背景渐变动画:', { fromColor, toColor, duration });
-            
-            const startTime = Date.now();
-            const fromRGB = hexToRgb(fromColor);
-            const toRGB = hexToRgb(toColor);
-            
-            function animate() {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                // 使用easeInOut缓动函数
-                const easeProgress = progress < 0.5 
-                    ? 2 * progress * progress 
-                    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-                
-                const currentRGB = {
-                    r: Math.round(fromRGB.r + (toRGB.r - fromRGB.r) * easeProgress),
-                    g: Math.round(fromRGB.g + (toRGB.g - fromRGB.g) * easeProgress),
-                    b: Math.round(fromRGB.b + (toRGB.b - fromRGB.b) * easeProgress)
-                };
-                
-                const currentColor = `rgb(${currentRGB.r}, ${currentRGB.g}, ${currentRGB.b})`;
-                
-                // 应用当前颜色
-                document.body.style.setProperty('background-color', currentColor, 'important');
-                document.documentElement.style.setProperty('background-color', currentColor, 'important');
-                
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    console.log('✅ JavaScript背景渐变动画完成！');
-                    console.log('  - 最终body背景色:', document.body.style.backgroundColor);
-                    console.log('  - 最终html背景色:', document.documentElement.style.backgroundColor);
-                }
-            }
-            
-            animate();
-        }
-        
-        // 辅助函数：将十六进制颜色转换为RGB
-        function hexToRgb(hex) {
-            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16),
-                g: parseInt(result[2], 16),
-                b: parseInt(result[3], 16)
-            } : { r: 0, g: 0, b: 0 };
-        }
+        // 天气相关函数已移除，统一由weather-client.js管理
         
 
     </script>
