@@ -36,6 +36,93 @@
             /* 移除过渡效果，避免与天气系统冲突 */
         }
         
+        /* ===== 太阳和月亮系统 ===== */
+        /* 太阳样式 - 动态位置（缩小3倍） */
+        .sun {
+            position: fixed;
+            width: 4vw; /* 缩小3倍：12vw -> 4vw */
+            height: 4vw; /* 缩小3倍：12vw -> 4vw */
+            background: radial-gradient(circle, #ff4444 0%, #ff0000 70%, #cc0000 100%);
+            border-radius: 50%;
+            box-shadow: none;
+            z-index: 999999999;
+            pointer-events: none;
+            transition: all 1s ease-in-out;
+            /* 初始隐藏位置，避免在JavaScript执行前显示在左上角 */
+            left: -100vw;
+            bottom: -100vh;
+            opacity: 0;
+        }
+        
+        /* 月亮样式 - 动态位置和半月形状（缩小3倍） */
+        .moon {
+            position: fixed;
+            width: 3.33vw; /* 缩小3倍：10vw -> 3.33vw */
+            height: 3.33vw; /* 缩小3倍：10vw -> 3.33vw */
+            z-index: 999999999;
+            pointer-events: none;
+            transition: all 1s ease-in-out;
+            /* 初始隐藏，避免在JavaScript执行前显示 */
+            opacity: 0;
+            /* 初始圆形，避免从方块渐变到正圆 */
+            border-radius: 50%;
+        }
+        
+        /* 7种半月形状（缩小3倍） */
+        .moon.phase-1 {
+            /* 新月 - 几乎不可见 */
+            background: radial-gradient(circle, rgba(255, 248, 220, 0.1) 0%, rgba(245, 245, 220, 0.05) 70%, rgba(230, 230, 250, 0.1) 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 3.33px rgba(255, 248, 220, 0.2); /* 缩小3倍：10px -> 3.33px */
+        }
+        
+        .moon.phase-2 {
+            /* 蛾眉月 - 细弯月 */
+            background: 
+                radial-gradient(ellipse 100% 50% at 20% 50%, transparent 0%, transparent 40%, #fff8dc 41%, #f5f5dc 70%, #e6e6fa 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(255, 248, 220, 0.3); /* 缩小3倍：15px -> 5px */
+        }
+        
+        .moon.phase-3 {
+            /* 上弦月 - 右半边 */
+            background: 
+                linear-gradient(90deg, transparent 0%, transparent 50%, #fff8dc 51%, #f5f5dc 70%, #e6e6fa 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 6.67px rgba(255, 248, 220, 0.4); /* 缩小3倍：20px -> 6.67px */
+        }
+        
+        .moon.phase-4 {
+            /* 盈凸月 - 大部分可见 */
+            background: 
+                radial-gradient(ellipse 80% 100% at 30% 50%, transparent 0%, transparent 20%, #fff8dc 21%, #f5f5dc 70%, #e6e6fa 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 8.33px rgba(255, 248, 220, 0.5); /* 缩小3倍：25px -> 8.33px */
+        }
+        
+        .moon.phase-5 {
+            /* 满月 - 完全可见 */
+            background: radial-gradient(circle, #fff8dc 0%, #f5f5dc 70%, #e6e6fa 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 248, 220, 0.6); /* 缩小3倍：30px -> 10px */
+        }
+        
+        .moon.phase-6 {
+            /* 亏凸月 - 大部分可见 */
+            background: 
+                radial-gradient(ellipse 80% 100% at 70% 50%, transparent 0%, transparent 20%, #fff8dc 21%, #f5f5dc 70%, #e6e6fa 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 8.33px rgba(255, 248, 220, 0.5); /* 缩小3倍：25px -> 8.33px */
+        }
+        
+        .moon.phase-7 {
+            /* 下弦月 - 左半边 */
+            background: 
+                linear-gradient(90deg, #fff8dc 0%, #f5f5dc 30%, #e6e6fa 50%, transparent 51%, transparent 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 6.67px rgba(255, 248, 220, 0.4); /* 缩小3倍：20px -> 6.67px */
+        }
+        
         /* ===== 视觉内容保护系统 ===== */
         /* 防止意外修改的全局保护 */
         * {
@@ -397,6 +484,59 @@
         .lang-content[data-lang="en"] {
             font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', monospace;
             font-display: swap;
+        }
+        
+        /* 英文字体大小调整 - 让英文看起来更合适 */
+        .lang-content[data-lang="en"] .work-title,
+        .lang-content[data-lang="en"] .work-title-2,
+        .lang-content[data-lang="en"] .work-title-3 {
+            font-size: 0.85em !important;
+        }
+        
+        .lang-content[data-lang="en"] .subtitle,
+        .lang-content[data-lang="en"] .subtitle-2,
+        .lang-content[data-lang="en"] .subtitle-3,
+        .lang-content[data-lang="en"] .subtitle-4,
+        .lang-content[data-lang="en"] .subtitle-5,
+        .lang-content[data-lang="en"] .subtitle-6 {
+            font-size: 0.9em !important;
+        }
+        
+        .lang-content[data-lang="en"] .mixed-media-subtitle-text {
+            font-size: 0.9em !important;
+        }
+        
+        /* 针对不同分辨率的英文字体大小微调 */
+        @media (min-width: 3840px) {
+            .lang-content[data-lang="en"] .work-title,
+            .lang-content[data-lang="en"] .work-title-2,
+            .lang-content[data-lang="en"] .work-title-3 {
+                font-size: 0.8em !important;
+            }
+            .lang-content[data-lang="en"] .subtitle,
+            .lang-content[data-lang="en"] .subtitle-2,
+            .lang-content[data-lang="en"] .subtitle-3,
+            .lang-content[data-lang="en"] .subtitle-4,
+            .lang-content[data-lang="en"] .subtitle-5,
+            .lang-content[data-lang="en"] .subtitle-6 {
+                font-size: 0.85em !important;
+            }
+        }
+        
+        @media (min-width: 2560px) and (max-width: 3839px) {
+            .lang-content[data-lang="en"] .work-title,
+            .lang-content[data-lang="en"] .work-title-2,
+            .lang-content[data-lang="en"] .work-title-3 {
+                font-size: 0.82em !important;
+            }
+            .lang-content[data-lang="en"] .subtitle,
+            .lang-content[data-lang="en"] .subtitle-2,
+            .lang-content[data-lang="en"] .subtitle-3,
+            .lang-content[data-lang="en"] .subtitle-4,
+            .lang-content[data-lang="en"] .subtitle-5,
+            .lang-content[data-lang="en"] .subtitle-6 {
+                font-size: 0.87em !important;
+            }
         }
         
         /* 强制语言切换样式优先级 */
@@ -3472,6 +3612,10 @@
     </style>
 </head>
 <body>
+    <!-- 太阳和月亮系统 -->
+    <div class="sun"></div>
+    <div class="moon"></div>
+    
     <!-- 语言切换按钮 -->
     <button id="languageToggle" class="language-toggle">中文</button>
     
@@ -10824,6 +10968,11 @@
             // 检查字体加载
             checkFontLoading();
             
+            // 初始化太阳和月亮系统
+            initSunPosition();
+            initMoonPosition();
+            console.log('🌞🌙 太阳和月亮系统已初始化');
+            
             // 初始化开场音效状态
             window.openingSoundPlayed = false;
             window.pendingWeatherData = null;
@@ -10983,6 +11132,199 @@
         function startWeatherBackgroundTransition() {
             // 天气系统已通过weather-client.js统一管理
             console.log('🌤️ 天气系统已统一管理，跳过独立天气处理');
+        }
+        
+        // ===== 太阳位置系统 =====
+        function initSunPosition() {
+            updateSunPosition();
+            // 每分钟更新一次太阳位置
+            setInterval(updateSunPosition, 60000);
+        }
+        
+        function updateSunPosition() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const totalMinutes = hours * 60 + minutes;
+            
+            // 太阳轨迹：6:00-18:00 (360分钟到1080分钟)
+            // 地平线：左下角为起点，右上角为终点
+            let sunVisible = true;
+            let left, bottom;
+            
+            if (totalMinutes >= 360 && totalMinutes <= 1080) {
+                // 白天：太阳可见 (6:00 AM - 6:00 PM)
+                const dayProgress = (totalMinutes - 360) / 720; // 0到1的进度
+                
+                // 太阳轨迹：抛物线路径
+                // X轴：从左下角(5vw)到右上角(85vw) - 调整以保持视觉中心一致
+                left = 5 + (80 * dayProgress) + 4; // 添加4vw偏移保持视觉中心一致
+                
+                // Y轴：抛物线，中午最高 - 调整以保持视觉中心一致
+                const heightFactor = Math.sin(dayProgress * Math.PI); // 0到1再到0的抛物线
+                bottom = 5 + (70 * heightFactor) + 4; // 添加4vh偏移保持视觉中心一致
+                
+            } else {
+                // 夜晚：太阳在地平线下不可见
+                sunVisible = false;
+                left = 50; // 隐藏位置
+                bottom = -20; // 地平线下
+            }
+            
+            const sun = document.querySelector('.sun');
+            if (sun) {
+                if (sunVisible) {
+                    sun.style.left = left + 'vw';
+                    sun.style.bottom = bottom + 'vh';
+                    sun.style.top = 'auto';
+                    sun.style.right = 'auto';
+                    sun.style.opacity = '1';
+                    
+                    // 根据时间调整太阳颜色
+                    const sunColor = getSunColor(totalMinutes);
+                    sun.style.background = sunColor;
+                } else {
+                    sun.style.opacity = '0';
+                }
+            }
+        }
+        
+        function getSunColor(totalMinutes) {
+            // 根据时间调整太阳颜色
+            if (totalMinutes >= 360 && totalMinutes <= 480) {
+                // 早晨：橙红色 (6:00-8:00)
+                return 'radial-gradient(circle, #ffaa44 0%, #ff6600 70%, #cc4400 100%)';
+            } else if (totalMinutes >= 480 && totalMinutes <= 960) {
+                // 白天：黄色 (8:00-16:00)
+                return 'radial-gradient(circle, #ffff44 0%, #ffcc00 70%, #ff9900 100%)';
+            } else if (totalMinutes >= 960 && totalMinutes <= 1080) {
+                // 傍晚：红色 (16:00-18:00)
+                return 'radial-gradient(circle, #ff4444 0%, #ff0000 70%, #cc0000 100%)';
+            } else {
+                // 夜晚：深红色
+                return 'radial-gradient(circle, #440000 0%, #220000 70%, #110000 100%)';
+            }
+        }
+        
+        // ===== 月亮位置系统 =====
+        function initMoonPosition() {
+            updateMoonPosition();
+            // 每分钟更新一次月亮位置
+            setInterval(updateMoonPosition, 60000);
+        }
+        
+        function updateMoonPosition() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const totalMinutes = hours * 60 + minutes;
+            
+            // 月亮轨迹：18:00-6:00 (1080分钟到1440分钟，然后0分钟到360分钟)
+            // 地平线：左下角为起点，右上角为终点
+            let moonVisible = true;
+            let left, bottom;
+            
+            // 处理跨天的情况
+            let nightProgress;
+            if (totalMinutes >= 1080) {
+                // 晚上：18:00-24:00 (1080分钟到1440分钟)
+                nightProgress = (totalMinutes - 1080) / 360; // 0到1的进度
+            } else if (totalMinutes <= 360) {
+                // 凌晨：0:00-6:00 (0分钟到360分钟)
+                nightProgress = (totalMinutes + 360) / 720; // 0.5到1的进度
+            } else {
+                // 白天：月亮不可见
+                moonVisible = false;
+                left = 50; // 隐藏位置
+                bottom = -20; // 地平线下
+            }
+            
+            if (moonVisible) {
+                // 月亮轨迹：抛物线路径 - 调整以保持视觉中心一致
+                // X轴：从左下角(5vw)到右上角(85vw) - 调整以保持视觉中心一致
+                left = 5 + (80 * nightProgress) + 3.33; // 添加3.33vw偏移保持视觉中心一致
+                
+                // Y轴：抛物线，午夜最高 - 调整以保持视觉中心一致
+                const heightFactor = Math.sin(nightProgress * Math.PI); // 0到1再到0的抛物线
+                bottom = 5 + (70 * heightFactor) + 3.33; // 添加3.33vh偏移保持视觉中心一致
+            }
+            
+            const moon = document.querySelector('.moon');
+            if (moon) {
+                if (moonVisible) {
+                    moon.style.left = left + 'vw';
+                    moon.style.bottom = bottom + 'vh';
+                    moon.style.top = 'auto';
+                    moon.style.right = 'auto';
+                    moon.style.opacity = '1';
+                    
+                    // 根据日期设置月亮形状（7天一周的轮回）
+                    const moonPhase = getMoonPhase(now);
+                    setMoonPhase(moon, moonPhase);
+                    
+                    // 根据时间调整月亮颜色
+                    const moonColor = getMoonColor(totalMinutes);
+                    moon.style.background = moonColor;
+                } else {
+                    moon.style.opacity = '0';
+                }
+            }
+        }
+        
+        // 获取月亮相位（1-7，7天一周的轮回）
+        function getMoonPhase(date) {
+            // 获取从1970年1月1日以来的天数
+            const epoch = new Date(1970, 0, 1);
+            const daysSinceEpoch = Math.floor((date - epoch) / (1000 * 60 * 60 * 24));
+            
+            // 7天一周的轮回
+            const phase = (daysSinceEpoch % 7) + 1;
+            return phase;
+        }
+        
+        // 设置月亮形状
+        function setMoonPhase(moonElement, phase) {
+            // 移除所有现有的相位类
+            moonElement.classList.remove('phase-1', 'phase-2', 'phase-3', 'phase-4', 'phase-5', 'phase-6', 'phase-7');
+            
+            // 添加新的相位类
+            moonElement.classList.add(`phase-${phase}`);
+            
+            console.log(`🌙 月亮相位设置为: 第${phase}天 (${getMoonPhaseName(phase)})`);
+        }
+        
+        // 获取月亮相位名称
+        function getMoonPhaseName(phase) {
+            const phaseNames = {
+                1: '新月',
+                2: '蛾眉月',
+                3: '上弦月',
+                4: '盈凸月',
+                5: '满月',
+                6: '亏凸月',
+                7: '下弦月'
+            };
+            return phaseNames[phase] || '未知';
+        }
+        
+        function getMoonColor(totalMinutes) {
+            // 根据时间调整月亮颜色
+            if (totalMinutes >= 1080 && totalMinutes <= 1200) {
+                // 傍晚：淡黄色 (18:00-20:00)
+                return 'radial-gradient(circle, #fff8dc 0%, #f5f5dc 70%, #e6e6fa 100%)';
+            } else if (totalMinutes >= 1200 && totalMinutes <= 1320) {
+                // 深夜：银白色 (20:00-22:00)
+                return 'radial-gradient(circle, #f8f8ff 0%, #e6e6fa 70%, #d3d3d3 100%)';
+            } else if (totalMinutes >= 1320 || totalMinutes <= 240) {
+                // 午夜到凌晨：冷白色 (22:00-4:00)
+                return 'radial-gradient(circle, #ffffff 0%, #f0f8ff 70%, #e0e0e0 100%)';
+            } else if (totalMinutes >= 240 && totalMinutes <= 360) {
+                // 黎明：淡黄色 (4:00-6:00)
+                return 'radial-gradient(circle, #fff8dc 0%, #f5f5dc 70%, #e6e6fa 100%)';
+            } else {
+                // 白天：不可见
+                return 'radial-gradient(circle, #fff8dc 0%, #f5f5dc 70%, #e6e6fa 100%)';
+            }
         }
         
         // 天气相关函数已移除，统一由weather-client.js管理
