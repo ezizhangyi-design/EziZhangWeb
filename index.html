@@ -47,10 +47,10 @@
             box-shadow: none;
             z-index: 999999999;
             pointer-events: none;
-            transition: all 1s ease-in-out;
-            /* 初始隐藏位置，避免在JavaScript执行前显示在左上角 */
-            left: -100vw;
-            bottom: -100vh;
+            transition: opacity 0.5s ease-in-out, background 0.3s ease-in-out;
+            /* 初始位置设置为合理的默认位置，避免瞬移 */
+            left: 50vw;
+            bottom: 5vh;
             opacity: 0;
         }
         
@@ -11168,18 +11168,19 @@
                 // 夜晚：太阳在地平线下不可见
                 sunVisible = false;
                 left = 50; // 隐藏位置
-                bottom = -20; // 地平线下
+                bottom = 5; // 保持在地平线附近，避免大幅移动
             }
             
             const sun = document.querySelector('.sun');
             if (sun) {
+                // 先设置位置，再设置可见性，避免瞬移
+                sun.style.left = left + 'vw';
+                sun.style.bottom = bottom + 'vh';
+                sun.style.top = 'auto';
+                sun.style.right = 'auto';
+                
                 if (sunVisible) {
-                    sun.style.left = left + 'vw';
-                    sun.style.bottom = bottom + 'vh';
-                    sun.style.top = 'auto';
-                    sun.style.right = 'auto';
                     sun.style.opacity = '1';
-                    
                     // 根据时间调整太阳颜色
                     const sunColor = getSunColor(totalMinutes);
                     sun.style.background = sunColor;
