@@ -5103,9 +5103,9 @@
             
             // 创建柔和耐听的碰撞音效 - 基于波点颜色和音效模式
             playCollisionSound(dot1Color, dot2Color) {
-                // 检查是否正在播放Hello World
-                if (window.isPlayingHelloWorld) {
-                    return; // Hello World播放期间不播放任何音效
+                // 检查是否正在播放Hello World或开场音效
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                    return; // Hello World播放期间或开场音效未结束时，不播放任何音效
                 }
                 
                 if (!this.audioContext) return;
@@ -5405,10 +5405,10 @@
                     window.addEventListener('musicSystemsReady', () => {
                         console.log('🎵 分割线音效系统收到音乐就绪通知！');
                         
-                        // 延迟启动管道音乐，确保Hello World完全播放完毕
+                        // 延迟启动管道音乐，确保Hello World和开场音效完全播放完毕
                         setTimeout(() => {
-                            if (!this.isMusicActive && !window.isPlayingHelloWorld) {
-                                console.log('🎵 Hello World播放完毕，自动启动管道音乐...');
+                            if (!this.isMusicActive && !window.isPlayingHelloWorld && window.openingSoundPlayed) {
+                                console.log('🎵 Hello World和开场音效播放完毕，自动启动管道音乐...');
                                 this.startPipesMusic();
                             }
                         }, 500); // 延迟0.5秒启动
@@ -5434,9 +5434,9 @@
                     if (group) {
                         // 鼠标进入分割线组
                         group.addEventListener('mouseenter', (e) => {
-                            // 双重检查：确保Hello World播放期间不播放音效
-                            if (window.isPlayingHelloWorld) {
-                                console.log('🔇 Hello World播放期间，分割线音效被阻止');
+                            // 双重检查：确保Hello World播放期间或开场音效未结束时，不播放音效
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                                console.log('🔇 Hello World播放期间或开场音效未结束，分割线音效被阻止');
                                 return;
                             }
                             this.playDividerSound('enter', e);
@@ -5444,7 +5444,7 @@
                         
                         // 鼠标离开分割线组
                         group.addEventListener('mouseleave', (e) => {
-                            if (window.isPlayingHelloWorld) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
                                 return;
                             }
                             this.playDividerSound('leave', e);
@@ -5452,7 +5452,7 @@
                         
                         // 鼠标在分割线组内移动
                         group.addEventListener('mousemove', (e) => {
-                            if (window.isPlayingHelloWorld) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
                                 return;
                             }
                             this.playDividerSound('move', e);
@@ -5460,7 +5460,7 @@
                         
                         // 鼠标点击分割线组
                         group.addEventListener('click', (e) => {
-                            if (window.isPlayingHelloWorld) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
                                 return;
                             }
                             this.playDividerSound('click', e);
@@ -5470,9 +5470,9 @@
             }
             
             playDividerSound(action, event) {
-                // 检查是否正在播放Hello World
-                if (window.isPlayingHelloWorld) {
-                    return; // 静音期间不播放任何音效
+                // 检查是否正在播放Hello World或开场音效
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                    return; // Hello World播放期间或开场音效未结束时，不播放任何音效
                 }
                 
                 if (!this.audioContext) return;
@@ -6781,9 +6781,9 @@
             
             // 启动管道赋格配乐
             startPipesMusic() {
-                // 检查是否正在播放Hello World
-                if (window.isPlayingHelloWorld) {
-                    console.log('🔇 Hello World正在播放，等待播放完毕...');
+                // 检查是否正在播放Hello World或开场音效
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                    console.log('🔇 Hello World正在播放或开场音效未结束，等待播放完毕...');
                     return;
                 }
                 
@@ -7890,9 +7890,9 @@
                     return;
                 }
                 
-                // 检查是否正在播放Hello World
-                if (window.isPlayingHelloWorld) {
-                    console.log('🔇 Hello World正在播放，雪花噪音静音');
+                // 检查是否正在播放Hello World或开场音效
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                    console.log('🔇 Hello World正在播放或开场音效未结束，雪花噪音静音');
                     return;
                 }
                 
@@ -7907,9 +7907,9 @@
             
             // 创建连续的雪花噪音流 - 真正的连续白噪音
             createContinuousSnowNoise() {
-                // 检查是否正在播放Hello World
-                if (window.isPlayingHelloWorld) {
-                    console.log('🔇 Hello World正在播放，连续雪花噪音静音');
+                // 检查是否正在播放Hello World或开场音效
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                    console.log('🔇 Hello World正在播放或开场音效未结束，连续雪花噪音静音');
                     return;
                 }
                 
