@@ -817,12 +817,14 @@
         .animated-dots {
             position: absolute !important;
             top: 0 !important;
-            left: 0 !important;
+            left: -300px !important; /* 向左扩展300px，保持不变 */
+            right: -250px !important; /* 向右扩展250px，稍微扩张 */
             width: 100% !important;
             height: 100% !important;
             pointer-events: none !important;
             z-index: 99999999 !important; /* 提高z-index，确保显示在所有元素之上 */
             overflow: visible !important;
+            border: none !important; /* 移除红色虚线框 */
         }
         
         /* 防止JavaScript意外修改关键样式 */
@@ -1306,18 +1308,56 @@
             position: relative;
         }
         
+        /* 盲文边框 */
+        .braille-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .braille-text {
+            position: absolute;
+            color: white;
+            font-size: 18px;
+            font-family: 'Courier New', monospace;
+            line-height: 1;
+            white-space: nowrap;
+            opacity: 0.9;
+            font-weight: bold;
+        }
+        
+        /* 盲文字符映射 */
+        .braille-char {
+            display: inline-block;
+            width: 8px;
+            height: 10px;
+            margin: 0 2px;
+            background: white;
+            border-radius: 2px;
+            opacity: 0.9;
+        }
+        
         /* 动态波点背景 */
         .animated-dots {
             position: absolute;
             top: 0px;
-            left: 0px;
-            right: 0px;
+            left: -300px; /* 向左扩展300px，保持不变 */
+            right: -250px; /* 向右扩展250px，稍微扩张 */
             bottom: 0px;
             height: 12000px !important;
             max-height: 12000px !important;
             pointer-events: none;
             z-index: 999999;
-            overflow: hidden !important;
+            overflow: visible !important; /* 允许波点超出容器边界 */
+            /* 确保容器本身不会限制内容 */
+            clip: none !important;
+            clip-path: none !important;
+            border: none !important; /* 移除红色虚线框 */
+            box-sizing: border-box !important;
         }
         
         /* 黑客帝国ASCII动画 - 在水管屏保内 */
@@ -3672,6 +3712,8 @@
             </div>
         </div>
         <div class="right-panel">
+            <!-- 盲文边框 -->
+            <div class="braille-border" id="braille-border"></div>
             <!-- 管道音调推子 - 左右两侧黄圈位置 -->
             <div class="pipes-mixer-container">
                 <!-- 左侧推子组 -->
@@ -4846,13 +4888,24 @@
                     const fixedHeight = 12000; // 滚轮终点位置：-12000px
                     this.container.style.height = fixedHeight + 'px';
                     this.container.style.maxHeight = fixedHeight + 'px';
-                    this.containerWidth = window.innerWidth; // 使用窗口宽度
+                    // 像测试页面一样计算容器宽度
+                    const rightPanelRect = this.rightPanel.getBoundingClientRect();
+                    this.containerWidth = rightPanelRect.width + 550; // 扩展550px宽度，支持右边稍微扩张
                     this.containerHeight = fixedHeight;
                     
-                    console.log('📐 容器尺寸更新:', {
-                        width: this.containerWidth,
-                        height: this.containerHeight,
-                        containerElement: this.container
+                    console.log('📐 容器尺寸更新 (测试页面逻辑):', {
+                        containerWidth: this.containerWidth,
+                        containerHeight: this.containerHeight,
+                        rightPanelWidth: rightPanelRect.width,
+                        containerClientWidth: this.container.clientWidth,
+                        containerOffsetWidth: this.container.offsetWidth,
+                        containerRect: this.container.getBoundingClientRect(),
+                        containerStyle: {
+                            left: this.container.style.left,
+                            right: this.container.style.right,
+                            width: this.container.style.width,
+                            position: window.getComputedStyle(this.container).position
+                        }
                     });
                 };
                 
@@ -4910,8 +4963,8 @@
                 const dotData = {
                     element: dot,
                     size: size,
-                    x: Math.random() * (this.containerWidth - size) + size/2, // 确保波点完全在容器内
-                    y: Math.random() * (this.containerHeight - size) + size/2, // 确保波点完全在容器内
+                    x: Math.random() * (this.containerWidth + 750) - 400, // 均匀分布，左边不动，右边稍微扩张
+                    y: Math.random() * (this.containerHeight - size + 200) + size/2, // 确保波点完全在容器内，底部向下扩展200px
                     vx: (Math.random() - 0.5) * (this.dotCount > 25 ? 3 : 4), // 根据波点数量调整速度
                     vy: (Math.random() - 0.5) * (this.dotCount > 25 ? 3 : 4), // 根据波点数量调整速度
                     colorClass: colorClass
@@ -4921,6 +4974,7 @@
                 dot.style.height = size + 'px';
                 dot.style.left = dotData.x + 'px';
                 dot.style.top = dotData.y + 'px';
+                dot.style.transform = 'none'; // 确保不使用transform
                 
                 this.container.appendChild(dot);
                 this.dots.push(dotData);
@@ -5031,19 +5085,86 @@
                     dot.x += dot.vx;
                     dot.y += dot.vy;
                     
-                    // 边界反弹 - 移除右侧限制，让波点在全屏范围内移动
-                    if (dot.x <= 0 || dot.x >= this.containerWidth - dot.size) {
-                        dot.vx *= -1;
-                        dot.x = Math.max(0, Math.min(this.containerWidth - dot.size, dot.x));
-                    }
-                    if (dot.y <= 0 || dot.y >= this.containerHeight - dot.size) {
-                        dot.vy *= -1;
-                        dot.y = Math.max(0, Math.min(this.containerHeight - dot.size, dot.y));
+                    // 宽松的边界检测 - 左边不动，右边稍微扩张，底部向下扩展
+                    const minX = -400; // 允许超出左边界400px，保持不变
+                    const maxX = this.containerWidth - dot.size + 350; // 允许超出右边界350px，稍微扩张
+                    const minY = 0;
+                    const maxY = this.containerHeight - dot.size + 200; // 允许超出底部边界200px，向下扩展
+                    
+                    // 调试信息 - 显示边界值（每60帧显示一次）
+                    if (this.frameCount % 60 === 0 && Math.random() < 0.1) {
+                        console.log('🔍 边界调试信息:', {
+                            containerWidth: this.containerWidth,
+                            dotSize: dot.size,
+                            minX: minX,
+                            maxX: maxX,
+                            dotX: dot.x,
+                            containerRect: this.container.getBoundingClientRect(),
+                            rightPanelRect: this.rightPanel.getBoundingClientRect(),
+                            dotElementRect: dot.element.getBoundingClientRect()
+                        });
                     }
                     
-                    // 额外的安全检查 - 强制限制波点位置
-                    dot.x = Math.max(0, Math.min(this.containerWidth - dot.size, dot.x));
-                    dot.y = Math.max(0, Math.min(this.containerHeight - dot.size, dot.y));
+                    // 调试信息 - 显示边界检测详情（减少日志频率）
+                    if ((dot.x > maxX || dot.x < minX) && Math.random() < 0.01) { // 只有1%的概率显示日志
+                        console.warn('🚨 波点超出边界!', {
+                            dotX: dot.x,
+                            dotSize: dot.size,
+                            containerWidth: this.containerWidth,
+                            maxX: maxX,
+                            minX: minX
+                        });
+                    }
+                    
+                    // X轴边界检测
+                    if (dot.x <= minX) {
+                        dot.x = minX;
+                        dot.vx = Math.abs(dot.vx); // 确保向右运动
+                    } else if (dot.x >= maxX) {
+                        dot.x = maxX;
+                        dot.vx = -Math.abs(dot.vx); // 确保向左运动
+                    }
+                    
+                    // Y轴边界检测
+                    if (dot.y <= minY) {
+                        dot.y = minY;
+                        dot.vy = Math.abs(dot.vy); // 确保向下运动
+                    } else if (dot.y >= maxY) {
+                        dot.y = maxY;
+                        dot.vy = -Math.abs(dot.vy); // 确保向上运动
+                    }
+                    
+                    // 最终安全检查 - 宽松限制波点位置
+                    dot.x = Math.max(minX, Math.min(maxX, dot.x));
+                    dot.y = Math.max(minY, Math.min(maxY, dot.y));
+                    
+                    // 超强制边界检查 - 左边不动，右边稍微扩张
+                    const containerRect = this.container.getBoundingClientRect();
+                    const maxAllowedX = containerRect.width - dot.size + 450; // 允许超出450px，稍微扩张
+                    const minAllowedX = -500; // 允许超出左边界500px，保持不变
+                    
+                    if (dot.x > maxAllowedX) {
+                        if (Math.random() < 0.01) { // 只有1%的概率显示日志
+                            console.warn('🚨 强制修正: 波点超出容器右边界', {
+                                dotX: dot.x,
+                                dotSize: dot.size,
+                                containerWidth: containerRect.width,
+                                maxAllowedX: maxAllowedX
+                            });
+                        }
+                        dot.x = maxAllowedX;
+                        dot.vx = -Math.abs(dot.vx); // 强制向左运动
+                    }
+                    if (dot.x < minAllowedX) {
+                        if (Math.random() < 0.01) { // 只有1%的概率显示日志
+                            console.warn('🚨 强制修正: 波点超出容器左边界', {
+                                dotX: dot.x,
+                                minAllowedX: minAllowedX
+                            });
+                        }
+                        dot.x = minAllowedX;
+                        dot.vx = Math.abs(dot.vx); // 强制向右运动
+                    }
                     
                     // 平衡运动方向 - 防止偏向右侧或左侧
                     if (dot.x > (this.containerWidth - dot.size) * 0.8) {
@@ -5068,15 +5189,10 @@
                         dot.vy = (dot.vy / speed) * maxSpeed;
                     }
                     
-                    // 使用transform优化性能，保持CSS的scale效果
-                    const currentTransform = window.getComputedStyle(dot.element).transform;
-                    const hasScale = currentTransform.includes('scale');
-                    if (hasScale) {
-                        // 如果已经有scale效果，保持它
-                        dot.element.style.transform = `translate(${dot.x}px, ${dot.y}px) scale(1.2)`;
-                    } else {
-                    dot.element.style.transform = `translate(${dot.x}px, ${dot.y}px)`;
-                    }
+                    // 使用直接定位替代transform，确保边界检测准确
+                    dot.element.style.left = dot.x + 'px';
+                    dot.element.style.top = dot.y + 'px';
+                    dot.element.style.transform = 'none'; // 清除transform
                 });
                 
                 // 智能碰撞检测频率 - 根据波点数量动态调整
@@ -5362,14 +5478,126 @@
             window.dotSystem = new DotSystem();
                 console.log('✅ 波点系统创建成功');
                 
+                // 立即显示容器尺寸信息
+                setTimeout(() => {
+                    const container = document.querySelector('.animated-dots');
+                    const rightPanel = document.querySelector('.right-panel');
+                    if (container && rightPanel) {
+                        console.log('📏 容器尺寸信息:', {
+                            containerRect: container.getBoundingClientRect(),
+                            rightPanelRect: rightPanel.getBoundingClientRect(),
+                            containerStyle: {
+                                left: container.style.left,
+                                right: container.style.right,
+                                width: container.style.width,
+                                overflow: window.getComputedStyle(container).overflow
+                            }
+                        });
+                    }
+                }, 1000);
+                
                 // 初始化分割线音效系统
                 window.dividerSoundSystem = new DividerSoundSystem();
                 console.log('✅ 分割线音效系统创建成功');
+                
+                // 初始化盲文边框
+                initBrailleBorder();
         } catch (error) {
                 console.error('❌ 波点系统创建失败:', error);
             // 静默处理错误，避免影响页面其他功能
             }
         });
+
+        // 盲文生成函数
+        function initBrailleBorder() {
+            const brailleBorder = document.getElementById('braille-border');
+            if (!brailleBorder) return;
+            
+            const text = "Hello Ha ！welcome to Ezi's World！";
+            const brailleMap = {
+                'H': '⠓', 'e': '⠑', 'l': '⠇', 'o': '⠕', ' ': '⠀', 'h': '⠓', 'a': '⠁',
+                '！': '⠖', 'W': '⠺', 'c': '⠉', 'm': '⠍', 't': '⠞', 'E': '⠑', 'z': '⠵',
+                'i': '⠊', "'": '⠄', 's': '⠎', 'r': '⠗', 'd': '⠙', 'w': '⠺', 'n': '⠝'
+            };
+            
+            // 将文本转换为盲文
+            let brailleText = '';
+            for (let char of text) {
+                brailleText += brailleMap[char] || char;
+            }
+            
+            // 获取容器尺寸
+            const container = brailleBorder.parentElement;
+            const rect = container.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+            
+            // 计算盲文字符大小和间距
+            const charWidth = 12;
+            const charHeight = 14;
+            const margin = 8; // 距离边框边缘的距离
+            
+            // 计算周长
+            const perimeter = 2 * (width + height) - 4 * margin;
+            const charsPerPerimeter = Math.floor(perimeter / charWidth);
+            
+            // 只显示一次文本，不重复
+            let fullBrailleText = brailleText;
+            
+            // 创建盲文元素，循环一圈
+            let currentChar = 0;
+            let currentPosition = 0;
+            
+            // 上边
+            for (let x = margin; x < width - margin && currentChar < fullBrailleText.length; x += charWidth) {
+                const char = fullBrailleText[currentChar];
+                const brailleChar = document.createElement('span');
+                brailleChar.className = 'braille-text';
+                brailleChar.textContent = char;
+                brailleChar.style.left = x + 'px';
+                brailleChar.style.top = margin + 'px';
+                brailleBorder.appendChild(brailleChar);
+                currentChar++;
+            }
+            
+            // 右边
+            for (let y = margin + charHeight; y < height - margin && currentChar < fullBrailleText.length; y += charHeight) {
+                const char = fullBrailleText[currentChar];
+                const brailleChar = document.createElement('span');
+                brailleChar.className = 'braille-text';
+                brailleChar.textContent = char;
+                brailleChar.style.left = (width - margin - charWidth) + 'px';
+                brailleChar.style.top = y + 'px';
+                brailleBorder.appendChild(brailleChar);
+                currentChar++;
+            }
+            
+            // 下边
+            for (let x = width - margin - charWidth; x >= margin && currentChar < fullBrailleText.length; x -= charWidth) {
+                const char = fullBrailleText[currentChar];
+                const brailleChar = document.createElement('span');
+                brailleChar.className = 'braille-text';
+                brailleChar.textContent = char;
+                brailleChar.style.left = x + 'px';
+                brailleChar.style.top = (height - margin - charHeight) + 'px';
+                brailleBorder.appendChild(brailleChar);
+                currentChar++;
+            }
+            
+            // 左边
+            for (let y = height - margin - charHeight; y >= margin + charHeight && currentChar < fullBrailleText.length; y -= charHeight) {
+                const char = fullBrailleText[currentChar];
+                const brailleChar = document.createElement('span');
+                brailleChar.className = 'braille-text';
+                brailleChar.textContent = char;
+                brailleChar.style.left = margin + 'px';
+                brailleChar.style.top = y + 'px';
+                brailleBorder.appendChild(brailleChar);
+                currentChar++;
+            }
+            
+            console.log('✅ 盲文边框创建成功，循环一圈贴着绿框边缘内侧');
+        }
         
         // ===== 分割线音效系统 =====
         class DividerSoundSystem {
@@ -5804,8 +6032,8 @@
                 this.protectElement('.preview-image-container-6', ['position', 'z-index']);
                 this.protectElement('.preview-image-container-7', ['position', 'z-index']);
                 
-                // 保护波点系统
-                this.protectElement('.animated-dots', ['position', 'top', 'left', 'width', 'height', 'z-index']);
+                // 保护波点系统（移除left保护以允许向左平移）
+                this.protectElement('.animated-dots', ['position', 'top', 'width', 'height', 'z-index']);
                 
                 // 监听DOM变化，防止意外修改
                 this.observeDOMChanges();
@@ -11156,11 +11384,17 @@
                 // 白天：太阳可见 (6:00 AM - 6:00 PM)
                 const dayProgress = (totalMinutes - 360) / 720; // 0到1的进度
                 
-                // 太阳轨迹：抛物线路径
-                // X轴：从左下角(5vw)到右上角(85vw) - 调整以保持视觉中心一致
-                left = 5 + (80 * dayProgress) + 4; // 添加4vw偏移保持视觉中心一致
+                // 太阳轨迹：6:00左下角 → 12:00顶部中间 → 18:00右下角
+                // X轴：从左下角(5vw)到右下角(85vw)，中午时在中间(45vw)
+                if (dayProgress <= 0.5) {
+                    // 6:00-12:00：从左下角到顶部中间
+                    left = 5 + (40 * dayProgress * 2) + 4; // 从5vw到45vw
+                } else {
+                    // 12:00-18:00：从顶部中间到右下角
+                    left = 45 + (40 * (dayProgress - 0.5) * 2) + 4; // 从45vw到85vw
+                }
                 
-                // Y轴：抛物线，中午最高 - 调整以保持视觉中心一致
+                // Y轴：抛物线，中午最高(顶部)
                 const heightFactor = Math.sin(dayProgress * Math.PI); // 0到1再到0的抛物线
                 bottom = 5 + (70 * heightFactor) + 4; // 添加4vh偏移保持视觉中心一致
                 
@@ -11212,6 +11446,10 @@
             updateMoonPosition();
             // 每分钟更新一次月亮位置
             setInterval(updateMoonPosition, 60000);
+            
+            // 添加手动更新函数到全局，方便调试
+            window.forceUpdateMoon = updateMoonPosition;
+            console.log('🌙 月亮位置系统已初始化，可使用 window.forceUpdateMoon() 手动更新');
         }
         
         function updateMoonPosition() {
@@ -11220,8 +11458,10 @@
             const minutes = now.getMinutes();
             const totalMinutes = hours * 60 + minutes;
             
+            console.log(`🌙 更新月亮位置 - 时间: ${hours}:${minutes.toString().padStart(2, '0')}, 总分钟: ${totalMinutes}`);
+            
             // 月亮轨迹：18:00-6:00 (1080分钟到1440分钟，然后0分钟到360分钟)
-            // 地平线：左下角为起点，右上角为终点
+            // 正确的轨迹：18:00右下角 -> 0:00上方中央 -> 6:00左上角
             let moonVisible = true;
             let left, bottom;
             
@@ -11241,13 +11481,21 @@
             }
             
             if (moonVisible) {
-                // 月亮轨迹：抛物线路径 - 调整以保持视觉中心一致
-                // X轴：从左下角(5vw)到右上角(85vw) - 调整以保持视觉中心一致
-                left = 5 + (80 * nightProgress) + 3.33; // 添加3.33vw偏移保持视觉中心一致
+                // 月亮轨迹：18:00左下角 → 0:00顶部中间 → 6:00右下角
+                // X轴：从左下角(5vw)到右下角(85vw)，午夜时在中间(45vw)
+                if (nightProgress <= 0.5) {
+                    // 18:00-0:00：从左下角到顶部中间
+                    left = 5 + (40 * nightProgress * 2) + 3.33; // 从5vw到45vw
+                } else {
+                    // 0:00-6:00：从顶部中间到右下角
+                    left = 45 + (40 * (nightProgress - 0.5) * 2) + 3.33; // 从45vw到85vw
+                }
                 
-                // Y轴：抛物线，午夜最高 - 调整以保持视觉中心一致
+                // Y轴：抛物线，午夜最高(顶部)
                 const heightFactor = Math.sin(nightProgress * Math.PI); // 0到1再到0的抛物线
                 bottom = 5 + (70 * heightFactor) + 3.33; // 添加3.33vh偏移保持视觉中心一致
+                
+                console.log(`🌙 月亮位置计算 - nightProgress: ${nightProgress.toFixed(3)}, left: ${left.toFixed(1)}vw, bottom: ${bottom.toFixed(1)}vh`);
             }
             
             const moon = document.querySelector('.moon');
@@ -11258,6 +11506,8 @@
                     moon.style.top = 'auto';
                     moon.style.right = 'auto';
                     moon.style.opacity = '1';
+                    
+                    console.log(`🌙 月亮位置已设置 - left: ${left}vw, bottom: ${bottom}vh`);
                     
                     // 根据日期设置月亮形状（7天一周的轮回）
                     const moonPhase = getMoonPhase(now);

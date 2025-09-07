@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主界面波点运动范围测试</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            overflow-x: hidden;
+        }
+        
+        .test-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            position: relative;
+        }
+        
+        /* 左侧面板 - 模拟主界面左侧 */
+        .left-panel {
+            width: 30vw;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .left-panel h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .left-panel p {
+            font-size: 1.2em;
+            margin: 20px 0;
+            text-align: center;
+            opacity: 0.9;
+        }
+        
+        /* 右侧面板 - 模拟主界面右侧 */
+        .right-panel {
+            width: 70vw;
+            background: #2c3e50;
+            border: 12px solid #88ff00; /* 与主界面完全一致：12px边框，亮绿色 */
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .right-panel h3 {
+            color: white;
+            margin: 10px;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+        
+        /* 模拟右侧面板的波点容器 */
+        .animated-dots {
+            position: absolute;
+            top: 0px;
+            left: 60px; /* 当前设置：60px左偏移 */
+            width: calc(100% - 120px); /* 当前设置：120px总边距 */
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            border: 2px dashed #ff6b6b; /* 红色虚线显示波点运动范围 */
+            box-sizing: border-box;
+        }
+        
+        .dot {
+            position: absolute;
+            border-radius: 50%;
+            will-change: transform;
+            transform: translateZ(0);
+            z-index: 20;
+        }
+        
+        .dot.bright-green {
+            background: rgba(0, 255, 102, 0.8);
+        }
+        
+        .dot.red {
+            background: rgba(255, 48, 48, 0.8);
+        }
+        
+        .dot.light-blue {
+            background: rgba(0, 191, 255, 0.8);
+        }
+        
+        .dot.yellow {
+            background: rgba(255, 255, 0, 0.8);
+        }
+        
+        /* 控制面板 - 浮动在左侧 */
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-width: 300px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-group {
+            margin: 10px 0;
+        }
+        
+        .control-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .control-group input {
+            width: 100%;
+            padding: 5px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        .control-group button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+            width: 100%;
+        }
+        
+        .control-group button:hover {
+            background: #2980b9;
+        }
+        
+        .control-group button.danger {
+            background: #e74c3c;
+        }
+        
+        .control-group button.danger:hover {
+            background: #c0392b;
+        }
+        
+        .info {
+            background: rgba(236, 240, 241, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        
+        .info h4 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        /* 右侧栏宽度调整滑块 */
+        .width-control {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .width-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 浮动控制面板 -->
+    <div class="controls">
+        <h3>🎛️ 主界面波点测试</h3>
+        
+        <div class="width-control">
+            <label>右侧栏宽度:</label>
+            <input type="range" id="rightPanelWidth" class="width-slider" min="40" max="80" value="70" step="5">
+            <span id="widthValue">70%</span>
+        </div>
+        
+        <div class="control-group">
+            <label>波点左偏移 (px):</label>
+            <input type="number" id="leftOffset" value="30" min="0" max="300">
+        </div>
+        
+        <div class="control-group">
+            <label>波点总边距 (px):</label>
+            <input type="number" id="totalMargin" value="60" min="0" max="500">
+        </div>
+        
+        <div class="control-group">
+            <label>波点数量:</label>
+            <input type="number" id="dotCount" value="15" min="5" max="50">
+        </div>
+        
+        <div class="control-group">
+            <button onclick="updateSettings()">更新设置</button>
+            <button onclick="startAnimation()">开始动画</button>
+            <button onclick="stopAnimation()">停止动画</button>
+            <button onclick="resetDots()" class="danger">重置波点</button>
+        </div>
+        
+        <div class="info">
+            <h4>📊 当前设置</h4>
+            <p id="currentSettings">右侧栏: 70%, 左偏移: 30px, 总边距: 60px</p>
+        </div>
+        
+        <div class="info">
+            <h4>📋 测试说明</h4>
+            <p>• 绿色边框：右侧面板边界</p>
+            <p>• 红色虚线框：波点运动范围</p>
+            <p>• 调整右侧栏宽度测试不同场景</p>
+        </div>
+    </div>
+
+    <!-- 主界面布局 -->
+    <div class="test-container">
+        <!-- 左侧面板 -->
+        <div class="left-panel">
+            <h1>EziZhang</h1>
+            <p>艺术家</p>
+            <p>数字艺术创作</p>
+            <p>交互式体验设计</p>
+        </div>
+        
+        <!-- 右侧面板 -->
+        <div class="right-panel" id="rightPanel">
+            <h3>波点运动区域 (绿色边框)</h3>
+            <div class="animated-dots" id="dotContainer">
+                <!-- 波点将在这里生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class DotTestSystem {
+            constructor() {
+                this.container = document.getElementById('dotContainer');
+                this.rightPanel = document.getElementById('rightPanel');
+                this.dots = [];
+                this.animationId = null;
+                this.colors = ['red', 'bright-green', 'light-blue', 'yellow'];
+                this.containerWidth = 0;
+                this.containerHeight = 0;
+                this.leftOffset = 30; // 减少左偏移，扩大运动区域
+                this.totalMargin = 60; // 减少总边距，扩大运动区域
+                this.dotCount = 15;
+                this.rightPanelWidth = 70; // 右侧栏宽度百分比
+                
+                this.setupEventListeners();
+                this.updateContainerSize();
+                this.createDots();
+                this.startAnimation();
+            }
+            
+            setupEventListeners() {
+                // 右侧栏宽度滑块
+                const widthSlider = document.getElementById('rightPanelWidth');
+                const widthValue = document.getElementById('widthValue');
+                
+                widthSlider.addEventListener('input', (e) => {
+                    this.rightPanelWidth = parseInt(e.target.value);
+                    widthValue.textContent = this.rightPanelWidth + '%';
+                    this.updateRightPanelWidth();
+                    this.updateContainerSize();
+                });
+            }
+            
+            updateRightPanelWidth() {
+                this.rightPanel.style.width = this.rightPanelWidth + 'vw';
+                // 左侧面板宽度自动调整
+                const leftPanel = document.querySelector('.left-panel');
+                leftPanel.style.width = (100 - this.rightPanelWidth) + 'vw';
+            }
+            
+            updateContainerSize() {
+                const panel = this.container.parentElement;
+                const panelRect = panel.getBoundingClientRect();
+                
+                this.containerWidth = panelRect.width - this.totalMargin;
+                this.containerHeight = panelRect.height;
+                
+                // 更新CSS
+                this.container.style.left = this.leftOffset + 'px';
+                this.container.style.width = 'calc(100% - ' + this.totalMargin + 'px)';
+                
+                console.log('容器尺寸更新:', {
+                    panelWidth: panelRect.width,
+                    containerWidth: this.containerWidth,
+                    containerHeight: this.containerHeight,
+                    leftOffset: this.leftOffset,
+                    totalMargin: this.totalMargin
+                });
+            }
+            
+            createDots() {
+                // 清除现有波点
+                this.container.innerHTML = '';
+                this.dots = [];
+                
+                for (let i = 0; i < this.dotCount; i++) {
+                    this.createDot(i);
+                }
+            }
+            
+            createDot(index) {
+                const dot = document.createElement('div');
+                const colorClass = this.colors[index % this.colors.length];
+                dot.className = `dot ${colorClass}`;
+                
+                const size = Math.random() * 40 + 20; // 20-60px
+                
+                const dotData = {
+                    element: dot,
+                    size: size,
+                    x: Math.random() * (this.containerWidth - size),
+                    y: Math.random() * (this.containerHeight - size),
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: (Math.random() - 0.5) * 4,
+                    colorClass: colorClass
+                };
+                
+                dot.style.width = size + 'px';
+                dot.style.height = size + 'px';
+                dot.style.left = dotData.x + 'px';
+                dot.style.top = dotData.y + 'px';
+                
+                this.container.appendChild(dot);
+                this.dots.push(dotData);
+            }
+            
+            animate() {
+                this.dots.forEach(dot => {
+                    // 更新位置
+                    dot.x += dot.vx;
+                    dot.y += dot.vy;
+                    
+                    // 边界检测
+                    const minX = 0;
+                    const maxX = this.containerWidth - dot.size;
+                    const minY = 0;
+                    const maxY = this.containerHeight - dot.size;
+                    
+                    // X轴边界
+                    if (dot.x <= minX) {
+                        dot.x = minX;
+                        dot.vx = Math.abs(dot.vx);
+                    } else if (dot.x >= maxX) {
+                        dot.x = maxX;
+                        dot.vx = -Math.abs(dot.vx);
+                    }
+                    
+                    // Y轴边界
+                    if (dot.y <= minY) {
+                        dot.y = minY;
+                        dot.vy = Math.abs(dot.vy);
+                    } else if (dot.y >= maxY) {
+                        dot.y = maxY;
+                        dot.vy = -Math.abs(dot.vy);
+                    }
+                    
+                    // 更新DOM位置
+                    dot.element.style.left = dot.x + 'px';
+                    dot.element.style.top = dot.y + 'px';
+                });
+                
+                this.animationId = requestAnimationFrame(() => this.animate());
+            }
+            
+            startAnimation() {
+                if (!this.animationId) {
+                    this.animate();
+                }
+            }
+            
+            stopAnimation() {
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
+                }
+            }
+            
+            updateSettings() {
+                this.leftOffset = parseInt(document.getElementById('leftOffset').value);
+                this.totalMargin = parseInt(document.getElementById('totalMargin').value);
+                this.dotCount = parseInt(document.getElementById('dotCount').value);
+                
+                this.updateContainerSize();
+                this.createDots();
+                
+                // 更新显示信息
+                document.getElementById('currentSettings').textContent = 
+                    `右侧栏: ${this.rightPanelWidth}%, 左偏移: ${this.leftOffset}px, 总边距: ${this.totalMargin}px`;
+            }
+            
+            resetDots() {
+                this.createDots();
+            }
+        }
+        
+        // 全局变量
+        let dotSystem;
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            dotSystem = new DotTestSystem();
+        });
+        
+        // 控制函数
+        function updateSettings() {
+            dotSystem.updateSettings();
+        }
+        
+        function startAnimation() {
+            dotSystem.startAnimation();
+        }
+        
+        function stopAnimation() {
+            dotSystem.stopAnimation();
+        }
+        
+        function resetDots() {
+            dotSystem.resetDots();
+        }
+        
+        // 窗口大小变化时重新计算
+        window.addEventListener('resize', () => {
+            if (dotSystem) {
+                dotSystem.updateContainerSize();
+            }
+        });
+    </script>
+</body>
+</html>

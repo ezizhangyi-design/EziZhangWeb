@@ -1871,11 +1871,17 @@
                 // 白天：太阳可见 (6:00 AM - 6:00 PM)
                 const dayProgress = (totalMinutes - 360) / 720; // 0到1的进度
                 
-                // 太阳轨迹：抛物线路径
-                // X轴：从左下角(5vw)到右上角(85vw)
-                left = 5 + (80 * dayProgress);
+                // 太阳轨迹：6:00左下角 → 12:00顶部中间 → 18:00右下角
+                // X轴：从左下角(5vw)到右下角(85vw)，中午时在中间(45vw)
+                if (dayProgress <= 0.5) {
+                    // 6:00-12:00：从左下角到顶部中间
+                    left = 5 + (40 * dayProgress * 2); // 从5vw到45vw
+                } else {
+                    // 12:00-18:00：从顶部中间到右下角
+                    left = 45 + (40 * (dayProgress - 0.5) * 2); // 从45vw到85vw
+                }
                 
-                // Y轴：抛物线，中午最高
+                // Y轴：抛物线，中午最高(顶部)
                 const heightFactor = Math.sin(dayProgress * Math.PI); // 0到1再到0的抛物线
                 bottom = 5 + (70 * heightFactor); // 最高70vh，最低5vh
                 
@@ -1935,7 +1941,7 @@
             const totalMinutes = hours * 60 + minutes;
             
             // 月亮轨迹：18:00-6:00 (1080分钟到1440分钟，然后0分钟到360分钟)
-            // 地平线：左下角为起点，右上角为终点
+            // 正确的轨迹：18:00右下角 -> 0:00顶部中间 -> 6:00左上角
             let moonVisible = true;
             let left, bottom;
             
@@ -1955,11 +1961,17 @@
             }
             
             if (moonVisible) {
-                // 月亮轨迹：抛物线路径
-                // X轴：从左下角(5vw)到右上角(85vw)
-                left = 5 + (80 * nightProgress);
+                // 月亮轨迹：18:00左下角 → 0:00顶部中间 → 6:00右下角
+                // X轴：从左下角(5vw)到右下角(85vw)，午夜时在中间(45vw)
+                if (nightProgress <= 0.5) {
+                    // 18:00-0:00：从左下角到顶部中间
+                    left = 5 + (40 * nightProgress * 2); // 从5vw到45vw
+                } else {
+                    // 0:00-6:00：从顶部中间到右下角
+                    left = 45 + (40 * (nightProgress - 0.5) * 2); // 从45vw到85vw
+                }
                 
-                // Y轴：抛物线，午夜最高
+                // Y轴：抛物线，午夜最高(顶部)
                 const heightFactor = Math.sin(nightProgress * Math.PI); // 0到1再到0的抛物线
                 bottom = 5 + (70 * heightFactor); // 最高70vh，最低5vh
             }
