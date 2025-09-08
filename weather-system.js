@@ -5,7 +5,7 @@ class GlobalWeatherSystem {
     constructor() {
         this.weatherTypes = [
             // 常见天气（调整概率以平衡特殊天气增加）
-            { name: '晴天', baseColor: '#003cff', description: 'Clear Sky', probability: 0.47 },
+            { name: '晴天', baseColor: '#0033d9', description: 'Clear Sky', probability: 0.47 },
             { name: '多云', baseColor: '#006fff', description: 'Cloudy', probability: 0.15 },
             { name: '雨天', baseColor: '#005398', description: 'Rainy', probability: 0.1 },
             { name: '雾天', baseColor: '#7c4900', description: 'Foggy', probability: 0.05 },
