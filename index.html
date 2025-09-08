@@ -5220,7 +5220,7 @@
             // 创建柔和耐听的碰撞音效 - 基于波点颜色和音效模式
             playCollisionSound(dot1Color, dot2Color) {
                 // 检查是否正在播放Hello World或开场音效
-                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                     return; // Hello World播放期间或开场音效未结束时，不播放任何音效
                 }
                 
@@ -5663,7 +5663,7 @@
                         // 鼠标进入分割线组
                         group.addEventListener('mouseenter', (e) => {
                             // 双重检查：确保Hello World播放期间或开场音效未结束时，不播放音效
-                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                                 console.log('🔇 Hello World播放期间或开场音效未结束，分割线音效被阻止');
                                 return;
                             }
@@ -5672,7 +5672,7 @@
                         
                         // 鼠标离开分割线组
                         group.addEventListener('mouseleave', (e) => {
-                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                                 return;
                             }
                             this.playDividerSound('leave', e);
@@ -5680,7 +5680,7 @@
                         
                         // 鼠标在分割线组内移动
                         group.addEventListener('mousemove', (e) => {
-                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                                 return;
                             }
                             this.playDividerSound('move', e);
@@ -5688,7 +5688,7 @@
                         
                         // 鼠标点击分割线组
                         group.addEventListener('click', (e) => {
-                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                                 return;
                             }
                             this.playDividerSound('click', e);
@@ -5699,7 +5699,7 @@
             
             playDividerSound(action, event) {
                 // 检查是否正在播放Hello World或开场音效
-                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                     return; // Hello World播放期间或开场音效未结束时，不播放任何音效
                 }
                 
@@ -6507,7 +6507,7 @@
             }
             
             // 检查是否应该应用天气背景（只有在音效结束后才允许）
-            if (!window.openingSoundPlayed) {
+            if (!window.openingSoundPlayed || window.openingSoundPlaying) {
                 console.log('🎵 开场音效还未播放完毕，暂不应用天气背景，保持黑色背景');
                 // 将天气数据存储起来，等音效结束后再应用
                 window.pendingWeatherData = weatherData;
@@ -7010,7 +7010,7 @@
             // 启动管道赋格配乐
             startPipesMusic() {
                 // 检查是否正在播放Hello World或开场音效
-                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                     console.log('🔇 Hello World正在播放或开场音效未结束，等待播放完毕...');
                     return;
                 }
@@ -8119,7 +8119,7 @@
                 }
                 
                 // 检查是否正在播放Hello World或开场音效
-                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                     console.log('🔇 Hello World正在播放或开场音效未结束，雪花噪音静音');
                     return;
                 }
@@ -8136,7 +8136,7 @@
             // 创建连续的雪花噪音流 - 真正的连续白噪音
             createContinuousSnowNoise() {
                 // 检查是否正在播放Hello World或开场音效
-                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                     console.log('🔇 Hello World正在播放或开场音效未结束，连续雪花噪音静音');
                     return;
                 }
@@ -11203,8 +11203,45 @@
             
             // 初始化开场音效状态
             window.openingSoundPlayed = false;
+            window.openingSoundPlaying = false;
             window.pendingWeatherData = null;
-            console.log('🎬 初始化开场音效状态:', { openingSoundPlayed: window.openingSoundPlayed, pendingWeatherData: window.pendingWeatherData });
+            console.log('🎬 初始化开场音效状态:', { 
+                openingSoundPlayed: window.openingSoundPlayed, 
+                openingSoundPlaying: window.openingSoundPlaying,
+                pendingWeatherData: window.pendingWeatherData 
+            });
+            
+            // 添加全局调试函数
+            window.debugOpeningSound = function() {
+                console.log('🎵 音效状态调试信息:', {
+                    openingSoundPlayed: window.openingSoundPlayed,
+                    openingSoundPlaying: window.openingSoundPlaying,
+                    pendingWeatherData: window.pendingWeatherData
+                });
+            };
+            
+            // 添加测试音效函数
+            window.testAudio = function() {
+                console.log('🎵 测试音频播放...');
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.5);
+                    
+                    console.log('✅ 测试音效播放成功');
+                } catch (error) {
+                    console.error('❌ 测试音效播放失败:', error);
+                }
+            };
             
             // 确保从黑色背景开始
             resetToBlackBackground();
@@ -11223,7 +11260,7 @@
                 console.log('🔄 页面重新显示，重置为黑色背景...');
                 resetToBlackBackground();
                 // 如果还没有播放过开场音效，重新开始
-                if (!window.openingSoundPlayed) {
+                if (!window.openingSoundPlayed || window.openingSoundPlaying) {
                     setTimeout(() => {
                         startOpeningSequence();
                     }, 500);
@@ -11252,36 +11289,72 @@
             console.log('✅ 设置后body背景色:', document.body.style.backgroundColor);
             console.log('✅ 设置后html背景色:', document.documentElement.style.backgroundColor);
             
-            // 重置播放状态
-            window.openingSoundPlayed = false;
+            // 重置播放状态（只在初始化时重置）
+            if (typeof window.openingSoundPlayed === 'undefined') {
+                window.openingSoundPlayed = false;
+            }
         }
         
         // 开场音效播放
         function startOpeningSequence() {
             console.log('🎬 开始主界面开场序列...');
+            console.log('🎬 当前音效状态:', { 
+                openingSoundPlayed: window.openingSoundPlayed, 
+                openingSoundPlaying: window.openingSoundPlaying 
+            });
             
             // 延迟1秒后开始播放开场音效
             setTimeout(() => {
+                console.log('⏰ 1秒延迟结束，准备播放开场音效...');
+                console.log('🎵 尝试播放开场音效，当前状态:', {
+                    openingSoundPlayed: window.openingSoundPlayed,
+                    openingSoundPlaying: window.openingSoundPlaying
+                });
+                
+                // 先测试简单的音效
+                console.log('🎵 先测试简单音效...');
+                try {
+                    const testContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const testOsc = testContext.createOscillator();
+                    const testGain = testContext.createGain();
+                    testOsc.connect(testGain);
+                    testGain.connect(testContext.destination);
+                    testOsc.frequency.setValueAtTime(440, testContext.currentTime);
+                    testGain.gain.setValueAtTime(0.1, testContext.currentTime);
+                    testOsc.start();
+                    testOsc.stop(testContext.currentTime + 0.1);
+                    console.log('✅ 简单音效测试成功');
+                } catch (error) {
+                    console.error('❌ 简单音效测试失败:', error);
+                }
+                
+                // 然后播放正式的开场音效
                 playOpeningSound();
             }, 1000);
         }
         
         // 播放开场音效
         function playOpeningSound() {
+            console.log('🎵 playOpeningSound 函数被调用');
+            console.log('🎵 当前音效状态:', { 
+                openingSoundPlayed: window.openingSoundPlayed, 
+                openingSoundPlaying: window.openingSoundPlaying 
+            });
+            
             // 防止重复播放
             if (window.openingSoundPlayed) {
                 console.log('🎵 开场音效已经播放过，跳过...');
                 return;
             }
             
-            console.log('🎵 播放开场音效...');
+            console.log('🎵 开始播放开场音效...');
             
             try {
                 // 标记音效正在播放（此时还不能应用天气背景）
-                window.openingSoundPlayed = false;
-                console.log('🎵 音效播放状态设置为false');
+                window.openingSoundPlaying = true;
+                console.log('🎵 音效播放状态设置为正在播放');
                 
-                // 创建音频上下文
+                // 创建音频上下文并尝试自动播放
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 
                 // 创建主混音器
@@ -11289,8 +11362,39 @@
                 masterGain.connect(audioContext.destination);
                 masterGain.gain.setValueAtTime(0.5, audioContext.currentTime); // 主音量50%
                 
-                // 创建开场音效 - 帝国时代风格
-                createOpeningSound(audioContext, masterGain);
+                // 强制尝试自动播放
+                console.log('🎵 音频上下文状态:', audioContext.state);
+                
+                // 尝试自动播放，如果失败则等待用户交互
+                if (audioContext.state === 'suspended') {
+                    console.log('🎵 音频上下文被暂停，尝试自动恢复...');
+                    audioContext.resume().then(() => {
+                        console.log('✅ 音频上下文自动恢复成功');
+                        createOpeningSound(audioContext, masterGain);
+                    }).catch(error => {
+                        console.log('⚠️ 自动播放失败，直接尝试播放:', error);
+                        // 直接尝试播放，不等待用户交互
+                        try {
+                            createOpeningSound(audioContext, masterGain);
+                        } catch (playError) {
+                            console.log('❌ 直接播放也失败，等待用户交互:', playError);
+                            const waitForUserInteraction = () => {
+                                audioContext.resume().then(() => {
+                                    console.log('✅ 通过用户交互恢复音频上下文');
+                                    createOpeningSound(audioContext, masterGain);
+                                    document.removeEventListener('click', waitForUserInteraction);
+                                    document.removeEventListener('touchstart', waitForUserInteraction);
+                                });
+                            };
+                            document.addEventListener('click', waitForUserInteraction);
+                            document.addEventListener('touchstart', waitForUserInteraction);
+                        }
+                    });
+                } else {
+                    // 音频上下文已经激活，直接播放
+                    console.log('✅ 音频上下文已激活，直接播放开场音效');
+                    createOpeningSound(audioContext, masterGain);
+                }
                 
                 console.log('🎵 开场音效开始播放！');
                 console.log('⏰ 设置1.2秒后开始背景渐变...');
@@ -11300,7 +11404,8 @@
                     console.log('⏰ 0.2秒定时器触发！');
                     // 标记音效播放完毕，现在可以应用天气背景了
                     window.openingSoundPlayed = true;
-                    console.log('🎵 音效播放状态设置为true');
+                    window.openingSoundPlaying = false;
+                    console.log('🎵 音效播放状态设置为已播放');
                     console.log('🌤️ 开始调用startWeatherBackgroundTransition...');
                     startWeatherBackgroundTransition();
                 }, 200); // 0.2秒后开始渐变（音效总时长1.0秒，留0.2秒缓冲）
@@ -11311,7 +11416,8 @@
                 setTimeout(() => {
                     console.log('⏰ 错误处理定时器触发！');
                     window.openingSoundPlayed = true;
-                    console.log('🎵 错误处理：音效播放状态设置为true');
+                    window.openingSoundPlaying = false;
+                    console.log('🎵 错误处理：音效播放状态设置为已播放');
                     startWeatherBackgroundTransition();
                 }, 200);
             }
