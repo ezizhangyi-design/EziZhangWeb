@@ -2089,6 +2089,8 @@
                 this.nextGrid = [];
                 this.isRunning = false;
                 this.animationId = null;
+                this.baseSpeed = 1000; // 基础速度1秒
+                this.windVolumeMultiplier = 1.0; // 风声音量倍数
                 
                 if (!this.grid) {
                     console.error(`无法找到元素: ${gridId}`);
@@ -2437,9 +2439,13 @@
                     }
                 }
                 
+                // 根据风声音量调整动画速度
+                this.adjustSpeedByWindVolume();
+                const currentSpeed = this.baseSpeed / this.windVolumeMultiplier;
+                
                 this.animationId = setTimeout(() => {
                     this.animate();
-                }, 1000); // 每1秒更新一次，稍微快一点的变化速度
+                }, currentSpeed); // 根据风声音量动态调整更新速度
             }
             
             start() {
@@ -2457,6 +2463,33 @@
                 this.isRunning = false;
                 if (this.animationId) {
                     clearTimeout(this.animationId);
+                }
+            }
+            
+            // 根据风力大小调整动画速度
+            adjustSpeedByWindVolume() {
+                if (!window.windWeatherData) {
+                    return; // 天气系统未初始化
+                }
+                
+                try {
+                    // 获取当前风力强度（0-1）
+                    const windStrength = window.windWeatherData.windStrength || 0.5;
+                    
+                    // 根据风力强度计算速度倍数
+                    // 风力越大，动画越快（云飘得越快）
+                    const windRange = 1.0; // 风力强度范围0-1
+                    const speedRange = 0.8; // 速度倍数范围0.2-1.0
+                    const normalizedWind = Math.min(windStrength / windRange, 1);
+                    this.windVolumeMultiplier = 0.2 + normalizedWind * speedRange;
+                    
+                    // 计算新的更新速度
+                    const newSpeed = this.baseSpeed / this.windVolumeMultiplier;
+                    
+                    console.log(`🌪️ ${this.gridId} 风力强度: ${(windStrength * 100).toFixed(0)}%, 速度倍数: ${this.windVolumeMultiplier.toFixed(2)}, 新速度: ${newSpeed.toFixed(0)}ms`);
+                    
+                } catch (error) {
+                    console.warn(`⚠️ 获取风力强度失败: ${error.message}`);
                 }
             }
         } // CloudAutomata类结束
@@ -3102,11 +3135,205 @@
         let windOscillators = [];
         let windLayers = []; // 风声层数组
         let isWindPlaying = false;
+        
+        // 下雨声音系统
+        let rainLayers = []; // 雨声层数组
+        let isRainPlaying = false;
         let windVolume = 0.9; // 基础风声音量，从0.8提升到0.9，增加13%
+        let windVolumeForAutomata = 0.05; // 专门用于控制细胞自动机的风声音量
+        
+        // 风声天气系统
+        let windWeatherData = {
+            windStrength: 0.5, // 风力强度 0-1
+            isRaining: false, // 是否下雨
+            rainIntensity: 0.0, // 雨量强度 0-1
+            lastUpdate: null, // 上次更新时间
+            updateInterval: 24 * 60 * 60 * 1000, // 24小时更新间隔
+            weeklyRainPattern: null, // 一周下雨模式
+            currentWeekStart: null // 当前周开始时间
+        };
+        
+        // 初始化风声天气系统
+        function initWindWeatherSystem() {
+            console.log('🌤️ 初始化风声天气系统...');
+            
+            // 检查是否需要更新天气数据
+            checkAndUpdateWindWeather();
+            
+            // 设置定时器，每天早晨6:00更新
+            scheduleWindWeatherUpdate();
+            
+            // 确保全局变量已设置
+            window.windWeatherData = windWeatherData;
+            
+            console.log('✅ 风声天气系统初始化完成');
+        }
+        
+        // 从本地存储加载风声天气数据
+        function loadWindWeatherData() {
+            const savedData = localStorage.getItem('windWeatherData');
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    windWeatherData = { ...windWeatherData, ...parsedData };
+                    console.log('🌤️ 已加载风声天气数据:', windWeatherData);
+                    
+                    // 设置为全局变量，供细胞自动机使用
+                    window.windWeatherData = windWeatherData;
+                } catch (error) {
+                    console.warn('⚠️ 加载风声天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 检查并更新风声天气数据
+        function checkAndUpdateWindWeather() {
+            // 首先尝试加载保存的数据
+            loadWindWeatherData();
+            
+            const now = new Date();
+            const lastUpdate = windWeatherData.lastUpdate ? new Date(windWeatherData.lastUpdate) : null;
+            
+            // 检查是否需要更新（每天早晨6:00或首次运行）
+            const shouldUpdate = !lastUpdate || 
+                (now.getHours() >= 6 && 
+                 (now.getDate() !== lastUpdate.getDate() || 
+                  now.getMonth() !== lastUpdate.getMonth() || 
+                  now.getFullYear() !== lastUpdate.getFullYear()));
+            
+            if (shouldUpdate) {
+                updateWindWeatherData();
+            } else {
+                // 即使不需要更新，也要检查一周下雨模式是否需要更新
+                const currentWeekStart = getCurrentWeekStart();
+                const needNewWeekPattern = !windWeatherData.currentWeekStart || 
+                    currentWeekStart.getTime() !== new Date(windWeatherData.currentWeekStart).getTime();
+                
+                if (needNewWeekPattern) {
+                    console.log('📅 检测到新的一周，更新下雨模式...');
+                    updateWindWeatherData();
+                } else {
+                    console.log('🌤️ 风声天气数据无需更新，使用缓存数据');
+                    console.log(`🌪️ 当前风力: ${(windWeatherData.windStrength * 100).toFixed(0)}%, 下雨: ${windWeatherData.isRaining ? '是' : '否'}, 雨量: ${(windWeatherData.rainIntensity * 100).toFixed(0)}%`);
+                    console.log(`📅 当前周开始: ${windWeatherData.currentWeekStart ? new Date(windWeatherData.currentWeekStart).toLocaleDateString() : '未设置'}`);
+                }
+            }
+        }
+        
+        // 生成一周下雨模式
+        function generateWeeklyRainPattern() {
+            console.log('🌧️ 生成一周下雨模式...');
+            
+            // 一周7天，20%概率下雨，即约1.4天会下雨
+            const rainDays = Math.floor(Math.random() * 2) + 1; // 1-2天下雨
+            const rainPattern = new Array(7).fill(false);
+            
+            // 随机选择下雨的天数
+            for (let i = 0; i < rainDays; i++) {
+                let randomDay;
+                do {
+                    randomDay = Math.floor(Math.random() * 7);
+                } while (rainPattern[randomDay]); // 避免重复选择同一天
+                
+                rainPattern[randomDay] = true;
+            }
+            
+            console.log(`🌧️ 一周下雨模式: ${rainPattern.map((rain, index) => 
+                `${['周一', '周二', '周三', '周四', '周五', '周六', '周日'][index]}: ${rain ? '下雨' : '晴天'}`
+            ).join(', ')}`);
+            
+            return rainPattern;
+        }
+        
+        // 获取当前是一周中的第几天
+        function getCurrentDayOfWeek() {
+            const now = new Date();
+            return now.getDay(); // 0=周日, 1=周一, ..., 6=周六
+        }
+        
+        // 获取当前周的开始时间（周一）
+        function getCurrentWeekStart() {
+            const now = new Date();
+            const dayOfWeek = now.getDay();
+            const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // 周日是0，需要-6到周一
+            
+            const weekStart = new Date(now);
+            weekStart.setDate(now.getDate() + mondayOffset);
+            weekStart.setHours(0, 0, 0, 0);
+            
+            return weekStart;
+        }
+        
+        // 更新风声天气数据
+        function updateWindWeatherData() {
+            console.log('🌤️ 更新风声天气数据...');
+            
+            // 随机化风力强度 (0-1)
+            windWeatherData.windStrength = Math.random();
+            
+            // 检查是否需要生成新的一周下雨模式
+            const currentWeekStart = getCurrentWeekStart();
+            const needNewWeekPattern = !windWeatherData.currentWeekStart || 
+                currentWeekStart.getTime() !== new Date(windWeatherData.currentWeekStart).getTime();
+            
+            if (needNewWeekPattern) {
+                console.log('📅 新的一周开始，生成新的下雨模式...');
+                windWeatherData.weeklyRainPattern = generateWeeklyRainPattern();
+                windWeatherData.currentWeekStart = currentWeekStart.toISOString();
+            }
+            
+            // 根据一周下雨模式确定今天是否下雨
+            const currentDay = getCurrentDayOfWeek();
+            windWeatherData.isRaining = windWeatherData.weeklyRainPattern[currentDay];
+            
+            // 如果下雨，随机化雨量强度
+            if (windWeatherData.isRaining) {
+                windWeatherData.rainIntensity = 0.3 + Math.random() * 0.7; // 0.3-1.0
+            } else {
+                windWeatherData.rainIntensity = 0.0;
+            }
+            
+            // 更新最后更新时间
+            windWeatherData.lastUpdate = new Date().toISOString();
+            
+            // 保存到本地存储
+            localStorage.setItem('windWeatherData', JSON.stringify(windWeatherData));
+            
+            // 设置为全局变量，供细胞自动机使用
+            window.windWeatherData = windWeatherData;
+            
+            console.log(`🌪️ 风声天气数据已更新:`);
+            console.log(`   风力强度: ${(windWeatherData.windStrength * 100).toFixed(0)}%`);
+            console.log(`   今天是否下雨: ${windWeatherData.isRaining ? '是' : '否'}`);
+            console.log(`   雨量强度: ${(windWeatherData.rainIntensity * 100).toFixed(0)}%`);
+            console.log(`   当前周开始: ${new Date(windWeatherData.currentWeekStart).toLocaleDateString()}`);
+            console.log(`   更新时间: ${windWeatherData.lastUpdate}`);
+        }
+        
+        // 安排风声天气更新
+        function scheduleWindWeatherUpdate() {
+            const now = new Date();
+            const tomorrow6AM = new Date(now);
+            tomorrow6AM.setDate(tomorrow6AM.getDate() + 1);
+            tomorrow6AM.setHours(6, 0, 0, 0);
+            
+            const timeUntilUpdate = tomorrow6AM.getTime() - now.getTime();
+            
+            console.log(`⏰ 下次风声天气更新: ${tomorrow6AM.toLocaleString()}`);
+            
+            setTimeout(() => {
+                updateWindWeatherData();
+                // 递归设置下一次更新
+                scheduleWindWeatherUpdate();
+            }, timeUntilUpdate);
+        }
         
         // 初始化风声系统
         function initWindSoundSystem() {
             console.log('🌪️ 开始初始化展览页面风声系统...');
+            
+            // 初始化风声天气系统
+            initWindWeatherSystem();
             
             try {
                 // 创建音频上下文
@@ -3218,8 +3445,15 @@
             console.log('🌪️ 启动持续循环风声...');
             isWindPlaying = true;
             
-            // 创建真实自然风声
+            // 根据天气数据创建风声
             createRealNaturalWind();
+            
+            // 如果下雨，创建下雨声音
+            if (windWeatherData.isRaining) {
+                console.log('🌧️ 检测到下雨，启动下雨声音...');
+                createRainSound();
+                isRainPlaying = true;
+            }
             
             // 设置持续的风声更新 - 根据云朵变化动态调整
             const windUpdateInterval = setInterval(() => {
@@ -3235,7 +3469,7 @@
                 // 根据云朵变化调整风声参数，而不是重新创建
                 updateWindParameters(cloudInfo);
                 
-            }, 3000); // 每3秒检查一次云朵状态并调整风声参数
+            }, 10000); // 每10秒检查一次云朵状态并调整风声参数
             
             // 保存更新间隔的引用
             window.windUpdateInterval = windUpdateInterval;
@@ -3330,13 +3564,99 @@
             if (windGain) {
                 windGain.gain.setValueAtTime(windVolume, windAudioContext.currentTime);
             }
-            console.log(`🌪️ 风声音量设置为: ${(windVolume * 100).toFixed(0)}%`);
+            
+            // 同时更新细胞自动机控制音量
+            windVolumeForAutomata = Math.max(0, Math.min(0.1, volume * 0.1)); // 限制在0-0.1范围内
+            window.windVolumeForAutomata = windVolumeForAutomata; // 设置为全局变量
+            
+            console.log(`🌪️ 风声音量设置为: ${(windVolume * 100).toFixed(0)}%, 细胞自动机控制音量: ${(windVolumeForAutomata * 100).toFixed(1)}%`);
+        }
+        
+        // 创建下雨声音
+        function createRainSound() {
+            if (!windAudioContext || !windWeatherData.isRaining) {
+                return;
+            }
+            
+            console.log('🌧️ 创建下雨声音...');
+            
+            const currentTime = windAudioContext.currentTime;
+            const rainIntensity = windWeatherData.rainIntensity;
+            
+            // 创建雨声缓冲区
+            const bufferSize = windAudioContext.sampleRate * 2; // 2秒缓冲区
+            const rainBuffer = windAudioContext.createBuffer(1, bufferSize, windAudioContext.sampleRate);
+            const output = rainBuffer.getChannelData(0);
+            
+            // 生成雨声噪音
+            for (let i = 0; i < bufferSize; i++) {
+                // 白噪音 + 低频滤波模拟雨声
+                const whiteNoise = (Math.random() * 2 - 1) * 0.1;
+                const lowFreq = Math.sin(i * 0.01) * 0.05;
+                output[i] = (whiteNoise + lowFreq) * rainIntensity;
+            }
+            
+            // 创建雨声源
+            const rainSource = windAudioContext.createBufferSource();
+            rainSource.buffer = rainBuffer;
+            rainSource.loop = true;
+            
+            // 创建雨声滤波器
+            const rainFilter = windAudioContext.createBiquadFilter();
+            rainFilter.type = 'lowpass';
+            rainFilter.frequency.setValueAtTime(800 + rainIntensity * 400, currentTime); // 800-1200Hz
+            rainFilter.Q.setValueAtTime(0.5, currentTime);
+            
+            // 创建雨声增益
+            const rainGain = windAudioContext.createGain();
+            rainGain.gain.setValueAtTime(0, currentTime);
+            rainGain.gain.linearRampToValueAtTime(0.3 * rainIntensity, currentTime + 1);
+            
+            // 连接雨声节点
+            rainSource.connect(rainFilter);
+            rainFilter.connect(rainGain);
+            rainGain.connect(windGain);
+            
+            // 启动雨声
+            rainSource.start(currentTime);
+            
+            // 保存雨声层
+            rainLayers.push({
+                source: rainSource,
+                filter: rainFilter,
+                gain: rainGain
+            });
+            
+            console.log(`🌧️ 下雨声音已创建，雨量强度: ${(rainIntensity * 100).toFixed(0)}%`);
+        }
+        
+        // 停止下雨声音
+        function stopRainSound() {
+            console.log('🌧️ 停止下雨声音...');
+            
+            rainLayers.forEach(layer => {
+                try {
+                    if (layer.source) {
+                        layer.source.stop();
+                    }
+                } catch (error) {
+                    console.warn('⚠️ 停止雨声源失败:', error);
+                }
+            });
+            
+            rainLayers = [];
+            isRainPlaying = false;
+            
+            console.log('✅ 下雨声音已停止');
         }
         
         // 完全停止风声系统
         function stopWindSystem() {
             console.log('🌪️ 完全停止风声系统...');
             isWindPlaying = false;
+            
+            // 同时停止下雨声音
+            stopRainSound();
             
             // 清理所有风声层
             stopWindSound();
@@ -3981,7 +4301,11 @@
             // 根据云朵情况调整风声参数
             // 云越多，风越小；云越少，风越大
             const cloudRatio = cloudInfo.ratio;
-            const windIntensity = Math.max(0.1, 1 - cloudRatio * 2);
+            const cloudWindIntensity = Math.max(0.1, 1 - cloudRatio * 2);
+            
+            // 结合天气数据中的风力强度
+            const weatherWindStrength = windWeatherData.windStrength || 0.5;
+            const windIntensity = (cloudWindIntensity + weatherWindStrength) / 2; // 综合风力强度
             
             // 风声基础参数 - 真实风声的特点
             const windVolume = 0.7 + windIntensity * 0.7; // 从0.6+0.6提升到0.7+0.7，0.7-1.4，更大的音量
@@ -4171,10 +4495,11 @@
             
             // 结合云朵和天气计算风强度
             // 云越多，风越小；云越少，风越大
-            // 同时考虑上海实际风速
+            // 同时考虑上海实际风速和天气数据中的风力强度
             const cloudWindIntensity = Math.max(0.1, 1 - cloudRatio * 2);
             const realWindIntensity = Math.min(weather.windSpeed / 10, 1); // 0-1
-            const windIntensity = (cloudWindIntensity + realWindIntensity) / 2; // 综合风强度
+            const weatherWindStrength = windWeatherData.windStrength || 0.5;
+            const windIntensity = (cloudWindIntensity + realWindIntensity + weatherWindStrength) / 3; // 综合风强度
             
             // 风声基础参数 - 真实风声的特点
             const windVolume = 0.7 + windIntensity * 0.7; // 从0.6+0.6提升到0.7+0.7，0.7-1.4，更大的音量
@@ -4186,6 +4511,10 @@
             // 动态调整主混音器音量
             const masterVolume = windIntensity * 1.0; // 从0.9提升到1.0，增加主混音器音量
             windGain.gain.setValueAtTime(masterVolume, windAudioContext.currentTime);
+            
+            // 同时更新细胞自动机控制音量
+            windVolumeForAutomata = Math.max(0, Math.min(0.1, masterVolume * 0.1)); // 限制在0-0.1范围内
+            window.windVolumeForAutomata = windVolumeForAutomata; // 设置为全局变量
             
             // 调整滤波器参数
             if (windLayers.length >= 8) {
