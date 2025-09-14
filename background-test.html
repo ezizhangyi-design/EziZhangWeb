@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背景色检测</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .color-display {
+            width: 100px;
+            height: 50px;
+            border: 2px solid #333;
+            margin: 10px 0;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #2196F3;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        
+        .error-box {
+            background: #f8d7da;
+            padding: 15px;
+            border-left: 4px solid #dc3545;
+            margin: 20px 0;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .reset-btn {
+            background: #28a745;
+        }
+        
+        .reset-btn:hover {
+            background: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎨 主界面背景色检测</h1>
+        
+        <div class="info-box">
+            <h3>📋 检测说明</h3>
+            <p>这个页面用于检测主界面的背景色状态。请按照以下步骤操作：</p>
+            <ol>
+                <li>点击"检测背景色"按钮</li>
+                <li>查看检测结果</li>
+                <li>如果背景是深色，点击"重置天气"按钮</li>
+            </ol>
+        </div>
+        
+        <div id="detection-results">
+            <h3>🔍 检测结果</h3>
+            <p>点击下方按钮开始检测...</p>
+        </div>
+        
+        <div>
+            <button onclick="detectBackground()">🔍 检测背景色</button>
+            <button onclick="resetWeather()" class="reset-btn">🌤️ 重置天气</button>
+            <button onclick="checkWeatherSystem()">🌤️ 检查天气系统</button>
+        </div>
+        
+        <div id="weather-info">
+            <h3>🌤️ 天气系统信息</h3>
+            <p>点击"检查天气系统"按钮查看详细信息...</p>
+        </div>
+    </div>
+    
+    <script src="weather-system.js"></script>
+    <script>
+        function detectBackground() {
+            const resultsDiv = document.getElementById('detection-results');
+            
+            // 尝试访问主页面
+            try {
+                // 检测主页面背景色
+                const mainPage = window.opener || window.parent;
+                if (mainPage && mainPage.document) {
+                    const bodyStyle = mainPage.getComputedStyle(mainPage.document.body);
+                    const bodyBgColor = bodyStyle.backgroundColor;
+                    const htmlStyle = mainPage.getComputedStyle(mainPage.document.documentElement);
+                    const htmlBgColor = htmlStyle.backgroundColor;
+                    
+                    resultsDiv.innerHTML = `
+                        <h3>🔍 检测结果</h3>
+                        <div class="info-box">
+                            <p><strong>Body 背景色:</strong> <span class="color-display" style="background-color: ${bodyBgColor}"></span> ${bodyBgColor}</p>
+                            <p><strong>HTML 背景色:</strong> <span class="color-display" style="background-color: ${htmlBgColor}"></span> ${htmlBgColor}</p>
+                        </div>
+                        ${isDarkColor(bodyBgColor) || isDarkColor(htmlBgColor) ? 
+                            '<div class="error-box"><strong>⚠️ 检测到深色背景！</strong><br>建议点击"重置天气"按钮</div>' : 
+                            '<div class="success-box"><strong>✅ 背景色正常</strong><br>不是深色背景</div>'
+                        }
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="warning-box">
+                            <strong>⚠️ 无法访问主页面</strong><br>
+                            请确保这个页面是从主页面打开的，或者直接在主页面按F12打开开发者工具查看控制台输出。
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="error-box">
+                        <strong>❌ 检测失败</strong><br>
+                        错误: ${error.message}<br>
+                        请直接在主页面按F12打开开发者工具查看控制台输出。
+                    </div>
+                `;
+            }
+        }
+        
+        function isDarkColor(color) {
+            if (!color || color === 'transparent' || color === 'rgba(0, 0, 0, 0)') {
+                return false;
+            }
+            
+            const rgbMatch = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+            if (rgbMatch) {
+                const r = parseInt(rgbMatch[1]);
+                const g = parseInt(rgbMatch[2]);
+                const b = parseInt(rgbMatch[3]);
+                
+                const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                return brightness < 100;
+            }
+            
+            return false;
+        }
+        
+        function resetWeather() {
+            if (window.globalWeatherSystem) {
+                window.globalWeatherSystem.resetToDefaultWeather();
+                document.getElementById('detection-results').innerHTML = `
+                    <div class="success-box">
+                        <strong>✅ 天气已重置</strong><br>
+                        背景色已重置为默认的亮蓝色 (#0080FF)
+                    </div>
+                `;
+            } else {
+                document.getElementById('detection-results').innerHTML = `
+                    <div class="error-box">
+                        <strong>❌ 天气系统未找到</strong><br>
+                        请确保在主页面中运行此功能
+                    </div>
+                `;
+            }
+        }
+        
+        function checkWeatherSystem() {
+            const weatherDiv = document.getElementById('weather-info');
+            
+            if (window.globalWeatherSystem) {
+                const currentWeather = window.globalWeatherSystem.getCurrentWeather();
+                const storedWeather = localStorage.getItem('globalWeatherData');
+                
+                let weatherData = null;
+                if (storedWeather) {
+                    try {
+                        weatherData = JSON.parse(storedWeather);
+                    } catch (error) {
+                        console.error('解析天气数据失败:', error);
+                    }
+                }
+                
+                weatherDiv.innerHTML = `
+                    <h3>🌤️ 天气系统信息</h3>
+                    <div class="info-box">
+                        <p><strong>当前天气:</strong> ${currentWeather ? currentWeather.name : '未知'}</p>
+                        <p><strong>天气颜色:</strong> <span class="color-display" style="background-color: ${currentWeather ? currentWeather.baseColor : '#0080FF'}"></span> ${currentWeather ? currentWeather.baseColor : '#0080FF'}</p>
+                        <p><strong>天气描述:</strong> ${currentWeather ? currentWeather.description : '默认'}</p>
+                        <p><strong>更新时间:</strong> ${currentWeather ? new Date(currentWeather.timestamp).toLocaleString() : '未知'}</p>
+                    </div>
+                    ${weatherData ? `
+                        <div class="info-box">
+                            <p><strong>存储的天气数据:</strong></p>
+                            <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto;">${JSON.stringify(weatherData, null, 2)}</pre>
+                        </div>
+                    ` : '<div class="warning-box">没有存储的天气数据</div>'}
+                `;
+            } else {
+                weatherDiv.innerHTML = `
+                    <div class="error-box">
+                        <strong>❌ 天气系统未找到</strong><br>
+                        请确保在主页面中运行此功能
+                    </div>
+                `;
+            }
+        }
+        
+        // 页面加载时自动检测
+        window.addEventListener('load', () => {
+            console.log('🎨 背景色检测页面已加载');
+            detectBackground();
+            checkWeatherSystem();
+        });
+    </script>
+</body>
+</html>

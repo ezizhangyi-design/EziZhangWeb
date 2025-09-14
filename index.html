@@ -15,6 +15,12 @@
     <script src="weather-system.js"></script>
     <script src="weather-client.js"></script>
     <style>
+        /* 最高优先级的光标设置 - 必须在最前面 */
+        html, body, * {
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-5/sym414.cur'), auto !important;
+        }
+    </style>
+    <style>
         html, body {
             height: 100%;
             margin: 0;
@@ -31,6 +37,8 @@
             max-width: 100vw;
             left: 0;
             right: 0;
+            /* Ten Commandments 光标 */
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-5/sym414.cur'), auto !important;
             box-sizing: border-box;
             background-color: #0080FF; /* 亮蓝色背景，会过渡到天气背景色 */
             /* 移除过渡效果，避免与天气系统冲突 */
@@ -1741,17 +1749,16 @@
         
         /* ===== 全局光标放大系统 ===== */
         
-        /* 保持原来的光标样式，但放大尺寸 */
-        /* 基础光标 - 放大版本 */
+        /* 全局 Ten Commandments 光标设置 - 最高优先级 */
         * {
-            cursor: default;
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-5/sym414.cur'), auto !important;
         }
         
-        /* 手型光标 - 放大版本 */
+        /* 所有元素都使用Ten Commandments光标 */
         button, input[type="button"], input[type="submit"], input[type="reset"], 
         a, .clickable, .signature-container, .volume-slider,
         [onclick], [style*="cursor: pointer"], [class*="cursor-pointer"] {
-            cursor: pointer !important; /* 手型光标 */
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-5/sym414.cur'), auto !important;
         }
         
         /* 文本光标 - 放大版本 */
@@ -1785,31 +1792,22 @@
             cursor: wait !important; /* 等待光标 */
         }
         
-        /* 光标尺寸放大 - 使用CSS transform */
-        * {
-            cursor: pointer; /* 默认手型光标 */
-        }
-        
-        /* 强制放大所有光标 */
-        * {
-            cursor: pointer !important; /* 强制手型光标 */
-        }
         
         /* 使用CSS放大光标尺寸 */
         /* 注意：CSS无法直接改变光标大小，但可以通过以下方式优化 */
         
-        /* 为不同元素设置合适的光标类型 */
+        /* 为不同元素设置Ten Commandments光标 */
         .volume-slider {
-            cursor: pointer !important; /* 音量滑块手型光标 */
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-5/sym414.cur'), auto !important;
         }
         
         .signature-container {
-            cursor: pointer !important; /* 数字签名手型光标 */
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-5/sym414.cur'), auto !important;
         }
         
-        /* 确保所有交互元素都有手型光标 */
+        /* 确保所有交互元素都使用Ten Commandments光标 */
         .clickable, [onclick], button, a {
-            cursor: pointer !important;
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-5/sym414.cur'), auto !important;
         }
         
         /* 确保输入框有文本光标 */
@@ -10127,6 +10125,7 @@
                 transform: translate(-50%, -50%);
                 image-rendering: pixelated;
                 -webkit-image-rendering: pixelated;
+                cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path d="M32,4 L32,24 L24,24 L24,28 L32,28 L32,40 L36,40 L36,28 L44,28 L44,24 L36,24 L36,4 Z" fill="%23ff6600" stroke="%23000" stroke-width="2"/><circle cx="32" cy="32" r="6" fill="%23fff"/></svg>') 32 32, auto !important;
             `;
             
             // 创建十字的垂直部分
@@ -10140,6 +10139,7 @@
                 background: red;
                 image-rendering: pixelated;
                 -webkit-image-rendering: pixelated;
+                cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path d="M32,4 L32,24 L24,24 L24,28 L32,28 L32,40 L36,40 L36,28 L44,28 L44,24 L36,24 L36,4 Z" fill="%23ff6600" stroke="%23000" stroke-width="2"/><circle cx="32" cy="32" r="6" fill="%23fff"/></svg>') 32 32, auto !important;
             `;
             
             // 创建十字的水平部分
@@ -10153,6 +10153,7 @@
                 background: red;
                 image-rendering: pixelated;
                 -webkit-image-rendering: pixelated;
+                cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path d="M32,4 L32,24 L24,24 L24,28 L32,28 L32,40 L36,40 L36,28 L44,28 L44,24 L36,24 L36,4 Z" fill="%23ff6600" stroke="%23000" stroke-width="2"/><circle cx="32" cy="32" r="6" fill="%23fff"/></svg>') 32 32, auto !important;
             `;
             
             redCross.appendChild(verticalLine);

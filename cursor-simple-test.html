@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光标简单测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+            /* 测试光标 */
+            cursor: url('https://ani.cursors-4u.net/games/gam-16/gam1565.cur'), url('oth870.ani'), auto !important;
+        }
+        
+        .test-area {
+            width: 200px;
+            height: 100px;
+            border: 2px solid #333;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .info {
+            background: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #2196F3;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 光标简单测试</h1>
+    
+    <div class="info">
+        <h3>测试说明</h3>
+        <p>这个页面测试在线光标是否正常工作。如果光标没有变化，说明浏览器不支持或网络有问题。</p>
+    </div>
+    
+    <div class="test-area">
+        <p>测试区域 - 移动鼠标查看光标</p>
+    </div>
+    
+    <div class="info">
+        <h3>检测结果</h3>
+        <p id="result">正在检测...</p>
+    </div>
+    
+    <script>
+        // 检测光标文件
+        fetch('https://ani.cursors-4u.net/games/gam-16/gam1565.cur')
+            .then(response => {
+                const result = document.getElementById('result');
+                if (response.ok) {
+                    result.innerHTML = '✅ 在线光标文件可访问<br>如果光标没有变化，可能是浏览器兼容性问题';
+                } else {
+                    result.innerHTML = '❌ 在线光标文件无法访问<br>错误代码: ' + response.status;
+                }
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = '❌ 网络错误: ' + error.message;
+            });
+        
+        // 检测本地光标文件
+        fetch('oth870.ani')
+            .then(response => {
+                console.log('本地光标文件状态:', response.status);
+            })
+            .catch(error => {
+                console.log('本地光标文件错误:', error.message);
+            });
+    </script>
+</body>
+</html>

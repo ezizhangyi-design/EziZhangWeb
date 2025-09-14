@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursor Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .test-area {
+            width: 300px;
+            height: 200px;
+            border: 2px solid #333;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+        }
+        
+        /* 测试不同的光标格式 */
+        .ani-cursor {
+            cursor: url('https://ani.cursors-4u.net/games/gam-16/gam1565.cur'), url('oth870.ani'), auto;
+        }
+        
+        .default-cursor {
+            cursor: default;
+        }
+        
+        .pointer-cursor {
+            cursor: pointer;
+        }
+        
+        .crosshair-cursor {
+            cursor: crosshair;
+        }
+        
+        .text-cursor {
+            cursor: text;
+        }
+        
+        .move-cursor {
+            cursor: move;
+        }
+        
+        .help-cursor {
+            cursor: help;
+        }
+        
+        .wait-cursor {
+            cursor: wait;
+        }
+        
+        .progress-cursor {
+            cursor: progress;
+        }
+        
+        .not-allowed-cursor {
+            cursor: not-allowed;
+        }
+        
+        .grab-cursor {
+            cursor: grab;
+        }
+        
+        .grabbing-cursor {
+            cursor: grabbing;
+        }
+        
+        .zoom-in-cursor {
+            cursor: zoom-in;
+        }
+        
+        .zoom-out-cursor {
+            cursor: zoom-out;
+        }
+        
+        .custom-cursor {
+            cursor: url('https://ani.cursors-4u.net/games/gam-16/gam1565.cur'), url('oth870.ani'), auto;
+        }
+        
+        .fallback-cursor {
+            cursor: url('https://ani.cursors-4u.net/games/gam-16/gam1565.cur'), url('oth870.ani'), auto;
+        }
+        
+        h2 {
+            color: #333;
+            margin-top: 30px;
+        }
+        
+        p {
+            margin: 10px 0;
+            color: #666;
+        }
+        
+        .info {
+            background: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #2196F3;
+            margin: 20px 0;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        
+        .error {
+            background: #f8d7da;
+            padding: 15px;
+            border-left: 4px solid #dc3545;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 光标测试页面</h1>
+    
+    <div class="info">
+        <h3>📋 测试说明</h3>
+        <p>这个页面用于测试不同光标格式的显示效果。请将鼠标移动到不同的测试区域，观察光标变化。</p>
+    </div>
+    
+    <div class="warning">
+        <h3>⚠️ 注意事项</h3>
+        <p>ANI格式光标在某些浏览器中可能不被支持，特别是移动端浏览器。如果ANI光标不显示，会回退到默认光标。</p>
+    </div>
+    
+    <h2>🔍 光标格式测试</h2>
+    
+    <div class="test-area ani-cursor">
+        <h3>ANI动画光标</h3>
+        <p>应该显示oth870.ani动画光标</p>
+        <p>如果看不到动画，说明浏览器不支持ANI格式</p>
+    </div>
+    
+    <div class="test-area custom-cursor">
+        <h3>自定义光标（多重回退）</h3>
+        <p>尝试显示ANI光标，多重回退到默认光标</p>
+    </div>
+    
+    <div class="test-area fallback-cursor">
+        <h3>回退光标（三重回退）</h3>
+        <p>三重回退机制</p>
+    </div>
+    
+    <h2>🎨 标准光标测试</h2>
+    
+    <div class="test-area default-cursor">
+        <h3>默认光标</h3>
+        <p>标准箭头光标</p>
+    </div>
+    
+    <div class="test-area pointer-cursor">
+        <h3>指针光标</h3>
+        <p>手型指针光标</p>
+    </div>
+    
+    <div class="test-area crosshair-cursor">
+        <h3>十字光标</h3>
+        <p>十字准星光标</p>
+    </div>
+    
+    <div class="test-area text-cursor">
+        <h3>文本光标</h3>
+        <p>I型文本光标</p>
+    </div>
+    
+    <div class="test-area move-cursor">
+        <h3>移动光标</h3>
+        <p>四向箭头光标</p>
+    </div>
+    
+    <div class="test-area help-cursor">
+        <h3>帮助光标</h3>
+        <p>问号光标</p>
+    </div>
+    
+    <div class="test-area wait-cursor">
+        <h3>等待光标</h3>
+        <p>沙漏光标</p>
+    </div>
+    
+    <div class="test-area progress-cursor">
+        <h3>进度光标</h3>
+        <p>进度条光标</p>
+    </div>
+    
+    <div class="test-area not-allowed-cursor">
+        <h3>禁止光标</h3>
+        <p>禁止符号光标</p>
+    </div>
+    
+    <div class="test-area grab-cursor">
+        <h3>抓取光标</h3>
+        <p>抓取手型光标</p>
+    </div>
+    
+    <div class="test-area grabbing-cursor">
+        <h3>抓取中光标</h3>
+        <p>抓取中手型光标</p>
+    </div>
+    
+    <div class="test-area zoom-in-cursor">
+        <h3>放大光标</h3>
+        <p>放大镜光标</p>
+    </div>
+    
+    <div class="test-area zoom-out-cursor">
+        <h3>缩小光标</h3>
+        <p>缩小镜光标</p>
+    </div>
+    
+    <div class="error">
+        <h3>🚨 如果ANI光标不显示</h3>
+        <p>可能的原因：</p>
+        <ul>
+            <li>浏览器不支持ANI格式</li>
+            <li>文件路径错误</li>
+            <li>文件损坏</li>
+            <li>浏览器安全策略限制</li>
+        </ul>
+        <p>解决方案：</p>
+        <ul>
+            <li>尝试使用CUR格式光标</li>
+            <li>检查文件路径</li>
+            <li>使用标准CSS光标</li>
+        </ul>
+    </div>
+    
+    <script>
+        // 检测浏览器信息
+        console.log('浏览器信息:', navigator.userAgent);
+        console.log('当前URL:', window.location.href);
+        
+        // 测试光标文件是否存在
+        fetch('oth870.ani')
+            .then(response => {
+                console.log('光标文件状态:', response.status);
+                if (response.ok) {
+                    console.log('✅ 光标文件存在且可访问');
+                } else {
+                    console.log('❌ 光标文件无法访问');
+                }
+            })
+            .catch(error => {
+                console.log('❌ 光标文件加载失败:', error);
+            });
+    </script>
+</body>
+</html>

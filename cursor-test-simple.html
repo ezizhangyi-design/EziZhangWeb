@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ten Commandments 光标测试</title>
+    <style>
+        /* 最高优先级的光标设置 */
+        html, body, * {
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-5/sym414.cur'), auto !important;
+        }
+        
+        body {
+            background: #0080FF;
+            color: white;
+            font-family: 'VCR OSD Mono', monospace;
+            padding: 50px;
+            margin: 0;
+        }
+        
+        .test-area {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid white;
+            border-radius: 10px;
+        }
+        
+        button {
+            background: #ff0000;
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+        
+        a {
+            color: #ffff00;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ten Commandments 光标测试页面</h1>
+    
+    <div class="test-area">
+        <h2>测试区域 1</h2>
+        <p>在这个区域移动鼠标，应该看到 Ten Commandments 光标</p>
+        <button>测试按钮</button>
+        <a href="#">测试链接</a>
+    </div>
+    
+    <div class="test-area">
+        <h2>测试区域 2</h2>
+        <p>如果光标显示正常，说明设置成功</p>
+        <p>如果看不到 Ten Commandments 光标，可能是：</p>
+        <ul>
+            <li>网络问题，无法加载在线光标</li>
+            <li>浏览器不支持该光标格式</li>
+            <li>CSS优先级问题</li>
+        </ul>
+    </div>
+    
+    <div class="test-area">
+        <h2>光标信息</h2>
+        <p><strong>光标URL:</strong> https://cur.cursors-4u.net/symbols/sym-5/sym414.cur</p>
+        <p><strong>光标名称:</strong> Ten Commandments</p>
+        <p><strong>回退光标:</strong> auto</p>
+    </div>
+</body>
+</html>

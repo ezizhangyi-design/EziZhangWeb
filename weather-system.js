@@ -75,9 +75,9 @@ class GlobalWeatherSystem {
             return;
         }
         
-        // 检查是否是新的一天且已经过了早上6点
-        if (this.lastUpdateDate !== currentDate && currentHour >= 6) {
-            console.log('🌅 检测到新的一天，开始更新天气...');
+        // 检查是否是新的一天且正好是早上6点
+        if (this.lastUpdateDate !== currentDate && currentHour === 6) {
+            console.log('🌅 检测到新的一天，早上6点开始更新天气...');
             this.generateNewWeather();
             this.lastUpdateDate = currentDate;
             
@@ -144,7 +144,7 @@ class GlobalWeatherSystem {
     }
     
     applyCurrentWeather() {
-        // 立即应用当前天气背景色
+        // 立即应用当前天气背景色（如果有的话）
         if (this.currentWeather && this.currentWeather.baseColor) {
             if (document.body) {
                 document.body.style.setProperty('background-color', this.currentWeather.baseColor, 'important');
