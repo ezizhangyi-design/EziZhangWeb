@@ -1487,24 +1487,47 @@
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', initSlideshow);
         
-        // 初始化展览页面语音问候系统
-        initExhibitionVoiceGreeting();
+        // 初始化展览页面语音问候系统 - 移到DOMContentLoaded事件中
+        document.addEventListener('DOMContentLoaded', initExhibitionVoiceGreeting);
         
-        // 等待云朵系统初始化完成后再启动风声系统
+        // 等待云朵系统初始化完成后再启动风声系统 - 延迟到背景渐变完成后
         setTimeout(() => {
             if (window.automataLeft && window.automataRight) {
-                console.log('☁️ 云朵系统已就绪，启动风声系统...');
-                initWindSoundSystem();
+                console.log('☁️ 云朵系统已就绪，等待背景渐变完成后启动风声系统...');
+                // 等待开场音效完成后再启动风声系统
+                const checkBackgroundTransition = () => {
+                    if (window.exhibitionOpeningSoundPlayed) {
+                        console.log('🎨 开场音效已完成，启动风声系统...');
+                        initWindSoundSystem();
+                    } else {
+                        console.log('⏳ 等待开场音效完成...', {
+                            soundPlayed: window.exhibitionOpeningSoundPlayed
+                        });
+                        setTimeout(checkBackgroundTransition, 500);
+                    }
+                };
+                checkBackgroundTransition();
             } else {
                 console.log('⏳ 云朵系统未就绪，继续等待...');
                 // 继续等待
                 setTimeout(() => {
                     if (window.automataLeft && window.automataRight) {
-                        console.log('☁️ 云朵系统已就绪，启动风声系统...');
-                        initWindSoundSystem();
+                        console.log('☁️ 云朵系统已就绪，等待背景渐变完成后启动风声系统...');
+                        const checkBackgroundTransition = () => {
+                            if (window.exhibitionOpeningSoundPlayed) {
+                                console.log('🎨 开场音效已完成，启动风声系统...');
+                                initWindSoundSystem();
+                            } else {
+                                setTimeout(checkBackgroundTransition, 500);
+                            }
+                        };
+                        checkBackgroundTransition();
                     } else {
                         console.log('⚠️ 云朵系统仍未就绪，强制启动风声系统...');
-                        initWindSoundSystem();
+                        // 等待背景渐变完成后强制启动
+                        setTimeout(() => {
+                            initWindSoundSystem();
+                        }, 6000); // 6秒后强制启动
                     }
                 }, 3000);
             }
@@ -2066,6 +2089,8 @@
                 this.nextGrid = [];
                 this.isRunning = false;
                 this.animationId = null;
+                this.baseSpeed = 1000; // 基础速度1秒
+                this.windVolumeMultiplier = 1.0; // 风声音量倍数
                 
                 if (!this.grid) {
                     console.error(`无法找到元素: ${gridId}`);
@@ -2414,9 +2439,13 @@
                     }
                 }
                 
+                // 根据风声音量调整动画速度
+                this.adjustSpeedByWindVolume();
+                const currentSpeed = this.baseSpeed / this.windVolumeMultiplier;
+                
                 this.animationId = setTimeout(() => {
                     this.animate();
-                }, 1000); // 每1秒更新一次，稍微快一点的变化速度
+                }, currentSpeed); // 根据风声音量动态调整更新速度
             }
             
             start() {
@@ -2434,6 +2463,33 @@
                 this.isRunning = false;
                 if (this.animationId) {
                     clearTimeout(this.animationId);
+                }
+            }
+            
+            // 根据风力大小调整动画速度
+            adjustSpeedByWindVolume() {
+                if (!window.windWeatherData) {
+                    return; // 天气系统未初始化
+                }
+                
+                try {
+                    // 获取当前风力强度（0-1）
+                    const windStrength = window.windWeatherData.windStrength || 0.5;
+                    
+                    // 根据风力强度计算速度倍数
+                    // 风力越大，动画越快（云飘得越快）
+                    const windRange = 1.0; // 风力强度范围0-1
+                    const speedRange = 0.8; // 速度倍数范围0.2-1.0
+                    const normalizedWind = Math.min(windStrength / windRange, 1);
+                    this.windVolumeMultiplier = 0.2 + normalizedWind * speedRange;
+                    
+                    // 计算新的更新速度
+                    const newSpeed = this.baseSpeed / this.windVolumeMultiplier;
+                    
+                    console.log(`🌪️ ${this.gridId} 风力强度: ${(windStrength * 100).toFixed(0)}%, 速度倍数: ${this.windVolumeMultiplier.toFixed(2)}, 新速度: ${newSpeed.toFixed(0)}ms`);
+                    
+                } catch (error) {
+                    console.warn(`⚠️ 获取风力强度失败: ${error.message}`);
                 }
             }
         } // CloudAutomata类结束
@@ -2518,44 +2574,22 @@
                 }
             });
             
-            // 初始检查天气
-            checkExhibitionWeather();
+            // 初始检查天气 - 等待开场音效结束后再检查
+            console.log('🌤️ 展览页面天气客户端初始化完成，等待开场音效结束后再检查天气...');
         }
         
-        // 处理天气变化
+        // 处理天气变化 - 禁用本地天气变化处理，使用全局天气客户端系统
         function handleExhibitionWeatherChange(weatherData) {
-            if (exhibitionWeatherTransitionStarted) {
-                console.log('⏳ 展览页面天气渐变已开始，跳过重复请求');
-                return;
-            }
-            
-            console.log('🌤️ 展览页面接收到天气变化:', weatherData.baseColor);
-            
-            if (weatherData.baseColor) {
-                startExhibitionBackgroundTransition(weatherData.baseColor);
-            }
+            console.log('🌤️ 展览页面使用全局天气客户端系统，跳过本地天气变化处理');
+            // 不处理任何天气变化，避免与全局天气客户端系统冲突
+            return;
         }
         
-        // 检查天气数据
+        // 检查天气数据 - 禁用本地天气检查，使用全局天气客户端系统
         function checkExhibitionWeather() {
-            if (exhibitionWeatherTransitionStarted) return;
-            
-            console.log('🔍 检查展览页面天气数据...');
-            
-            const storedWeather = localStorage.getItem('globalWeatherData');
-            if (storedWeather) {
-                try {
-                    const weatherData = JSON.parse(storedWeather);
-                    if (weatherData && weatherData.baseColor) {
-                        console.log('🌤️ 找到天气数据，开始渐变到:', weatherData.baseColor);
-                        startExhibitionBackgroundTransition(weatherData.baseColor);
-                    }
-                } catch (error) {
-                    console.error('❌ 解析天气数据失败:', error);
-                }
-            } else {
-                console.log('🌤️ 没有找到天气数据，保持蓝色背景');
-            }
+            console.log('🌤️ 展览页面使用全局天气客户端系统，跳过本地天气检查');
+            // 不执行任何天气检查，避免与全局天气客户端系统冲突
+            return;
         }
         
         // 开始背景渐变
@@ -2565,8 +2599,8 @@
             exhibitionWeatherTransitionStarted = true;
             console.log('🎬 开始展览页面背景渐变:', targetColor);
             
-            // 使用JavaScript动画实现渐变
-            animateExhibitionBackgroundTransition('#0041ff', targetColor, 2000);
+            // 使用JavaScript动画实现渐变 - 使用与CSS初始背景色一致的颜色
+            animateExhibitionBackgroundTransition('#0080FF', targetColor, 2000);
         }
         
         // 背景渐变动画
@@ -2594,14 +2628,27 @@
                 
                 const currentColor = `rgb(${currentRGB.r}, ${currentRGB.g}, ${currentRGB.b})`;
                 
-                // 应用背景色
-                document.body.style.backgroundColor = currentColor;
-                document.documentElement.style.backgroundColor = currentColor;
+                // 应用背景色，使用 !important 提高优先级
+                document.body.style.setProperty('background-color', currentColor, 'important');
+                document.documentElement.style.setProperty('background-color', currentColor, 'important');
                 
                 if (progress < 1) {
                     requestAnimationFrame(animate);
                 } else {
                     console.log('✅ 展览页面背景渐变完成！');
+                    // 确保最终颜色准确设置，使用 !important 提高优先级
+                    const finalColor = `rgb(${toRGB.r}, ${toRGB.g}, ${toRGB.b})`;
+                    document.body.style.setProperty('background-color', finalColor, 'important');
+                    document.documentElement.style.setProperty('background-color', finalColor, 'important');
+                    console.log('🎨 最终背景颜色已设置（高优先级）:', finalColor);
+                    
+                    // 背景渐变完成后，添加额外的稳定性保护
+                    setTimeout(() => {
+                        // 再次确保背景颜色稳定
+                        document.body.style.setProperty('background-color', finalColor, 'important');
+                        document.documentElement.style.setProperty('background-color', finalColor, 'important');
+                        console.log('🛡️ 背景颜色稳定性保护已应用');
+                    }, 100);
                 }
             }
             
@@ -2693,6 +2740,10 @@
         function initExhibitionVoiceGreeting() {
             console.log('🎮 开始初始化展览页面语音问候系统...');
             
+            // 初始化开场音效状态
+            window.exhibitionOpeningSoundPlayed = false;
+            console.log('🎬 初始化展览页面开场音效状态:', { exhibitionOpeningSoundPlayed: window.exhibitionOpeningSoundPlayed });
+            
             // 延迟播放，确保页面完全加载
             setTimeout(() => {
                 playExhibitionGreeting();
@@ -2701,47 +2752,117 @@
         
         // 展览页面语音问候 - 完全不同的风格！
         function playExhibitionGreeting() {
+            // 防止重复播放
+            if (window.exhibitionOpeningSoundPlayed) {
+                console.log('🎵 展览页面开场音效已经播放过，跳过...');
+                return;
+            }
+            
             console.log('🎨 开始播放展览页面问候...');
             
             try {
-                // 创建音频上下文
+                // 标记音效正在播放
+                window.exhibitionOpeningSoundPlaying = true;
+                console.log('🎵 展览页面音效播放状态设置为正在播放');
+                // 创建音频上下文并尝试自动播放
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 
-                // 创建主混音器
-                const masterGain = audioContext.createGain();
-                masterGain.connect(audioContext.destination);
-                masterGain.gain.setValueAtTime(0.22, audioContext.currentTime); // 主音量从30%降到22%，更轻柔
-                
-                // 创建展览特有的延迟效果
-                const delayGain = audioContext.createGain();
-                const delayNode = audioContext.createDelay(0.15);
-                delayGain.connect(delayNode);
-                delayNode.connect(masterGain);
-                delayGain.gain.setValueAtTime(0.11, audioContext.currentTime); // 延迟音量从15%降到11%，更轻柔
-                
-                // 创建"Ezi's"音效 - 现代电子风格
-                createEziSound(audioContext, masterGain, delayGain, 0);
-                
-                // 延迟播放"EXHIBITION"音效
-                setTimeout(() => {
-                    createExhibitionSound(audioContext, masterGain, delayGain, 0.6);
-                }, 600);
-                
-                // 延迟播放"EXPERIENCE"音效
-                setTimeout(() => {
-                    createExperienceSound(audioContext, masterGain, delayGain, 1.2);
-                }, 1200);
-                
-                // 添加展览特有的结尾音效
-                setTimeout(() => {
-                    createExhibitionEndingSound(audioContext, masterGain);
-                }, 2.4); // 2.4秒后播放结尾音效
+                // 尝试自动播放，如果失败则等待用户交互
+                if (audioContext.state === 'suspended') {
+                    console.log('🎨 音频上下文被暂停，尝试自动恢复...');
+                    audioContext.resume().then(() => {
+                        console.log('✅ 展览页面音频上下文自动恢复成功');
+                        createExhibitionGreetingSounds(audioContext);
+                    }).catch(error => {
+                        console.log('⚠️ 展览页面自动播放失败，等待用户交互:', error);
+                        // 如果自动播放失败，等待用户交互
+                        const waitForUserInteraction = () => {
+                            audioContext.resume().then(() => {
+                                console.log('✅ 展览页面通过用户交互恢复音频上下文');
+                                createExhibitionGreetingSounds(audioContext);
+                                document.removeEventListener('click', waitForUserInteraction);
+                                document.removeEventListener('touchstart', waitForUserInteraction);
+                            });
+                        };
+                        document.addEventListener('click', waitForUserInteraction);
+                        document.addEventListener('touchstart', waitForUserInteraction);
+                    });
+                } else {
+                    // 音频上下文已经激活，直接播放
+                    console.log('✅ 展览页面音频上下文已激活，直接播放问候音效');
+                    createExhibitionGreetingSounds(audioContext);
+                }
                 
                 console.log('🎨 展览页面问候开始播放！');
                 
+                // 音效播放完毕后标记为已播放
+                setTimeout(() => {
+                    window.exhibitionOpeningSoundPlayed = true;
+                    window.exhibitionOpeningSoundPlaying = false;
+                    console.log('🎵 展览页面音效播放状态设置为已播放');
+                    
+                    // 音效播放完毕后，尝试启动风声
+                    console.log('🌪️ 展览页面音效播放完毕，尝试启动风声...');
+                    if (typeof startWindSound === 'function') {
+                        startWindSound();
+                    }
+                    
+                    // 音效播放完毕后，开始背景渐变
+                    console.log('🌤️ 展览页面音效播放完毕，开始背景渐变...');
+                    checkExhibitionWeather();
+                }, 3000); // 3秒后标记音效播放完毕
+                
             } catch (error) {
                 console.error('❌ 展览页面问候播放失败:', error);
+                
+                // 出错时也要标记音效播放完毕
+                setTimeout(() => {
+                    window.exhibitionOpeningSoundPlayed = true;
+                    window.exhibitionOpeningSoundPlaying = false;
+                    console.log('🎵 展览页面错误处理：音效播放状态设置为已播放');
+                    
+                    // 出错时也要尝试启动风声
+                    console.log('🌪️ 展览页面音效播放出错，尝试启动风声...');
+                    if (typeof startWindSound === 'function') {
+                        startWindSound();
+                    }
+                    
+                    checkExhibitionWeather();
+                }, 3000);
             }
+        }
+        
+        // 创建展览页面问候音效
+        function createExhibitionGreetingSounds(audioContext) {
+            // 创建主混音器
+            const masterGain = audioContext.createGain();
+            masterGain.connect(audioContext.destination);
+            masterGain.gain.setValueAtTime(0.22, audioContext.currentTime); // 主音量从30%降到22%，更轻柔
+            
+            // 创建展览特有的延迟效果
+            const delayGain = audioContext.createGain();
+            const delayNode = audioContext.createDelay(0.15);
+            delayGain.connect(delayNode);
+            delayNode.connect(masterGain);
+            delayGain.gain.setValueAtTime(0.11, audioContext.currentTime); // 延迟音量从15%降到11%，更轻柔
+            
+            // 创建"Ezi's"音效 - 现代电子风格
+            createEziSound(audioContext, masterGain, delayGain, 0);
+            
+            // 延迟播放"EXHIBITION"音效
+            setTimeout(() => {
+                createExhibitionSound(audioContext, masterGain, delayGain, 0.6);
+            }, 600);
+            
+            // 延迟播放"EXPERIENCE"音效
+            setTimeout(() => {
+                createExperienceSound(audioContext, masterGain, delayGain, 1.2);
+            }, 1200);
+            
+            // 添加展览特有的结尾音效
+            setTimeout(() => {
+                createExhibitionEndingSound(audioContext, masterGain);
+            }, 2.4); // 2.4秒后播放结尾音效
         }
         
         // 创建"Ezi's"音效 - 现代电子风格，完全不同于Hello World
@@ -3014,11 +3135,205 @@
         let windOscillators = [];
         let windLayers = []; // 风声层数组
         let isWindPlaying = false;
+        
+        // 下雨声音系统
+        let rainLayers = []; // 雨声层数组
+        let isRainPlaying = false;
         let windVolume = 0.9; // 基础风声音量，从0.8提升到0.9，增加13%
+        let windVolumeForAutomata = 0.05; // 专门用于控制细胞自动机的风声音量
+        
+        // 风声天气系统
+        let windWeatherData = {
+            windStrength: 0.5, // 风力强度 0-1
+            isRaining: false, // 是否下雨
+            rainIntensity: 0.0, // 雨量强度 0-1
+            lastUpdate: null, // 上次更新时间
+            updateInterval: 24 * 60 * 60 * 1000, // 24小时更新间隔
+            weeklyRainPattern: null, // 一周下雨模式
+            currentWeekStart: null // 当前周开始时间
+        };
+        
+        // 初始化风声天气系统
+        function initWindWeatherSystem() {
+            console.log('🌤️ 初始化风声天气系统...');
+            
+            // 检查是否需要更新天气数据
+            checkAndUpdateWindWeather();
+            
+            // 设置定时器，每天早晨6:00更新
+            scheduleWindWeatherUpdate();
+            
+            // 确保全局变量已设置
+            window.windWeatherData = windWeatherData;
+            
+            console.log('✅ 风声天气系统初始化完成');
+        }
+        
+        // 从本地存储加载风声天气数据
+        function loadWindWeatherData() {
+            const savedData = localStorage.getItem('windWeatherData');
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    windWeatherData = { ...windWeatherData, ...parsedData };
+                    console.log('🌤️ 已加载风声天气数据:', windWeatherData);
+                    
+                    // 设置为全局变量，供细胞自动机使用
+                    window.windWeatherData = windWeatherData;
+                } catch (error) {
+                    console.warn('⚠️ 加载风声天气数据失败:', error);
+                }
+            }
+        }
+        
+        // 检查并更新风声天气数据
+        function checkAndUpdateWindWeather() {
+            // 首先尝试加载保存的数据
+            loadWindWeatherData();
+            
+            const now = new Date();
+            const lastUpdate = windWeatherData.lastUpdate ? new Date(windWeatherData.lastUpdate) : null;
+            
+            // 检查是否需要更新（每天早晨6:00或首次运行）
+            const shouldUpdate = !lastUpdate || 
+                (now.getHours() >= 6 && 
+                 (now.getDate() !== lastUpdate.getDate() || 
+                  now.getMonth() !== lastUpdate.getMonth() || 
+                  now.getFullYear() !== lastUpdate.getFullYear()));
+            
+            if (shouldUpdate) {
+                updateWindWeatherData();
+            } else {
+                // 即使不需要更新，也要检查一周下雨模式是否需要更新
+                const currentWeekStart = getCurrentWeekStart();
+                const needNewWeekPattern = !windWeatherData.currentWeekStart || 
+                    currentWeekStart.getTime() !== new Date(windWeatherData.currentWeekStart).getTime();
+                
+                if (needNewWeekPattern) {
+                    console.log('📅 检测到新的一周，更新下雨模式...');
+                    updateWindWeatherData();
+                } else {
+                    console.log('🌤️ 风声天气数据无需更新，使用缓存数据');
+                    console.log(`🌪️ 当前风力: ${(windWeatherData.windStrength * 100).toFixed(0)}%, 下雨: ${windWeatherData.isRaining ? '是' : '否'}, 雨量: ${(windWeatherData.rainIntensity * 100).toFixed(0)}%`);
+                    console.log(`📅 当前周开始: ${windWeatherData.currentWeekStart ? new Date(windWeatherData.currentWeekStart).toLocaleDateString() : '未设置'}`);
+                }
+            }
+        }
+        
+        // 生成一周下雨模式
+        function generateWeeklyRainPattern() {
+            console.log('🌧️ 生成一周下雨模式...');
+            
+            // 一周7天，20%概率下雨，即约1.4天会下雨
+            const rainDays = Math.floor(Math.random() * 2) + 1; // 1-2天下雨
+            const rainPattern = new Array(7).fill(false);
+            
+            // 随机选择下雨的天数
+            for (let i = 0; i < rainDays; i++) {
+                let randomDay;
+                do {
+                    randomDay = Math.floor(Math.random() * 7);
+                } while (rainPattern[randomDay]); // 避免重复选择同一天
+                
+                rainPattern[randomDay] = true;
+            }
+            
+            console.log(`🌧️ 一周下雨模式: ${rainPattern.map((rain, index) => 
+                `${['周一', '周二', '周三', '周四', '周五', '周六', '周日'][index]}: ${rain ? '下雨' : '晴天'}`
+            ).join(', ')}`);
+            
+            return rainPattern;
+        }
+        
+        // 获取当前是一周中的第几天
+        function getCurrentDayOfWeek() {
+            const now = new Date();
+            return now.getDay(); // 0=周日, 1=周一, ..., 6=周六
+        }
+        
+        // 获取当前周的开始时间（周一）
+        function getCurrentWeekStart() {
+            const now = new Date();
+            const dayOfWeek = now.getDay();
+            const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // 周日是0，需要-6到周一
+            
+            const weekStart = new Date(now);
+            weekStart.setDate(now.getDate() + mondayOffset);
+            weekStart.setHours(0, 0, 0, 0);
+            
+            return weekStart;
+        }
+        
+        // 更新风声天气数据
+        function updateWindWeatherData() {
+            console.log('🌤️ 更新风声天气数据...');
+            
+            // 随机化风力强度 (0-1)
+            windWeatherData.windStrength = Math.random();
+            
+            // 检查是否需要生成新的一周下雨模式
+            const currentWeekStart = getCurrentWeekStart();
+            const needNewWeekPattern = !windWeatherData.currentWeekStart || 
+                currentWeekStart.getTime() !== new Date(windWeatherData.currentWeekStart).getTime();
+            
+            if (needNewWeekPattern) {
+                console.log('📅 新的一周开始，生成新的下雨模式...');
+                windWeatherData.weeklyRainPattern = generateWeeklyRainPattern();
+                windWeatherData.currentWeekStart = currentWeekStart.toISOString();
+            }
+            
+            // 根据一周下雨模式确定今天是否下雨
+            const currentDay = getCurrentDayOfWeek();
+            windWeatherData.isRaining = windWeatherData.weeklyRainPattern[currentDay];
+            
+            // 如果下雨，随机化雨量强度
+            if (windWeatherData.isRaining) {
+                windWeatherData.rainIntensity = 0.3 + Math.random() * 0.7; // 0.3-1.0
+            } else {
+                windWeatherData.rainIntensity = 0.0;
+            }
+            
+            // 更新最后更新时间
+            windWeatherData.lastUpdate = new Date().toISOString();
+            
+            // 保存到本地存储
+            localStorage.setItem('windWeatherData', JSON.stringify(windWeatherData));
+            
+            // 设置为全局变量，供细胞自动机使用
+            window.windWeatherData = windWeatherData;
+            
+            console.log(`🌪️ 风声天气数据已更新:`);
+            console.log(`   风力强度: ${(windWeatherData.windStrength * 100).toFixed(0)}%`);
+            console.log(`   今天是否下雨: ${windWeatherData.isRaining ? '是' : '否'}`);
+            console.log(`   雨量强度: ${(windWeatherData.rainIntensity * 100).toFixed(0)}%`);
+            console.log(`   当前周开始: ${new Date(windWeatherData.currentWeekStart).toLocaleDateString()}`);
+            console.log(`   更新时间: ${windWeatherData.lastUpdate}`);
+        }
+        
+        // 安排风声天气更新
+        function scheduleWindWeatherUpdate() {
+            const now = new Date();
+            const tomorrow6AM = new Date(now);
+            tomorrow6AM.setDate(tomorrow6AM.getDate() + 1);
+            tomorrow6AM.setHours(6, 0, 0, 0);
+            
+            const timeUntilUpdate = tomorrow6AM.getTime() - now.getTime();
+            
+            console.log(`⏰ 下次风声天气更新: ${tomorrow6AM.toLocaleString()}`);
+            
+            setTimeout(() => {
+                updateWindWeatherData();
+                // 递归设置下一次更新
+                scheduleWindWeatherUpdate();
+            }, timeUntilUpdate);
+        }
         
         // 初始化风声系统
         function initWindSoundSystem() {
             console.log('🌪️ 开始初始化展览页面风声系统...');
+            
+            // 初始化风声天气系统
+            initWindWeatherSystem();
             
             try {
                 // 创建音频上下文
@@ -3062,20 +3377,14 @@
                         
                         // 初始化上海天气系统
                         console.log('🌤️ 初始化上海天气系统...');
-                        getShanghaiWeather(); // 获取初始天气
                         
-                        // 设置天气更新定时器（每天早上太阳升起时更新，更符合自然规律）
-                        setInterval(() => {
-                            const now = new Date();
-                            const hour = now.getHours();
-                            const minute = now.getMinutes();
-                            
-                            // 北京时间早上6-8点之间更新天气（太阳升起时间）
-                            if (hour >= 6 && hour < 8 && minute === 0) {
-                                console.log('🌅 太阳升起，更新上海天气...');
-                                getShanghaiWeather();
-                            }
-                        }, 60 * 1000); // 每分钟检查一次，但只在指定时间更新
+                        // 禁用本地天气系统，只使用全局天气客户端系统
+                        console.log('🌤️ 展览页面使用全局天气客户端系统，禁用本地天气系统');
+                        // 不调用 getShanghaiWeather()，避免与全局天气客户端系统冲突
+                        
+                        // 禁用本地天气更新定时器，使用全局天气客户端系统
+                        console.log('🌤️ 展览页面使用全局天气客户端系统，禁用本地天气更新定时器');
+                        // 不设置天气更新定时器，避免与全局天气客户端系统冲突
                         
                         // 移除频繁的微调，改为每天一次自然更新
                         console.log('🌤️ 天气系统已设置为每天早晨自然更新模式');
@@ -3122,6 +3431,12 @@
                 return;
             }
             
+            // 检查开场音效是否播放完毕
+            if (!window.exhibitionOpeningSoundPlayed) {
+                console.log('🎵 展览页面开场音效还未播放完毕，等待音效结束后再启动风声...');
+                return;
+            }
+            
             if (!windAudioContext || windAudioContext.state !== 'running') {
                 console.log('❌ 音频上下文未就绪');
                 return;
@@ -3130,8 +3445,15 @@
             console.log('🌪️ 启动持续循环风声...');
             isWindPlaying = true;
             
-            // 创建真实自然风声
+            // 根据天气数据创建风声
             createRealNaturalWind();
+            
+            // 如果下雨，创建下雨声音
+            if (windWeatherData.isRaining) {
+                console.log('🌧️ 检测到下雨，启动下雨声音...');
+                createRainSound();
+                isRainPlaying = true;
+            }
             
             // 设置持续的风声更新 - 根据云朵变化动态调整
             const windUpdateInterval = setInterval(() => {
@@ -3147,7 +3469,7 @@
                 // 根据云朵变化调整风声参数，而不是重新创建
                 updateWindParameters(cloudInfo);
                 
-            }, 3000); // 每3秒检查一次云朵状态并调整风声参数
+            }, 10000); // 每10秒检查一次云朵状态并调整风声参数
             
             // 保存更新间隔的引用
             window.windUpdateInterval = windUpdateInterval;
@@ -3242,13 +3564,99 @@
             if (windGain) {
                 windGain.gain.setValueAtTime(windVolume, windAudioContext.currentTime);
             }
-            console.log(`🌪️ 风声音量设置为: ${(windVolume * 100).toFixed(0)}%`);
+            
+            // 同时更新细胞自动机控制音量
+            windVolumeForAutomata = Math.max(0, Math.min(0.1, volume * 0.1)); // 限制在0-0.1范围内
+            window.windVolumeForAutomata = windVolumeForAutomata; // 设置为全局变量
+            
+            console.log(`🌪️ 风声音量设置为: ${(windVolume * 100).toFixed(0)}%, 细胞自动机控制音量: ${(windVolumeForAutomata * 100).toFixed(1)}%`);
+        }
+        
+        // 创建下雨声音
+        function createRainSound() {
+            if (!windAudioContext || !windWeatherData.isRaining) {
+                return;
+            }
+            
+            console.log('🌧️ 创建下雨声音...');
+            
+            const currentTime = windAudioContext.currentTime;
+            const rainIntensity = windWeatherData.rainIntensity;
+            
+            // 创建雨声缓冲区
+            const bufferSize = windAudioContext.sampleRate * 2; // 2秒缓冲区
+            const rainBuffer = windAudioContext.createBuffer(1, bufferSize, windAudioContext.sampleRate);
+            const output = rainBuffer.getChannelData(0);
+            
+            // 生成雨声噪音
+            for (let i = 0; i < bufferSize; i++) {
+                // 白噪音 + 低频滤波模拟雨声
+                const whiteNoise = (Math.random() * 2 - 1) * 0.1;
+                const lowFreq = Math.sin(i * 0.01) * 0.05;
+                output[i] = (whiteNoise + lowFreq) * rainIntensity;
+            }
+            
+            // 创建雨声源
+            const rainSource = windAudioContext.createBufferSource();
+            rainSource.buffer = rainBuffer;
+            rainSource.loop = true;
+            
+            // 创建雨声滤波器
+            const rainFilter = windAudioContext.createBiquadFilter();
+            rainFilter.type = 'lowpass';
+            rainFilter.frequency.setValueAtTime(800 + rainIntensity * 400, currentTime); // 800-1200Hz
+            rainFilter.Q.setValueAtTime(0.5, currentTime);
+            
+            // 创建雨声增益
+            const rainGain = windAudioContext.createGain();
+            rainGain.gain.setValueAtTime(0, currentTime);
+            rainGain.gain.linearRampToValueAtTime(0.3 * rainIntensity, currentTime + 1);
+            
+            // 连接雨声节点
+            rainSource.connect(rainFilter);
+            rainFilter.connect(rainGain);
+            rainGain.connect(windGain);
+            
+            // 启动雨声
+            rainSource.start(currentTime);
+            
+            // 保存雨声层
+            rainLayers.push({
+                source: rainSource,
+                filter: rainFilter,
+                gain: rainGain
+            });
+            
+            console.log(`🌧️ 下雨声音已创建，雨量强度: ${(rainIntensity * 100).toFixed(0)}%`);
+        }
+        
+        // 停止下雨声音
+        function stopRainSound() {
+            console.log('🌧️ 停止下雨声音...');
+            
+            rainLayers.forEach(layer => {
+                try {
+                    if (layer.source) {
+                        layer.source.stop();
+                    }
+                } catch (error) {
+                    console.warn('⚠️ 停止雨声源失败:', error);
+                }
+            });
+            
+            rainLayers = [];
+            isRainPlaying = false;
+            
+            console.log('✅ 下雨声音已停止');
         }
         
         // 完全停止风声系统
         function stopWindSystem() {
             console.log('🌪️ 完全停止风声系统...');
             isWindPlaying = false;
+            
+            // 同时停止下雨声音
+            stopRainSound();
             
             // 清理所有风声层
             stopWindSound();
@@ -3314,7 +3722,37 @@
         
         // 获取上海智能模拟天气信息
         function getShanghaiWeather() {
-            console.log('🌤️ 使用智能模拟上海天气系统...');
+            console.log('🌤️ 检查全局天气系统数据...');
+            
+            // 首先检查是否有全局天气数据
+            const globalWeatherData = localStorage.getItem('globalWeatherData');
+            if (globalWeatherData) {
+                try {
+                    const weatherData = JSON.parse(globalWeatherData);
+                    console.log('🌤️ 使用全局天气系统数据:', weatherData);
+                    
+                    // 使用全局天气数据设置展览界面的天气参数
+                    shanghaiWeather.clouds = weatherData.intensity * 100;
+                    shanghaiWeather.humidity = weatherData.humidityFactor * 100;
+                    shanghaiWeather.windSpeed = weatherData.windFactor * 20;
+                    shanghaiWeather.temperature = 20 + weatherData.seasonalAdjustment * 10;
+                    shanghaiWeather.season = weatherData.seasonalAdjustment;
+                    shanghaiWeather.timeOfDay = weatherData.timeAdjustment;
+                    
+                    // 更新天气描述
+                    updateWeatherDescription();
+                    
+                    // 注意：不调用 adjustPageBackgroundColor()，因为背景颜色已经通过全局天气系统设置
+                    console.log('🌤️ 使用全局天气数据，跳过背景颜色调整');
+                    
+                    return;
+                } catch (error) {
+                    console.error('❌ 解析全局天气数据失败:', error);
+                }
+            }
+            
+            // 如果没有全局天气数据，使用本地模拟天气
+            console.log('🌤️ 没有全局天气数据，使用本地模拟天气系统...');
             useSimulatedWeather();
         }
         
@@ -3462,9 +3900,16 @@
             return '凌晨';
         }
         
-        // 微调天气参数，模拟真实天气的细微变化
+        // 微调天气参数，模拟真实天气的细微变化（但不改变背景颜色）
         function adjustWeatherSubtly() {
             if (!shanghaiWeather.lastUpdate) return;
+            
+            // 检查是否有全局天气数据，如果有则不进行微调
+            const globalWeatherData = localStorage.getItem('globalWeatherData');
+            if (globalWeatherData) {
+                console.log('🌤️ 检测到全局天气数据，跳过天气微调以保持背景稳定');
+                return;
+            }
             
             // 微调云量 (±5%)
             const cloudChange = (Math.random() - 0.5) * 10;
@@ -3491,8 +3936,7 @@
             // 根据微调后的天气调整云朵系统
             adjustCloudsByWeather();
             
-            // 同时更新页面背景颜色
-            adjustPageBackgroundColor();
+            // 注意：不调用 adjustPageBackgroundColor()，保持背景颜色稳定
         }
         
         // 根据当前天气参数生成更新的描述
@@ -3663,8 +4107,14 @@
             style.textContent = css;
             document.head.appendChild(style);
             
-            // 广播天气变化事件，让其他页面同步更新
-            broadcastWeatherChange(baseColor, intensity, humidityFactor, windFactor, seasonalAdjustment, timeAdjustment);
+            // 检查是否有全局天气数据，如果有则不广播天气变化
+            const globalWeatherData = localStorage.getItem('globalWeatherData');
+            if (!globalWeatherData) {
+                // 只有在没有全局天气数据时才广播天气变化
+                broadcastWeatherChange(baseColor, intensity, humidityFactor, windFactor, seasonalAdjustment, timeAdjustment);
+            } else {
+                console.log('🌤️ 检测到全局天气数据，跳过天气变化广播以保持稳定');
+            }
             
             console.log(`🎨 纯色背景应用完成: 基础色=${baseColor}, 强度=${intensity.toFixed(2)}, 湿度因子=${humidityFactor.toFixed(2)}, 风速因子=${windFactor.toFixed(2)}, 季节调整=${seasonalAdjustment}, 时间调整=${timeAdjustment}`);
         }
@@ -3734,8 +4184,14 @@
             // 调整右侧云朵
             adjustCloudAutomata(window.automataRight, cloudDensity, cloudSize, windIntensity);
             
-            // 根据天气调整页面底部颜色
-            adjustPageBackgroundColor();
+            // 检查是否有全局天气数据，如果有则不改变背景颜色
+            const globalWeatherData = localStorage.getItem('globalWeatherData');
+            if (!globalWeatherData) {
+                // 只有在没有全局天气数据时才调整页面背景颜色
+                adjustPageBackgroundColor();
+            } else {
+                console.log('🌤️ 检测到全局天气数据，跳过背景颜色调整以保持稳定');
+            }
             
             console.log(`🌪️ 天气调整完成: 云量=${shanghaiWeather.clouds}%, 湿度=${shanghaiWeather.humidity}%, 风速=${shanghaiWeather.windSpeed}m/s`);
         }
@@ -3845,7 +4301,11 @@
             // 根据云朵情况调整风声参数
             // 云越多，风越小；云越少，风越大
             const cloudRatio = cloudInfo.ratio;
-            const windIntensity = Math.max(0.1, 1 - cloudRatio * 2);
+            const cloudWindIntensity = Math.max(0.1, 1 - cloudRatio * 2);
+            
+            // 结合天气数据中的风力强度
+            const weatherWindStrength = windWeatherData.windStrength || 0.5;
+            const windIntensity = (cloudWindIntensity + weatherWindStrength) / 2; // 综合风力强度
             
             // 风声基础参数 - 真实风声的特点
             const windVolume = 0.7 + windIntensity * 0.7; // 从0.6+0.6提升到0.7+0.7，0.7-1.4，更大的音量
@@ -4035,10 +4495,11 @@
             
             // 结合云朵和天气计算风强度
             // 云越多，风越小；云越少，风越大
-            // 同时考虑上海实际风速
+            // 同时考虑上海实际风速和天气数据中的风力强度
             const cloudWindIntensity = Math.max(0.1, 1 - cloudRatio * 2);
             const realWindIntensity = Math.min(weather.windSpeed / 10, 1); // 0-1
-            const windIntensity = (cloudWindIntensity + realWindIntensity) / 2; // 综合风强度
+            const weatherWindStrength = windWeatherData.windStrength || 0.5;
+            const windIntensity = (cloudWindIntensity + realWindIntensity + weatherWindStrength) / 3; // 综合风强度
             
             // 风声基础参数 - 真实风声的特点
             const windVolume = 0.7 + windIntensity * 0.7; // 从0.6+0.6提升到0.7+0.7，0.7-1.4，更大的音量
@@ -4050,6 +4511,10 @@
             // 动态调整主混音器音量
             const masterVolume = windIntensity * 1.0; // 从0.9提升到1.0，增加主混音器音量
             windGain.gain.setValueAtTime(masterVolume, windAudioContext.currentTime);
+            
+            // 同时更新细胞自动机控制音量
+            windVolumeForAutomata = Math.max(0, Math.min(0.1, masterVolume * 0.1)); // 限制在0-0.1范围内
+            window.windVolumeForAutomata = windVolumeForAutomata; // 设置为全局变量
             
             // 调整滤波器参数
             if (windLayers.length >= 8) {
@@ -4083,8 +4548,6 @@
             }
         }
         
-
-        
     </script>
 </body>
-</html> 
+</html>

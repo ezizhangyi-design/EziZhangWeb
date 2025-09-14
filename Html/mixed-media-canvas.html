@@ -17,7 +17,7 @@
             padding: 0;
             background: #0041ff;
             color: white;
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Monaco', 'Consolas', monospace;
             overflow-x: hidden;
             image-rendering: pixelated;
             -webkit-font-smoothing: none;
@@ -34,7 +34,7 @@
             border: 0.1563vw solid #fac800; /* 3px - 增加边框宽度 */
             color: #fac800;
             padding: 1.0417vh 1.5625vw; /* 20px 30px - 增加内边距 */
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Monaco', 'Consolas', monospace;
             font-size: 0.8333vw; /* 16px / 1920px * 100 - 增加字体大小 */
             cursor: pointer;
             transition: all 0.3s ease;
@@ -66,23 +66,46 @@
             align-items: center;
         }
 
-        .artwork-frame {
-            background: white;
-            padding: 3.125vw; /* 60px - doubled from 30px */
-            padding-top: 1.5625vw; /* 30px - inward indentation */
-            padding-bottom: 1.5625vw; /* 30px - inward indentation */
-            border-radius: 0; /* 0px - right angles */
-            box-shadow: 0 0.4167vw 0.8333vw rgba(0,0,0,0.3); /* 0 8px 16px */
-            margin-bottom: 2.0833vh; /* 40px */
+        /* 参考数字绘画页面的固定定位样式 */
+        .artwork-container {
+            position: relative;
+            width: 780px;
+            height: 1170px;
+            margin: 0 auto 2.0833vh;
+            z-index: 5;
+        }
+
+        .outer-black-frame {
+            position: absolute;
+            width: 100%;
+            height: calc(100% + 10px);
+            top: -5px;
+            background-color: black;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+
+        .inner-gray-frame {
+            position: absolute;
+            top: 93px;
+            left: 110px;
+            right: 110px;
+            bottom: 93px;
+            background-color: #cfcfcf;
+            border-radius: 0px;
+            box-sizing: border-box;
         }
 
         .artwork-image {
-            max-width: 95vw; /* 1824px - increased from 1600px */
-            max-height: 110vh; /* 2112px - increased from 1920px */
-            width: auto;
-            height: auto;
-            display: block;
-            border-radius: 0; /* 0px - right angles */
+            position: absolute;
+            top: 102px;
+            left: 102px;
+            right: 102px;
+            bottom: 102px;
+            width: calc(100% - 204px);
+            height: calc(100% - 204px);
+            object-fit: contain;
+            border-radius: 0px;
         }
 
         .info-section {
@@ -164,24 +187,46 @@
             padding-left: 10.4167vw; /* 200px 与第二组文字信息对齐 */
         }
 
-        /* 第二组作品样式 - 缩小一圈 */
-        .artwork-frame-small {
-            background: white;
-            padding: 2.6042vw; /* 50px - 缩小一圈 */
-            padding-top: 2.3438vw; /* 45px - 继续向外拉伸 */
-            padding-bottom: 2.3438vw; /* 45px - 继续向外拉伸 */
-            border-radius: 0; /* 0px - right angles */
-            box-shadow: 0 0.4167vw 0.8333vw rgba(0,0,0,0.3); /* 0 8px 16px */
-            margin-bottom: 2.0833vh; /* 40px */
+        /* 小尺寸作品样式 - 参考数字绘画页面 */
+        .artwork-container-small {
+            position: relative;
+            width: 600px;
+            height: 900px;
+            margin: 0 auto 2.0833vh;
+            z-index: 5;
+        }
+
+        .outer-black-frame-small {
+            position: absolute;
+            width: 100%;
+            height: calc(100% + 10px);
+            top: -5px;
+            background-color: black;
+            border-radius: 0px;
+            box-sizing: border-box;
+        }
+
+        .inner-gray-frame-small {
+            position: absolute;
+            top: 70px;
+            left: 85px;
+            right: 85px;
+            bottom: 70px;
+            background-color: #cfcfcf;
+            border-radius: 0px;
+            box-sizing: border-box;
         }
 
         .artwork-image-small {
-            max-width: 79.1667vw; /* 1520px - 缩小一圈 */
-            max-height: 91.6667vh; /* 1760px - 缩小一圈 */
-            width: auto;
-            height: auto;
-            display: block;
-            border-radius: 0; /* 0px - right angles */
+            position: absolute;
+            top: 78px;
+            left: 78px;
+            right: 78px;
+            bottom: 78px;
+            width: calc(100% - 156px);
+            height: calc(100% - 156px);
+            object-fit: contain;
+            border-radius: 0px;
         }
 
         /* 超大播放器样式 */
@@ -325,7 +370,7 @@
             border: 0.1042vw solid #fac800;
             color: #fac800;
             padding: 0.625vh 1.0417vw;
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Monaco', 'Consolas', monospace;
             font-size: 0.625vw;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -478,7 +523,7 @@
             border: 0.1042vw solid #fac800;
             color: #fac800;
             padding: 0.625vh 1.0417vw;
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Monaco', 'Consolas', monospace;
             font-size: 0.625vw;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -572,7 +617,7 @@
             border: 0.1042vw solid #fac800;
             color: #fac800;
             padding: 0.625vh 1.0417vw;
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', monospace;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Monaco', 'Consolas', monospace;
             font-size: 0.625vw;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -762,16 +807,25 @@
                 padding: 6.25vh 2.0833vw; /* 120px 40px */
             }
 
-            .artwork-frame,
-            .blank-frame {
-                padding: 2.0833vw; /* 40px - doubled from 20px */
-                padding-top: 1.0417vw; /* 20px - inward indentation */
-                padding-bottom: 1.0417vw; /* 20px - inward indentation */
+            .artwork-container {
+                width: 600px;
+                height: 900px;
+            }
+
+            .inner-gray-frame {
+                top: 70px;
+                left: 85px;
+                right: 85px;
+                bottom: 70px;
             }
 
             .artwork-image {
-                max-width: 200vw; /* increased from 160vw */
-                max-height: 140vh; /* increased from 120vh */
+                top: 78px;
+                left: 78px;
+                right: 78px;
+                bottom: 78px;
+                width: calc(100% - 156px);
+                height: calc(100% - 156px);
             }
 
             .info-section,
@@ -867,15 +921,25 @@
                 font-size: 4vw;
             }
 
-            .artwork-frame-small {
-                padding: 1.5625vw;
-                padding-top: 1.4063vw;
-                padding-bottom: 1.4063vw;
+            .artwork-container-small {
+                width: 500px;
+                height: 750px;
+            }
+
+            .inner-gray-frame-small {
+                top: 60px;
+                left: 70px;
+                right: 70px;
+                bottom: 60px;
             }
 
             .artwork-image-small {
-                max-width: 130vw;
-                max-height: 100vh;
+                top: 68px;
+                left: 68px;
+                right: 68px;
+                bottom: 68px;
+                width: calc(100% - 136px);
+                height: calc(100% - 136px);
             }
 
             .player-frame {
@@ -949,17 +1013,27 @@
                 padding: 4.1667vh 1.0417vw; /* 80px 20px */
             }
 
-            .artwork-frame,
-            .blank-frame {
-                padding: 1.5625vw; /* 30px - doubled from 15px */
-                padding-top: 0.7813vw; /* 15px - inward indentation */
-                padding-bottom: 0.7813vw; /* 15px - inward indentation */
+            .artwork-container {
+                width: 500px;
+                height: 750px;
+            }
+
+            .inner-gray-frame {
+                top: 60px;
+                left: 70px;
+                right: 70px;
+                bottom: 60px;
             }
 
             .artwork-image {
-                max-width: 280vw; /* increased from 220vw */
-                max-height: 120vh; /* increased from 100vh */
+                top: 68px;
+                left: 68px;
+                right: 68px;
+                bottom: 68px;
+                width: calc(100% - 136px);
+                height: calc(100% - 136px);
             }
+
 
             .info-section,
             .info-section-small,
@@ -1007,15 +1081,25 @@
                 font-size: 4vw;
             }
 
-            .artwork-frame-small {
-                padding: 1.0417vw;
-                padding-top: 0.9375vw;
-                padding-bottom: 0.9375vw;
+            .artwork-container-small {
+                width: 400px;
+                height: 600px;
+            }
+
+            .inner-gray-frame-small {
+                top: 50px;
+                left: 60px;
+                right: 60px;
+                bottom: 50px;
             }
 
             .artwork-image-small {
-                max-width: 180vw;
-                max-height: 80vh;
+                top: 58px;
+                left: 58px;
+                right: 58px;
+                bottom: 58px;
+                width: calc(100% - 116px);
+                height: calc(100% - 116px);
             }
 
             .player-frame {
@@ -1575,7 +1659,9 @@
     <!-- 综合材料木偶作品 -->
     <div class="page-container" style="margin-top: 4.1667vh;">
         <div class="artwork-section">
-            <div class="artwork-frame-small">
+            <div class="artwork-container-small">
+                <div class="outer-black-frame-small"></div>
+                <div class="inner-gray-frame-small"></div>
                 <img src="../综合材料木偶%20R.E.Creation%20-%20部落勇士.jpeg" alt="R.E.Creation - Tribal Warrior" class="artwork-image-small">
             </div>
         </div>
@@ -1605,7 +1691,9 @@
     <!-- 第一页：Architect作品 -->
     <div class="page-container">
         <div class="artwork-section">
-            <div class="artwork-frame">
+            <div class="artwork-container">
+                <div class="outer-black-frame"></div>
+                <div class="inner-gray-frame"></div>
                 <img src="../综合材料绘画%20建筑师%20Archltect.png" alt="Architect" class="artwork-image">
             </div>
         </div>
@@ -1630,7 +1718,9 @@
     <!-- 第二页：3U人型战士作品 -->
     <div class="page-container" style="margin-top: 50vh;">
         <div class="artwork-section">
-            <div class="artwork-frame-small">
+            <div class="artwork-container-small">
+                <div class="outer-black-frame-small"></div>
+                <div class="inner-gray-frame-small"></div>
                 <img src="../综合材料绘画%203U人型战士%20.jpg" alt="3U Humanoid Warrior" class="artwork-image-small">
             </div>
         </div>
@@ -1655,7 +1745,9 @@
     <!-- 第三页：指定路径作品 -->
     <div class="page-container" style="margin-top: 50vh; margin-left: 0vw;">
         <div class="artwork-section">
-            <div class="artwork-frame-small">
+            <div class="artwork-container-small">
+                <div class="outer-black-frame-small"></div>
+                <div class="inner-gray-frame-small"></div>
                 <img src="../综合材料绘画%20指定路径.jpg" alt="The Pathway" class="artwork-image-small">
             </div>
         </div>
@@ -1680,7 +1772,9 @@
     <!-- 第四页：泥螺河作品 -->
     <div class="page-container" style="margin-top: 50vh;">
         <div class="artwork-section">
-            <div class="artwork-frame-small">
+            <div class="artwork-container-small">
+                <div class="outer-black-frame-small"></div>
+                <div class="inner-gray-frame-small"></div>
                 <img src="../综合材料绘画%20泥螺河%20.jpg" alt="The Mud Snail River" class="artwork-image-small">
             </div>
         </div>
@@ -1705,7 +1799,9 @@
     <!-- 第五页：如此美丽作品 -->
     <div class="page-container" style="margin-top: 50vh;">
         <div class="artwork-section">
-            <div class="artwork-frame-small">
+            <div class="artwork-container-small">
+                <div class="outer-black-frame-small"></div>
+                <div class="inner-gray-frame-small"></div>
                 <img src="../综合材料绘画%20如此美丽%20.jpg" alt="So Pertty" class="artwork-image-small">
             </div>
         </div>

@@ -4,18 +4,18 @@
 class GlobalWeatherSystem {
     constructor() {
         this.weatherTypes = [
-            // 常见天气（高概率）
-            { name: '晴天', baseColor: '#003cff', description: 'Clear Sky', probability: 0.6 },
+            // 常见天气（调整概率以平衡特殊天气增加）
+            { name: '晴天', baseColor: '#0033d9', description: 'Clear Sky', probability: 0.47 },
             { name: '多云', baseColor: '#006fff', description: 'Cloudy', probability: 0.15 },
             { name: '雨天', baseColor: '#005398', description: 'Rainy', probability: 0.1 },
             { name: '雾天', baseColor: '#7c4900', description: 'Foggy', probability: 0.05 },
             { name: '风暴', baseColor: '#008282', description: 'Stormy', probability: 0.05 },
             
-            // 特殊天气（低概率）
-            { name: '血夜', baseColor: '#9d0051', description: 'Blood Night', probability: 0.02 },
-            { name: '腐化之地', baseColor: '#5200cc', description: 'Corrupted Land', probability: 0.015 },
-            { name: '酸雨', baseColor: '#007f51', description: 'Acid Rain', probability: 0.01 },
-            { name: '地狱', baseColor: '#841900', description: 'Hell', probability: 0.005 }
+            // 特殊天气（提高概率到18%）
+            { name: '血夜', baseColor: '#9d0051', description: 'Blood Night', probability: 0.08 },
+            { name: '腐化之地', baseColor: '#5200cc', description: 'Corrupted Land', probability: 0.05 },
+            { name: '酸雨', baseColor: '#007f51', description: 'Acid Rain', probability: 0.03 },
+            { name: '地狱', baseColor: '#841900', description: 'Hell', probability: 0.02 }
         ];
         
         this.currentWeather = null;

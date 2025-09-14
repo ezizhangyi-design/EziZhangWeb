@@ -25,7 +25,8 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', monospace;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Monaco', 'Consolas', monospace;
+            font-size: 16px; /* 设置基础字体大小 */
             image-rendering: pixelated;
             -webkit-font-smoothing: none;
             -moz-osx-font-smoothing: none;
@@ -178,18 +179,537 @@
             -webkit-user-select: none;
         }
         
+        /* 强制像素字体显示 - 更精确的选择器 */
+        body, html {
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Monaco', 'Consolas', monospace !important;
+            -webkit-font-smoothing: none !important;
+            -moz-osx-font-smoothing: none !important;
+            text-rendering: optimizeSpeed !important;
+            image-rendering: pixelated !important;
+        }
+        
+        /* 为特定元素设置字体族，避免影响字体大小 */
+        .work-title, .work-title-2, .work-title-3,
+        .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6,
+        .mixed-media-subtitle-text,
+        .artist-location p, .artist-description p,
+        button, input, textarea, select {
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Monaco', 'Consolas', monospace !important;
+            -webkit-font-smoothing: none !important;
+            -moz-osx-font-smoothing: none !important;
+            text-rendering: optimizeSpeed !important;
+            image-rendering: pixelated !important;
+        }
+        
+        /* 确保主要标题元素的字体大小不被影响 */
+        .work-title, .work-title-2, .work-title-3 {
+            font-size: 100px !important;
+        }
+        
+        .subtitle, .subtitle-2, .subtitle-3, .subtitle-4, .subtitle-5, .subtitle-6 {
+            font-size: 45px !important;
+        }
+        
+        .mixed-media-subtitle-text {
+            font-size: 35px !important;
+        }
+        
         /* 确保响应式稳定性 */
+        
+        /* 8K超高清屏幕 (≥ 7680px) */
+        @media (min-width: 7680px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 25vw !important;
+                height: 60vh !important;
+                left: calc(50% - 12.5vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 60px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 60px) !important;
+                left: calc(11.025% + 60px) !important;
+                right: calc(11.025% + 60px) !important;
+                bottom: calc(12.705% + 60px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 66px) !important;
+                left: calc(11.025% + 66px) !important;
+                right: calc(11.025% + 66px) !important;
+                bottom: calc(12.705% + 66px) !important;
+            }
+        }
+
+        /* 4K超高清屏幕 (3840px - 7679px) */
+        @media (min-width: 3840px) and (max-width: 7679px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 30vw !important;
+                height: 65vh !important;
+                left: calc(50% - 15vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 55px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 55px) !important;
+                left: calc(11.025% + 55px) !important;
+                right: calc(11.025% + 55px) !important;
+                bottom: calc(12.705% + 55px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 61px) !important;
+                left: calc(11.025% + 61px) !important;
+                right: calc(11.025% + 61px) !important;
+                bottom: calc(12.705% + 61px) !important;
+            }
+        }
+
+        /* 2K超高清屏幕 (2560px - 3839px) */
+        @media (min-width: 2560px) and (max-width: 3839px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 35vw !important;
+                height: 70vh !important;
+                left: calc(50% - 17.5vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 50px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 50px) !important;
+                left: calc(11.025% + 50px) !important;
+                right: calc(11.025% + 50px) !important;
+                bottom: calc(12.705% + 50px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 56px) !important;
+                left: calc(11.025% + 56px) !important;
+                right: calc(11.025% + 56px) !important;
+                bottom: calc(12.705% + 56px) !important;
+            }
+        }
+
+        /* 超宽屏幕 (1920px - 2559px) */
+        @media (min-width: 1920px) and (max-width: 2559px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 40vw !important;
+                height: 75vh !important;
+                left: calc(50% - 20vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 48px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 48px) !important;
+                left: calc(11.025% + 48px) !important;
+                right: calc(11.025% + 48px) !important;
+                bottom: calc(12.705% + 48px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 54px) !important;
+                left: calc(11.025% + 54px) !important;
+                right: calc(11.025% + 54px) !important;
+                bottom: calc(12.705% + 54px) !important;
+            }
+        }
+
+        /* 标准大屏幕 (1201px - 1919px) - 保持原始设计 */
+        @media (min-width: 1201px) and (max-width: 1919px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                /* 保持原始绝对定位，不响应式变化 */
+            }
+        }
+
+        /* 大屏幕 (901px - 1200px) */
+        @media (max-width: 1200px) and (min-width: 901px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 70vw !important;
+                height: 85vh !important;
+                left: calc(50% - 35vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 42px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 42px) !important;
+                left: calc(11.025% + 42px) !important;
+                right: calc(11.025% + 42px) !important;
+                bottom: calc(12.705% + 42px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 48px) !important;
+                left: calc(11.025% + 48px) !important;
+                right: calc(11.025% + 48px) !important;
+                bottom: calc(12.705% + 48px) !important;
+            }
+        }
+
+        /* 中等屏幕 (769px - 900px) */
+        @media (max-width: 900px) and (min-width: 769px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 65vw !important;
+                height: 88vh !important;
+                left: calc(50% - 32.5vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 39px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 39px) !important;
+                left: calc(11.025% + 39px) !important;
+                right: calc(11.025% + 39px) !important;
+                bottom: calc(12.705% + 39px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 45px) !important;
+                left: calc(11.025% + 45px) !important;
+                right: calc(11.025% + 45px) !important;
+                bottom: calc(12.705% + 45px) !important;
+            }
+        }
+
+        /* 平板屏幕 (481px - 768px) */
         @media (max-width: 768px) {
             .preview-image-container-3,
-            .preview-image-container-4 {
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
                 min-height: 200px;
                 max-height: 80vh;
+                /* 添加响应式尺寸控制 */
+                width: 60vw !important;
+                height: 90vh !important;
+                left: calc(50% - 30vw) !important;
+                transform: translateX(-50%) !important;
             }
             
             .preview-image-3,
-            .preview-image-4 {
+            .preview-image-4,
+            .preview-image-5,
+            .preview-image-6 {
                 max-width: 100%;
                 max-height: 100%;
+            }
+
+            /* 调整灰色底和边框的响应式比例 */
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 36px !important; /* 缩小边框 */
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 36px) !important;
+                left: calc(11.025% + 36px) !important;
+                right: calc(11.025% + 36px) !important;
+                bottom: calc(12.705% + 36px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 42px) !important;
+                left: calc(11.025% + 42px) !important;
+                right: calc(11.025% + 42px) !important;
+                bottom: calc(12.705% + 42px) !important;
+            }
+        }
+
+        /* 手机竖屏 (321px - 480px) */
+        @media (max-width: 480px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 80vw !important;
+                height: 70vh !important;
+                left: calc(50% - 40vw) !important;
+            }
+
+            /* 进一步调整小屏幕的边框和灰色底 */
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 24px !important; /* 进一步缩小边框 */
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 24px) !important;
+                left: calc(11.025% + 24px) !important;
+                right: calc(11.025% + 24px) !important;
+                bottom: calc(12.705% + 24px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 30px) !important;
+                left: calc(11.025% + 30px) !important;
+                right: calc(11.025% + 30px) !important;
+                bottom: calc(12.705% + 30px) !important;
+            }
+        }
+
+        /* 小手机竖屏 (≤320px) */
+        @media (max-width: 320px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 85vw !important;
+                height: 65vh !important;
+                left: calc(50% - 42.5vw) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 18px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 18px) !important;
+                left: calc(11.025% + 18px) !important;
+                right: calc(11.025% + 18px) !important;
+                bottom: calc(12.705% + 18px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 24px) !important;
+                left: calc(11.025% + 24px) !important;
+                right: calc(11.025% + 24px) !important;
+                bottom: calc(12.705% + 24px) !important;
+            }
+        }
+
+        /* 手机横屏支持 (高度 ≤ 500px 且宽度 ≥ 600px) */
+        @media (max-height: 500px) and (min-width: 600px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 50vw !important;
+                height: 95vh !important;
+                left: calc(50% - 25vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 30px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 30px) !important;
+                left: calc(11.025% + 30px) !important;
+                right: calc(11.025% + 30px) !important;
+                bottom: calc(12.705% + 30px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 36px) !important;
+                left: calc(11.025% + 36px) !important;
+                right: calc(11.025% + 36px) !important;
+                bottom: calc(12.705% + 36px) !important;
+            }
+        }
+
+        /* 超宽屏幕横屏支持 (高度 ≤ 600px 且宽度 ≥ 1000px) */
+        @media (max-height: 600px) and (min-width: 1000px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 45vw !important;
+                height: 90vh !important;
+                left: calc(50% - 22.5vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 35px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 35px) !important;
+                left: calc(11.025% + 35px) !important;
+                right: calc(11.025% + 35px) !important;
+                bottom: calc(12.705% + 35px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 41px) !important;
+                left: calc(11.025% + 41px) !important;
+                right: calc(11.025% + 41px) !important;
+                bottom: calc(12.705% + 41px) !important;
+            }
+        }
+
+        /* 21:9超宽屏横屏支持 (高度 ≤ 800px 且宽度 ≥ 2000px) */
+        @media (max-height: 800px) and (min-width: 2000px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 35vw !important;
+                height: 85vh !important;
+                left: calc(50% - 17.5vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 40px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 40px) !important;
+                left: calc(11.025% + 40px) !important;
+                right: calc(11.025% + 40px) !important;
+                bottom: calc(12.705% + 40px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 46px) !important;
+                left: calc(11.025% + 46px) !important;
+                right: calc(11.025% + 46px) !important;
+                bottom: calc(12.705% + 46px) !important;
+            }
+        }
+
+        /* 32:9超宽屏横屏支持 (高度 ≤ 1000px 且宽度 ≥ 3000px) */
+        @media (max-height: 1000px) and (min-width: 3000px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 30vw !important;
+                height: 80vh !important;
+                left: calc(50% - 15vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 45px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 45px) !important;
+                left: calc(11.025% + 45px) !important;
+                right: calc(11.025% + 45px) !important;
+                bottom: calc(12.705% + 45px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 51px) !important;
+                left: calc(11.025% + 51px) !important;
+                right: calc(11.025% + 51px) !important;
+                bottom: calc(12.705% + 51px) !important;
+            }
+        }
+
+        /* 4K横屏支持 (高度 ≤ 1200px 且宽度 ≥ 3840px) */
+        @media (max-height: 1200px) and (min-width: 3840px) {
+            .preview-image-container-3,
+            .preview-image-container-4,
+            .preview-image-container-5,
+            .preview-image-container-6 {
+                width: 25vw !important;
+                height: 75vh !important;
+                left: calc(50% - 12.5vw) !important;
+                transform: translateX(-50%) !important;
+            }
+
+            .inner-black-frame-5,
+            .inner-black-frame-6 {
+                border-width: 50px !important;
+            }
+
+            .inner-gray-frame-5,
+            .inner-gray-frame-6 {
+                top: calc(12.705% + 50px) !important;
+                left: calc(11.025% + 50px) !important;
+                right: calc(11.025% + 50px) !important;
+                bottom: calc(12.705% + 50px) !important;
+            }
+
+            .preview-image-5,
+            .preview-image-6 {
+                top: calc(12.705% + 56px) !important;
+                left: calc(11.025% + 56px) !important;
+                right: calc(11.025% + 56px) !important;
+                bottom: calc(12.705% + 56px) !important;
             }
         }
         
@@ -490,7 +1010,7 @@
         
         /* 确保英文字符正确显示 */
         .lang-content[data-lang="en"] {
-            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', monospace;
+            font-family: 'VCR OSD Mono', 'Press Start 2P', 'VT323', 'Courier New', 'Monaco', 'Consolas', monospace;
             font-display: swap;
         }
         
@@ -1375,7 +1895,7 @@
             opacity: 0;
             font-family: 'Courier New', monospace;
             font-size: 24px;
-            color: #00ff00;
+            /* 颜色将通过JavaScript动态设置 */
             pointer-events: none;
         }
         
@@ -2480,8 +3000,8 @@
             font-size: 35px !important;
             color: white;
             margin: 0;
-            font-weight: 600;
-            font-style: italic;
+            font-weight: normal;
+            font-style: normal;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
@@ -2598,8 +3118,8 @@
             color: white;
             margin: 0 !important;
             padding: 0 !important;
-            font-weight: bold;
-            font-style: italic;
+            font-weight: normal;
+            font-style: normal;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: pre-line;
             letter-spacing: -2px;
@@ -2713,8 +3233,8 @@
             font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 600;
-            font-style: italic;
+            font-weight: normal;
+            font-style: normal;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
@@ -2784,8 +3304,8 @@
             font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 600;
-            font-style: italic;
+            font-weight: normal;
+            font-style: normal;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
@@ -2816,7 +3336,7 @@
             font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 600;
+            font-weight: normal;
             font-style: normal;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
@@ -2832,8 +3352,8 @@
             font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 600;
-            font-style: italic;
+            font-weight: normal;
+            font-style: normal;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
@@ -2848,8 +3368,8 @@
             font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 600;
-            font-style: italic;
+            font-weight: normal;
+            font-style: normal;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
@@ -2864,8 +3384,8 @@
             font-size: 45px !important;
             color: white;
             margin: 0;
-            font-weight: 600;
-            font-style: italic;
+            font-weight: normal;
+            font-style: normal;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             white-space: nowrap;
             background: #666666;
@@ -3200,13 +3720,13 @@
             box-sizing: border-box;
         }
         
-        .inner-yellow-frame-5 {
+        .inner-gray-frame-5 {
             position: absolute;
             top: calc(12.705% + 48px);
             left: calc(11.025% + 48px);
             right: calc(11.025% + 48px);
             bottom: calc(12.705% + 48px);
-            border: 16px solid #cfcfcf;
+            background-color: #cfcfcf;
             border-radius: 0px;
             box-sizing: border-box;
         }
@@ -3249,7 +3769,7 @@
             left: calc(11.025% + 48px);
             right: calc(11.025% + 48px);
             bottom: calc(12.705% + 48px);
-            border: 16px solid #cfcfcf;
+            background-color: #cfcfcf;
             border-radius: 0px;
             box-sizing: border-box;
         }
@@ -3699,7 +4219,7 @@
                     <!-- 管道元素将通过JavaScript动态生成 -->
                 </div>
                 <!-- 屏保切换按钮 -->
-                <button id="test-pipes" style="position: relative; margin-top: 120px; z-index: 20; background: #ff0000; color: white; border: 3px solid #ff0000; width: 60px; height: 60px; cursor: pointer; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-family: 'VCR OSD Mono', monospace; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">PIPE</button>
+                <button id="test-pipes" style="position: relative; margin-top: 120px; z-index: 20; background: #ff0000; color: white; border: 3px solid #ff0000; width: 60px; height: 60px; cursor: pointer; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-family: 'VCR OSD Mono', monospace; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">PLAY</button>
                 
                 <!-- 音乐控制按钮 -->
                 <button id="music-control" style="position: relative; margin-top: 20px; z-index: 20; background: #00ff00; color: white; border: 3px solid #00ff00; width: 60px; height: 60px; cursor: pointer; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-family: 'VCR OSD Mono', monospace; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.3);" title="单击播放/停止音乐，双击测试音效">MUSIC</button>
@@ -4071,7 +4591,7 @@
         <div class="preview-image-container-5">
             <div class="outer-black-frame-5"></div>
             <div class="inner-black-frame-5"></div>
-            <div class="inner-yellow-frame-5"></div>
+            <div class="inner-gray-frame-5"></div>
             <img src="RGB星史 I 黑白 .png" alt="R.G.B. Star History Series Preview" class="preview-image-5">
         </div>
         
@@ -5218,7 +5738,7 @@
             // 创建柔和耐听的碰撞音效 - 基于波点颜色和音效模式
             playCollisionSound(dot1Color, dot2Color) {
                 // 检查是否正在播放Hello World或开场音效
-                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                     return; // Hello World播放期间或开场音效未结束时，不播放任何音效
                 }
                 
@@ -5661,7 +6181,7 @@
                         // 鼠标进入分割线组
                         group.addEventListener('mouseenter', (e) => {
                             // 双重检查：确保Hello World播放期间或开场音效未结束时，不播放音效
-                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                                 console.log('🔇 Hello World播放期间或开场音效未结束，分割线音效被阻止');
                                 return;
                             }
@@ -5670,7 +6190,7 @@
                         
                         // 鼠标离开分割线组
                         group.addEventListener('mouseleave', (e) => {
-                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                                 return;
                             }
                             this.playDividerSound('leave', e);
@@ -5678,7 +6198,7 @@
                         
                         // 鼠标在分割线组内移动
                         group.addEventListener('mousemove', (e) => {
-                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                                 return;
                             }
                             this.playDividerSound('move', e);
@@ -5686,7 +6206,7 @@
                         
                         // 鼠标点击分割线组
                         group.addEventListener('click', (e) => {
-                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                            if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                                 return;
                             }
                             this.playDividerSound('click', e);
@@ -5697,7 +6217,7 @@
             
             playDividerSound(action, event) {
                 // 检查是否正在播放Hello World或开场音效
-                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                     return; // Hello World播放期间或开场音效未结束时，不播放任何音效
                 }
                 
@@ -6129,6 +6649,8 @@
                 this.pipeHead = null;
                 this.bluePipes = []; // 蓝色管道数组
                 this.bluePipeHead = null; // 蓝色管道头部
+                this.redPipes = []; // 红色管道数组
+                this.redPipeHead = null; // 红色管道头部
                 this.gridSize = 25; // 适合整个左面板的网格大小
                 this.cols = 0;
                 this.rows = 0;
@@ -6140,12 +6662,15 @@
                 this.blueCurrentX = 0;
                 this.blueCurrentY = 0;
                 this.blueCurrentZ = 0; // 蓝色管道Z轴位置
+                this.redCurrentX = 0;
+                this.redCurrentY = 0;
+                this.redCurrentZ = 0; // 红色管道Z轴位置
                 this.animationId = null;
                 this.lastTime = 0;
                 
                 // ASCII动画相关
                 this.asciiChars = ['01', '10', '11', '00', '█', '▓', '▒', '░', '●', '○', '◆', '◇', '★', '☆', '♦', '♠', '♣', '♥'];
-                this.maxAsciiChars = 3;
+                this.maxAsciiChars = 25; // 从8增加到25，创造弹幕效果
                 this.activeAsciiChars = [];
                 this.asciiInterval = null;
                 
@@ -6174,6 +6699,32 @@
                 
                 // 音色调色器控制
                 this.basslineVolume = 1.0; // Bassline音量 100%
+                
+                // 鼠标交互系统
+                this.mouseInteraction = {
+                    isActive: false,
+                    lastMouseX: 0,
+                    lastMouseY: 0,
+                    mouseVelocity: 0,
+                    mouseDirection: 0,
+                    rhythmMultiplier: 1.0,
+                    timbreShift: 0.0,
+                    volumeModulation: 0.0,
+                    interactionIntensity: 0.0,
+                    velocityResetTimer: null // 添加速度重置定时器
+                };
+                
+                // 动画加速和保护系统
+                this.animationSystem = {
+                    baseSpeed: 1.0, // 恢复正常的基础速度
+                    currentSpeed: 1.0, // 恢复正常的基础速度
+                    maxSpeed: 8.0, // 从4.0增加到8.0，允许更快的加速
+                    speedMultiplier: 1.0,
+                    frameCount: 0,
+                    lastFrameTime: 0,
+                    performanceCheckInterval: 100, // 每100帧检查一次性能
+                    resetThreshold: 1000 // 超过1000ms无响应则重置
+                };
                 this.leadVolume = 1.0;     // Lead音量 100%
                 this.padVolume = 1.0;      // Pad音量 100%
                 this.drumsVolume = 1.0;    // Drums音量 100%
@@ -6260,6 +6811,9 @@
                 // 初始化雪花噪音事件监听器
                 this.initSnowNoiseEvents();
                 
+                // 初始化鼠标交互系统
+                this.initMouseInteraction();
+                
                         // 初始化光标放大系统
         this.initCursorEnlargement();
         
@@ -6270,6 +6824,307 @@
         this.initMainPageWeatherClient();
         
         console.log('✅ 管道屏保系统初始化完成');
+            }
+            
+            // 初始化鼠标交互系统
+            initMouseInteraction() {
+                console.log('🎯 初始化管道动画鼠标交互系统...');
+                
+                // 获取管道容器
+                const pipesContainer = document.getElementById('pipes-screensaver');
+                if (!pipesContainer) {
+                    console.warn('⚠️ 找不到管道容器，鼠标交互系统初始化失败');
+                    return;
+                }
+                
+                // 鼠标进入管道区域
+                pipesContainer.addEventListener('mouseenter', (e) => {
+                    this.mouseInteraction.isActive = true;
+                    console.log('🖱️ 鼠标进入管道区域，激活交互模式');
+                });
+                
+                // 鼠标离开管道区域
+                pipesContainer.addEventListener('mouseleave', (e) => {
+                    this.mouseInteraction.isActive = false;
+                    this.mouseInteraction.rhythmMultiplier = 1.0;
+                    this.mouseInteraction.timbreShift = 0.0;
+                    this.mouseInteraction.interactionIntensity = 0.0;
+                    this.mouseInteraction.mouseVelocity = 0; // 立即重置速度为0
+                    
+                    // 清除速度重置定时器
+                    if (this.mouseInteraction.velocityResetTimer) {
+                        clearTimeout(this.mouseInteraction.velocityResetTimer);
+                        this.mouseInteraction.velocityResetTimer = null;
+                    }
+                    
+                    // 停止ASCII动画
+                    if (this.asciiInterval) {
+                        clearInterval(this.asciiInterval);
+                        this.asciiInterval = null;
+                    }
+                    
+                    console.log('🖱️ 鼠标离开管道区域，关闭交互模式和ASCII动画');
+                });
+                
+                // 鼠标在管道区域内移动
+                pipesContainer.addEventListener('mousemove', (e) => {
+                    if (!this.mouseInteraction.isActive || !this.isMusicActive) return;
+                    
+                    const rect = pipesContainer.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    
+                    // 计算鼠标移动速度
+                    const deltaX = mouseX - this.mouseInteraction.lastMouseX;
+                    const deltaY = mouseY - this.mouseInteraction.lastMouseY;
+                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    
+                    this.mouseInteraction.mouseVelocity = distance;
+                    this.mouseInteraction.lastMouseX = mouseX;
+                    this.mouseInteraction.lastMouseY = mouseY;
+                    
+                    // 清除之前的重置定时器
+                    if (this.mouseInteraction.velocityResetTimer) {
+                        clearTimeout(this.mouseInteraction.velocityResetTimer);
+                    }
+                    
+                    // 设置新的重置定时器 - 100ms后重置速度为0
+                    this.mouseInteraction.velocityResetTimer = setTimeout(() => {
+                        this.mouseInteraction.mouseVelocity = 0;
+                        console.log('🖱️ 鼠标停止移动，重置速度为0');
+                    }, 100);
+                    
+                    // 计算鼠标方向
+                    this.mouseInteraction.mouseDirection = Math.atan2(deltaY, deltaX);
+                    
+                    // 更新交互强度
+                    this.mouseInteraction.interactionIntensity = Math.min(distance / 10, 2.0);
+                    
+                    // 根据鼠标位置和移动速度调整音乐参数
+                    this.updateMusicFromMouseInteraction();
+                });
+                
+                console.log('✅ 管道动画鼠标交互系统初始化完成');
+            }
+            
+            // 根据鼠标交互更新音乐参数
+            updateMusicFromMouseInteraction() {
+                if (!this.isMusicActive) return;
+                
+                const interaction = this.mouseInteraction;
+                
+                // 根据鼠标速度调整节奏倍数 - 超夸张的效果
+                // 鼠标移动越快，节奏越快
+                interaction.rhythmMultiplier = 1.0 + (interaction.mouseVelocity * 0.25); // 从0.15增加到0.25，超夸张
+                interaction.rhythmMultiplier = Math.max(0.05, Math.min(12.0, interaction.rhythmMultiplier)); // 进一步扩大范围到12倍
+                
+                // 根据鼠标位置调整音色 - 大幅增强效果
+                const containerWidth = this.container.offsetWidth;
+                const containerHeight = this.container.offsetHeight;
+                const normalizedX = interaction.lastMouseX / containerWidth;
+                const normalizedY = interaction.lastMouseY / containerHeight;
+                
+                // 水平位置影响音色偏移 - 超夸张的变化幅度
+                interaction.timbreShift = (normalizedX - 0.5) * 9000; // 从6000增加到9000，范围-4500到4500 Hz，超夸张
+                
+                // 垂直位置影响音量调制 - 超夸张的效果
+                interaction.volumeModulation = (normalizedY - 0.5) * 1.5; // 从1.0增加到1.5，范围-0.75到0.75，超夸张
+                
+                // 应用音色变化到各个音轨
+                this.applyTimbreChanges();
+                
+                // 更新动画加速效果
+                this.updateAnimationSpeed();
+                
+                // 当鼠标快速移动时，添加额外的乱码音效
+                if (interaction.mouseVelocity > 5) { // 快速移动时
+                    const currentTime = this.audioContext.currentTime;
+                    const glitchDuration = 0.05 + Math.random() * 0.1; // 短促的乱码音效
+                    this.createGlitchEffect(currentTime, glitchDuration);
+                    
+                    // 50%概率添加第二层乱码音效
+                    if (Math.random() < 0.5) {
+                        setTimeout(() => {
+                            const secondGlitchTime = this.audioContext.currentTime;
+                            const secondGlitchDuration = 0.03 + Math.random() * 0.08;
+                            this.createGlitchEffect(secondGlitchTime, secondGlitchDuration);
+                        }, 20 + Math.random() * 30); // 20-50ms延迟
+                    }
+                }
+                
+                // ASCII字符只在鼠标高速移动时出现
+                if (interaction.mouseVelocity > 8) { // 只在高速移动时显示ASCII
+                    // 启动ASCII动画间隔
+                    if (!this.asciiInterval) {
+                        this.asciiInterval = setInterval(() => {
+                            if (this.isActive && this.activeAsciiChars.length < this.maxAsciiChars) {
+                                this.createAsciiChar();
+                            }
+                        }, this.getAsciiInterval());
+                    }
+                    
+                    // 弹幕模式：创建大量ASCII字符 - 像下雨一样随机
+                    const barrageCount = Math.floor(interaction.mouseVelocity * 0.5); // 从0.6降低到0.5，减少数量
+                    for (let i = 0; i < barrageCount; i++) {
+                        setTimeout(() => {
+                            if (this.isActive && this.activeAsciiChars.length < this.maxAsciiChars) {
+                                this.createAsciiChar();
+                            }
+                        }, i * 30 + Math.random() * 50); // 从15-40ms改为30-80ms，更随机更慢
+                    }
+                } else {
+                    // 鼠标速度不够时，停止ASCII动画
+                    if (this.asciiInterval) {
+                        clearInterval(this.asciiInterval);
+                        this.asciiInterval = null;
+                    }
+                }
+                
+                console.log(`🎵 鼠标交互: 速度=${interaction.mouseVelocity.toFixed(1)}, 节奏倍数=${interaction.rhythmMultiplier.toFixed(2)}, 音色偏移=${interaction.timbreShift.toFixed(0)}Hz, 动画速度=${this.animationSystem.currentSpeed.toFixed(2)}x`);
+            }
+            
+            // 应用音色变化到各个音轨 - 增强版本
+            applyTimbreChanges() {
+                const interaction = this.mouseInteraction;
+                const currentTime = this.audioContext.currentTime;
+                
+                // 更新贝斯线音色 - 极度夸张的效果
+                if (this.bassline) {
+                    try {
+                        const baseFreq = 60; // 低音基础频率
+                        const newFreq = baseFreq + (interaction.timbreShift * 2.0); // 从1.5增加到2.0，超夸张
+                        this.bassline.frequency.setValueAtTime(newFreq, currentTime);
+                        
+                        // 添加音量调制 - 超夸张的效果
+                        if (this.bassline.gain) {
+                            const baseVolume = 0.5 * this.pipesMusicVolume * this.basslineVolume; // 从0.3提高到0.5
+                            const modulatedVolume = baseVolume * (1 + interaction.volumeModulation * 4.5); // 从3.0增加到4.5，超夸张
+                            this.bassline.gain.gain.setValueAtTime(modulatedVolume, currentTime);
+                        }
+                    } catch (e) {
+                        // 忽略频率设置错误
+                    }
+                }
+                
+                // 更新主旋律音色 - 极度夸张的效果
+                if (this.lead) {
+                    try {
+                        const baseFreq = 220; // 主旋律基础频率
+                        const newFreq = baseFreq + (interaction.timbreShift * 5.0); // 从3.5增加到5.0，超夸张
+                        this.lead.frequency.setValueAtTime(newFreq, currentTime);
+                        
+                        // 添加音量调制 - 超夸张的效果
+                        if (this.lead.gain) {
+                            const baseVolume = 0.25 * this.pipesMusicVolume * this.leadVolume; // 从0.15提高到0.25
+                            const modulatedVolume = baseVolume * (1 + interaction.volumeModulation * 6.0); // 从4.0增加到6.0，超夸张
+                            this.lead.gain.gain.setValueAtTime(modulatedVolume, currentTime);
+                        }
+                    } catch (e) {
+                        // 忽略频率设置错误
+                    }
+                }
+                
+                // 更新Pad音色 - 极度夸张的效果
+                if (this.pad) {
+                    try {
+                        const baseFreq = 110; // Pad基础频率
+                        const newFreq = baseFreq + (interaction.timbreShift * 3.5); // 从2.5增加到3.5，超夸张
+                        this.pad.frequency.setValueAtTime(newFreq, currentTime);
+                        
+                        // 添加音量调制 - 超夸张的效果
+                        if (this.pad.gain) {
+                            const baseVolume = 0.25 * this.pipesMusicVolume * this.padVolume; // 从0.15提高到0.25
+                            const modulatedVolume = baseVolume * (1 + interaction.volumeModulation * 5.0); // 从3.5增加到5.0，超夸张
+                            this.pad.gain.gain.setValueAtTime(modulatedVolume, currentTime);
+                        }
+                    } catch (e) {
+                        // 忽略频率设置错误
+                    }
+                }
+            }
+            
+            // 更新动画加速效果
+            updateAnimationSpeed() {
+                const interaction = this.mouseInteraction;
+                const animSystem = this.animationSystem;
+                
+                if (interaction.isActive) {
+                    // 鼠标在区域内时，根据移动速度动态调整动画速度
+                    if (interaction.mouseVelocity > 0) {
+                        // 根据鼠标移动速度计算动画加速倍数 - 极度增强响应
+                        // 静止时保持正常速度，移动时根据速度加速
+                        animSystem.speedMultiplier = 1.0 + (interaction.mouseVelocity * 0.4); // 从0.15增加到0.4，极度增强响应
+                        animSystem.speedMultiplier = Math.max(1.0, Math.min(animSystem.maxSpeed, animSystem.speedMultiplier));
+                    } else {
+                        // 鼠标静止时保持正常速度
+                        animSystem.speedMultiplier = 1.0;
+                    }
+                    
+                    // 平滑过渡到目标速度 - 极度增强响应性
+                    const targetSpeed = animSystem.baseSpeed * animSystem.speedMultiplier;
+                    animSystem.currentSpeed = animSystem.currentSpeed + (targetSpeed - animSystem.currentSpeed) * 0.7; // 从0.4增加到0.7，极度快速响应
+                    
+                    // 调试信息 - 当鼠标停下时显示
+                    if (interaction.mouseVelocity === 0 && animSystem.currentSpeed > 1.1) {
+                        console.log(`🐌 鼠标停下，动画减速中: 当前速度=${animSystem.currentSpeed.toFixed(2)}x, 目标速度=${targetSpeed.toFixed(2)}x`);
+                    }
+                } else {
+                    // 鼠标离开时逐渐恢复到基础速度
+                    animSystem.currentSpeed = animSystem.currentSpeed + (animSystem.baseSpeed - animSystem.currentSpeed) * 0.1;
+                    animSystem.speedMultiplier = 1.0;
+                }
+            }
+            
+            // 动画性能监控和保护机制
+            monitorAnimationPerformance() {
+                const animSystem = this.animationSystem;
+                const currentTime = performance.now();
+                
+                animSystem.frameCount++;
+                
+                // 每100帧检查一次性能
+                if (animSystem.frameCount % animSystem.performanceCheckInterval === 0) {
+                    const frameTime = currentTime - animSystem.lastFrameTime;
+                    const avgFrameTime = frameTime / animSystem.performanceCheckInterval;
+                    
+                    // 如果平均帧时间超过阈值，触发保护机制
+                    if (avgFrameTime > animSystem.resetThreshold) {
+                        console.warn('⚠️ 动画性能下降，触发保护机制');
+                        this.resetAnimation();
+                    }
+                    
+                    animSystem.lastFrameTime = currentTime;
+                }
+            }
+            
+            // 重置动画系统
+            resetAnimation() {
+                console.log('🔄 重置动画系统...');
+                
+                // 清除所有管道元素
+                this.clearPipes();
+                
+                // 重置动画参数
+                this.animationSystem.currentSpeed = 1.0; // 重置到正常的基础速度
+                this.animationSystem.speedMultiplier = 1.0;
+                this.animationSystem.frameCount = 0;
+                this.animationSystem.lastFrameTime = performance.now();
+                
+                // 重新创建管道头部
+                this.createPipeHead();
+                
+                // 重置位置
+                this.currentX = Math.floor(this.cols / 2);
+                this.currentY = Math.floor(this.rows / 2);
+                this.currentZ = 0;
+                this.blueCurrentX = Math.floor(this.cols / 2);
+                this.blueCurrentY = Math.floor(this.rows / 2);
+                this.blueCurrentZ = 0;
+                this.redCurrentX = Math.floor(this.cols / 2);
+                this.redCurrentY = Math.floor(this.rows / 2);
+                this.redCurrentZ = 0;
+                
+                console.log('✅ 动画系统重置完成');
             }
             
             // 初始化管道音乐音量控制
@@ -6505,7 +7360,7 @@
             }
             
             // 检查是否应该应用天气背景（只有在音效结束后才允许）
-            if (!window.openingSoundPlayed) {
+            if (!window.openingSoundPlayed || window.openingSoundPlaying) {
                 console.log('🎵 开场音效还未播放完毕，暂不应用天气背景，保持黑色背景');
                 // 将天气数据存储起来，等音效结束后再应用
                 window.pendingWeatherData = weatherData;
@@ -7008,7 +7863,7 @@
             // 启动管道赋格配乐
             startPipesMusic() {
                 // 检查是否正在播放Hello World或开场音效
-                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                     console.log('🔇 Hello World正在播放或开场音效未结束，等待播放完毕...');
                     return;
                 }
@@ -7775,7 +8630,16 @@
                 const bassFilter = this.audioContext.createBiquadFilter();
                 
                 bassOsc.type = 'sawtooth';
-                bassOsc.frequency.setValueAtTime(pipeNote, this.audioContext.currentTime);
+                
+                // 根据鼠标交互调整频率
+                let finalFreq = pipeNote;
+                if (this.mouseInteraction.isActive) {
+                    const interaction = this.mouseInteraction;
+                    const timbreOffset = interaction.timbreShift * 0.3; // 贝斯线音色变化较小
+                    finalFreq = pipeNote + timbreOffset;
+                }
+                
+                bassOsc.frequency.setValueAtTime(finalFreq, this.audioContext.currentTime);
                 
                 bassFilter.type = 'lowpass';
                 bassFilter.frequency.setValueAtTime(pipeNote * 2, this.audioContext.currentTime);
@@ -7783,8 +8647,14 @@
                 
                 bassGain.gain.setValueAtTime(0.3 * this.pipesMusicVolume * this.basslineVolume, this.audioContext.currentTime);
                 
-                // 管道进程节奏 - 每4拍一个音符
-                const noteDuration = this.barLength / 4;
+                // 管道进程节奏 - 每4拍一个音符，根据鼠标交互调整
+                let noteDuration = this.barLength / 4;
+                
+                // 根据鼠标交互调整节奏
+                if (this.mouseInteraction.isActive) {
+                    const rhythmMultiplier = this.mouseInteraction.rhythmMultiplier;
+                    noteDuration = noteDuration / rhythmMultiplier; // 鼠标移动越快，节奏越快
+                }
                 const currentTime = this.audioContext.currentTime;
                 
                 bassOsc.connect(bassFilter);
@@ -7817,6 +8687,14 @@
                 const leadGain = this.audioContext.createGain();
                 const leadFilter = this.audioContext.createBiquadFilter();
                 
+                // 根据鼠标交互调整频率
+                let finalFreq = leadNote;
+                if (this.mouseInteraction.isActive) {
+                    const interaction = this.mouseInteraction;
+                    const timbreOffset = interaction.timbreShift; // 主旋律音色变化较大
+                    finalFreq = leadNote + timbreOffset;
+                }
+                
                 // 使用更电子化的音色组合
                 const timeMod = (Date.now() % 6000) / 6000;
                 
@@ -7832,7 +8710,9 @@
                 
                 // 随机频率变化，增加动感
                 const freqVariation = (Math.random() - 0.5) * 0.1; // -0.05到+0.05随机变化
-                const finalFreq = leadNote * (1 + freqVariation);
+                const randomVariation = leadNote * (1 + freqVariation);
+                finalFreq = finalFreq + (randomVariation - leadNote); // 结合鼠标交互和随机变化
+                
                 leadOsc.frequency.setValueAtTime(finalFreq, this.audioContext.currentTime);
                 harmonyOsc.frequency.setValueAtTime(finalFreq * 1.5, this.audioContext.currentTime);
                 
@@ -7856,7 +8736,13 @@
                 harmonyGain.gain.setValueAtTime(baseVolume * 0.3, this.audioContext.currentTime); // 和声较轻
                 
                 const currentTime = this.audioContext.currentTime;
-                const noteDuration = this.barLength / 2; // 答题节奏
+                
+                // 答题节奏，根据鼠标交互调整
+                let noteDuration = this.barLength / 2;
+                if (this.mouseInteraction.isActive) {
+                    const rhythmMultiplier = this.mouseInteraction.rhythmMultiplier;
+                    noteDuration = noteDuration / rhythmMultiplier; // 鼠标移动越快，节奏越快
+                }
                 
                 // 连接音频节点
                 leadOsc.connect(leadFilter);
@@ -7941,8 +8827,16 @@
                 const padGain = this.audioContext.createGain();
                 const padFilter = this.audioContext.createBiquadFilter();
                 
+                // 根据鼠标交互调整频率
+                let finalFreq = padNote;
+                if (this.mouseInteraction.isActive) {
+                    const interaction = this.mouseInteraction;
+                    const timbreOffset = interaction.timbreShift * 0.5; // Pad音色变化中等
+                    finalFreq = padNote + timbreOffset;
+                }
+                
                 padOsc.type = 'sine';
-                padOsc.frequency.setValueAtTime(padNote, this.audioContext.currentTime);
+                padOsc.frequency.setValueAtTime(finalFreq, this.audioContext.currentTime);
                 
                 padFilter.type = 'lowpass';
                 padFilter.frequency.setValueAtTime(padNote * 3, this.audioContext.currentTime);
@@ -7950,8 +8844,12 @@
                 
                 padGain.gain.setValueAtTime(0.15 * this.pipesMusicVolume * this.padVolume, this.audioContext.currentTime);
                 
-                // 长音符 - 持续整个小节
-                const noteDuration = this.barLength;
+                // 长音符 - 持续整个小节，根据鼠标交互调整
+                let noteDuration = this.barLength;
+                if (this.mouseInteraction.isActive) {
+                    const rhythmMultiplier = this.mouseInteraction.rhythmMultiplier;
+                    noteDuration = noteDuration / rhythmMultiplier; // 鼠标移动越快，节奏越快
+                }
                 const currentTime = this.audioContext.currentTime;
                 
                 // 随机穿插电视白噪音
@@ -8117,7 +9015,7 @@
                 }
                 
                 // 检查是否正在播放Hello World或开场音效
-                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                     console.log('🔇 Hello World正在播放或开场音效未结束，雪花噪音静音');
                     return;
                 }
@@ -8134,7 +9032,7 @@
             // 创建连续的雪花噪音流 - 真正的连续白噪音
             createContinuousSnowNoise() {
                 // 检查是否正在播放Hello World或开场音效
-                if (window.isPlayingHelloWorld || !window.openingSoundPlayed) {
+                if (window.isPlayingHelloWorld || !window.openingSoundPlayed || window.openingSoundPlaying) {
                     console.log('🔇 Hello World正在播放或开场音效未结束，连续雪花噪音静音');
                     return;
                 }
@@ -8526,7 +9424,10 @@
                 if (!this.audioContext) return;
                 
                 const currentTime = this.audioContext.currentTime;
-                const noteDuration = this.barLength / 2; // 从4分音符改为2分音符，节奏更慢
+                
+                // 鼓点节奏 - 固定节奏，不受鼠标交互影响
+                let noteDuration = this.barLength / 2; // 从4分音符改为2分音符，节奏更慢
+                
                 const rhythmDelay = this.barLength * 0.5; // 延迟2拍进入，配合慢节奏
                 
                 // 根据调音器值创建不同的鼓点模式
@@ -8673,7 +9574,7 @@
                 
                 // 更猛的音量包络 - 快速攻击，快速衰减，更干脆利落
                 kickGain.gain.setValueAtTime(0, startTime);
-                kickGain.gain.linearRampToValueAtTime(1.0 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.01); // 更快攻击
+                kickGain.gain.linearRampToValueAtTime(0.6 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.01); // 从1.0降低到0.6
                 kickGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3); // 更快衰减，更干脆
                 
                 // 连接多个振荡器，包括噪声
@@ -8692,249 +9593,74 @@
                 kickNoise.stop(startTime + 0.3);
             }
             
-            // 创建军鼓 - 添加噪声元素，更丰富的音色
-            createSnareDrum(startTime, duration) {
-                const toneValue = this.drumsPitch;
-                
-                // 创建多个振荡器叠加，包括噪声
-                const snareOsc1 = this.audioContext.createOscillator();
-                const snareOsc2 = this.audioContext.createOscillator();
-                const snareNoise = this.audioContext.createOscillator(); // 噪声振荡器
-                const snareGain = this.audioContext.createGain();
-                const snareFilter = this.audioContext.createBiquadFilter();
-                const noiseFilter = this.audioContext.createBiquadFilter(); // 噪声滤波器
-                
-                // 根据IDM模式选择完全不同的音色
-                if (toneValue < 0.2) {
-                    // 极简模式 - 正弦波+噪声，温暖圆润
-                    snareOsc1.type = 'sine';
-                    snareOsc1.frequency.setValueAtTime(180, startTime);
-                    snareOsc2.type = 'sine';
-                    snareOsc2.frequency.setValueAtTime(130, startTime);
-                    
-                    snareNoise.type = 'sawtooth'; // 温和噪声
-                    snareNoise.frequency.setValueAtTime(160, startTime);
-                    
-                } else if (toneValue < 0.4) {
-                    // 故障模式 - 三角形波+噪声，数字感
-                    snareOsc1.type = 'triangle';
-                    snareOsc1.frequency.setValueAtTime(230, startTime);
-                    snareOsc2.type = 'triangle';
-                    snareOsc2.frequency.setValueAtTime(160, startTime);
-                    
-                    snareNoise.type = 'square'; // 数字噪声
-                    snareNoise.frequency.setValueAtTime(200, startTime);
-                    
-                } else if (toneValue < 0.6) {
-                    // 碎拍模式 - 正弦+三角形+噪声，节奏感
-                    snareOsc1.type = 'sine';
-                    snareOsc1.frequency.setValueAtTime(200, startTime);
-                    snareOsc2.type = 'triangle';
-                    snareOsc2.frequency.setValueAtTime(140, startTime);
-                    
-                    snareNoise.type = 'sawtooth'; // 节奏噪声
-                    snareNoise.frequency.setValueAtTime(180, startTime);
-                    
-                } else if (toneValue < 0.8) {
-                    // 氛围模式 - 正弦+噪声，空间感
-                    snareOsc1.type = 'sine';
-                    snareOsc1.frequency.setValueAtTime(160, startTime);
-                    snareOsc2.type = 'sine';
-                    snareOsc2.frequency.setValueAtTime(120, startTime);
-                    
-                    snareNoise.type = 'triangle'; // 氛围噪声
-                    snareNoise.frequency.setValueAtTime(150, startTime);
-                    
-                } else {
-                    // IDM模式 - 复杂叠加+噪声，智能感
-                    snareOsc1.type = 'sine';
-                    snareOsc1.frequency.setValueAtTime(220, startTime);
-                    snareOsc2.type = 'triangle';
-                    snareOsc2.frequency.setValueAtTime(150, startTime);
-                    
-                    snareNoise.type = 'sawtooth'; // 智能噪声
-                    snareNoise.frequency.setValueAtTime(190, startTime);
-                }
-                
-                // 超柔和的滤波器设置
-                snareFilter.type = 'lowpass'; // 低通，减少尖锐感
-                snareFilter.frequency.setValueAtTime(350, startTime);
-                snareFilter.Q.setValueAtTime(0.2, startTime); // 极低Q值，完全消除锐耳
-                
-                // 噪声滤波器 - 低通，让噪声更温暖
-                noiseFilter.type = 'lowpass';
-                noiseFilter.frequency.setValueAtTime(300, startTime);
-                noiseFilter.Q.setValueAtTime(0.15, startTime);
-                
-                // 温暖的音量包络 - 延长持续时间
-                snareGain.gain.setValueAtTime(0, startTime);
-                snareGain.gain.linearRampToValueAtTime(0.5 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.05);
-                snareGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.6);
-                
-                // 连接多个振荡器，包括噪声
-                snareOsc1.connect(snareFilter);
-                snareOsc2.connect(snareFilter);
-                snareNoise.connect(noiseFilter);
-                snareFilter.connect(snareGain);
-                noiseFilter.connect(snareGain);
-                snareGain.connect(this.masterGain);
-                
-                snareOsc1.start(startTime);
-                snareOsc2.start(startTime);
-                snareNoise.start(startTime);
-                snareOsc1.stop(startTime + 0.6);
-                snareOsc2.stop(startTime + 0.6);
-                snareNoise.stop(startTime + 0.6);
-            }
             
             // 创建踩镲 - 完全柔和的音色，IDM变化明显
             createHiHat(startTime, duration) {
                 const toneValue = this.drumsPitch;
                 
-                // 创建多个振荡器叠加，产生更丰富的音色
-                const hihatOsc1 = this.audioContext.createOscillator();
-                const hihatOsc2 = this.audioContext.createOscillator();
+                // 创建真正的hihat音效 - 使用白噪音和滤波器
+                const bufferSize = this.audioContext.sampleRate * 0.2; // 200ms缓冲区
+                const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+                const data = buffer.getChannelData(0);
+                
+                // 生成白噪音
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * 0.5;
+                }
+                
+                const noiseSource = this.audioContext.createBufferSource();
+                noiseSource.buffer = buffer;
+                
                 const hihatGain = this.audioContext.createGain();
                 const hihatFilter = this.audioContext.createBiquadFilter();
                 
-                // 根据IDM模式选择完全不同的音色
+                // 根据调音器值调整hihat音色
                 if (toneValue < 0.2) {
-                    // 极简模式 - 纯正弦波，温暖圆润
-                    hihatOsc1.type = 'sine';
-                    hihatOsc1.frequency.setValueAtTime(3000, startTime);
-                    hihatOsc2.type = 'sine';
-                    hihatOsc2.frequency.setValueAtTime(2500, startTime);
+                    // 极简模式 - 高频hihat
+                    hihatFilter.type = 'highpass';
+                    hihatFilter.frequency.setValueAtTime(8000, startTime);
+                    hihatFilter.Q.setValueAtTime(0.5, startTime);
                     
                 } else if (toneValue < 0.4) {
-                    // 故障模式 - 三角形波，数字感
-                    hihatOsc1.type = 'triangle';
-                    hihatOsc1.frequency.setValueAtTime(4000, startTime);
-                    hihatOsc2.type = 'triangle';
-                    hihatOsc2.frequency.setValueAtTime(3200, startTime);
+                    // 故障模式 - 中高频hihat
+                    hihatFilter.type = 'bandpass';
+                    hihatFilter.frequency.setValueAtTime(6000, startTime);
+                    hihatFilter.Q.setValueAtTime(1.5, startTime);
                     
                 } else if (toneValue < 0.6) {
-                    // 碎拍模式 - 正弦+三角形，节奏感
-                    hihatOsc1.type = 'sine';
-                    hihatOsc1.frequency.setValueAtTime(3500, startTime);
-                    hihatOsc2.type = 'triangle';
-                    hihatOsc2.frequency.setValueAtTime(2800, startTime);
+                    // 碎拍模式 - 宽频hihat
+                    hihatFilter.type = 'highpass';
+                    hihatFilter.frequency.setValueAtTime(4000, startTime);
+                    hihatFilter.Q.setValueAtTime(0.3, startTime);
                     
                 } else if (toneValue < 0.8) {
-                    // 氛围模式 - 纯正弦，空间感
-                    hihatOsc1.type = 'sine';
-                    hihatOsc1.frequency.setValueAtTime(2800, startTime);
-                    hihatOsc2.type = 'sine';
-                    hihatOsc2.frequency.setValueAtTime(2400, startTime);
+                    // 氛围模式 - 低频hihat
+                    hihatFilter.type = 'highpass';
+                    hihatFilter.frequency.setValueAtTime(3000, startTime);
+                    hihatFilter.Q.setValueAtTime(0.8, startTime);
                     
                 } else {
-                    // IDM模式 - 复杂叠加，智能感
-                    hihatOsc1.type = 'sine';
-                    hihatOsc1.frequency.setValueAtTime(3800, startTime);
-                    hihatOsc2.type = 'triangle';
-                    hihatOsc2.frequency.setValueAtTime(3000, startTime);
+                    // IDM模式 - 复杂hihat
+                    hihatFilter.type = 'bandpass';
+                    hihatFilter.frequency.setValueAtTime(5000, startTime);
+                    hihatFilter.Q.setValueAtTime(2.0, startTime);
                 }
                 
-                // 超柔和的滤波器设置
-                hihatFilter.type = 'highpass';
-                hihatFilter.frequency.setValueAtTime(2000, startTime);
-                hihatFilter.Q.setValueAtTime(1.0, startTime); // 极低Q值，完全消除锐耳
-                
-                // 温暖的音量包络
+                // 快速的hihat包络 - 短促的"嚓"声
                 hihatGain.gain.setValueAtTime(0, startTime);
-                hihatGain.gain.linearRampToValueAtTime(0.4 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.003);
-                hihatGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.1);
+                hihatGain.gain.linearRampToValueAtTime(0.3 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.001); // 从0.6降低到0.3
+                hihatGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.05); // 更短促的衰减
                 
-                // 连接多个振荡器
-                hihatOsc1.connect(hihatFilter);
-                hihatOsc2.connect(hihatFilter);
+                // 连接音频链
+                noiseSource.connect(hihatFilter);
                 hihatFilter.connect(hihatGain);
                 hihatGain.connect(this.masterGain);
                 
-                hihatOsc1.start(startTime);
-                hihatOsc2.start(startTime);
-                hihatOsc1.stop(startTime + 0.1);
-                hihatOsc2.stop(startTime + 0.1);
+                // 播放
+                noiseSource.start(startTime);
+                noiseSource.stop(startTime + 0.1);
             }
             
-            // 创建开镲 - 完全柔和的音色，IDM变化明显
-            createCrash(startTime, duration) {
-                const toneValue = this.drumsPitch;
-                
-                // 创建多个振荡器叠加，产生更丰富的音色
-                const crashOsc1 = this.audioContext.createOscillator();
-                const crashOsc2 = this.audioContext.createOscillator();
-                const crashGain = this.audioContext.createGain();
-                const crashFilter = this.audioContext.createBiquadFilter();
-                
-                // 根据IDM模式选择完全不同的音色
-                if (toneValue < 0.2) {
-                    // 极简模式 - 纯正弦波，温暖圆润
-                    crashOsc1.type = 'sine';
-                    crashOsc1.frequency.setValueAtTime(300, startTime);
-                    crashOsc1.frequency.exponentialRampToValueAtTime(180, startTime + 0.8);
-                    crashOsc2.type = 'sine';
-                    crashOsc2.frequency.setValueAtTime(250, startTime);
-                    crashOsc2.frequency.exponentialRampToValueAtTime(150, startTime + 0.8);
-                    
-                } else if (toneValue < 0.4) {
-                    // 故障模式 - 三角形波，数字感
-                    crashOsc1.type = 'triangle';
-                    crashOsc1.frequency.setValueAtTime(400, startTime);
-                    crashOsc1.frequency.exponentialRampToValueAtTime(220, startTime + 0.6);
-                    crashOsc2.type = 'triangle';
-                    crashOsc2.frequency.setValueAtTime(320, startTime);
-                    crashOsc2.frequency.exponentialRampToValueAtTime(180, startTime + 0.6);
-                    
-                } else if (toneValue < 0.6) {
-                    // 碎拍模式 - 正弦+三角形，节奏感
-                    crashOsc1.type = 'sine';
-                    crashOsc1.frequency.setValueAtTime(350, startTime);
-                    crashOsc1.frequency.exponentialRampToValueAtTime(200, startTime + 0.7);
-                    crashOsc2.type = 'triangle';
-                    crashOsc2.frequency.setValueAtTime(280, startTime);
-                    crashOsc2.frequency.exponentialRampToValueAtTime(180, startTime + 0.7);
-                    
-                } else if (toneValue < 0.8) {
-                    // 氛围模式 - 纯正弦，空间感
-                    crashOsc1.type = 'sine';
-                    crashOsc1.frequency.setValueAtTime(280, startTime);
-                    crashOsc1.frequency.exponentialRampToValueAtTime(170, startTime + 0.9);
-                    crashOsc2.type = 'sine';
-                    crashOsc2.frequency.setValueAtTime(230, startTime);
-                    crashOsc2.frequency.exponentialRampToValueAtTime(140, startTime + 0.9);
-                    
-                } else {
-                    // IDM模式 - 复杂叠加，智能感
-                    crashOsc1.type = 'sine';
-                    crashOsc1.frequency.setValueAtTime(380, startTime);
-                    crashOsc1.frequency.exponentialRampToValueAtTime(210, startTime + 0.5);
-                    crashOsc2.type = 'triangle';
-                    crashOsc2.frequency.setValueAtTime(300, startTime);
-                    crashOsc2.frequency.exponentialRampToValueAtTime(170, startTime + 0.5);
-                }
-                
-                // 超柔和的滤波器设置
-                crashFilter.type = 'bandpass';
-                crashFilter.frequency.setValueAtTime(600, startTime);
-                crashFilter.frequency.exponentialRampToValueAtTime(300, startTime + 0.8);
-                crashFilter.Q.setValueAtTime(1.0, startTime); // 极低Q值，完全消除锐耳
-                
-                // 温暖的音量包络
-                crashGain.gain.setValueAtTime(0, startTime);
-                crashGain.gain.linearRampToValueAtTime(0.5 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.03);
-                crashGain.gain.exponentialRampToValueAtTime(0.01, startTime + 1.2);
-                
-                // 连接多个振荡器
-                crashOsc1.connect(crashFilter);
-                crashOsc2.connect(crashFilter);
-                crashFilter.connect(crashGain);
-                crashGain.connect(this.masterGain);
-                
-                crashOsc1.start(startTime);
-                crashOsc2.start(startTime);
-                crashOsc1.stop(startTime + 1.2);
-                crashOsc2.stop(startTime + 1.2);
-            }
             
             // 极简鼓点模式 - 真正的随机性 (IDM风格)
             createMinimalDrums(startTime, noteDuration) {
@@ -8951,11 +9677,6 @@
                     const kickOffset = (randomSeed2 - 0.5) * noteDuration * 0.4;
                     this.createKickDrum(startTime + kickOffset, noteDuration * (0.6 + randomSeed3 * 0.4));
                     
-                    // 军鼓 - 随机概率出现
-                    if (randomSeed2 > 0.6) {
-                        const snareOffset = (randomSeed3 - 0.5) * noteDuration * 0.6;
-                        this.createSnareDrum(startTime + noteDuration * 0.5 + snareOffset, noteDuration * (0.4 + randomSeed1 * 0.4));
-                    }
                     
                     // 踩镲 - 随机节奏点缀
                     if (randomSeed3 > 0.7) {
@@ -8989,12 +9710,6 @@
                     this.createKickDrum(startTime + noteDuration * 0.5 + kickOffset2, kickDuration2);
                 }
                 
-                // 军鼓 - 随机故障切分音
-                if (randomSeed3 > 0.5) {
-                    const snareOffset = (randomSeed4 - 0.5) * noteDuration * 0.8;
-                    const snareDuration = noteDuration * (0.3 + randomSeed1 * 0.5);
-                    this.createSnareDrum(startTime + noteDuration * 0.5 + snareOffset, snareDuration);
-                }
                 
                 // 踩镲 - 随机故障高频
                 if (randomSeed4 > 0.3) {
@@ -9009,10 +9724,10 @@
                     this.createHiHat(startTime + noteDuration * 0.5 + hihatOffset2, hihatDuration2);
                 }
                 
-                // 随机故障效果 - 增加概率
-                if (Math.random() < 0.3) { // 30%概率
+                // 随机故障效果 - 大幅增加概率，让乱码更频繁
+                if (Math.random() < 0.6) { // 从30%提高到60%概率
                     const glitchOffset = (Math.random() - 0.5) * noteDuration * 0.5;
-                    const glitchDuration = noteDuration * (0.05 + Math.random() * 0.15);
+                    const glitchDuration = noteDuration * (0.08 + Math.random() * 0.2); // 增加持续时间
                     this.createGlitchEffect(startTime + noteDuration * 0.5 + glitchOffset, glitchDuration);
                 }
             }
@@ -9041,20 +9756,6 @@
                     this.createKickDrum(startTime + noteDuration * 0.625 + kickOffset2, kickDuration2);
                 }
                 
-                // 军鼓 - 随机复杂切分音
-                this.createSnareDrum(startTime + noteDuration * 0.5, noteDuration);
-                
-                if (randomSeed3 > 0.5) {
-                    const snareOffset1 = (randomSeed4 - 0.5) * noteDuration * 0.6;
-                    const snareDuration1 = noteDuration * (0.4 + randomSeed1 * 0.4);
-                    this.createSnareDrum(startTime + noteDuration * 0.25 + snareOffset1, snareDuration1);
-                }
-                
-                if (randomSeed4 > 0.7) {
-                    const snareOffset2 = (randomSeed1 - 0.5) * noteDuration * 0.5;
-                    const snareDuration2 = noteDuration * (0.3 + randomSeed2 * 0.5);
-                    this.createSnareDrum(startTime + noteDuration * 0.75 + snareOffset2, snareDuration2);
-                }
                 
                 // 踩镲 - 随机碎拍高频
                 this.createHiHat(startTime, noteDuration * 0.25);
@@ -9092,13 +9793,6 @@
                     const kickDuration = noteDuration * (0.8 + randomSeed3 * 0.8);
                     this.createKickDrum(startTime + kickOffset, kickDuration);
                     
-                    // 军鼓 - 随机延迟出现
-                    if (randomSeed2 > 0.4) {
-                        const snareOffset = (randomSeed3 - 0.5) * noteDuration * 0.8;
-                        const snareDelay = noteDuration * (0.3 + randomSeed4 * 0.6);
-                        const snareDuration = noteDuration * (0.6 + randomSeed1 * 0.6);
-                        this.createSnareDrum(startTime + snareDelay + snareOffset, snareDuration);
-                    }
                     
                     // 踩镲 - 随机空间感高频
                     if (randomSeed3 > 0.5) {
@@ -9146,24 +9840,6 @@
                     this.createKickDrum(startTime + noteDuration * 0.6 + kickOffset3, kickDuration3);
                 }
                 
-                // 军鼓 - 随机智能切分音
-                if (randomSeed4 > 0.4) {
-                    const snareOffset1 = (randomSeed5 - 0.5) * noteDuration * 0.5;
-                    const snareDuration1 = noteDuration * (0.8 + randomSeed1 * 0.4);
-                    this.createSnareDrum(startTime + noteDuration * 0.5 + snareOffset1, snareDuration1);
-                }
-                
-                if (randomSeed5 > 0.6) {
-                    const snareOffset2 = (randomSeed1 - 0.5) * noteDuration * 0.6;
-                    const snareDuration2 = noteDuration * (0.4 + randomSeed2 * 0.5);
-                    this.createSnareDrum(startTime + noteDuration * 0.25 + snareOffset2, snareDuration2);
-                }
-                
-                if (randomSeed1 > 0.8) {
-                    const snareOffset3 = (randomSeed2 - 0.5) * noteDuration * 0.4;
-                    const snareDuration3 = noteDuration * (0.3 + randomSeed3 * 0.6);
-                    this.createSnareDrum(startTime + noteDuration * 0.75 + snareOffset3, snareDuration3);
-                }
                 
                 // 踩镲 - 随机智能高频
                 if (randomSeed2 > 0.2) {
@@ -9198,11 +9874,11 @@
                     this.createIDMEffect(startTime + idmDelay + idmOffset, idmDuration);
                 }
                 
-                // 额外随机效果
-                if (Math.random() < 0.3) { // 30%概率
+                // 额外随机效果 - 大幅增加概率，让乱码更频繁
+                if (Math.random() < 0.7) { // 从30%提高到70%概率
                     const extraOffset = (Math.random() - 0.5) * noteDuration * 0.8;
                     const extraDelay = noteDuration * (0.1 + Math.random() * 0.8);
-                    const extraDuration = noteDuration * (0.1 + Math.random() * 0.2);
+                    const extraDuration = noteDuration * (0.12 + Math.random() * 0.25); // 增加持续时间
                     this.createGlitchEffect(startTime + extraDelay + extraOffset, extraDuration);
                 }
             }
@@ -9213,19 +9889,19 @@
                 const glitchGain = this.audioContext.createGain();
                 const glitchFilter = this.audioContext.createBiquadFilter();
                 
-                // 故障音色 - 使用更柔和的波形
-                glitchOsc.type = 'triangle'; // 改为三角形，减少锐耳
-                glitchOsc.frequency.setValueAtTime(1500 + Math.random() * 2000, startTime); // 降低频率范围
+                // 故障音色 - 使用更尖锐的波形，增强乱码效果
+                glitchOsc.type = 'sawtooth'; // 改为锯齿波，更尖锐的乱码声音
+                glitchOsc.frequency.setValueAtTime(800 + Math.random() * 3000, startTime); // 扩大频率范围，更明显的乱码
                 
-                // 故障滤波器 - 更柔和的设置
+                // 故障滤波器 - 更尖锐的设置，增强乱码特征
                 glitchFilter.type = 'bandpass';
-                glitchFilter.frequency.setValueAtTime(800, startTime);
-                glitchFilter.frequency.exponentialRampToValueAtTime(4000, startTime + duration * 0.5); // 降低最高频率
-                glitchFilter.Q.setValueAtTime(8, startTime); // 大幅降低Q值，减少锐耳
+                glitchFilter.frequency.setValueAtTime(600, startTime);
+                glitchFilter.frequency.exponentialRampToValueAtTime(6000, startTime + duration * 0.5); // 提高最高频率，更尖锐
+                glitchFilter.Q.setValueAtTime(15, startTime); // 提高Q值，增强乱码特征
                 
-                // 故障音量 - 更平缓
+                // 故障音量 - 极度增强，让乱码声音非常明显
                 glitchGain.gain.setValueAtTime(0, startTime);
-                glitchGain.gain.linearRampToValueAtTime(0.2 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.002); // 降低音量，延长攻击
+                glitchGain.gain.linearRampToValueAtTime(1.2 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.001); // 从0.7提高到1.2，极度增强
                 glitchGain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
                 
                 glitchOsc.connect(glitchFilter);
@@ -9252,9 +9928,9 @@
                 ambientFilter.frequency.setValueAtTime(200, startTime);
                 ambientFilter.Q.setValueAtTime(8, startTime);
                 
-                // 氛围音量 - 缓慢衰减
+                // 氛围音量 - 更响亮，增强快速运动时的夸张效果
                 ambientGain.gain.setValueAtTime(0, startTime);
-                ambientGain.gain.linearRampToValueAtTime(0.2 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.1);
+                ambientGain.gain.linearRampToValueAtTime(0.7 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.1); // 从0.4提高到0.7，增强夸张效果
                 ambientGain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
                 
                 ambientOsc.connect(ambientFilter);
@@ -9283,10 +9959,10 @@
                 idmFilter.frequency.exponentialRampToValueAtTime(1200, startTime + duration * 0.5); // 降低最高频率
                 idmFilter.Q.setValueAtTime(6, startTime); // 大幅降低Q值，减少锐耳
                 
-                // IDM音量 - 更平缓的包络
+                // IDM音量 - 更响亮，增强快速运动时的夸张效果
                 idmGain.gain.setValueAtTime(0, startTime);
-                idmGain.gain.linearRampToValueAtTime(0.3 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.02); // 降低音量，延长攻击
-                idmGain.gain.linearRampToValueAtTime(0.15 * this.pipesMusicVolume * this.drumsVolume, startTime + duration * 0.3);
+                idmGain.gain.linearRampToValueAtTime(0.8 * this.pipesMusicVolume * this.drumsVolume, startTime + 0.02); // 从0.5提高到0.8，增强夸张效果
+                idmGain.gain.linearRampToValueAtTime(0.4 * this.pipesMusicVolume * this.drumsVolume, startTime + duration * 0.3); // 从0.25提高到0.4，增强夸张效果
                 idmGain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
                 
                 idmOsc.connect(idmFilter);
@@ -9467,6 +10143,19 @@
                     this.bluePipeHead = null;
                 }
                 
+                // 清理红色管道
+                this.redPipes.forEach(pipe => {
+                    if (pipe && pipe.parentNode) {
+                        pipe.parentNode.removeChild(pipe);
+                    }
+                });
+                this.redPipes = [];
+                
+                if (this.redPipeHead && this.redPipeHead.parentNode) {
+                    this.redPipeHead.parentNode.removeChild(this.redPipeHead);
+                    this.redPipeHead = null;
+                }
+                
                 // 清理ASCII字符
                 this.activeAsciiChars.forEach(char => {
                     if (char && char.parentNode) {
@@ -9512,15 +10201,34 @@
                 // Random direction with Z axis for blue pipe
                 this.blueDirection = directions[Math.floor(Math.random() * directions.length)];
                 
-                console.log(`🎯 3D管道头部创建：绿色位置(${this.currentX}, ${this.currentY}, ${this.currentZ})，蓝色位置(${this.blueCurrentX}, ${this.blueCurrentY}, ${this.blueCurrentZ})`);
+                // 创建红色管道头部
+                this.redPipeHead = document.createElement('div');
+                this.redPipeHead.className = 'pipe-line pipe-head';
+                this.redPipeHead.style.background = '#ff0000';
+                this.redPipeHead.style.border = '3px solid #ff0000';
+                this.redPipeHead.style.position = 'absolute';
+                this.redPipeHead.style.zIndex = '10';
+                this.container.appendChild(this.redPipeHead);
+                
+                // Random start position for red pipe
+                this.redCurrentX = Math.floor(Math.random() * this.cols);
+                this.redCurrentY = Math.floor(Math.random() * this.rows);
+                this.redCurrentZ = Math.floor(Math.random() * 10) - 5; // Z轴随机位置
+                
+                // Random direction with Z axis for red pipe
+                this.redDirection = directions[Math.floor(Math.random() * directions.length)];
+                
+                console.log(`🎯 3D管道头部创建：绿色位置(${this.currentX}, ${this.currentY}, ${this.currentZ})，蓝色位置(${this.blueCurrentX}, ${this.blueCurrentY}, ${this.blueCurrentZ})，红色位置(${this.redCurrentX}, ${this.redCurrentY}, ${this.redCurrentZ})`);
             }
             
-            createPipeSegment(x, y, z, type, isBlue = false) {
+            createPipeSegment(x, y, z, type, isBlue = false, isRed = false) {
                 const pipe = document.createElement('div');
                 let pipeClass;
                 
                 if (isBlue) {
                     pipeClass = type === 'pipe-horizontal' ? 'pipe-blue-horizontal' : 'pipe-blue-vertical';
+                } else if (isRed) {
+                    pipeClass = `pipe-line pipe-segment ${type}`;
                 } else {
                     pipeClass = `pipe-line pipe-segment ${type}`;
                 }
@@ -9533,6 +10241,14 @@
                     pipe.style.background = '#0066ff';
                     pipe.style.border = '2px solid #0066ff';
                     pipe.style.zIndex = '5';
+                }
+                
+                // 确保红色管道有正确的样式
+                if (isRed) {
+                    pipe.style.position = 'absolute';
+                    pipe.style.background = '#ff0000';
+                    pipe.style.border = '2px solid #ff0000';
+                    pipe.style.zIndex = '6'; // 红色管道在蓝色管道之上
                 }
                 
                 const left = x * this.gridSize;
@@ -9562,6 +10278,8 @@
                 this.container.appendChild(pipe);
                 if (isBlue) {
                     this.bluePipes.push(pipe);
+                } else if (isRed) {
+                    this.redPipes.push(pipe);
                 } else {
                     this.pipes.push(pipe);
                 }
@@ -9581,8 +10299,18 @@
             animate(currentTime = 0) {
                 if (!this.isActive) return;
                 
-                // 控制帧率 - 慢一点的动画
-                if (currentTime - this.lastTime < 200) { // 每200ms移动一次
+                // 性能监控
+                this.monitorAnimationPerformance();
+                
+                // 更新动画速度 - 确保鼠标停下时也能正确减速
+                this.updateAnimationSpeed();
+                
+                // 根据动画速度调整帧率控制
+                const baseFrameRate = 450; // 从300ms增加到450ms，进一步减慢动画速度
+                const speedAdjustedFrameRate = baseFrameRate / this.animationSystem.currentSpeed;
+                
+                // 控制帧率 - 根据动画速度动态调整
+                if (currentTime - this.lastTime < speedAdjustedFrameRate) {
                     this.animationId = requestAnimationFrame((time) => this.animate(time));
                     return;
                 }
@@ -9619,6 +10347,21 @@
                 this.bluePipeHead.style.transform = blueZTransform;
                 this.bluePipeHead.style.opacity = blueOpacity;
                 
+                // 更新红色管道头部位置
+                const redLeft = this.redCurrentX * this.gridSize + this.gridSize / 2 - 15;
+                const redTop = this.redCurrentY * this.gridSize + this.gridSize / 2 - 15;
+                this.redPipeHead.style.left = redLeft + 'px';
+                this.redPipeHead.style.top = redTop + 'px';
+                
+                // 计算红色管道近大远小的缩放比例
+                const redScale = Math.max(0.4, 1 - (this.redCurrentZ + 10) * 0.03);
+                const redOpacity = Math.max(0.3, 1 - (this.redCurrentZ + 10) * 0.035);
+                
+                // 添加Z轴变换和缩放到红色管道头部
+                const redZTransform = `rotateX(15deg) rotateY(5deg) translateZ(${this.redCurrentZ * 2}px) scale(${redScale})`;
+                this.redPipeHead.style.transform = redZTransform;
+                this.redPipeHead.style.opacity = redOpacity;
+                
                 // 调试：显示管道头部位置
                 if (this.currentX % 10 === 0) {
                     console.log(`🎯 3D管道头部位置：绿色(${left}px, ${top}px, ${this.currentZ}) 蓝色(${blueLeft}px, ${blueTop}px, ${this.blueCurrentZ})`);
@@ -9632,9 +10375,18 @@
                 this.createPipeSegment(this.blueCurrentX, this.blueCurrentY, this.blueCurrentZ,
                     this.blueDirection.x !== 0 ? 'pipe-horizontal' : 'pipe-vertical', true);
                 
+                // 创建红色管道段
+                this.createPipeSegment(this.redCurrentX, this.redCurrentY, this.redCurrentZ,
+                    this.redDirection.x !== 0 ? 'pipe-horizontal' : 'pipe-vertical', false, true); // 第三个参数表示是红色管道
+                
                 // 调试：检查蓝色管道数量
                 if (this.bluePipes.length % 10 === 0) {
                     console.log(`🔵 蓝色管道数量: ${this.bluePipes.length}, 位置: (${this.blueCurrentX}, ${this.blueCurrentY}, ${this.blueCurrentZ})`);
+                }
+                
+                // 调试：检查红色管道数量
+                if (this.redPipes.length % 10 === 0) {
+                    console.log(`🔴 红色管道数量: ${this.redPipes.length}, 位置: (${this.redCurrentX}, ${this.redCurrentY}, ${this.redCurrentZ})`);
                 }
                 
                 // 移动绿色管道到下一个位置
@@ -9646,6 +10398,11 @@
                 this.blueCurrentX += this.blueDirection.x;
                 this.blueCurrentY += this.blueDirection.y;
                 this.blueCurrentZ += this.blueDirection.z;
+                
+                // 移动红色管道到下一个位置
+                this.redCurrentX += this.redDirection.x;
+                this.redCurrentY += this.redDirection.y;
+                this.redCurrentZ += this.redDirection.z;
                 
                 // 检查绿色管道边界碰撞
                 if (this.currentX < 0) {
@@ -9689,12 +10446,36 @@
                     this.changeBlueDirection();
                 }
                 
+                // 检查红色管道边界碰撞
+                if (this.redCurrentX < 0) {
+                    this.redCurrentX = 0;
+                    this.changeRedDirection();
+                } else if (this.redCurrentX >= this.cols) {
+                    this.redCurrentX = this.cols - 1;
+                    this.changeRedDirection();
+                } else if (this.redCurrentY < 0) {
+                    this.redCurrentY = 0;
+                    this.changeRedDirection();
+                } else if (this.redCurrentY >= this.rows) {
+                    this.redCurrentY = this.rows - 1;
+                    this.changeRedDirection();
+                } else if (this.redCurrentZ < -10) {
+                    this.redCurrentZ = -10;
+                    this.changeRedDirection();
+                } else if (this.redCurrentZ > 10) {
+                    this.redCurrentZ = 10;
+                    this.changeRedDirection();
+                }
+                
                 // 随机改变方向 - 减少频率
                 if (Math.random() < 0.05) {
                     this.changeDirection();
                 }
                 if (Math.random() < 0.05) {
                     this.changeBlueDirection();
+                }
+                if (Math.random() < 0.05) {
+                    this.changeRedDirection();
                 }
                 
                 this.animationId = requestAnimationFrame((time) => this.animate(time));
@@ -9740,6 +10521,26 @@
                 this.blueCurrentZ = Math.max(-10, Math.min(10, this.blueCurrentZ));
             }
             
+            changeRedDirection() {
+                const directions = [
+                    {x: 1, y: 0, z: 0}, {x: -1, y: 0, z: 0}, 
+                    {x: 0, y: 1, z: 0}, {x: 0, y: -1, z: 0},
+                    {x: 0, y: 0, z: 1}, {x: 0, y: 0, z: -1}
+                ];
+                
+                // 避免反向移动
+                const validDirections = directions.filter(dir => 
+                    dir.x !== -this.redDirection.x || dir.y !== -this.redDirection.y || dir.z !== -this.redDirection.z
+                );
+                
+                this.redDirection = validDirections[Math.floor(Math.random() * validDirections.length)];
+                
+                // 确保在边界内
+                this.redCurrentX = Math.max(0, Math.min(this.cols - 1, this.redCurrentX));
+                this.redCurrentY = Math.max(0, Math.min(this.rows - 1, this.redCurrentY));
+                this.redCurrentZ = Math.max(-10, Math.min(10, this.redCurrentZ));
+            }
+            
             observePortraitChanges() {
                 // 使用 ResizeObserver 监听容器尺寸变化
                 const portraitContainer = this.portrait.parentElement;
@@ -9770,23 +10571,34 @@
                 });
             }
             
-            // ASCII动画方法
+            // ASCII动画方法 - 只在鼠标高速移动时启动
             startAsciiAnimation() {
                 if (this.asciiInterval) {
                     clearInterval(this.asciiInterval);
                 }
                 
-                // 每3-6秒随机生成一个字符（降低频率以提升性能）
-                this.asciiInterval = setInterval(() => {
-                    if (this.isActive && this.activeAsciiChars.length < this.maxAsciiChars) {
-                        this.createAsciiChar();
-                    }
-                }, Math.random() * 3000 + 3000); // 3-6秒随机间隔
-                
-                // 添加ASCII音效音量控制
+                // 不启动常规ASCII动画，只在鼠标高速移动时通过交互触发
                 this.asciiSoundVolume = 0.6; // 默认音量60%
                 
-                console.log('✅ ASCII动画已启动');
+                console.log('✅ ASCII动画系统已准备就绪（仅在鼠标高速移动时显示）');
+            }
+            
+            // 根据鼠标速度计算ASCII生成间隔 - 调整速度，增加随机性
+            getAsciiInterval() {
+                const baseInterval = 3000; // 基础间隔3秒
+                const minInterval = 100; // 从50ms增加到100ms，让超快部分慢一点
+                
+                if (this.mouseInteraction && this.mouseInteraction.isActive) {
+                    const mouseVelocity = this.mouseInteraction.mouseVelocity;
+                    // 鼠标移动越快，间隔越短，ASCII降落越多 - 调整敏感度
+                    const velocityFactor = Math.max(0.05, 1 - (mouseVelocity * 0.2)); // 从0.3降低到0.2，减少敏感度
+                    const dynamicInterval = baseInterval * velocityFactor;
+                    // 添加随机性，让间隔更随机
+                    const randomFactor = 0.7 + Math.random() * 0.6; // 0.7-1.3的随机因子
+                    return Math.max(minInterval, dynamicInterval * randomFactor);
+                }
+                
+                return baseInterval; // 默认间隔
             }
             
             stopAsciiAnimation() {
@@ -9812,15 +10624,45 @@
                 const asciiText = this.asciiChars[Math.floor(Math.random() * this.asciiChars.length)];
                 char.textContent = asciiText;
                 
-                // 随机位置（在左面板范围内）
+                // 设置五颜六色的颜色，白色偏多
+                const colors = [
+                    '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff', // 白色偏多 (5/15)
+                    '#ff0000', '#00ff00', '#0000ff', // 红绿蓝 (3/15)
+                    '#ffff00', '#ff00ff', '#00ffff', // 黄紫青 (3/15)
+                    '#ffa500', '#ff69b4', '#00ff7f', // 橙粉绿 (3/15)
+                    '#ffd700', '#da70d6' // 金紫 (2/15)
+                ];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                char.style.color = randomColor;
+                
+                // 去除光芒效果，保持简洁的五颜六色
+                char.style.fontWeight = 'bold';
+                
+                // 随机位置（在左面板范围内）- 像下雨一样随机
                 const leftPanel = document.querySelector('.left-panel');
                 const leftPanelRect = leftPanel.getBoundingClientRect();
-                const x = Math.random() * leftPanelRect.width;
+                
+                // 添加随机的水平偏移，模拟下雨的随机性
+                const baseX = Math.random() * leftPanelRect.width;
+                const randomOffset = (Math.random() - 0.5) * 50; // ±25px的随机偏移
+                const x = Math.max(0, Math.min(leftPanelRect.width - 30, baseX + randomOffset));
                 char.style.left = x + 'px';
                 
-                // 随机动画延迟
-                const delay = Math.random() * 2;
+                // 添加随机的下落角度，模拟下雨的倾斜
+                const randomAngle = (Math.random() - 0.5) * 10; // ±5度的随机角度
+                char.style.transform = `rotate(${randomAngle}deg)`;
+                
+                // 根据鼠标速度动态调整动画速度和延迟 - 调整超快部分的速度
+                const mouseVelocity = this.mouseInteraction ? this.mouseInteraction.mouseVelocity : 0;
+                const speedMultiplier = Math.max(1.0, 1 + (mouseVelocity * 0.4)); // 从0.8降低到0.4，让超快部分慢一点
+                const delay = Math.random() * (1.5 / speedMultiplier); // 从1增加到1.5，增加延迟范围
+                
+                // 动态调整动画持续时间 - 让超快部分慢一点
+                const baseDuration = 8; // 基础8秒
+                const dynamicDuration = Math.max(3, baseDuration / speedMultiplier); // 设置最小3秒，避免过快
+                
                 char.style.animationDelay = delay + 's';
+                char.style.animationDuration = dynamicDuration + 's';
                 
                 this.container.appendChild(char);
                 this.activeAsciiChars.push(char);
@@ -9834,7 +10676,9 @@
                         char.parentNode.removeChild(char);
                         this.activeAsciiChars = this.activeAsciiChars.filter(c => c !== char);
                     }
-                }, 8000 + delay * 1000);
+                }, (dynamicDuration + delay) * 1000);
+                
+                // 注意：额外字符创建逻辑已移至鼠标交互更新中，这里不再重复创建
             }
             
             // 播放ASCII掉落音效
@@ -11039,8 +11883,12 @@
             if (document.fonts && document.fonts.ready) {
                 document.fonts.ready.then(() => {
                     console.log('所有字体加载完成');
-                    // 强制重新渲染页面
-                    document.body.style.fontFamily = 'VCR OSD Mono, Press Start 2P, VT323, Courier New, monospace';
+                    // 强制重新渲染页面，确保像素字体正确显示
+                    document.body.style.fontFamily = 'VCR OSD Mono, Press Start 2P, VT323, Courier New, Monaco, Consolas, monospace';
+                    // 强制禁用字体平滑，确保像素效果
+                    document.body.style.webkitFontSmoothing = 'none';
+                    document.body.style.mozOsxFontSmoothing = 'none';
+                    document.body.style.textRendering = 'optimizeSpeed';
                 });
             }
         }
@@ -11204,8 +12052,45 @@
             
             // 初始化开场音效状态
             window.openingSoundPlayed = false;
+            window.openingSoundPlaying = false;
             window.pendingWeatherData = null;
-            console.log('🎬 初始化开场音效状态:', { openingSoundPlayed: window.openingSoundPlayed, pendingWeatherData: window.pendingWeatherData });
+            console.log('🎬 初始化开场音效状态:', { 
+                openingSoundPlayed: window.openingSoundPlayed, 
+                openingSoundPlaying: window.openingSoundPlaying,
+                pendingWeatherData: window.pendingWeatherData 
+            });
+            
+            // 添加全局调试函数
+            window.debugOpeningSound = function() {
+                console.log('🎵 音效状态调试信息:', {
+                    openingSoundPlayed: window.openingSoundPlayed,
+                    openingSoundPlaying: window.openingSoundPlaying,
+                    pendingWeatherData: window.pendingWeatherData
+                });
+            };
+            
+            // 添加测试音效函数
+            window.testAudio = function() {
+                console.log('🎵 测试音频播放...');
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.5);
+                    
+                    console.log('✅ 测试音效播放成功');
+                } catch (error) {
+                    console.error('❌ 测试音效播放失败:', error);
+                }
+            };
             
             // 确保从黑色背景开始
             resetToBlackBackground();
@@ -11224,7 +12109,7 @@
                 console.log('🔄 页面重新显示，重置为黑色背景...');
                 resetToBlackBackground();
                 // 如果还没有播放过开场音效，重新开始
-                if (!window.openingSoundPlayed) {
+                if (!window.openingSoundPlayed || window.openingSoundPlaying) {
                     setTimeout(() => {
                         startOpeningSequence();
                     }, 500);
@@ -11253,36 +12138,72 @@
             console.log('✅ 设置后body背景色:', document.body.style.backgroundColor);
             console.log('✅ 设置后html背景色:', document.documentElement.style.backgroundColor);
             
-            // 重置播放状态
-            window.openingSoundPlayed = false;
+            // 重置播放状态（只在初始化时重置）
+            if (typeof window.openingSoundPlayed === 'undefined') {
+                window.openingSoundPlayed = false;
+            }
         }
         
         // 开场音效播放
         function startOpeningSequence() {
             console.log('🎬 开始主界面开场序列...');
+            console.log('🎬 当前音效状态:', { 
+                openingSoundPlayed: window.openingSoundPlayed, 
+                openingSoundPlaying: window.openingSoundPlaying 
+            });
             
             // 延迟1秒后开始播放开场音效
             setTimeout(() => {
+                console.log('⏰ 1秒延迟结束，准备播放开场音效...');
+                console.log('🎵 尝试播放开场音效，当前状态:', {
+                    openingSoundPlayed: window.openingSoundPlayed,
+                    openingSoundPlaying: window.openingSoundPlaying
+                });
+                
+                // 先测试简单的音效
+                console.log('🎵 先测试简单音效...');
+                try {
+                    const testContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const testOsc = testContext.createOscillator();
+                    const testGain = testContext.createGain();
+                    testOsc.connect(testGain);
+                    testGain.connect(testContext.destination);
+                    testOsc.frequency.setValueAtTime(440, testContext.currentTime);
+                    testGain.gain.setValueAtTime(0.1, testContext.currentTime);
+                    testOsc.start();
+                    testOsc.stop(testContext.currentTime + 0.1);
+                    console.log('✅ 简单音效测试成功');
+                } catch (error) {
+                    console.error('❌ 简单音效测试失败:', error);
+                }
+                
+                // 然后播放正式的开场音效
                 playOpeningSound();
             }, 1000);
         }
         
         // 播放开场音效
         function playOpeningSound() {
+            console.log('🎵 playOpeningSound 函数被调用');
+            console.log('🎵 当前音效状态:', { 
+                openingSoundPlayed: window.openingSoundPlayed, 
+                openingSoundPlaying: window.openingSoundPlaying 
+            });
+            
             // 防止重复播放
             if (window.openingSoundPlayed) {
                 console.log('🎵 开场音效已经播放过，跳过...');
                 return;
             }
             
-            console.log('🎵 播放开场音效...');
+            console.log('🎵 开始播放开场音效...');
             
             try {
                 // 标记音效正在播放（此时还不能应用天气背景）
-                window.openingSoundPlayed = false;
-                console.log('🎵 音效播放状态设置为false');
+                window.openingSoundPlaying = true;
+                console.log('🎵 音效播放状态设置为正在播放');
                 
-                // 创建音频上下文
+                // 创建音频上下文并尝试自动播放
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 
                 // 创建主混音器
@@ -11290,8 +12211,39 @@
                 masterGain.connect(audioContext.destination);
                 masterGain.gain.setValueAtTime(0.5, audioContext.currentTime); // 主音量50%
                 
-                // 创建开场音效 - 帝国时代风格
-                createOpeningSound(audioContext, masterGain);
+                // 强制尝试自动播放
+                console.log('🎵 音频上下文状态:', audioContext.state);
+                
+                // 尝试自动播放，如果失败则等待用户交互
+                if (audioContext.state === 'suspended') {
+                    console.log('🎵 音频上下文被暂停，尝试自动恢复...');
+                    audioContext.resume().then(() => {
+                        console.log('✅ 音频上下文自动恢复成功');
+                        createOpeningSound(audioContext, masterGain);
+                    }).catch(error => {
+                        console.log('⚠️ 自动播放失败，直接尝试播放:', error);
+                        // 直接尝试播放，不等待用户交互
+                        try {
+                            createOpeningSound(audioContext, masterGain);
+                        } catch (playError) {
+                            console.log('❌ 直接播放也失败，等待用户交互:', playError);
+                            const waitForUserInteraction = () => {
+                                audioContext.resume().then(() => {
+                                    console.log('✅ 通过用户交互恢复音频上下文');
+                                    createOpeningSound(audioContext, masterGain);
+                                    document.removeEventListener('click', waitForUserInteraction);
+                                    document.removeEventListener('touchstart', waitForUserInteraction);
+                                });
+                            };
+                            document.addEventListener('click', waitForUserInteraction);
+                            document.addEventListener('touchstart', waitForUserInteraction);
+                        }
+                    });
+                } else {
+                    // 音频上下文已经激活，直接播放
+                    console.log('✅ 音频上下文已激活，直接播放开场音效');
+                    createOpeningSound(audioContext, masterGain);
+                }
                 
                 console.log('🎵 开场音效开始播放！');
                 console.log('⏰ 设置1.2秒后开始背景渐变...');
@@ -11301,7 +12253,8 @@
                     console.log('⏰ 0.2秒定时器触发！');
                     // 标记音效播放完毕，现在可以应用天气背景了
                     window.openingSoundPlayed = true;
-                    console.log('🎵 音效播放状态设置为true');
+                    window.openingSoundPlaying = false;
+                    console.log('🎵 音效播放状态设置为已播放');
                     console.log('🌤️ 开始调用startWeatherBackgroundTransition...');
                     startWeatherBackgroundTransition();
                 }, 200); // 0.2秒后开始渐变（音效总时长1.0秒，留0.2秒缓冲）
@@ -11312,7 +12265,8 @@
                 setTimeout(() => {
                     console.log('⏰ 错误处理定时器触发！');
                     window.openingSoundPlayed = true;
-                    console.log('🎵 错误处理：音效播放状态设置为true');
+                    window.openingSoundPlaying = false;
+                    console.log('🎵 错误处理：音效播放状态设置为已播放');
                     startWeatherBackgroundTransition();
                 }, 200);
             }
