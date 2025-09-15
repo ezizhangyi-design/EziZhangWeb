@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音效测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #000;
+            color: #00ff00;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #00cc00;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 展览页面音效测试</h1>
+    
+    <div class="status" id="status">
+        状态: 等待测试...
+    </div>
+    
+    <button onclick="testAudioContext()">测试音频上下文</button>
+    <button onclick="testExhibitionGreeting()">测试展览问候音效</button>
+    <button onclick="testSimpleSound()">测试简单音效</button>
+    
+    <script>
+        let audioContext = null;
+        
+        function updateStatus(message) {
+            document.getElementById('status').innerHTML = `状态: ${message}`;
+            console.log('🎵 状态更新:', message);
+        }
+        
+        function testAudioContext() {
+            updateStatus('正在测试音频上下文...');
+            
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                updateStatus(`音频上下文创建成功，状态: ${audioContext.state}`);
+                
+                if (audioContext.state === 'suspended') {
+                    updateStatus('音频上下文被暂停，尝试恢复...');
+                    audioContext.resume().then(() => {
+                        updateStatus(`音频上下文恢复成功，状态: ${audioContext.state}`);
+                    }).catch(error => {
+                        updateStatus(`音频上下文恢复失败: ${error.message}`);
+                    });
+                }
+            } catch (error) {
+                updateStatus(`音频上下文创建失败: ${error.message}`);
+            }
+        }
+        
+        function testSimpleSound() {
+            if (!audioContext) {
+                updateStatus('请先测试音频上下文');
+                return;
+            }
+            
+            updateStatus('正在播放简单音效...');
+            
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+                
+                updateStatus('简单音效播放成功！');
+                
+                setTimeout(() => {
+                    updateStatus('音效播放完成');
+                }, 600);
+                
+            } catch (error) {
+                updateStatus(`简单音效播放失败: ${error.message}`);
+            }
+        }
+        
+        function testExhibitionGreeting() {
+            if (!audioContext) {
+                updateStatus('请先测试音频上下文');
+                return;
+            }
+            
+            updateStatus('正在播放展览问候音效...');
+            
+            try {
+                // 创建主混音器
+                const masterGain = audioContext.createGain();
+                masterGain.connect(audioContext.destination);
+                masterGain.gain.setValueAtTime(0.22, audioContext.currentTime);
+                
+                // 创建延迟效果
+                const delayGain = audioContext.createGain();
+                const delayNode = audioContext.createDelay(0.15);
+                delayGain.gain.setValueAtTime(0.11, audioContext.currentTime);
+                
+                // 创建"Ezi's"音效
+                createEziSound(audioContext, masterGain, delayGain, 0);
+                
+                // 延迟播放"EXHIBITION"音效
+                setTimeout(() => {
+                    createExhibitionSound(audioContext, masterGain, delayGain, 0.6);
+                }, 600);
+                
+                // 延迟播放"EXPERIENCE"音效
+                setTimeout(() => {
+                    createExperienceSound(audioContext, masterGain, delayGain, 1.2);
+                }, 1200);
+                
+                updateStatus('展览问候音效开始播放！');
+                
+                setTimeout(() => {
+                    updateStatus('展览问候音效播放完成');
+                }, 3000);
+                
+            } catch (error) {
+                updateStatus(`展览问候音效播放失败: ${error.message}`);
+            }
+        }
+        
+        // 创建"Ezi's"音效
+        function createEziSound(audioContext, masterGain, delayGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            const eziNotes = [
+                { freq: 440, duration: 0.2, gain: 0.22 },
+                { freq: 523, duration: 0.15, gain: 0.18 },
+                { freq: 659, duration: 0.25, gain: 0.25 }
+            ];
+            
+            eziNotes.forEach((note, index) => {
+                const noteTime = currentTime + index * 0.1;
+                
+                const mainOsc = audioContext.createOscillator();
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(mainGain);
+                
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                mainOsc.type = 'sawtooth';
+                
+                mainFilter.type = 'lowpass';
+                mainFilter.frequency.setValueAtTime(note.freq * 2, noteTime);
+                
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.01);
+                mainGain.gain.exponentialRampToValueAtTime(0.001, noteTime + note.duration);
+                
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                
+                addModernHarmonics(audioContext, masterGain, delayGain, noteTime, note.freq, note.gain * 0.3);
+            });
+            
+            console.log('🎵 播放"Ezi\'s"音效 - 现代电子风格');
+        }
+        
+        // 创建"EXHIBITION"音效
+        function createExhibitionSound(audioContext, masterGain, delayGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            const exhibitionNotes = [
+                { freq: 523, duration: 0.25, gain: 0.44 },
+                { freq: 659, duration: 0.2, gain: 0.35 },
+                { freq: 784, duration: 0.3, gain: 0.5 }
+            ];
+            
+            exhibitionNotes.forEach((note, index) => {
+                const noteTime = currentTime + index * 0.12;
+                
+                const mainOsc = audioContext.createOscillator();
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                mainOsc.type = 'square';
+                
+                mainFilter.type = 'lowpass';
+                mainFilter.frequency.setValueAtTime(note.freq * 1.5, noteTime);
+                
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.01);
+                mainGain.gain.exponentialRampToValueAtTime(0.001, noteTime + note.duration);
+                
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                
+                addModernHarmonics(audioContext, masterGain, delayGain, noteTime, note.freq, note.gain * 0.4);
+            });
+            
+            console.log('🎵 播放"EXHIBITION"音效 - 现代科技风格');
+        }
+        
+        // 创建"EXPERIENCE"音效
+        function createExperienceSound(audioContext, masterGain, delayGain, startTime) {
+            const currentTime = audioContext.currentTime + startTime;
+            
+            const experienceNotes = [
+                { freq: 659, duration: 0.3, gain: 0.4 },
+                { freq: 784, duration: 0.25, gain: 0.35 },
+                { freq: 880, duration: 0.35, gain: 0.45 }
+            ];
+            
+            experienceNotes.forEach((note, index) => {
+                const noteTime = currentTime + index * 0.15;
+                
+                const mainOsc = audioContext.createOscillator();
+                const mainGain = audioContext.createGain();
+                const mainFilter = audioContext.createBiquadFilter();
+                
+                mainOsc.connect(mainFilter);
+                mainFilter.connect(mainGain);
+                mainGain.connect(masterGain);
+                
+                mainOsc.frequency.setValueAtTime(note.freq, noteTime);
+                mainOsc.type = 'triangle';
+                
+                mainFilter.type = 'lowpass';
+                mainFilter.frequency.setValueAtTime(note.freq * 1.8, noteTime);
+                
+                mainGain.gain.setValueAtTime(0, noteTime);
+                mainGain.gain.linearRampToValueAtTime(note.gain, noteTime + 0.01);
+                mainGain.gain.exponentialRampToValueAtTime(0.001, noteTime + note.duration);
+                
+                mainOsc.start(noteTime);
+                mainOsc.stop(noteTime + note.duration);
+                
+                addModernHarmonics(audioContext, masterGain, delayGain, noteTime, note.freq, note.gain * 0.3);
+            });
+            
+            console.log('🎵 播放"EXPERIENCE"音效 - 未来科技风格');
+        }
+        
+        // 添加现代谐波
+        function addModernHarmonics(audioContext, masterGain, delayGain, startTime, baseFreq, volume) {
+            const harmonics = [
+                { freq: baseFreq * 1.5, gain: volume * 0.3, type: 'square' },
+                { freq: baseFreq * 2.5, gain: volume * 0.2, type: 'sawtooth' },
+                { freq: baseFreq * 0.75, gain: volume * 0.25, type: 'triangle' }
+            ];
+            
+            harmonics.forEach(harmonic => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(masterGain);
+                
+                osc.frequency.setValueAtTime(harmonic.freq, startTime);
+                osc.type = harmonic.type;
+                
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(harmonic.freq * 2, startTime);
+                
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(harmonic.gain, startTime + 0.01);
+                gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3);
+                
+                osc.start(startTime);
+                osc.stop(startTime + 0.3);
+            });
+        }
+        
+        // 页面加载完成后自动测试音频上下文
+        window.addEventListener('load', () => {
+            updateStatus('页面加载完成，请点击按钮测试音效');
+        });
+    </script>
+</body>
+</html>

@@ -150,6 +150,27 @@
             transition: all 1s ease-in-out;
         }
         
+        /* 文字重叠检测和变色效果 */
+        .text-overlap-detection {
+            position: relative;
+            z-index: 10; /* 确保文字在月亮之上 */
+            transition: all 0.3s ease;
+        }
+        
+        .text-overlap-detection.overlapping::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #000000;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+            -webkit-mask: var(--moon-mask);
+            mask: var(--moon-mask);
+            pointer-events: none;
+        }
+        
         /* 7种半月形状 */
         .moon.phase-1 {
             /* 新月 - 几乎不可见 */
@@ -946,34 +967,34 @@
     
     <div class="container">
         <div class="header">
-            <h1 class="title">EZI.ZHANG</h1>
-            <p class="subtitle lang-content active" data-lang="en">EXHIBITION EXPERIENCE</p>
-            <p class="subtitle lang-content" data-lang="zh">展览经历</p>
+            <h1 class="title text-overlap-detection">EZI.ZHANG</h1>
+            <p class="subtitle lang-content active text-overlap-detection" data-lang="en">EXHIBITION EXPERIENCE</p>
+            <p class="subtitle lang-content text-overlap-detection" data-lang="zh">展览经历</p>
         </div>
         
         <!-- Solo Exhibitions -->
         <div class="exhibition-section">
-            <h2 class="exhibition-title lang-content active" data-lang="en">SOLO EXHIBITIONS</h2>
-            <h2 class="exhibition-title lang-content" data-lang="zh">个人展览</h2>
+            <h2 class="exhibition-title lang-content active text-overlap-detection" data-lang="en">SOLO EXHIBITIONS</h2>
+            <h2 class="exhibition-title lang-content text-overlap-detection" data-lang="zh">个人展览</h2>
             <div class="exhibition-item">
-                <p class="exhibition-date">2025</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>if it happens in a flash Rasterize - L·F·T·R</strong>, E.SCAPE Art Space, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>如果在一瞬间，光栅化 - 光·裂·变·解</strong>, E.SCAPE艺术空间, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2025</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>if it happens in a flash Rasterize - L·F·T·R</strong>, E.SCAPE Art Space, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>如果在一瞬间，光栅化 - 光·裂·变·解</strong>, E.SCAPE艺术空间, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Journey</strong>, Klein Art Space, M50, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>征途</strong>, Klein Art Space, M50, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Journey</strong>, Klein Art Space, M50, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>征途</strong>, Klein Art Space, M50, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2023</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Rasterize — The Quadrilogy</strong>, Yellspace, Sichuan</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>光栅化/Rasterize—— 四部曲</strong>, 要空间Yellspace, 四川</p>
+                <p class="exhibition-date text-overlap-detection">2023</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Rasterize — The Quadrilogy</strong>, Yellspace, Sichuan</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>光栅化/Rasterize—— 四部曲</strong>, 要空间Yellspace, 四川</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2022</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>High-Frequency Synesthesia</strong>, Kongsan Art Museum, Hangzhou</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>高频联觉</strong>, 空山美术馆, 杭州</p>
+                <p class="exhibition-date text-overlap-detection">2022</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>High-Frequency Synesthesia</strong>, Kongsan Art Museum, Hangzhou</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>高频联觉</strong>, 空山美术馆, 杭州</p>
             </div>
             
             <!-- 空行分隔 -->
@@ -1084,42 +1105,42 @@
 
         <!-- Performances -->
         <div class="exhibition-section">
-            <h2 class="exhibition-title lang-content active" data-lang="en">PERFORMANCES</h2>
-            <h2 class="exhibition-title lang-content" data-lang="zh">视听表演</h2>
+            <h2 class="exhibition-title lang-content active text-overlap-detection" data-lang="en">PERFORMANCES</h2>
+            <h2 class="exhibition-title lang-content text-overlap-detection" data-lang="zh">视听表演</h2>
             <div class="exhibition-item">
-                <p class="exhibition-date">2025</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Synth Colors</strong>, Moin, Rockbund Ensemble, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>ROCKBUND ENSEMBLE 重奏外滩波频绘梦</strong>, 墨音, 外滩洛克源, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2025</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Synth Colors</strong>, Moin, Rockbund Ensemble, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>ROCKBUND ENSEMBLE 重奏外滩波频绘梦</strong>, 墨音, 外滩洛克源, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2025</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>if it happens in a flash Rasterize - L·F·T·R</strong>, E.SCAPE Art Space, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>如果在一瞬间发生 光栅化 - L·F·T·R</strong>, E.SCAPE艺术空间, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2025</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>if it happens in a flash Rasterize - L·F·T·R</strong>, E.SCAPE Art Space, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>如果在一瞬间发生 光栅化 - L·F·T·R</strong>, E.SCAPE艺术空间, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>"7th Anniversary"</strong>, Mago Sheng at ALL, All Club, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>「7周年」马戈生在ALL</strong>, All Club, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>"7th Anniversary"</strong>, Mago Sheng at ALL, All Club, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>「7周年」马戈生在ALL</strong>, All Club, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Oll.Korrect = All Correct</strong>, SYSTEM, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>Oll.Korrect = All correct</strong>, SYSTEM, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Oll.Korrect = All Correct</strong>, SYSTEM, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>Oll.Korrect = All correct</strong>, SYSTEM, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Illusion Resonance</strong>, THEBOXX, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>幻觉共振</strong>, THEBOXX, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Illusion Resonance</strong>, THEBOXX, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>幻觉共振</strong>, THEBOXX, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2023</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Circular Gaze</strong>, Yujian Guanchi Space, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>环形凝视</strong>, 愚见观池空间, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2023</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Circular Gaze</strong>, Yujian Guanchi Space, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>环形凝视</strong>, 愚见观池空间, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2023</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Loneliness — Audio-Visual Performance</strong>, Shanghai Broadcasting Art Center</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>孤独—视听演艺会</strong>, 上海广播艺术中心</p>
+                <p class="exhibition-date text-overlap-detection">2023</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Loneliness — Audio-Visual Performance</strong>, Shanghai Broadcasting Art Center</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>孤独—视听演艺会</strong>, 上海广播艺术中心</p>
             </div>
             
             <!-- 空行分隔 -->
@@ -1258,77 +1279,77 @@
 
         <!-- Group Exhibitions/Projects -->
         <div class="exhibition-section">
-            <h2 class="exhibition-title lang-content active" data-lang="en">GROUP EXHIBITIONS / PROJECTS</h2>
-            <h2 class="exhibition-title lang-content" data-lang="zh">群展 / 项目</h2>
+            <h2 class="exhibition-title lang-content active text-overlap-detection" data-lang="en">GROUP EXHIBITIONS / PROJECTS</h2>
+            <h2 class="exhibition-title lang-content text-overlap-detection" data-lang="zh">群展 / 项目</h2>
             <div class="exhibition-item">
-                <p class="exhibition-date">2025</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>THERTER NOON WILDNESS STREAM WASHE RUINS THERTER</strong>, Power Station of Art, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>新文化制作人，正午、荒原、息流、瓦舍、废墟、剧场</strong>, 上海当代艺术博物馆, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2025</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>THERTER NOON WILDNESS STREAM WASHE RUINS THERTER</strong>, Power Station of Art, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>新文化制作人，正午、荒原、息流、瓦舍、废墟、剧场</strong>, 上海当代艺术博物馆, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Sense n Vision</strong>, Art Basel Hong Kong, Hong Kong Convention and Exhibition Centre, Hong Kong</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>艺文香港「异度维声 Sense n Vision」</strong>, 香港会议展览中心, 香港</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Sense n Vision</strong>, Art Basel Hong Kong, Hong Kong Convention and Exhibition Centre, Hong Kong</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>艺文香港「异度维声 Sense n Vision」</strong>, 香港会议展览中心, 香港</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Shanghai Never Sleeps: ART021 Immersive Party</strong>, K11, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>上海从未入睡：ART021 沉浸式派对</strong>, 上海K11, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Shanghai Never Sleeps: ART021 Immersive Party</strong>, K11, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>上海从未入睡：ART021 沉浸式派对</strong>, 上海K11, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>UFO Terminal: Unknown Terminal</strong>, West Bund Oil Tank Art Park No.1 Tank, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>UFO Terminal 未知终端</strong>, 上海西岸油罐艺术公园1号罐, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>UFO Terminal: Unknown Terminal</strong>, West Bund Oil Tank Art Park No.1 Tank, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>UFO Terminal 未知终端</strong>, 上海西岸油罐艺术公园1号罐, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Phantom Realm</strong>, Sculpture Park Art Center, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>幻境</strong>, 雕塑公园艺术中心, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Phantom Realm</strong>, Sculpture Park Art Center, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>幻境</strong>, 雕塑公园艺术中心, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Ultra Substance (HK)</strong>, Mihn Club, Hong Kong</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>超物质ULTRA SUBSTANCE（HK）</strong>, Mihn Club, 香港</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Ultra Substance (HK)</strong>, Mihn Club, Hong Kong</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>超物质ULTRA SUBSTANCE（HK）</strong>, Mihn Club, 香港</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Wukang Sun Yard</strong>, E.SCAPE Art Space, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>武康晒场</strong>, E.SCAPE艺术空间, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Wukang Sun Yard</strong>, E.SCAPE Art Space, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>武康晒场</strong>, E.SCAPE艺术空间, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2024</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Happy Faces — Chinese Experimental & Tech Art</strong>, Nantong Art Museum, Nantong</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>幸福的表情——中国实验与科技艺术</strong>, 南通美术馆, 南通</p>
+                <p class="exhibition-date text-overlap-detection">2024</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Happy Faces — Chinese Experimental & Tech Art</strong>, Nantong Art Museum, Nantong</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>幸福的表情——中国实验与科技艺术</strong>, 南通美术馆, 南通</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2023</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Virtual · Roaming</strong>, K11 Select Art Mall, Tianjin</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>虚拟 · 漫游 K11 Select 艺术购物中心</strong>, 天津</p>
+                <p class="exhibition-date text-overlap-detection">2023</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Virtual · Roaming</strong>, K11 Select Art Mall, Tianjin</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>虚拟 · 漫游 K11 Select 艺术购物中心</strong>, 天津</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2023</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Design Shanghai x London</strong>, organized by Shanghai Design Week, London</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>设计沪航计划</strong>, 由上海设计周主办, 伦敦</p>
+                <p class="exhibition-date text-overlap-detection">2023</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Design Shanghai x London</strong>, organized by Shanghai Design Week, London</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>设计沪航计划</strong>, 由上海设计周主办, 伦敦</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2022</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>BXQ Experimental Video Week</strong>, Aotu Space, Beijing</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>BXQ实验影像周</strong>, 凹凸空间, 北京</p>
+                <p class="exhibition-date text-overlap-detection">2022</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>BXQ Experimental Video Week</strong>, Aotu Space, Beijing</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>BXQ实验影像周</strong>, 凹凸空间, 北京</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2022</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Player Art Festival</strong>, Oil Tank Art Center, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>玩家艺术节</strong>, 油罐艺术中心, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2022</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Player Art Festival</strong>, Oil Tank Art Center, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>玩家艺术节</strong>, 油罐艺术中心, 上海</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2022</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Bird & Flower Collection</strong>, Hangzhou</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>花鸟集</strong>, 杭州</p>
+                <p class="exhibition-date text-overlap-detection">2022</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Bird & Flower Collection</strong>, Hangzhou</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>花鸟集</strong>, 杭州</p>
             </div>
             <div class="exhibition-item">
-                <p class="exhibition-date">2022</p>
-                <p class="exhibition-description lang-content active" data-lang="en"><strong>Beyond Time, Knowledge of the Past: Oil Tank Art Center Sleepless Night</strong>, curated by Martin Goya, Oil Tank Art Center, Shanghai</p>
-                <p class="exhibition-description lang-content" data-lang="zh"><strong>藏往知来 油罐艺术不眠夜 马丁·戈雅生意策划</strong>, 油罐艺术中心, 上海</p>
+                <p class="exhibition-date text-overlap-detection">2022</p>
+                <p class="exhibition-description lang-content active text-overlap-detection" data-lang="en"><strong>Beyond Time, Knowledge of the Past: Oil Tank Art Center Sleepless Night</strong>, curated by Martin Goya, Oil Tank Art Center, Shanghai</p>
+                <p class="exhibition-description lang-content text-overlap-detection" data-lang="zh"><strong>藏往知来 油罐艺术不眠夜 马丁·戈雅生意策划</strong>, 油罐艺术中心, 上海</p>
             </div>
             
             <!-- 空行分隔 -->
@@ -1489,6 +1510,10 @@
         
         // 初始化展览页面语音问候系统 - 移到DOMContentLoaded事件中
         document.addEventListener('DOMContentLoaded', initExhibitionVoiceGreeting);
+        
+        // 移除重复的自动播放机制，避免音效重复播放
+        
+        // 移除复杂的网络访问检测，采用主界面相同的简单模式
         
         // 等待云朵系统初始化完成后再启动风声系统 - 延迟到背景渐变完成后
         setTimeout(() => {
@@ -2692,8 +2717,100 @@
             // 初始化太阳位置系统
             initSunPosition();
             
-            // 初始化月亮位置系统
-            initMoonPosition();
+        // 初始化月亮位置系统
+        initMoonPosition();
+        
+        // 初始化文字重叠检测系统
+        initTextOverlapDetection();
+        
+        // ===== 文字重叠检测系统 =====
+        function initTextOverlapDetection() {
+            console.log('🔍 初始化文字重叠检测系统...');
+            
+            // 检测文字与月亮的重叠
+            function checkTextMoonOverlap() {
+                const moon = document.querySelector('.moon');
+                const textElements = document.querySelectorAll('.text-overlap-detection');
+                
+                if (!moon || textElements.length === 0) return;
+                
+                // 获取月亮的位置和尺寸
+                const moonRect = moon.getBoundingClientRect();
+                const moonVisible = moon.style.opacity !== '0' && moonRect.width > 0;
+                
+                if (!moonVisible) {
+                    // 月亮不可见时，移除所有重叠状态
+                    textElements.forEach(element => {
+                        element.classList.remove('overlapping');
+                        element.style.setProperty('--moon-mask', 'none');
+                    });
+                    return;
+                }
+                
+                // 计算月亮的圆形中心点和半径
+                const moonCenterX = moonRect.left + moonRect.width / 2;
+                const moonCenterY = moonRect.top + moonRect.height / 2;
+                const moonRadius = Math.min(moonRect.width, moonRect.height) / 2;
+                
+                // 检查每个文字元素
+                textElements.forEach(element => {
+                    const textRect = element.getBoundingClientRect();
+                    
+                    // 检测文字元素是否与月亮圆形区域重叠
+                    const isOverlapping = checkCircularOverlap(textRect, moonCenterX, moonCenterY, moonRadius);
+                    
+                    // 更新重叠状态
+                    if (isOverlapping) {
+                        element.classList.add('overlapping');
+                        // 设置文字内容到data-text属性
+                        element.setAttribute('data-text', element.textContent);
+                        // 创建精确的圆形mask
+                        const mask = createCircularMask(textRect, moonCenterX, moonCenterY, moonRadius);
+                        element.style.setProperty('--moon-mask', mask);
+                    } else {
+                        element.classList.remove('overlapping');
+                        element.style.setProperty('--moon-mask', 'none');
+                        element.removeAttribute('data-text');
+                    }
+                });
+            }
+            
+            // 检测矩形与圆形的重叠
+            function checkCircularOverlap(rect, centerX, centerY, radius) {
+                // 找到矩形上离圆心最近的点
+                const closestX = Math.max(rect.left, Math.min(centerX, rect.right));
+                const closestY = Math.max(rect.top, Math.min(centerY, rect.bottom));
+                
+                // 计算距离
+                const distance = Math.sqrt(
+                    Math.pow(closestX - centerX, 2) + Math.pow(closestY - centerY, 2)
+                );
+                
+                return distance <= radius;
+            }
+            
+            // 创建圆形mask
+            function createCircularMask(rect, centerX, centerY, radius) {
+                // 将全局坐标转换为相对于文字元素的坐标
+                const relativeCenterX = centerX - rect.left;
+                const relativeCenterY = centerY - rect.top;
+                
+                // 创建圆形mask
+                const mask = `radial-gradient(circle at ${relativeCenterX}px ${relativeCenterY}px, black ${radius}px, transparent ${radius}px)`;
+                return mask;
+            }
+            
+            // 初始检测
+            checkTextMoonOverlap();
+            
+            // 定期检测（每100ms检测一次，确保响应及时）
+            setInterval(checkTextMoonOverlap, 100);
+            
+            // 监听窗口大小变化
+            window.addEventListener('resize', checkTextMoonOverlap);
+            
+            console.log('✅ 文字重叠检测系统初始化完成');
+        }
             
             // 确保两边都正常启动
             setTimeout(() => {
@@ -2736,81 +2853,99 @@
         });
         
         // ===== 展览页面语音问候系统 =====
-        // 初始化展览页面语音问候系统
+        // 显示音效提示
+        function showAudioPrompt() {
+            // 创建音效提示元素
+            const audioPrompt = document.createElement('div');
+            audioPrompt.id = 'audioPrompt';
+            audioPrompt.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0, 0, 0, 0.8);
+                    color: #00ff00;
+                    padding: 20px 30px;
+                    border-radius: 10px;
+                    border: 2px solid #00ff00;
+                    font-family: 'VT323', monospace;
+                    font-size: 18px;
+                    text-align: center;
+                    z-index: 10000;
+                    animation: pulse 2s infinite;
+                ">
+                    🎵 点击任意位置播放开场音效 🎵
+                </div>
+            `;
+            
+            // 添加脉冲动画样式
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulse {
+                    0% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+                    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+                    100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+            document.body.appendChild(audioPrompt);
+            
+            console.log('🎵 显示音效提示');
+        }
+        
+        // 隐藏音效提示
+        function hideAudioPrompt() {
+            const audioPrompt = document.getElementById('audioPrompt');
+            if (audioPrompt) {
+                audioPrompt.remove();
+                console.log('🎵 隐藏音效提示');
+            }
+        }
+        
+        // 移除复杂的网络访问提示函数，采用主界面相同的简单模式
+        
+        // 初始化展览页面语音问候系统 - 采用主界面相同的模式
         function initExhibitionVoiceGreeting() {
             console.log('🎮 开始初始化展览页面语音问候系统...');
             
-            // 初始化开场音效状态
-            window.exhibitionOpeningSoundPlayed = false;
-            console.log('🎬 初始化展览页面开场音效状态:', { exhibitionOpeningSoundPlayed: window.exhibitionOpeningSoundPlayed });
-            
-            // 延迟播放，确保页面完全加载
+            // 延迟播放，确保页面完全加载 - 与主界面相同的延迟
             setTimeout(() => {
                 playExhibitionGreeting();
-            }, 1000); // 延迟1秒播放
+            }, 1000); // 延迟1秒播放，与主界面保持一致
         }
         
-        // 展览页面语音问候 - 完全不同的风格！
+        // 展览页面语音问候 - 采用主界面相同的简单播放模式
         function playExhibitionGreeting() {
-            // 防止重复播放
-            if (window.exhibitionOpeningSoundPlayed) {
-                console.log('🎵 展览页面开场音效已经播放过，跳过...');
-                return;
-            }
-            
             console.log('🎨 开始播放展览页面问候...');
             
             try {
-                // 标记音效正在播放
-                window.exhibitionOpeningSoundPlaying = true;
-                console.log('🎵 展览页面音效播放状态设置为正在播放');
-                // 创建音频上下文并尝试自动播放
+                // 创建音频上下文 - 与主界面相同的简单方式
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 
-                // 尝试自动播放，如果失败则等待用户交互
-                if (audioContext.state === 'suspended') {
-                    console.log('🎨 音频上下文被暂停，尝试自动恢复...');
-                    audioContext.resume().then(() => {
-                        console.log('✅ 展览页面音频上下文自动恢复成功');
-                        createExhibitionGreetingSounds(audioContext);
-                    }).catch(error => {
-                        console.log('⚠️ 展览页面自动播放失败，等待用户交互:', error);
-                        // 如果自动播放失败，等待用户交互
-                        const waitForUserInteraction = () => {
-                            audioContext.resume().then(() => {
-                                console.log('✅ 展览页面通过用户交互恢复音频上下文');
-                                createExhibitionGreetingSounds(audioContext);
-                                document.removeEventListener('click', waitForUserInteraction);
-                                document.removeEventListener('touchstart', waitForUserInteraction);
-                            });
-                        };
-                        document.addEventListener('click', waitForUserInteraction);
-                        document.addEventListener('touchstart', waitForUserInteraction);
-                    });
-                } else {
-                    // 音频上下文已经激活，直接播放
-                    console.log('✅ 展览页面音频上下文已激活，直接播放问候音效');
-                    createExhibitionGreetingSounds(audioContext);
-                }
+                // 创建主混音器 - 与主界面相同的设置
+                const masterGain = audioContext.createGain();
+                masterGain.connect(audioContext.destination);
+                masterGain.gain.setValueAtTime(0.6, audioContext.currentTime); // 主音量60%，与主界面一致
                 
-                console.log('🎨 展览页面问候开始播放！');
+                // 创建混响效果 - 与主界面相同的设置
+                const reverbGain = audioContext.createGain();
+                const reverbDelay = audioContext.createDelay(0.2);
+                reverbGain.connect(reverbDelay);
+                reverbDelay.connect(masterGain);
+                reverbGain.gain.setValueAtTime(0.1, audioContext.currentTime);
                 
-                // 音效播放完毕后标记为已播放
+                // 创建展览页面特有的音效 - 保持原有内容
+                createExhibitionGreetingSounds(audioContext, masterGain, reverbGain);
+                
+                // 计算总播放时间并设置完成标志
+                const totalPlayTime = 3000; // 3秒后完全播放完毕
                 setTimeout(() => {
                     window.exhibitionOpeningSoundPlayed = true;
-                    window.exhibitionOpeningSoundPlaying = false;
-                    console.log('🎵 展览页面音效播放状态设置为已播放');
-                    
-                    // 音效播放完毕后，尝试启动风声
-                    console.log('🌪️ 展览页面音效播放完毕，尝试启动风声...');
-                    if (typeof startWindSound === 'function') {
-                        startWindSound();
-                    }
-                    
-                    // 音效播放完毕后，开始背景渐变
-                    console.log('🌤️ 展览页面音效播放完毕，开始背景渐变...');
-                    checkExhibitionWeather();
-                }, 3000); // 3秒后标记音效播放完毕
+                    console.log('🎵 展览页面音效播放完毕！');
+                }, totalPlayTime);
+                
+                console.log('🎨 展览页面问候开始播放！');
                 
             } catch (error) {
                 console.error('❌ 展览页面问候播放失败:', error);
@@ -2832,21 +2967,16 @@
             }
         }
         
-        // 创建展览页面问候音效
-        function createExhibitionGreetingSounds(audioContext) {
-            // 创建主混音器
-            const masterGain = audioContext.createGain();
-            masterGain.connect(audioContext.destination);
-            masterGain.gain.setValueAtTime(0.22, audioContext.currentTime); // 主音量从30%降到22%，更轻柔
-            
+        // 创建展览页面问候音效 - 保持原有内容，采用主界面相同的播放模式
+        function createExhibitionGreetingSounds(audioContext, masterGain, reverbGain) {
             // 创建展览特有的延迟效果
             const delayGain = audioContext.createGain();
             const delayNode = audioContext.createDelay(0.15);
             delayGain.connect(delayNode);
             delayNode.connect(masterGain);
-            delayGain.gain.setValueAtTime(0.11, audioContext.currentTime); // 延迟音量从15%降到11%，更轻柔
+            delayGain.gain.setValueAtTime(0.11, audioContext.currentTime);
             
-            // 创建"Ezi's"音效 - 现代电子风格
+            // 创建"Ezi's"音效 - 保持原有现代电子风格
             createEziSound(audioContext, masterGain, delayGain, 0);
             
             // 延迟播放"EXHIBITION"音效
@@ -2865,7 +2995,7 @@
             }, 2.4); // 2.4秒后播放结尾音效
         }
         
-        // 创建"Ezi's"音效 - 现代电子风格，完全不同于Hello World
+        // 创建"Ezi's"音效 - 保持原有现代电子风格
         function createEziSound(audioContext, masterGain, delayGain, startTime) {
             const currentTime = audioContext.currentTime + startTime;
             
@@ -2903,7 +3033,6 @@
                 mainOsc.connect(mainFilter);
                 mainFilter.connect(mainGain);
                 mainGain.connect(masterGain);
-                mainGain.connect(delayGain);
                 
                 // 播放音效
                 mainOsc.start(noteTime);
@@ -2916,7 +3045,7 @@
             console.log('🎵 播放"Ezi\'s"音效 - 现代电子风格');
         }
         
-        // 创建"EXHIBITION"音效 - 现代科技风格，完全不同于Hello World
+        // 创建"EXHIBITION"音效 - 保持原有现代科技风格
         function createExhibitionSound(audioContext, masterGain, delayGain, startTime) {
             const currentTime = audioContext.currentTime + startTime;
             
@@ -2955,7 +3084,6 @@
                 mainOsc.connect(mainFilter);
                 mainFilter.connect(mainGain);
                 mainGain.connect(masterGain);
-                mainGain.connect(delayGain);
                 
                 // 播放音效
                 mainOsc.start(noteTime);
@@ -2968,7 +3096,7 @@
             console.log('🎵 播放"EXHIBITION"音效 - 现代科技风格');
         }
         
-        // 创建"EXPERIENCE"音效 - 未来科技风格，完全不同于Hello World
+        // 创建"EXPERIENCE"音效 - 保持原有未来科技风格
         function createExperienceSound(audioContext, masterGain, delayGain, startTime) {
             const currentTime = audioContext.currentTime + startTime;
             
@@ -3007,7 +3135,6 @@
                 mainOsc.connect(mainFilter);
                 mainFilter.connect(mainGain);
                 mainGain.connect(masterGain);
-                mainGain.connect(delayGain);
                 
                 // 播放音效
                 mainOsc.start(noteTime);
