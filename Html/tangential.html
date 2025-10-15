@@ -2185,7 +2185,7 @@
                 // 创建主混音器
                 const masterGain = tangentialAudioContext.createGain();
                 masterGain.connect(tangentialAudioContext.destination);
-                masterGain.gain.setValueAtTime(0.5, tangentialAudioContext.currentTime); // 主音量50% - 稍微响一点
+                masterGain.gain.setValueAtTime(0.4, tangentialAudioContext.currentTime); // 主音量40%
                 
                 // 创建题外话风格的音效
                 createTangentialSound(tangentialAudioContext, masterGain);

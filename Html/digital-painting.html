@@ -1096,7 +1096,7 @@
                 // 创建主混音器
                 const masterGain = digitalPaintingAudioContext.createGain();
                 masterGain.connect(digitalPaintingAudioContext.destination);
-                masterGain.gain.setValueAtTime(0.3, digitalPaintingAudioContext.currentTime); // 主音量降低到30%，更温和
+                masterGain.gain.setValueAtTime(0.4, digitalPaintingAudioContext.currentTime); // 主音量40%
                 
                 // 创建独特的音效处理链
                 const digitalGain = digitalPaintingAudioContext.createGain();

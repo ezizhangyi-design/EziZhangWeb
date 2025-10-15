@@ -1279,28 +1279,6 @@
 
 
 
-        @keyframes pacman-move {
-            0% { transform: translateX(calc(100vw + 24px)); }
-            100% { transform: translateX(-24px); }
-        }
-
-        @keyframes pacman-chomp {
-            0% { clip-path: polygon(100% 0, 100% 100%, 50% 50%); }
-            50% { clip-path: polygon(100% 0, 100% 100%, 50% 50%, 100% 50%); }
-            100% { clip-path: polygon(100% 0, 100% 100%, 50% 50%); }
-        }
-
-        @keyframes pacman-chomp-left {
-            0% { clip-path: polygon(0% 0, 0% 100%, 50% 50%); }
-            50% { clip-path: polygon(0% 0, 0% 100%, 50% 50%, 0% 50%); }
-            100% { clip-path: polygon(0% 0, 0% 100%, 50% 50%); }
-        }
-
-        .dot.eaten {
-            opacity: 0 !important;
-            transform: scale(0) !important;
-            transition: all 0.1s ease !important;
-        }
 
         /* 第三个影像作品样式 */
         .third-artwork-container {
@@ -1652,85 +1630,6 @@
 
 
 
-        /* Fourth pacman animation after the fourth artwork */
-
-
-        .fourth-pacman {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background: #fac800;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            animation: fourth-pacman-move 8s linear infinite;
-            border-radius: 50%;
-            overflow: hidden;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-            /* 性能优化：硬件加速 */
-            will-change: transform;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-        }
-
-        .fourth-pacman-mouth {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            clip-path: polygon(0% 0, 0% 100%, 50% 50%);
-            animation: pacman-chomp-left 0.2s linear infinite;
-        }
-
-        .fourth-pacman-eye {
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            width: 4px;
-            height: 4px;
-            background: #ff0000;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-        }
-
-        .fourth-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 0;
-            width: 100%;
-            height: 20px;
-        }
-
-        .fourth-line-segment {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #fac800;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            border-radius: 50%;
-            transform-origin: center;
-        }
-
-        .fourth-line-segment:nth-child(1) { left: 5%; top: 7px; }
-        .fourth-line-segment:nth-child(2) { left: 15%; top: 7px; }
-        .fourth-line-segment:nth-child(3) { left: 25%; top: 7px; }
-        .fourth-line-segment:nth-child(4) { left: 35%; top: 7px; }
-        .fourth-line-segment:nth-child(5) { left: 45%; top: 7px; }
-        .fourth-line-segment:nth-child(6) { left: 55%; top: 7px; }
-        .fourth-line-segment:nth-child(7) { left: 65%; top: 7px; }
-        .fourth-line-segment:nth-child(8) { left: 75%; top: 7px; }
-        .fourth-line-segment:nth-child(9) { left: 85%; top: 7px; }
-        .fourth-line-segment:nth-child(10) { left: 95%; top: 7px; }
-
-        @keyframes fourth-pacman-move {
-            0% { transform: translateX(calc(100vw + 24px)); }
-            100% { transform: translateX(-24px); }
-        }
 
         .fourth-story-image-container-copy {
             width: 100vw;
@@ -2801,92 +2700,8 @@
             z-index: 4;
         }
 
-        /* Sixth pacman animation - green dots (copy) */
-        .sixth-pacman-animation {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100vw;
-            height: 40px;
-            z-index: 9999;
-            top: 11400px;
-        }
 
-        .sixth-pacman {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background: #fac800;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            animation: first-pacman-move 8s linear infinite;
-            border-radius: 50%;
-            overflow: hidden;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-            z-index: 3;
-            /* 性能优化：硬件加速 */
-            will-change: transform;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-        }
-
-        .sixth-pacman-mouth {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            clip-path: polygon(100% 0, 100% 100%, 50% 50%);
-            animation: pacman-chomp 0.2s linear infinite;
-        }
-
-        .sixth-pacman-eye {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 4px;
-            height: 4px;
-            background: #ff0000;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-        }
-
-        .sixth-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 0;
-            width: 100%;
-            height: 20px;
-        }
-
-        .sixth-line-segment {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #00ff00;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            border-radius: 50%;
-            transform-origin: center;
-            z-index: 2;
-        }
-
-        .sixth-line-segment:nth-child(1) { left: 5%; top: 7px; }
-        .sixth-line-segment:nth-child(2) { left: 15%; top: 7px; }
-        .sixth-line-segment:nth-child(3) { left: 25%; top: 7px; }
-        .sixth-line-segment:nth-child(4) { left: 35%; top: 7px; }
-        .sixth-line-segment:nth-child(5) { left: 45%; top: 7px; }
-        .sixth-line-segment:nth-child(6) { left: 55%; top: 7px; }
-        .sixth-line-segment:nth-child(7) { left: 65%; top: 7px; }
-        .sixth-line-segment:nth-child(8) { left: 75%; top: 7px; }
-        .sixth-line-segment:nth-child(9) { left: 85%; top: 7px; }
-        .sixth-line-segment:nth-child(10) { left: 95%; top: 7px; }
-
-        /* YouTube Video Container - Below Sixth Pacman */
+        /* YouTube Video Container */
         .youtube-video-container {
             width: 100vw;
             position: relative;
@@ -3738,178 +3553,7 @@
             letter-spacing: 0.5px;
         }
 
-        .first-pacman {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background: #ff0000;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            animation: first-pacman-move 8s linear infinite;
-            border-radius: 50%;
-            overflow: hidden;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-            z-index: 3;
-            /* 性能优化：硬件加速 */
-            will-change: transform;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-        }
 
-        .first-pacman-mouth {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            clip-path: polygon(100% 0, 100% 100%, 50% 50%);
-            animation: pacman-chomp 0.2s linear infinite;
-        }
-
-        .first-pacman-eye {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 4px;
-            height: 4px;
-            background: #000000;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-        }
-
-        .first-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 0;
-            width: 100%;
-            height: 20px;
-        }
-
-        .first-line-segment {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #00ff00;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            border-radius: 50%;
-            transform-origin: center;
-            z-index: 2;
-        }
-
-        .first-line-segment:nth-child(1) { left: 5%; top: 9px; }
-        .first-line-segment:nth-child(2) { left: 15%; top: 9px; }
-        .first-line-segment:nth-child(3) { left: 25%; top: 9px; }
-        .first-line-segment:nth-child(4) { left: 35%; top: 9px; }
-        .first-line-segment:nth-child(5) { left: 45%; top: 9px; }
-        .first-line-segment:nth-child(6) { left: 55%; top: 9px; }
-        .first-line-segment:nth-child(7) { left: 65%; top: 9px; }
-        .first-line-segment:nth-child(8) { left: 75%; top: 9px; }
-        .first-line-segment:nth-child(9) { left: 85%; top: 9px; }
-        .first-line-segment:nth-child(10) { left: 95%; top: 9px; }
-
-        .first-line-segment.eaten {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            transform: scale(0) !important;
-        }
-
-        @keyframes first-pacman-move {
-            0% { transform: translateX(-24px); }
-            100% { transform: translateX(calc(100vw + 24px)); }
-        }
-
-        /* 红色吃豆人动画 - 在第一和第二作品组之间 */
-        .red-pacman {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background: #ff0000;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            animation: red-pacman-move 8s linear infinite;
-            border-radius: 50%;
-            overflow: hidden;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-            z-index: 3;
-            /* 性能优化：硬件加速 */
-            will-change: transform;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-        }
-
-        .red-pacman-mouth {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            clip-path: polygon(100% 0, 100% 100%, 50% 50%);
-            animation: pacman-chomp 0.2s linear infinite;
-        }
-
-        .red-pacman-eye {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 4px;
-            height: 4px;
-            background: #ffffff;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-        }
-
-        .red-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 0;
-            width: 100%;
-            height: 20px;
-        }
-
-        .red-line-segment {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #00ff00;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            border-radius: 50%;
-            transform-origin: center;
-            z-index: 2;
-        }
-
-        .red-line-segment:nth-child(1) { left: 5%; top: 7px; }
-        .red-line-segment:nth-child(2) { left: 15%; top: 7px; }
-        .red-line-segment:nth-child(3) { left: 25%; top: 7px; }
-        .red-line-segment:nth-child(4) { left: 35%; top: 7px; }
-        .red-line-segment:nth-child(5) { left: 45%; top: 7px; }
-        .red-line-segment:nth-child(6) { left: 55%; top: 7px; }
-        .red-line-segment:nth-child(7) { left: 65%; top: 7px; }
-        .red-line-segment:nth-child(8) { left: 75%; top: 7px; }
-        .red-line-segment:nth-child(9) { left: 85%; top: 7px; }
-        .red-line-segment:nth-child(10) { left: 95%; top: 7px; }
-
-        .red-line-segment.eaten {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            transform: scale(0) !important;
-        }
-
-        @keyframes red-pacman-move {
-            0% { transform: translateX(-24px); }
-            100% { transform: translateX(calc(100vw + 24px)); }
-        }
 
 
 
@@ -4558,16 +4202,6 @@
             }
         }
         
-        /* 高DPI显示器优化 */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .video-info .title,
-            .video-info .description-title,
-            .video-info .video-artwork-title,
-            .video-info .still-frame-title,
-            .video-info .synopsis-title {
-                /* 字体渲染已全局设置 */
-            }
-        }
         
         /* 触摸设备优化 */
         @media (hover: none) and (pointer: coarse) {
@@ -4694,25 +4328,6 @@
 
 
 
-        <!-- 第一组吃豆人动画 -->
-        <div class="first-pacman-animation" style="position: absolute; top: 2300px; left: 0; width: 100vw; height: 20px; z-index: 3;">
-            <div class="first-pacman">
-                <div class="first-pacman-mouth"></div>
-                <div class="first-pacman-eye"></div>
-            </div>
-            <div class="first-dots">
-                <div class="first-line-segment"></div>
-                <div class="first-line-segment"></div>
-                <div class="first-line-segment"></div>
-                <div class="first-line-segment"></div>
-                <div class="first-line-segment"></div>
-                <div class="first-line-segment"></div>
-                <div class="first-line-segment"></div>
-                <div class="first-line-segment"></div>
-                <div class="first-line-segment"></div>
-                <div class="first-line-segment"></div>
-            </div>
-        </div>
 
                   <div class="second-artwork-group-container" style="margin-top: 800px;">
         <div class="second-artwork-container">
@@ -5164,7 +4779,6 @@
             </div>
         </div>
 
-        <!-- 绿色吃豆人动画 - 在08图片下方400px -->
 
 
         <!-- 第六组作品：THE CONSCIOUSNESS OF THE LEFT FOOT -->
@@ -5361,7 +4975,7 @@
         </div>
     </div>
 
-    <!-- YouTube Video Container - Below Sixth Pacman -->
+    <!-- YouTube Video Container -->
     <div class="youtube-video-group-container" style="margin-top: -1000px;">
     <div class="youtube-video-container">
         <div class="youtube-video-background">
@@ -5538,63 +5152,6 @@
 
 
 
-        // 贪吃豆动画控制
-        function initPacmanAnimation() {
-            initSinglePacmanAnimation('.pacman', '.line-segment');
-            initSinglePacmanAnimation('.first-pacman', '.first-line-segment');
-            initSinglePacmanAnimation('.mid-pacman', '.mid-line-segment');
-            initSinglePacmanAnimation('.fourth-pacman', '.fourth-line-segment');
-            initSinglePacmanAnimation('.fifth-pacman', '.fifth-line-segment');
-            initSinglePacmanAnimation('.red-pacman', '.red-line-segment');
-        }
-
-        function initSinglePacmanAnimation(pacmanSelector, segmentSelector) {
-            const pacman = document.querySelector(pacmanSelector);
-            const lineSegments = document.querySelectorAll(segmentSelector);
-            
-            if (!pacman || lineSegments.length === 0) return;
-            
-            function checkLineCollision() {
-                const currentPacman = document.querySelector(pacmanSelector);
-                if (!currentPacman) return;
-                
-                const pacmanRect = currentPacman.getBoundingClientRect();
-                const pacmanLeft = pacmanRect.left;
-                
-                lineSegments.forEach((segment, index) => {
-                    const segmentRect = segment.getBoundingClientRect();
-                    const segmentLeft = segmentRect.left;
-                    const segmentRight = segmentRect.right;
-                    
-                    // 提前0.3秒检测碰撞（大约24px的距离）
-                    if (pacmanLeft >= (segmentLeft - 24) && pacmanLeft <= segmentRight && !segment.classList.contains('eaten')) {
-                        console.log('Dot eaten!', index, 'pacmanLeft:', pacmanLeft, 'segmentLeft:', segmentLeft);
-                        segment.style.display = 'none';
-                        segment.classList.add('eaten');
-                        
-                        setTimeout(() => {
-                            segment.style.display = '';
-                            segment.classList.remove('eaten');
-                        }, 1500);
-                    }
-                });
-            }
-            
-            // 性能优化：使用requestAnimationFrame替代高频setInterval
-            let animationId;
-            function animateCollision() {
-            checkLineCollision();
-                animationId = requestAnimationFrame(animateCollision);
-            }
-            animateCollision();
-            
-            // 清理函数
-            return () => {
-                if (animationId) {
-                    cancelAnimationFrame(animationId);
-                }
-            };
-        }
 
         // Fifth color carousel animation
         class FifthColorCarousel {
@@ -6149,7 +5706,7 @@
                 // 创建主混音器
                 const masterGain = rasterizeAudioContext.createGain();
                 masterGain.connect(rasterizeAudioContext.destination);
-                masterGain.gain.setValueAtTime(0.35, rasterizeAudioContext.currentTime); // 主音量35%
+                masterGain.gain.setValueAtTime(0.4, rasterizeAudioContext.currentTime); // 主音量40%
                 
                 // 创建光栅化特有的混响效果
                 const reverbGain = rasterizeAudioContext.createGain();
@@ -6639,7 +6196,6 @@
             triggerRasterizeGreeting();
             
             createRasterizeEffect();
-            initPacmanAnimation();
             
             // 初始化第五个轮播
             console.log('Initializing fifth carousel');

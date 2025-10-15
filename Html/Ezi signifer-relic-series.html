@@ -2608,7 +2608,7 @@
                 // 创建主混音器
                 const masterGain = signiferRelicAudioContext.createGain();
                 masterGain.connect(signiferRelicAudioContext.destination);
-                masterGain.gain.setValueAtTime(0.6, signiferRelicAudioContext.currentTime); // 主音量60% - 稍微响一点
+                masterGain.gain.setValueAtTime(0.4, signiferRelicAudioContext.currentTime); // 主音量40%
                 
                 // 创建遗迹系列的音效
                 createSigniferRelicSound(signiferRelicAudioContext, masterGain);

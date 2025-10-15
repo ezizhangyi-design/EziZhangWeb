@@ -2926,7 +2926,7 @@
                 // 创建主混音器 - 与主界面相同的设置
                 const masterGain = audioContext.createGain();
                 masterGain.connect(audioContext.destination);
-                masterGain.gain.setValueAtTime(0.6, audioContext.currentTime); // 主音量60%，与主界面一致
+                masterGain.gain.setValueAtTime(0.4, audioContext.currentTime); // 主音量40%
                 
                 // 创建混响效果 - 与主界面相同的设置
                 const reverbGain = audioContext.createGain();

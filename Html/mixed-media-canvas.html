@@ -2314,7 +2314,7 @@
                 // 创建主混音器
                 const masterGain = mixedMediaCanvasAudioContext.createGain();
                 masterGain.connect(mixedMediaCanvasAudioContext.destination);
-                masterGain.gain.setValueAtTime(0.5, mixedMediaCanvasAudioContext.currentTime); // 主音量50% - 稍微响一点
+                masterGain.gain.setValueAtTime(0.4, mixedMediaCanvasAudioContext.currentTime); // 主音量40%
                 
                 // 创建混合媒体风格的音效
                 createMixedMediaCanvasSound(mixedMediaCanvasAudioContext, masterGain);

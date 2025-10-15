@@ -2392,7 +2392,7 @@
                 // 创建主混音器
                 const masterGain = rgbStarHistoryAudioContext.createGain();
                 masterGain.connect(rgbStarHistoryAudioContext.destination);
-                masterGain.gain.setValueAtTime(0.5, rgbStarHistoryAudioContext.currentTime); // 主音量50% - 稍微响一点
+                masterGain.gain.setValueAtTime(0.4, rgbStarHistoryAudioContext.currentTime); // 主音量40%
                 
                 // 创建RGB星星历史风格的音效
                 createRgbStarHistorySound(rgbStarHistoryAudioContext, masterGain);
